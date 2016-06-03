@@ -10,4 +10,6 @@ tensorflow.org 문서를 한글로 번역하여 깃북으로 제공하기 위한
 
 깃북의 주소는 https://tensorflowkorea.gitbooks.io/tensorflow-kr 입니다.
 
+깃허브의 작업 방법에 대해서는 블로그 포스팅(https://tensorflowkorea.wordpress.com/2016/06/01/텐서플로우-문서-한글화/)을 참고해 주세요.
+
 감사합니다.
