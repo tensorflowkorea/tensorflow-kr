@@ -1,7 +1,7 @@
-# How-Tos ss
+# How-Tos 
 
 
-## Variables: Creation, Initializing, Saving, and Restoring
+## 변수: Creation, Initializing, Saving, and Restoring
 
 TensorFlow Variables are in-memory buffers containing tensors.  Learn how to
 use them to hold and update model parameters during training.
