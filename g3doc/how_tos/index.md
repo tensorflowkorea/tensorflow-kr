@@ -1,9 +1,9 @@
-# 길잡이 
+# 입문
 
 
 ## 변수: 생성, 초기화, 저장, 복구
 
-TensorFlow Variables are in-memory buffers containing tensors.  Learn how to
+TensorFlow 변수들은 텐서를 가지고 있는 메모리내 버퍼입니다. Variables are in-memory buffers containing tensors.  Learn how to
 use them to hold and update model parameters during training.
 
 [View Tutorial](variables/index.md)
