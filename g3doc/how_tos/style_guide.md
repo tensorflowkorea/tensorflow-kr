@@ -21,7 +21,7 @@ from __future__ import print_function
 from __future__ import division
 ```
 
-* 코드의 호환성을 위하여 `six` 를 사용하십시요. (예: `six.range`).
+* 코드의 호환성을 위해 `six` 를 사용하십시요. (예: `six.range`).
 
 
 ## 베이젤(Bazel) BUILD 규칙
