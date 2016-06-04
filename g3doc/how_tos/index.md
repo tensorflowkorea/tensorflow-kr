@@ -86,7 +86,7 @@ GPU상에서 모델을 구축하고 실행하는 방법을 설명하는 튜토�
 
 ## 변수 공유
 
-큰 모델을 하나 이상의 GPU에서 돌리거나, 복잡한 LSTM 또는 RNN을 전개하는 경우, 모델을 만드는 코드상의 여러 곳으로부터 동일한 변수 객체에 접근하는 것이 필요한 경우가 자주 있습니다.
+큰 모델을 하나 이상의 GPU에서 돌리거나, 복잡한 LSTM 또는 RNN을 전개하는 경우에, 모델을 만드는 코드상의 여러 곳으로부터 동일한 변수 객체에 접근할 필요가 자주 생깁니다.
 
 When deploying large models on multiple GPUs, or when unrolling complex LSTMs
 or RNNs, it is often necessary to access the same Variable objects from
