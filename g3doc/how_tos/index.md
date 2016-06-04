@@ -96,6 +96,7 @@ The "Variable Scope" mechanism is designed to facilitate that.
 
 ## 모델 파일
 
+
 If you're developing a tool to load, analyze, or manipulate TensorFlow model
 files, it's useful to understand a bit about the format in which they're stored.
 This guide covers the details of the saved model format.
@@ -120,8 +121,6 @@ retraining a new model.
 
 ## 텐서플로우로 뉴럴 네트워크를 정량화 하기
 
-This guide shows how you can convert a float model into one using eight-bit
-quantized parameters and calculations. It also describes how the quantization
-process works under the hood.
+플로팅 포인트 모델을 8비트 파라미터와 연산을 사용하도록 정량화(양자화)하는 방법을 배웁니다. 프로그램의 이면에서 정량화가 어떻게 동작하는지도 설명합니다.
 
 [튜토리얼 보기](../how_tos/quantization/index.md)
