@@ -92,7 +92,7 @@ When deploying large models on multiple GPUs, or when unrolling complex LSTMs
 or RNNs, it is often necessary to access the same Variable objects from
 different locations in the model construction code.
 
-그것을 실현하기 위한 "변수 범위" 방식이라는 것이 있습니다.
+그것을 실현하기 위한 "변수 범위(Variable Scope)" 방식이라는 것이 있습니다.
 
 The "Variable Scope" mechanism is designed to facilitate that.
 
