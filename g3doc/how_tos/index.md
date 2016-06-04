@@ -24,39 +24,35 @@
 
 ## 텐서보드: 그래프 시각화
 
-This tutorial describes how to use the graph visualizer in 텐서보드 to help
-you understand the dataflow graph and debug it.
+데이타 플로우를 그래프로 이해하고 수정을 가할 수 있도록, 텐서보드에서 그래프 시각화 툴을 사용하는 방법을 배웁니다. 
 
 [튜토리얼 보기](graph_viz/index.md)
 
 
 ## 데이터 로딩
 
-This tutorial describes the three main methods of getting data into your
-TensorFlow program: Feeding, Reading and Preloading.
+텐서플로우 프로그램에 데이타를 로딩하는 세가지 방법을 설명합니다: Feeding, Reading, Preloading, 이렇게 세가지입니다.
 
 [튜토리얼 보기](reading_data/index.md)
 
 ## 분산처리
 
-This tutorial describes how to execute TensorFlow programs using a cluster of
-TensorFlow servers.
+텐서플로우 서버 클러스터를 이용하여 텐서플로우 프로그램을 실행하는 방법을 설명합니다.
 
 [튜토리얼 보기](distributed/index.md)
 
 
 ## 쓰레드와 큐
 
-This tutorial describes the various constructs implemented by TensorFlow
-to facilitate asynchronous and concurrent training.
+비동기 학습과 동시 학습을 구현하기 위한 다양한 텐서플로우 구조들을 설명합니다.
 
 [튜토리얼 보기](threading_and_queues/index.md)
 
 
 ## 커스텀 연산자
 
-TensorFlow already has a large suite of node operations from which you can
-compose in your graph, but here are the details of how to add you own custom Op.
+텐서플로우는 이미 많은 수의 연산자들을 제공하고 있습니다. 스스로 커스텀 연산자를 만들 필요가 있는 경우, 이 튜토리얼을 참고하십시요.
+(검토 필요: Custom Op를 커스텀 '연산자'로 번역하는 것이 적절할지?)
 
 [튜토리얼 보기](adding_an_op/index.md)
 
@@ -70,9 +66,7 @@ compose in your graph, but here are the details of how to add you own custom Op.
 
 ## 문서화
 
-TensorFlow's documentation is largely generated from its source code. Here is an
-introduction to the formats we use, a style guide, and instructions on how to
-build updated documentation from the source.
+텐서플로우의 도큐먼테이션들은 대부분 소스 코드들로부터 생성되었습니다. 이 튜토리얼을 통해, 문서의 포맷, 스타일 가이드, 그리고 소스로부터 업데이트된 도큐먼테이션을 생성하는 방법을 배울 수 있습니다.
 
 [튜토리얼 보기](documentation/index.md)
 
