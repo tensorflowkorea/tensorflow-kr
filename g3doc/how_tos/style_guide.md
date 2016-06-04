@@ -8,8 +8,8 @@ errors, and promote consistency.
 
 ## 파이썬 스타일
 
-들여쓰기 2칸을 제외하면, 일반적으로 다음의 가이드를 따릅니다.
-[PEP8 Python style guide](https://www.python.org/dev/peps/pep-0008/)
+들여쓰기 2칸이라는 것을 제외하면, 일반적으로 다음의
+[PEP8 Python style guide](https://www.python.org/dev/peps/pep-0008/) 가이드를 따릅니다.
 
 ## 파이썬 2, 3 호환
 
