@@ -88,13 +88,7 @@ GPU상에서 모델을 구축하고 실행하는 방법을 설명하는 튜토�
 
 큰 모델을 하나 이상의 GPU에서 돌리거나, 복잡한 LSTM 또는 RNN을 전개하는 경우에, 모델을 만드는 코드상의 여러 곳으로부터 동일한 변수 객체에 접근할 필요가 자주 생깁니다.
 
-When deploying large models on multiple GPUs, or when unrolling complex LSTMs
-or RNNs, it is often necessary to access the same Variable objects from
-different locations in the model construction code.
-
 그것을 실현하기 위한 "변수 범위(Variable Scope)" 방식이라는 것이 있습니다.
-
-The "Variable Scope" mechanism is designed to facilitate that.
 
 [튜토리얼 보기](variable_scope/index.md)
 
@@ -107,12 +101,6 @@ The "Variable Scope" mechanism is designed to facilitate that.
 ## 트랜스퍼 학습을 이용한 부분 학습
 
 Inception과 같은 완성된 형태의 인식 모델을 학습시키는 데에는, 많은 수의 이미지와 오랜 시간이 필요합니다. 학습이 끝난 모델의 최종 레이어만 다시 학습함으로써, 다른 카테고리의 대상을 인식할 수 있게 하는 트랜스퍼 학습 기법을 설명합니다. 모델을 처음부터 다시 학습하는 것보다 훨씬 빠르고 쉬운 방법입니다.
-
-Training a full object recognition model like Inception takes a long time and a
-lot of images. This example shows how to use the technique of transfer learning
-to retrain just the final layer of a fully-trained model to recognize new
-categories of objects, which is a lot faster and easier than completely
-retraining a new model.
 
 [튜토리얼 보기](../how_tos/image_retraining/index.md)
 
