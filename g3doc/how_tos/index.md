@@ -84,15 +84,14 @@ build updated documentation from the source.
 
 ## 커스텀 데이터 포맷
 
-If you have a sizable custom data set, you may want to consider extending
-TensorFlow to read your data directly in it's native format.  Here's how.
+상당한 양의 커스텀 데이터를 가지고 있는 경우, 텐서플로우가 데이터 본래의 포맷으로 직접 읽어들이게 하는 방법입니다.
 
 [튜토리얼 보기](new_data_formats/index.md)
 
 
 ## GPU 사용하기
 
-This tutorial describes how to construct and execute models on GPU(s).
+GPU상에서 모델을 구축하고 실행하는 방법을 설명하는 튜토리얼입니다.
 
 [튜토리얼 보기](using_gpu/index.md)
 
