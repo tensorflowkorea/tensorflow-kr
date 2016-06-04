@@ -60,7 +60,10 @@ filegroup(
 )
 ```
 
-* 새 BUILD 화일을 추가하는 경우, 다음의 내용을 add this line to `tensorflow/BUILD` file into `all_opensource_files` target.
+* 새 BUILD 화일을 추가하는 경우, 다음의 내용을 `tensorflow/BUILD` 화일에 추가하여 `all_opensource_files` 타겟에 들어가도록 합니다.
+
+
+add this line to `tensorflow/BUILD` file into `all_opensource_files` target.
 
 ```
 "//third_party/tensorflow/<directory>:all_files",
