@@ -52,7 +52,6 @@
 ## 커스텀 연산자
 
 텐서플로우는 이미 많은 수의 연산자들을 제공하고 있습니다. 스스로 커스텀 연산자를 만들 필요가 있는 경우, 이 튜토리얼을 참고하십시요.
-(검토 필요: Custom Op를 커스텀 '연산자'로 번역하는 것이 적절할지?)
 
 [튜토리얼 보기](adding_an_op/index.md)
 
@@ -115,8 +114,7 @@ retraining a new model.
 
 ## 모델 Export 와 Import
 
-This tutorial describes how to export everything pertaining to a running
-model and import it later for various purposes.
+모델을 사용하는 데에 필요한 일체를 Export하고, 나중에 Import하는 방법을 설명합니다.
 
 [튜토리얼 보기](../how_tos/meta_graph/index.md)
 
