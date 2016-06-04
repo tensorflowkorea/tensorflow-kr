@@ -10,9 +10,7 @@
 
 ## 텐서플로우 구조 101
 
-A step-by-step walk through of the details of using TensorFlow infrastructure
-to train models at scale, using MNIST handwritten digit recognition as a toy
-example.
+텐서플로우 구조를 사용하여 어느정도 규모가 되는 모델을 학습하는 방법을 차근차근 상세하게 설명합니다. MNIST 필기 숫자 인식을 예제로 사용합니다.
 
 [튜토리얼 보기](../tutorials/mnist/tf/index.md)
 
