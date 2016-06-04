@@ -66,7 +66,7 @@ filegroup(
 "//third_party/tensorflow/<directory>:all_files",
 ```
 
-* 모든 파이썬 BUILD 타겟(라이브러리와 테스트) 다음의 내용을 추가하십시요:
+* 모든 파이썬 BUILD 타겟(라이브러리와 테스트)에 다음의 내용을 추가하십시요:
 
 ```
 srcs_version = "PY2AND3",
