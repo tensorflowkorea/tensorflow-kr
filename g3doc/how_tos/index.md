@@ -68,7 +68,7 @@ compose in your graph, but here are the details of how to add you own custom Op.
 
 ## 텐서플로우 코드 작성 스타일
 
-코드의 가독성을 높이고, 에러를 줄이며, 일관성을 장려하기 위해, 텐서플로우 개발자와 사용자들이 따라야 할 스타일 가이드.
+코드의 가독성을 높이고, 에러를 줄이며, 일관성을 장려하기 위해, 텐서플로우 개발자와 사용자들이 따라야 할 스타일 가이드입니다.
 
 [스타일 가이드 보기](style_guide.md)
 
