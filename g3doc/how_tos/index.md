@@ -100,13 +100,13 @@ The "Variable Scope" mechanism is designed to facilitate that.
 
 ## 모델 파일
 
-텐서플로우 모델이 저장되는 포맷을 이해하는 것은, 모델을 읽어들이고, 분석하고, 수정하는 데에 도움을 줍니다.
-이 튜토리얼을 통해서 모델이 저장되는 포맷에 대해 자세하게 알 수 있습니다.
+텐서플로우 모델이 저장되는 포맷을 이해하는 것은, 모델을 읽어들이고, 분석하고, 수정하는 데에 도움을 줍니다. 이 튜토리얼을 통해서 모델이 저장되는 포맷에 대해 자세하게 알 수 있습니다.
 
 [튜토리얼 보기](../how_tos/tool_developers/index.md)
 
 ## 트랜스퍼 학습을 이용한 부분 학습
 
+Inception과 같은 완성된 형태의 인식 모델을 학습시키는 데에는, 많은 수의 이미지와 오랜 시간이 필요합니다. 학습이 끝난 모델의 최종 레이어만 다시 학습함으로써, 다른 카테고리의 대상을 인식할 수 있게 하는 트랜스퍼 학습 기법을 설명합니다. 모델을 처음부터 다시 학습하는 것보다 훨씬 빠르고 쉬운 방법입니다.
 
 Training a full object recognition model like Inception takes a long time and a
 lot of images. This example shows how to use the technique of transfer learning
