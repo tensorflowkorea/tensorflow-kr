@@ -86,9 +86,13 @@ GPU상에서 모델을 구축하고 실행하는 방법을 설명하는 튜토�
 
 ## 변수 공유
 
+큰 모델을 하나 이상의 GPU에서 돌리거나, 복잡한 LSTM 또는 RNN을 전개하는 경우, 모델 구축 코드상의 여러 곳으로부터 동일한 변수 객체에 접근하는 것이 필요한 경우가 자주 있습니다.
+
 When deploying large models on multiple GPUs, or when unrolling complex LSTMs
 or RNNs, it is often necessary to access the same Variable objects from
 different locations in the model construction code.
+
+그것을 실현하기 위하여 "변수 범위" 방식이라는 것이 있습니다.
 
 The "Variable Scope" mechanism is designed to facilitate that.
 
@@ -96,7 +100,7 @@ The "Variable Scope" mechanism is designed to facilitate that.
 
 ## 모델 파일
 
-텐서플로우 모델이 저장되는 포맷을 이해하는 것은, 모델을 로드하고, 분석하고, 수정하는 데에 도움을 줍니다.
+텐서플로우 모델이 저장되는 포맷을 이해하는 것은, 모델을 읽어들이고, 분석하고, 수정하는 데에 도움을 줍니다.
 이 튜토리얼을 통해서 모델이 저장되는 포맷에 대해 자세하게 알 수 있습니다.
 
 [튜토리얼 보기](../how_tos/tool_developers/index.md)
