@@ -1,8 +1,6 @@
 # 텐서플로우 스타일 가이드
 
-This page contains style decisions that both developers and users of Tensorflow
-should follow to increase the readability of their code, reduce the number of
-errors, and promote consistency.
+텐서플로우의 개발자들과 사용자들이 따라야 할 코딩 스타일에 대한 내용입니다. 코드의 가독성을 좋게 하고, 에러를 줄이며, 일관성을 높이는 것이 목적입니다.
 
 [TOC]
 
