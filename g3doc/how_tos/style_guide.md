@@ -1,4 +1,4 @@
-# TensorFlow Style Guide
+# 텐서플로우 스타일 가이드
 
 This page contains style decisions that both developers and users of Tensorflow
 should follow to increase the readability of their code, reduce the number of
@@ -6,14 +6,14 @@ errors, and promote consistency.
 
 [TOC]
 
-## Python style
+## 파이썬 스타일
 
 Generally follow
 [PEP8 Python style guide](https://www.python.org/dev/peps/pep-0008/),
 except for using 2 spaces.
 
 
-## Python 2 and 3 compatible
+## 파이썬 2, 3 호환
 
 * All code needs to be compatible with Python 2 and 3.
 
@@ -28,7 +28,7 @@ from __future__ import division
 * Use `six` to write compatible code (for example `six.range`).
 
 
-## Bazel BUILD rules
+## 베이젤(Bazel) BUILD 규칙
 
 TensorFlow uses Bazel build system and enforces next requirements:
 
@@ -77,12 +77,12 @@ srcs_version = "PY2AND3",
 ```
 
 
-## Tensor
+## 텐서
 
 * Operations that deal with batches may assume that the first dimension of a Tensor is the batch dimension.
 
 
-## Python operations
+## 파이썬 operations
 
 A *Python operation* is a function that, given input tensors and parameters,
 creates a part of the graph and returns output tensors.
@@ -147,7 +147,7 @@ Usage:
                    output_collections=['MY_OPS'], name='add_t1t2')
 
 
-## Layers
+## 레이어
 
 A *Layer* is a Python operation that combines variable creation and/or one or many
 other graph operations. Follow the same requirements as for regular Python
@@ -166,7 +166,7 @@ operation.
   - `is_training`: `bool` to indicate if a training graph is been built.
 
 
-Example:
+예:
 
     def conv2d(inputs,
                num_filters_out,
