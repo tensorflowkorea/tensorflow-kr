@@ -24,11 +24,11 @@ from __future__ import division
 * 코드의 호환성을 위해 `six` 를 사용하십시요. (예: `six.range`).
 
 
-## 베이젤(Bazel) 빌드 규칙
+## 베이젤(Bazel) BUILD 규칙
 
 텐서플로우는 Bazel 빌드 시스템을 사용하며, 그에 따라 다음의 조건들이 요구됩니다:
 
-* Every BUILD file should contain next header:
+* 모든 BUILD 화일은 다음의 헤더를 포함해야 합니다:
 
 ```
 # Description:
@@ -44,7 +44,7 @@ licenses(["notice"])  # Apache 2.0
 exports_files(["LICENSE"])
 ```
 
-* At the end of every BUILD file, should contain:
+* 모든 BUILD 화일의 마지막에는 다음 내용이 있어야 합니다:
 
 ```
 filegroup(
@@ -60,13 +60,13 @@ filegroup(
 )
 ```
 
-* When adding new BUILD file, add this line to `tensorflow/BUILD` file into `all_opensource_files` target.
+* 새 BUILD 화일을 추가하는 경우, 다음의 내용을 add this line to `tensorflow/BUILD` file into `all_opensource_files` target.
 
 ```
 "//third_party/tensorflow/<directory>:all_files",
 ```
 
-* For all Python BUILD targets (libraries and tests) add next line:
+* 모든 파이썬 BUILD 타겟(라이브러리와 테스트) 다음의 내용을 추가하십시요:
 
 ```
 srcs_version = "PY2AND3",
