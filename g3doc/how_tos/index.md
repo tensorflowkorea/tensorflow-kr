@@ -96,14 +96,13 @@ The "Variable Scope" mechanism is designed to facilitate that.
 
 ## 모델 파일
 
-
-If you're developing a tool to load, analyze, or manipulate TensorFlow model
-files, it's useful to understand a bit about the format in which they're stored.
-This guide covers the details of the saved model format.
+텐서플로우 모델이 저장되는 포맷을 이해하는 것은, 모델을 로드하고, 분석하고, 수정하는 데에 도움을 줍니다.
+이 튜토리얼을 통해서 모델이 저장되는 포맷에 대해 자세하게 알 수 있습니다.
 
 [튜토리얼 보기](../how_tos/tool_developers/index.md)
 
 ## 트랜스퍼 학습을 이용한 부분 학습
+
 
 Training a full object recognition model like Inception takes a long time and a
 lot of images. This example shows how to use the technique of transfer learning
@@ -121,6 +120,6 @@ retraining a new model.
 
 ## 텐서플로우로 뉴럴 네트워크를 정량화 하기
 
-플로팅 포인트 모델을 8비트 파라미터와 연산을 사용하도록 정량화(양자화)하는 방법을 배웁니다. 프로그램의 이면에서 정량화가 어떻게 동작하는지도 설명합니다.
+플로팅 포인트 모델을, 8비트 파라미터와 연산을 사용하도록 정량화(양자화)하는 방법을 배웁니다. 프로그램의 이면에서 정량화가 어떻게 동작하는지도 설명합니다.
 
 [튜토리얼 보기](../how_tos/quantization/index.md)
