@@ -11,9 +11,9 @@
 
 ## 파이썬 2, 3 호환
 
-* All code needs to be compatible with Python 2 and 3.
+* 모든 코드는 파이썬 2 및 3과 호환되어야 합니다.
 
-* Next lines should be present in all Python files:
+* 모든 파이썬 화일들에 다음 라인들이 들어 있어야 합니다:
 
 ```
 from __future__ import absolute_import
