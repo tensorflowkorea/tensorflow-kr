@@ -24,9 +24,9 @@ from __future__ import division
 * 코드의 호환성을 위해 `six` 를 사용하십시요. (예: `six.range`).
 
 
-## 베이젤(Bazel) BUILD 규칙
+## 베이젤(Bazel) 빌드 규칙
 
-TensorFlow uses Bazel build system and enforces next requirements:
+텐서플로우는 Bazel 빌드 시스템을 사용하며, 그에 따라 다음의 조건들이 요구됩니다:
 
 * Every BUILD file should contain next header:
 
