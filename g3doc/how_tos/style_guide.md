@@ -133,10 +133,9 @@ srcs_version = "PY2AND3",
 
 ## 레이어
 
-*레이어*는 변수 생성 기능과 하나 또는 그 이상의 다른 그래프 오퍼레이션들을 합친 파이썬 오퍼레이션입니다. 정규 파이썬 오퍼레이션의 요구 조건들을 따르십시요.
+*레이어*는 변수 생성 기능과 하나 이상의 다른 그래프 오퍼레이션들을 합친 파이썬 오퍼레이션입니다. 정규 파이썬 오퍼레이션의 요구 조건들을 따르십시요.
 
-* If a layer creates one or more variables, the layer function
- should take next arguments also following order:
+* 레이어가 하나 이상의 변수를 생성하는 경우, 레이어 함수는 다음의 인자들을 나열된 순서대로 받아들여야 합니다:
   - `initializers`: Optionally allow to specify initializers for the variables.
   - `regularizers`: Optionally allow to specify regularizers for the variables.
   - `trainable`: which control if their variables are trainable or not.
@@ -144,8 +143,9 @@ srcs_version = "PY2AND3",
   - `reuse`: `bool` indicator if the variable should be reused if
              it's present in the scope.
 
+* 학습중에 
 * Layers that behave differently during training should have:
-  - `is_training`: `bool` to indicate if a training graph is been built.
+  - `is_training`: 학습 그래프가 만들어져 있는지를 나타내기 위한 `bool` 인자.
 
 
 예:
