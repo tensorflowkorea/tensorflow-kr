@@ -86,14 +86,12 @@ srcs_version = "PY2AND3",
 
 * 텐서값을 담은 인자들은 하나의 텐서이거나 반복가능한 텐서이어야 합니다. 예: "텐서 또는 텐서의 리스트" 는 지나치게 광범합니다. `assert_proper_iterable`를 참조하십시요.
 
-* 텐서를 인자로 받아들이는 오퍼레이션이 C++ 오퍼레이션들을 사용하는 경우, `convert_to_tensor`를 호출하여 非텐서 입력들을 텐서들로 변환해야 합니다. 문서에서 해당 인자들은 여전히 특별한 dtype의 `Tensor` 객체로 표현된다는 점을 기억하십시요.
+* 텐서를 인자로 받아들이는 오퍼레이션이 C++ 오퍼레이션들을 사용하는 경우, `convert_to_tensor`를 호출하여 非텐서 입력들을 텐서들로 변환해야 합니다. 문서에서 해당 인자들은 여전히 `Tensor` 라는 특별한 자료형 객체로 표현된다는 점을 기억하십시요.
 
 * 각각의 파이썬 오퍼레이션들은 아래와 같은 `op_scope`를 가져야 합니다. 입력 텐서들의 리스트와 `name`, 그리고 그 op의 디폴트 네임을 인자로 전달하십시요.
 
-* Operations should contain an extensive Python comment with Args and Returns
- declarations that explain both the type and meaning of each value. Possible
- shapes, dtypes, or ranks should be specified in the description.
- [See documentation details](documentation/index.md)
+* 오퍼레이션들에 선언되더 있는 인자들과 리턴값들은, 상세한 파이썬 주석을 통하여 그 의미와 자료형이 설명되어야 합니다. 가능한 형태, 자료형, 랭크(텐서의 계수)도 주석에 명시되어야 합니다.
+ [도큐멘테이션 상세 설명 보기](documentation/index.md)
 
 * For increased usability include an example of usage with inputs / outputs
  of the op in Example section.
