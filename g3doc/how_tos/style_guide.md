@@ -80,7 +80,9 @@ srcs_version = "PY2AND3",
 
 ## 파이썬 operations
 
-A *Python operation* is a function that, given input tensors and parameters,
+*파이썬 operation* 이란
+
+*s a function that, given input tensors and parameters,
 creates a part of the graph and returns output tensors.
 
 * The first arguments should be tensors, followed by basic python parameters.
