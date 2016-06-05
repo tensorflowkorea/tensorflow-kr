@@ -133,11 +133,7 @@ srcs_version = "PY2AND3",
 
 ## 레이어
 
-*레이어*는 
-
-A *Layer* is a Python operation that combines variable creation and/or one or many
-other graph operations. Follow the same requirements as for regular Python
-operation.
+*레이어*는 변수 생성 기능과 하나 또는 그 이상의 다른 그래프 오퍼레이션들을 합친 파이썬 오퍼레이션입니다. 정규 파이썬 오퍼레이션의 요구 조건들을 따르십시요.
 
 * If a layer creates one or more variables, the layer function
  should take next arguments also following order:
