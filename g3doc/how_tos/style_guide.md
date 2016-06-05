@@ -93,10 +93,9 @@ srcs_version = "PY2AND3",
 * 오퍼레이션들에 선언되어 있는 인자들과 리턴값들은, 상세한 파이썬 주석을 통하여 그 의미와 자료형이 설명되어야 합니다. 가능한 형태, 자료형, 랭크(텐서의 계수)도 주석에 명시되어야 합니다.
  [도큐멘테이션 상세 설명 보기](documentation/index.md)
 
-* For increased usability include an example of usage with inputs / outputs
- of the op in Example section.
+* 사용 편의를 높이기 위하여, 해당 오퍼레이션의 입력값과 출력값이 포함되어 있는 사용예를 Example 항목에 포함해야 합니다.
 
-Example:
+예:
 
     def my_op(tensor_in, other_tensor_in, my_param, other_param=0.5,
               output_collections=(), name=None):
