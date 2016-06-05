@@ -1,4 +1,4 @@
-# 변수: 생성, 초기화, 저장, and 복구
+# 변수: 생성, 초기화, 저장, 복구
 
 When you train a model, you use [variables](../../api_docs/python/state_ops.md)
 to hold and update parameters.  Variables are in-memory buffers containing
