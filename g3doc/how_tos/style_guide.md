@@ -125,13 +125,15 @@ srcs_version = "PY2AND3",
       tf.add_to_collections(output_collections, result)
       return result
 
-Usage:
+실제 사용시:
 
     output = my_op(t1, t2, my_param=0.5, other_param=0.6,
                    output_collections=['MY_OPS'], name='add_t1t2')
 
 
 ## 레이어
+
+*레이어*는 
 
 A *Layer* is a Python operation that combines variable creation and/or one or many
 other graph operations. Follow the same requirements as for regular Python
