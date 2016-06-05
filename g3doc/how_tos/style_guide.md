@@ -75,7 +75,7 @@ srcs_version = "PY2AND3",
 
 ## 텐서
 
-* Operations that deal with batches may assume that the first dimension of a Tensor is the batch dimension.
+* 배치(batch)를 다루는 오퍼레이션은 텐서의 첫번째 차원을 배치의 차원으로 간주할 수 있습니다.
 
 
 ## 파이썬 오퍼레이션
