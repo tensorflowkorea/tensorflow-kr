@@ -78,14 +78,13 @@ srcs_version = "PY2AND3",
 * Operations that deal with batches may assume that the first dimension of a Tensor is the batch dimension.
 
 
-## 파이썬 operations
+## 파이썬 오퍼레이션
 
-*파이썬 operation* 이란, 입력 텐서와 파라미터를 받아서, 그래프의 일부를 생성하고 출력 텐서를 리턴하는 함수를 의미합니다.
+*파이썬 오퍼레이션* 이란, 입력 텐서와 파라미터를 받아, 그래프의 일부를 생성하고 출력 텐서를 리턴하는 함수를 의미합니다.
 
-*s a function that, given input tensors and parameters,
-creates a part of the graph and returns output tensors.
+* 텐서값들은 처음에 오는 인자들로 받아야 하며, 그 다음 인자들부터 일반적인 파이썬 파라미터를 씁니다. 마지막 인자는 `name`인데, 디폴트 값은 `None`입니다. 오퍼레이션이 그래프 콜렉션들에 어떠한 `텐서`들을 저장할 필요가 있는 경우에는, 콜렉션들의 이름을 인자에 담아서, `name` 인자의 바로 앞순서로 받아야 합니다.
 
-* The first arguments should be tensors, followed by basic python parameters.
+* The first arguments should be tensors, followed by basic python parameters. 
  The last argument is `name` with a default value of `None`.
  If operation needs to save some `Tensor`s to Graph collections,
  put the arguments with names of the collections right before `name` argument.
