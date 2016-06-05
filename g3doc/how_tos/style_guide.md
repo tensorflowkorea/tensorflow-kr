@@ -84,13 +84,7 @@ srcs_version = "PY2AND3",
 
 * 텐서값들은 처음에 오는 인자들로 받아야 하며, 일반적인 파이썬 파라미터들은 그 다음 인자들로 받습니다. 마지막 인자는 `name`인데, 디폴트 값은 `None`입니다. 오퍼레이션이 그래프 콜렉션들에 어떠한 `Tensor`들을 저장할 필요가 있는 경우에는, 콜렉션들의 이름을 인자에 담아서, `name` 인자의 바로 앞순서로 받아야 합니다.
 
-* The first arguments should be tensors, followed by basic python parameters. 
- The last argument is `name` with a default value of `None`.
- If operation needs to save some `Tensor`s to Graph collections,
- put the arguments with names of the collections right before `name` argument.
-
-* Tensor arguments should be either a single tensor or an iterable of tensors.
-  E.g. a "Tensor or list of Tensors" is too broad. See `assert_proper_iterable`.
+* 텐서값을 담은 인자들은 하나의 텐서이거나 반복가능한 텐서이어야 합니다. 예: "텐서 또는 텐서의 리스트" 는 지나치게 광범합니다. `assert_proper_iterable`를 참조하십시요.
 
 * Operations that take tensors as arguments should call `convert_to_tensor`
  to convert non-tensor inputs into tensors if they are using C++ operations.
