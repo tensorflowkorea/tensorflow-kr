@@ -75,7 +75,7 @@ setting. See
 for details of a device function that can simplify the configuration for devices
 for a replicated model.
 
-## 초기화
+## 초기화 하기
 
 Variable initializers must be run explicitly before other ops in your model can
 be run.  The easiest way to do that is to add an op that runs all the variable
