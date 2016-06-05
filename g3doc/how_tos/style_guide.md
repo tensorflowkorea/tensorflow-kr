@@ -142,8 +142,7 @@ srcs_version = "PY2AND3",
   - `scope`: `VariableScope` 객체로서, 변수들의 범위를 나타냄.
   - `reuse`: 변수가 범위(scope)내에 있는 경우, 재사용 할 것인지를 나타내는 `bool` 값.
 
-* 학습중에 
-* Layers that behave differently during training should have:
+* 학습중에 다른 동작(학습하지 않는?)을 하는 레이어는 다음의 인자를 가져야 합니다:
   - `is_training`: 학습 그래프가 만들어져 있는지를 나타내기 위한 `bool` 인자.
 
 
