@@ -136,12 +136,11 @@ srcs_version = "PY2AND3",
 *레이어*는 변수 생성 기능과 하나 이상의 다른 그래프 오퍼레이션들을 합친 파이썬 오퍼레이션입니다. 정규 파이썬 오퍼레이션의 요구 조건들을 따르십시요.
 
 * 레이어가 하나 이상의 변수를 생성하는 경우, 레이어 함수는 다음의 인자들을 나열된 순서대로 받아들여야 합니다:
-  - `initializers`: Optionally allow to specify initializers for the variables.
-  - `regularizers`: Optionally allow to specify regularizers for the variables.
-  - `trainable`: which control if their variables are trainable or not.
-  - `scope`: `VariableScope` object that variable will be put under.
-  - `reuse`: `bool` indicator if the variable should be reused if
-             it's present in the scope.
+  - `initializers`: 변수들의 초기화 방법을 명시하는 경우에 선택적으로 사용.
+  - `regularizers`: 변수들의 정측화(regularization) 방법을 며잇하는 경우에 선택적으로 사용.
+  - `trainable`: 변수들이 학습 가능한지의 여부를 컨트롤 함.
+  - `scope`: `VariableScope` 객체로서, 변수들의 범위를 나타냄.
+  - `reuse`: 변수가 범위(scope)내에 있는 경우에 재사용 할 것인지를 나타내는 `bool` 값.
 
 * 학습중에 
 * Layers that behave differently during training should have:
