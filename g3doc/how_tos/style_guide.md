@@ -80,7 +80,7 @@ srcs_version = "PY2AND3",
 
 ## 파이썬 operations
 
-*파이썬 operation* 이란
+*파이썬 operation* 이란, 입력 텐서와 파라미터를 받아서, 그래프의 일부를 생성하고 출력 텐서를 리턴하는 함수를 의미합니다.
 
 *s a function that, given input tensors and parameters,
 creates a part of the graph and returns output tensors.
