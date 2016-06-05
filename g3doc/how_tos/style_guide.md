@@ -137,10 +137,10 @@ srcs_version = "PY2AND3",
 
 * 레이어가 하나 이상의 변수를 생성하는 경우, 레이어 함수는 다음의 인자들을 나열된 순서대로 받아들여야 합니다:
   - `initializers`: 변수들의 초기화 방법을 명시하는 경우에 선택적으로 사용.
-  - `regularizers`: 변수들의 정측화(regularization) 방법을 며잇하는 경우에 선택적으로 사용.
+  - `regularizers`: 변수들의 정측화(regularization) 방법을 명시하는 경우에 선택적으로 사용.
   - `trainable`: 변수들이 학습 가능한지의 여부를 컨트롤 함.
   - `scope`: `VariableScope` 객체로서, 변수들의 범위를 나타냄.
-  - `reuse`: 변수가 범위(scope)내에 있는 경우에 재사용 할 것인지를 나타내는 `bool` 값.
+  - `reuse`: 변수가 범위(scope)내에 있는 경우, 재사용 할 것인지를 나타내는 `bool` 값.
 
 * 학습중에 
 * Layers that behave differently during training should have:
