@@ -1,4 +1,4 @@
-# Variables: Creation, Initialization, Saving, and Loading
+# 변수: 생성, 초기화, 저장, 복구
 
 When you train a model, you use [variables](../../api_docs/python/state_ops.md)
 to hold and update parameters.  Variables are in-memory buffers containing
@@ -13,7 +13,7 @@ their reference manual for a complete description of their API:
 *  The [`tf.train.Saver`](../../api_docs/python/state_ops.md#Saver) class.
 
 
-## Creation
+## 생성
 
 When you create a [Variable](../../api_docs/python/state_ops.md) you pass a
 `Tensor` as its initial value to the `Variable()` constructor.  TensorFlow
@@ -75,7 +75,7 @@ setting. See
 for details of a device function that can simplify the configuration for devices
 for a replicated model.
 
-## Initialization
+## 초기화
 
 Variable initializers must be run explicitly before other ops in your model can
 be run.  The easiest way to do that is to add an op that runs all the variable
@@ -106,7 +106,7 @@ with tf.Session() as sess:
   ...
 ```
 
-### Initialization from another Variable
+### 다른 변수값을 참조하여 초기화 하기
 
 You sometimes need to initialize a variable from the initial value of another
 variable.  As the op added by `tf.initialize_all_variables()` initializes all
@@ -128,7 +128,7 @@ w2 = tf.Variable(weights.initialized_value(), name="w2")
 w_twice = tf.Variable(weights.initialized_value() * 2.0, name="w_twice")
 ```
 
-### Custom Initialization
+### 커스텀 초기화
 
 The convenience function `tf.initialize_all_variables()` adds an op to
 initialize *all variables* in the model.  You can also pass it an explicit list
@@ -136,7 +136,7 @@ of variables to initialize.  See the
 [Variables Documentation](../../api_docs/python/state_ops.md) for more options,
 including checking if variables are initialized.
 
-## Saving and Restoring
+## 저장과 복구
 
 The easiest way to save and restore a model is to use a `tf.train.Saver` object.
 The constructor adds `save` and `restore` ops to the graph for all, or a
@@ -144,7 +144,7 @@ specified list, of the variables in the graph.  The saver object provides
 methods to run these ops, specifying paths for the checkpoint files to write to
 or read from.
 
-### Checkpoint Files
+### 체크 포인트 화일 Checkpoint Files
 
 Variables are saved in binary files that, roughly, contain a map from variable
 names to tensor values.
@@ -158,7 +158,7 @@ To understand what variables are in a checkpoint, you can use the
 [`inspect_checkpoint`](https://www.tensorflow.org/code/tensorflow/python/tools/inspect_checkpoint.py)
 library, and in particular, the `print_tensors_in_checkpoint_file` function.
 
-### Saving Variables
+### 변수 저장
 
 Create a `Saver` with `tf.train.Saver()` to manage all variables in
 the model.
@@ -185,7 +185,7 @@ with tf.Session() as sess:
   print("Model saved in file: %s" % save_path)
 ```
 
-### Restoring Variables
+### 변수 복구
 
 The same `Saver` object is used to restore variables.  Note that when you
 restore variables from a file you do not have to initialize them beforehand.
@@ -208,7 +208,7 @@ with tf.Session() as sess:
   ...
 ```
 
-### Choosing which Variables to Save and Restore
+### 저장 및 복구할 변수들의 선택
 
 If you do not pass any argument to `tf.train.Saver()` the saver handles all
 variables in the graph.  Each one of them is saved under the name that was
