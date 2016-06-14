@@ -1,6 +1,6 @@
 # 시작하기
 
-텐서플로우를 작동시켜 봅시다!
+텐서플로우를 실제로 작동시켜 봅시다!
 
 시작하기 전에 앞으로 무엇을 배울지 힌트를 얻기위해 파이썬 API로 된 텐서플로우 코드를 잠깐 보겠습니다.
 
@@ -42,18 +42,9 @@ for step in range(201):
 # Learns best fit is W: [0.1], b: [0.3]
 ```
 
-The first part of this code builds the data flow graph.  TensorFlow does not
-actually run any computation until the session is created and the `run`
-function is called.
+코드의 앞 부분은 데이터 플로우 그래프를 만들고 있습니다. 텐서플로우는 세션이 만들어져서 `run` 함수가 호출되기 전까지 어떤 것도 실제로 실행하지 않습니다.
 
-To whet your appetite further, we suggest you check out what a classical
-machine learning problem looks like in TensorFlow.  In the land of neural
-networks the most "classic" classical problem is the MNIST handwritten digit
-classification.  We offer two introductions here, one for machine learning
-newbies, and one for pros.  If you've already trained dozens of MNIST models in
-other software packages, please take the red pill.  If you've never even heard
-of MNIST, definitely take the blue pill.  If you're somewhere in between, we
-suggest skimming blue, then red.
+좀 더 흥미를 돋우기 위해 전형적인 머신러닝 모델이 텐서플로우에서 어떻게 구현되는지 살펴보시면 좋습니다. 뉴럴 네트워크 분야에서 가장 전형적인 문제는 MNIST 손글씨 숫자를 분류하는 것입니다. 우리는 여기서 두가지 버전의 설명 즉 하나는 머신러닝 초보자를 위한 것과 하나는 전문가를 위한 버전을 제공합니다. 만약 다른 소프트웨어 패키지로 MNIST 모델을 여러번 훈련시킨 적이 있다면 붉은 알약을 선택하세요. 만약 MNIST에 대해 들어본 적이 없다면 푸른 알약을 선택하면 됩니다. 초보자와 전문가 사이의 어디라면 푸른색 말고 붉은 알약을 선택하시면 됩니다.
 
 <div style="width:100%; margin:auto; margin-bottom:10px; margin-top:20px; display: flex; flex-direction: row">
  <a href="../tutorials/mnist/beginners/index.md" title="MNIST for ML Beginners tutorial">
@@ -65,13 +56,10 @@ suggest skimming blue, then red.
 </div>
 <p style="font-size:10px;">Images licensed CC BY-SA 4.0; original by W. Carter</p>
 
-If you're already sure you want to learn and install TensorFlow you can skip
-these and charge ahead.  Don't worry, you'll still get to see MNIST -- we'll
-also use MNIST as an example in our technical tutorial where we elaborate on
-TensorFlow features.
+바로 텐서플로우를 설치하고 배우고 싶다면 이 내용은 넘어가고 다음으로 진행해도 됩니다. 텐서플로우 기능을 설명하는 기술적인 튜토리얼에서 MNIST 예제를 또 사용하므로 다시 볼 수 있습니다.
 
 ## Recommended Next Steps
-* [Download and Setup](../get_started/os_setup.md)
-* [Basic Usage](../get_started/basic_usage.md)
-* [TensorFlow Mechanics 101](../tutorials/mnist/tf/index.md)
-* [Tinker with a neural network in your browser](http://playground.tensorflow.org)
+* [다운로드 및 설치](../get_started/os_setup.md)
+* [기본적인 사용법](../get_started/basic_usage.md)
+* [텐서플로우 구조](../tutorials/mnist/tf/index.md)
+* [텐서플로우 플레이그라운드](http://playground.tensorflow.org)
