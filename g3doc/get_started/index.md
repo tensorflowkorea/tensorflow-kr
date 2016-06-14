@@ -1,13 +1,10 @@
-# Introduction
+# 시작하기
 
-Let's get you up and running with TensorFlow!
+텐서플로우를 작동시켜 봅시다!
 
-But before we even get started, let's peek at what TensorFlow
-code looks like in the Python API, so you have a sense of where we're
-headed.
+시작하기 전에 앞으로 무엇을 배울지 힌트를 얻기위해 파이썬 API로 된 텐서플로우 코드를 잠깐 보겠습니다.
 
-Here's a little Python program that makes up some data in two dimensions, and
-then fits a line to it.
+이 코드는 2차원 샘플 데이터를 사용하여 분포에 맞는 직선을 찾는(역주: 회귀분석) 간단한 파이썬 프로그램입니다.
 
 ```python
 import tensorflow as tf
