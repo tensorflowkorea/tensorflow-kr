@@ -1,42 +1,35 @@
-# Download and Setup
+# 다운로드와 셋업
 
-You can install TensorFlow either from our provided binary packages or from the
-github source.
+텐서플로우는 바이너리 패키지나 깃허브 소스를 이용해 설치할 수 있습니다.
 
-## Requirements
+## 필요사항
 
-The TensorFlow Python API supports Python 2.7 and Python 3.3+.
+텐서플로우 파이썬 API는 파이썬 2.7이과 파이썬 3.3+을 지원합니다.
 
-The GPU version (Linux only) works best with Cuda Toolkit 7.5 and
-cuDNN v4.  other versions are supported (Cuda toolkit >= 7.0 and
-cuDNN 6.5(v2), 7.0(v3), v5) only when installing from sources.
-Please see [Cuda installation](#optional-install-cuda-gpus-on-linux)
-for details.
+GPU 버전(아직 리눅스용만 있습니다)은 Cuda Toolkit 7.5 과
+cuDNN v4 와 가장 잘 작동합니다. 소스를 이용해 설치하면 다른 버전(Cuda toolkit >= 7.0 과
+cuDNN 6.5(v2), 7.0(v3), v5)도 사용할 수 있습니다. 자세한 내용은 [Cuda 설치](#optional-install-cuda-gpus-on-linux) 부분을 참고해 주세요.
 
-## Overview
+## 개요
 
-We support different ways to install TensorFlow:
+여러가지 설치 방법을 지원하고 있습니다:
 
-*  [Pip install](#pip-installation): Install TensorFlow on your machine, possibly
-   upgrading previously installed Python packages.  May impact existing
-   Python programs on your machine.
-*  [Virtualenv install](#virtualenv-installation): Install TensorFlow in its own
-   directory, not impacting any existing Python programs on your machine.
-*  [Anaconda install](#anaconda-installation): Install TensorFlow in its own
-   environment for those running the Anaconda Python distribution.  Does not
-   impact existing Python programs on your machine.
-*  [Docker install](#docker-installation): Run TensorFlow in a Docker container
-   isolated from all other programs on your machine.
-*  [Installing from sources](#installing-from-sources): Install TensorFlow by
-   building a pip wheel that you then install using pip.
+*  [Pip 설치](#pip-installation): 이 방식으로 텐서플로우를 설치하거나 업그레이드할 때는
+   이 전에 작성했던 파이썬 프로그램에 영향을 미칠 수 있습니다.
+*  [Virtualenv 설치](#virtualenv-installation): 텐서플로우를 각각의 디렉토리 안에 
+   설치하므로 다른 프로그램에 영향을 미치지 않습니다.
+*  [아나콘다(Anaconda) 설치](#anaconda-installation): 텐서플로우를 각 아나콘다 환경에
+   설치하므로 다른 프로그램에 영향을 미치지 않습니다.
+*  [도커(Docker) 설치](#docker-installation): 텐서플로우를 도커 컨테이너에서 실행하므로 
+   컴퓨터의 다른 프로그램과 분리되어 운영됩니다.
+*  [소스로 설치](#installing-from-sources): 텐서플로우를 pip wheel을 이용하여 
+   빌드하고 설치합니다.
 
-If you are familiar with Pip, Virtualenv, Anaconda, or Docker, please feel free to adapt
-the instructions to your particular needs.  The names of the pip and Docker
-images are listed in the corresponding installation sections.
+만약 Pip, Virtualenv, 아나콘다(Anaconda) 나 도커(Docker)를 잘 알고 있다면 필요에 맞게 설치 과정을 응용해도 좋습니다. pip 패키지 이름이나 도커 이미지 이름은 각 설치 섹션에 기재되어 있습니다.
 
-If you encounter installation errors, see
-[common problems](#common-problems) for some solutions.
+설치시 에러가 발생하면 [자주 발생하는 문제](#common-problems)를 참고하세요.
 
+<a id="pip-installation"></a>
 ## Pip Installation
 
 [Pip](https://en.wikipedia.org/wiki/Pip_(package_manager)) is a package
