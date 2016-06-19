@@ -4,7 +4,7 @@
 
 ## 필요사항
 
-텐서플로우 파이썬 API는 파이썬 2.7이과 파이썬 3.3+을 지원합니다.
+텐서플로우 파이썬 API는 파이썬 2.7과 파이썬 3.3+을 지원합니다.
 
 GPU 버전(아직 리눅스용만 있습니다)은 Cuda Toolkit 7.5 과
 cuDNN v4 와 가장 잘 작동합니다. 소스를 이용해 설치하면 다른 버전(Cuda toolkit >= 7.0 과
@@ -16,13 +16,13 @@ cuDNN 6.5(v2), 7.0(v3), v5)도 사용할 수 있습니다. 자세한 내용은 [
 
 *  [Pip 설치](#pip-installation): 이 방식으로 텐서플로우를 설치하거나 업그레이드할 때는
    이 전에 작성했던 파이썬 프로그램에 영향을 미칠 수 있습니다.
-*  [Virtualenv 설치](#virtualenv-installation): 텐서플로우를 각각의 디렉토리 안에 
+*  [Virtualenv 설치](#virtualenv-installation): 텐서플로우를 각각의 디렉토리 안에
    설치하므로 다른 프로그램에 영향을 미치지 않습니다.
 *  [아나콘다(Anaconda) 설치](#anaconda-installation): 텐서플로우를 각 아나콘다 환경에
    설치하므로 다른 프로그램에 영향을 미치지 않습니다.
-*  [도커(Docker) 설치](#docker-installation): 텐서플로우를 도커 컨테이너에서 실행하므로 
+*  [도커(Docker) 설치](#docker-installation): 텐서플로우를 도커 컨테이너에서 실행하므로
    컴퓨터의 다른 프로그램과 분리되어 운영됩니다.
-*  [소스로 설치](#installing-from-sources): 텐서플로우를 pip wheel을 이용하여 
+*  [소스에서 설치](#installing-from-sources): 텐서플로우를 pip wheel을 이용하여
    빌드하고 설치합니다.
 
 만약 Pip, Virtualenv, 아나콘다(Anaconda) 나 도커(Docker)를 잘 알고 있다면 필요에 맞게 설치 과정을 응용해도 좋습니다. pip 패키지 이름이나 도커 이미지 이름은 각 설치 섹션에 기재되어 있습니다.
@@ -32,14 +32,11 @@ cuDNN 6.5(v2), 7.0(v3), v5)도 사용할 수 있습니다. 자세한 내용은 [
 <a id="pip-installation"></a>
 ## Pip Installation
 
-[Pip](https://en.wikipedia.org/wiki/Pip_(package_manager)) is a package
-management system used to install and manage software packages written in
-Python.
+[Pip](https://en.wikipedia.org/wiki/Pip_(package_manager)는 파이썬 패키지를 설치하고 관리하는 패키지 매니저 프로그램입니다.
 
-The packages that will be installed or upgraded during the pip install are listed in the
-[REQUIRED_PACKAGES section of setup.py](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/pip_package/setup.py)
+설치되는 동안 추가되거나 업그레이드 될 파이썬 패키지 목록은 [setup.py 파일의 REQUIRED_PACKAGES 섹션](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/pip_package/setup.py)에 있습니다.
 
-Install pip (or pip3 for python3) if it is not already installed:
+pip가 설치되어 있지 않다면 먼저 pip를 설치해야 합니다(python 3일 경우는 pip3):
 
 ```bash
 # Ubuntu/Linux 64-bit
@@ -49,43 +46,39 @@ $ sudo apt-get install python-pip python-dev
 $ sudo easy_install pip
 ```
 
-Install TensorFlow:
+텐서플로우를 설치합니다:
 
 ```bash
-# Ubuntu/Linux 64-bit, CPU only, Python 2.7:
+# Ubuntu/Linux 64-bit, CPU 전용, 파이썬 2.7:
 $ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
 
-# Ubuntu/Linux 64-bit, GPU enabled, Python 2.7. Requires CUDA toolkit 7.5 and CuDNN v4.
-# For other versions, see "Install from sources" below.
+# Ubuntu/Linux 64-bit, GPU 버전, 파이썬 2.7. CUDA toolkit 7.5 와 CuDNN v4 필수.
+# 다른 버전을 사용하려면 아래 "소스에서 설치" 섹션을 참고하세요.
 $ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
 
-# Mac OS X, CPU only:
+# Mac OS X, CPU 전용:
 $ sudo easy_install --upgrade six
 $ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/mac/tensorflow-0.8.0-py2-none-any.whl
 ```
 
-For python3:
+파이썬3의 경우:
 
 ```bash
-# Ubuntu/Linux 64-bit, CPU only, Python 3.4:
+# Ubuntu/Linux 64-bit, CPU 전용, 파이썬 3.4:
 $ sudo pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl
 
-# Ubuntu/Linux 64-bit, GPU enabled, Python 3.4. Requires CUDA toolkit 7.5 and CuDNN v4.
-# For other versions, see "Install from sources" below.
+# Ubuntu/Linux 64-bit, GPU 버전, 파이썬 3.4. CUDA toolkit 7.5 와 CuDNN v4 필수.
+# 다른 버전을 사용하려면 아래 "소스에서 설치" 섹션을 참고하세요.
 $ sudo pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl
 
-# Mac OS X, CPU only:
+# Mac OS X, CPU 전용:
 $ sudo easy_install --upgrade six
 $ sudo pip3 install --upgrade https://storage.googleapis.com/tensorflow/mac/tensorflow-0.8.0-py3-none-any.whl
 ```
 
-NOTE: If you are upgrading from a previous installation of TensorFlow < 0.7.1,
-you should uninstall the previous TensorFlow *and protobuf* using `pip
-uninstall` first to make sure you get a clean installation of the updated
-protobuf dependency.
+NOTE: 만약 텐서플로우 0.7.1 버전 이하에서 업그레이드하는 경우라면 protobuf 업데이트를 반영하기 위해 반드시 `pip uninstall`을 사용하여 텐서플로우 이전 버전과 protobuf 를 언인스톨한 후 진행해야 합니다.
 
-
-You can now [test your installation](#test-the-tensorflow-installation).
+[설치 후 테스트](#test-the-tensorflow-installation)를 해 보세요.
 
 ## Virtualenv installation
 
@@ -409,7 +402,7 @@ $ git clone https://github.com/tensorflow/tensorflow
 Note that these instructions will install the latest master branch
 of tensorflow. If you want to install a specific branch (such as a release branch),
 pass `-b <branchname>` to the `git clone` command and `--recurse-submodules` for
-r0.8 and earlier to fetch the protobuf library that TensorFlow depends on. 
+r0.8 and earlier to fetch the protobuf library that TensorFlow depends on.
 
 ### Installation for Linux
 
