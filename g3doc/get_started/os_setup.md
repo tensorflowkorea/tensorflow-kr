@@ -422,42 +422,40 @@ $ python /usr/local/lib/python2.7/dist-packages/tensorflow/models/image/mnist/co
 ...
 ```
 
-## Installing from sources
+<a id="installing-from-sources"></a>
+## 소스에서 설치
 
 When installing from source you will build a pip wheel that you then install
 using pip. You'll need pip for that, so install it as described
 [above](#pip-installation).
 
-### Clone the TensorFlow repository
+### 텐서플로우 레파지토리 클론(Clone)하기
 
 ```bash
 $ git clone https://github.com/tensorflow/tensorflow
 ```
 
-Note that these instructions will install the latest master branch
-of tensorflow. If you want to install a specific branch (such as a release branch),
-pass `-b <branchname>` to the `git clone` command and `--recurse-submodules` for
-r0.8 and earlier to fetch the protobuf library that TensorFlow depends on.
+아래 방법은 최신 마스터 브랜치의 텐서플로우를 설치하는 것입니다.
+만약 특정 브랜치(릴리즈 브랜치 같은)를 설치하고 싶다면 `git clone` 명령에
+`-b <branchname>` 옵션을 추가하고 r0.8 과 그 이전 버전에서는 protobuf 라이브러리를 추가하기 위해
+`--recurse-submodules` 옵션을 추가합니다.
 
-### Installation for Linux
+### 리눅스 설치
 
-#### Install Bazel
+#### Bazel 설치
 
-Follow instructions [here](http://bazel.io/docs/install.html) to install the
-dependencies for bazel. Then download the latest stable bazel version using the
-[installer for your system](https://github.com/bazelbuild/bazel/releases) and
-run the installer as mentioned there:
+Bazel에 필요한 소프트웨어를 [여기](http://bazel.io/docs/install.html)를 따라 설치합니다.
+[자신의 컴퓨터에 맞는 인스톨러](https://github.com/bazelbuild/bazel/releases)를 사용하여
+최신 안정버전의 bazel을 다운로드 하여 아래와 같이 실행합니다:
 
 ```bash
 $ chmod +x PATH_TO_INSTALL.SH
 $ ./PATH_TO_INSTALL.SH --user
 ```
 
-Remember to replace `PATH_TO_INSTALL.SH` with the location where you
-downloaded the installer.
+`PATH_TO_INSTALL.SH` 부분을 다운받은 인스톨러의 경로롤 바꾸어 줍니다..
 
-Finally, follow the instructions in that script to place `bazel` into your
-binary path.
+마지막으로 실행 경로에 `bazel`을 추가하기 위해 화면의 설명을 따릅니다.
 
 #### Install other dependencies
 
