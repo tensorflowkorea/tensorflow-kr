@@ -1,92 +1,82 @@
-# How to Quantize Neural Networks with TensorFlow
+# 텐서플로우를 이용하여 신경망 양자화(Quantize) 하는 방법
 
-When modern neural networks were being developed, the biggest challenge was
-getting them to work at all! That meant that accuracy and speed during training
-were the top priorities. Using floating point arithmetic was the easiest way to
-preserve accuracy, and GPUs were well-equipped to accelerate those calculations,
-so it's natural that not much attention was paid to other numerical formats.
+최신 신경망이 개발될 때, 가장 큰 도전은 어떻게든 일을 하게 하는 것이였다.  이것
+은 학습에서 정확도와 속도가 가장 중요했다는 것을 의미한다. 부동소수점을 이용한 
+연산은 정확도를 유지하기 가장 쉬운 방법이었다, 그리고 GPU들은 이런 부동소수점 계
+산 가속에 특화되어 있다, 따라서 다른 형태의 연산 타입에는 많은 관심이 없었다.
 
-These days, we actually have a lot of models being being deployed in commercial
-applications. The computation demands of training grow with the number of
-researchers, but the cycles needed for inference expand in proportion to users.
-That means pure inference efficiency has become a burning issue for a lot of
-teams.
+최근에, 많은 모델들이 적용된 상용 제품들을 다수 보유 하고 있다. The computation 
+demands of training grow with the number ofresearchers, but the cycles needed 
+for inference expand in proportion to users. 이는 많은 팀에서 순수한 추론 효율이
+상당히 중요한 이슈라는 것을 의미합니다.
 
-That is where quantization comes in. It's an umbrella term that covers a lot of
-different techniques to store numbers and perform calculations on them in more
-compact formats than 32-bit floating point. I am going to focus on eight-bit
-fixed point, for reasons I'll go into more detail on later.
+이런 이유로 quantization이 발생한 것입니다. Quantization은 숫자를 저장하고, 계산
+을 위한 32bit 부동 소수점 형식보다 컴팩트하고, 많은 부분을 커버하는 포괄적 용어
+입니다. 나는 앞으로 8bit 고정소수점에 초점을 맞추고 풀어갈 예정입니다. 
 
 [TOC]
 
-## Why does Quantization Work?
+## 양자화는 왜 동작할까?
 
-Training neural networks is done by applying many tiny nudges to the weights,
-and these small increments typically need floating point precision to work
-(though there are research efforts to use quantized representations here too).
+신경망을 학습시키기 위해서는, 가중치들을 여러번 조금씩 조정해야 합니다. 그리고 
+조금씩 증가 혹은 감소를 통해 동작 시키기 위해서는 부동소수점이 필요하게 됩니다
+(양자화된 표현을 사용하려는 노력이 있기는 하지만 말이죠).
 
-Taking a pre-trained model and running inference is very different. One of the
-magical qualities of deep networks is that they tend to cope very well with high
-levels of noise in their inputs. If you think about recognizing an object in a
-photo you've just taken, the network has to ignore all the CCD noise, lighting
-changes, and other non-essential differences between it and the training
-examples it's seen before, and focus on the important similarities instead. This
-ability means that they seem to treat low-precision calculations as just another
-source of noise, and still produce accurate results even with numerical formats
-that hold less information.
+미리 학습된 모델을 이용하여 추론하는 것은 매우 다릅니다. 깊은 신경망에서 대단한
+성능을 보이는 것은 그 deep network가 입력의 노이즈를 잘 감추기 때문입니다. 만약
+당신이 방금 찍은 사진에서 물체를 인식하기를 바란다면, 신경망은 모든 CCD 잡음,
+빛 변화, 그리고 학습예제로 사용했던 것과 다른 불필요한 것들을 무시할 필요가 있
+습니다, 그리고 중요하다고 생각되는 것에 집중하게 되죠. 이 능력은 낮은 정밀도의 
+연산은 위에서 언급한 것 처럼 단순히 잡음으로 취급될 수 있다는 것을 의미합니다.
+그리고 적은 정보를 가지고 있는 숫자 표현으로도 정확한 결과를 생산해 냅니다.
 
-## Why Quantize?
+## 왜 양자일까?
 
-Neural network models can take up a lot of space on disk, with the original
-AlexNet being over 200 MB in float format for example. Almost all of that size
-is taken up with the weights for the neural connections, since there are often
-many millions of these in a single model. Because they're all slightly different
-floating point numbers, simple compression formats like zip don't compress them
-well. They are arranged in large layers though, and within each layer the
-weights tend to be normally distributed within a certain range, for example -3.0
-to 6.0.
+신경망 모델들은 디스크의 많은 공간을 차지합니다, 예를 들어 AlexNet의 경우 200MB
+가 넘는 부동 소수점 변수들이 필요합니다. 그 크기의 대부분은 신경망 연결을 위한
+가중치에 할애되고 있습니다. 그 이유는 신경망 연결이 수백만개가 하나의 모델에 존
+재하기 때문입니다. 왜냐하면, 모든 변수들은 다 조금 씩 다른 부동 소수점이기 때문
+입니다, zip과 같이 단순한 압축 형식은 이 변수들을 잘 압축시키지 못합니다. 많은 
+층에 위치해 있지고, 각각의 층의 가중치들은 대부분 특정 영역에 분산되어 있습니다.
+예를 들어 -3.0 부터 +6.0까지.
 
-The simplest motivation for quantization is to shrink file sizes by storing the
-min and max for each layer, and then compressing each float value to an
-eight-bit integer representing the closest real number in a linear set of 256
-within the range. For example with the -3.0 to 6.0 range, a 0 byte would
-represent -3.0, a 255 would stand for 6.0, and 128 would represent about 1.5.
-I'll go into the exact calculations later, since there's some subtleties, but
-this means you can get the benefit of a file on disk that's shrunk by 75%, and
-then convert back to float after loading so that your existing floating-point
-code can work without any changes.
+Quantization의 가장 단순한 동기는 파일의 크기를 줄이는 것이었습니다. 크기를 줄
+이기 위해서 각 층의 최대, 최소 값을 저장하고, 각각의 부동 소수점 값을 256개의 
+범위 내에서 가장 가까운 실수 값을 8bit 정수형으로 압축시키는 것입니다. 예를 들어
+-3.0에서 6.0까지의 범위에서, 0x0은 -3.0을 의미합니다, 그리고 0xff는 6.0을 표현
+하겠죠, 그리고 0xef는 1.5정도를 표현 하겠죠. 정확한 계산은 뒤에서 합시다, 왜냐
+하면 좀 미묘한 문제가 있습니다, 하지만 이런 방식을 사용하면 75%정도의 디스크 크
+기를 아낄 수 있습니다, 그리고 다시 부동 소수점으로 바꾸면 우리의 모델은 변경 없
+이 부동 소수점을 사용할 수 있습니다.
 
-Another reason to quantize is to reduce the computational resources you need to
-do the inference calculations, by running them entirely with eight-bit inputs
-and outputs. This is a lot more difficult since it requires changes everywhere
-you do calculations, but offers a lot of potential rewards. Fetching eight-bit
-values only requires 25% of the memory bandwidth of floats, so you'll make much
-better use of caches and avoid bottlenecking on RAM access. You can also
-typically use SIMD operations that do many more operations per clock cycle. In
-some case you'll have a DSP chip available that can accelerate eight-bit
-calculations too, which can offer a lot of advantages.
+Quantize의 다른 이유는 연산을 통한 추론 과정에서 하드웨어 연산기를 줄이기 위함
+입니다, 전체를 8bit 입력과 8bit 출력으로 사용하여서 말이죠. 계산이 필요한 모든 
+곳에서 변화가 필요하기 때문에 상당히 어렵습니다. 하지만 매우 높은 보상이 있습니
+다. 8bit의 값을 읽어 오는 것은 부동 소수점을 읽어오는 것의 25%에 해당하는 메모리
+대역폭만을 요구합니다, 따라서 RAM에 접근에 따른 병목 현상이나, 캐싱을 함에 있어
+훨씬 더 좋은 성능을 낼 수 있습니다. 또한 SIMD(Single Instruction Multiple Data)
+명령어를 이용하여 한 클럭당 더욱 많은 명령어를 수행할 수도 있습니다. 몇몇 경우에
+는 DSP(Digital Signal Processing)칩을 이용하여 8bit 연산을 가속할 수도 있습니다.
 
-Moving calculations over to eight bit will help you run your models faster, and
-use less power (which is especially important on mobile devices). It also opens
-the door to a lot of embedded systems that can't run floating point code
-efficiently, so it can enable a lot of applications in the IoT world.
+8bit를 이용한 연산으로 옮겨갈 경우, 모델들을 더욱 빠르고, 저전력(휴대기기에서 중
+요한 조건)으로 동작시킬 수 있습니다. 또한 부동 소수점 연산이 불가능한 많은 embed
+ded 시스템에 적용될 수 있습니다, 따라서 IoT 세상에 많은 어플리케이션에 적용 될 
+수 있습니다.
 
-## Why Not Train in Lower Precision Directly?
+## 왜 낮은 정밀도로 바로 학습시키지 않는 것인가요?
 
-There have been some experiments training at lower bit depths, but the results
-seem to indicate that you need higher than eight bit to handle the back
-propagation and gradients. That makes implementing the training more
-complicated, and so starting with inference made sense. We also already have a
-lot of float models already that we use and know well, so being able to convert
-them directly is very convenient.
+적은 bit를 이용하여 학습시키는 실험들이 몇번 시도 되었었습니다, 하지만 결과는
+역전파(backpropagation)과 기울기(gradient)를 위해서는 더욱 정밀한 bit 폭이 필
+요한 것으로 파악되었습니다. 이런 문제는 학습을 더욱 복잡하게 만들고, 추론을 더욱
+힘들게 합니다. 우리는 이미 부동 소수점으로 이루어진 잘알려진 모델들에 대해 실험
+해보고, quantize로의 변환을 즉각적으로 매우 쉽게 할 수 있는 것을 확인 했습니다.
 
-## How Can You Quantize Your Models?
+## 어떻게 당신의 모델을 Quantize하나요?
 
-TensorFlow has production-grade support for eight-bit calculations built it. It
-also has a process for converting many models trained in floating-point over to
-equivalent graphs using quantized calculations for inference. For example,
-here's how you can translate the latest GoogLeNet model into a version that uses
-eight-bit computations:
+TensorFlow는 제품화 단계 등급의 8bit 연산기능을 지원하고 있습니다. 또한 부동 소수
+점으로 학습된 많은 모델들을 양자화된 연산을 통해 동일한 추론이 가능하도록 변환할 
+수 있습니다. 예를들어 가장 최근의 GoogLeNet 모델을 8bit 연산으로 변경하는 방법을
+소개하고 있습니다:
 
 ```sh
 curl http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz -o /tmp/inceptionv3.tgz
