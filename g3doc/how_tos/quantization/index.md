@@ -88,11 +88,10 @@ bazel-bin/tensorflow/contrib/quantization/tools/quantize_graph \
 --mode=eightbit
 ```
 
-This will produce a new model that runs the same operations as the original, but
-with eight bit calculations internally, and all weights quantized as well. If
-you look at the file size, you'll see it's about a quarter of the original (23MB
-versus 91MB). You can still run this model using exactly the same inputs and
-outputs though, and you should get equivalent results. Here's an example:
+이것은 내부적으로는 8bit 연산을 사용하고 가중치 또한 양자화 되었지만, 원본 모델
+과 동일하게 동작합니다. 파일의 크기를 본다면, 원본과 비교하여 25%밖에 되지 않습니
+다(원본은 91MB인 반면 새로 생성된 모델은 23MB이다). 같은 입력과 출력을 갖고, 같은
+결과를 얻을 수 있습니다. 아래에 예제가 있습니다:
 
 ```sh
 bazel build tensorflow/examples/label_image:label_image
@@ -106,70 +105,59 @@ bazel-bin/tensorflow/examples/label_image/label_image \
 --output_layer_name="softmax:0"
 ```
 
-You'll see that this runs the newly-quantized graph, and outputs a very similar
-answer to the original.
+새롭게 양자화(quantized)된 그래프를 볼 수 있으며, 출력이 원본과 굉장히 비슷한
+것을 볼 수 있습니다.
 
-You can run the same process on your own models saved out as GraphDefs, with the
-input and output names adapted to those your network requires. I recommend that
-you run them through the freeze_graph script first, to convert checkpoints into
-constants stored in the file.
+입력과 출력의 이름을 당신의 네트워크의 맞게 바꾸어 GraphDefs로 저장함으로서, 당
+신의 모델도 같은 처리를 할 수 있습니다. 상수값들이 저장되어 있는 파일을 변환하기
+위해 freeze_graph 스크립트를 수행하는 것을 추천합니다.
 
-## How Does the Quantization Process Work?
+## 양자화 프로세스가 어떻게 동작하나요?
 
-We've implemented quantization by writing equivalent eight-bit versions of
-operations that are commonly used during inference. These include convolution,
-matrix multiplication, activation functions, pooling operations and
-concatenation. The conversion script first replaces all the individual ops it
-knows about with quantized equivalents. These are small sub-graphs that have
-conversion functions before and after to move the data between float and
-eight-bit. Below is an example of what they look like. First here's the original
-Relu operation, with float inputs and outputs:
+추론과정에 주로 사용되는 연산(operations)들을 8bit 버전의 동일한 동작을 할 수 있
+는 코드를 구현하였습니다. Convolution, 행렬 곱셈기, 활성 함수, pooling 연산 그리
+고 행렬 합산기를 포함하고 있습니다. 기존 연산과 양자화 연산이 동일하게 각각의 연산
+(TensorFlow의 ops; 번역)들에 변환 스크립트를 적용하였습니다. 부동 소수점과 8bit간
+의 이동을 위한 작은 부-그래프(sub-graph) 변환기를 위한 스크립트입니다. 아래 예제는
+그것들이 어떻게 생겼는지에 대한 그림 입니다. 처음으로 소개할 것은 입력과 출력이 
+부동 소수점으로 이루어진 원본 ReLU 연산입니다:
 
 ![Relu Diagram](../../images/quantization0.png)
 
-Then, this is the equivalent converted subgraph, still with float inputs and
-outputs, but with internal conversions so the calculations are done in eight
-bit.
+그리고, 아래 그림은 동일하지만 변환된 subgraph입니다, 여전히 부동 소수점 입력과
+출력을 갖고 있지만 내부 변환을 통해 연산은 8bit로 진행되는 것을 알 수 있습니다.
 
 ![Converted Diagram](../../images/quantization1.png)
 
-The min and max operations actually look at the values in the input float
-tensor, and then feeds them into the Dequantize operation that converts the
-tensor into eight-bits. There's more details on how the quantized representation
-works later on.
+최대, 최소값 연산은 처음의 부동 소수점 tensor를 확인하고 역양자화(dequantize)연
+산을 위해 공급됩니다. 양자화 표현 방법에 관한 설명은 나중에 언급하도록 하겠습
+니다.
 
-Once the individual operations have been converted, the next stage is to remove
-unnecessary conversions to and from float. If there are consecutive sequences of
-operations that all have float equivalents, then there will be a lot of adjacent
-Dequantize/Quantize ops. This stage spots that pattern, recognizes that they
-cancel each other out, and removes them, like this:
+처음 각각의 연산(ReLU, convolution 등)이 변환 되었으면, 다음 단계는 부동 소수점
+으로(부터, to/from)의 불필요한 변환을 없애는 것입니다. 만약 연속된 연산들이 부동
+소수점과 동일(여기서는 8bit quantize를 의미)하다면, 양자화와 역 양자화는 필요가
+없게 되고 서로 상쇄될 것입니다 아래와 같이요:
 
 ![Stripping Diagram](../../images/quantization2.png)
 
-Applied on a large scale to models where all of the operations have quantized
-equivalents, this gives a graph where all of the tensor calculations are done in
-eight bit, without having to convert to float.
+모든 연산(graph in tensorflow)들이 양자화 된 거대한 모델에 적용된다면 tensor들의
+연산은 모두 부동 소수점으로의 변환 없이 8bit로 끝낼 수 있습니다.
 
-## What Representation is Used for Quantized Tensors?
+## 양자화된 Tensor를 위해 사용된 표현방법은 무엇인가요?
 
-We approach converting floating-point arrays of numbers into eight-bit
-representations as a compression problem. We know that the weights and
-activation tensors in trained neural network models tend to have values that are
-distributed across comparatively small ranges (for example you might have -15 to
-+15 for weights, -500 to 1000 for activations on an image model, though the
-exact numbers will vary). We also know from experiment that neural nets tend to
-be very robust in the face of noise, and so the noise-like error produced by
-quantizing down to a small set of values will not hurt the precision of the
-overall results very much. We also want to pick a representation that's easy to
-perform calculations on, especially the large matrix multiplications that form
-the bulk of the work that's needed to run a model.
+우리는 부동소수점 숫자의 집합들을 8bit 표현으로 변경하는 방법을 압축 문제로 접근
+했습니다. 우리는 학습되어 있는 신경망 모델들의 가중치와 활성 tensor들이 비교적 
+작은 범위로 분포되어 있다는 것을 알았습니다(예를 들어 영상 모델에서 -15부터 15까
+지는 가중치, -500부터 1000까지는 활성 함수). 또한 우리는 신경망은 잡음에 상당히 
+강하고, 잡음과 같은 에러는 양자화 되어 결과에 영향을 미치기 힘들정도로 작아지는 
+것을 실험으로 확인하였습니다. 또한 거대한 행렬 곱과 같이 복잡한 연산에서 쉬운 방
+법을 통한 변환을 선택하기를 원했습니다.
 
-These led us to pick a representation that has two floats to store the overall
-minimum and maximum values that are represented by the lowest and highest
-quantized value. Each entry in the quantized array represents a float value in
-that range, distributed linearly between the minimum and maximum. For example,
-if we have minimum = -10.0, and maximum = 30.0f, and an eight-bit array, here's
-what the quantized values represent:
+이런 아이디어는 두 개의 부동 소수점을 통해 최대, 최소값을 양자화 값으로 정하고 
+표현하는 방법을 선택하게 하였습니다. 각각의 입력에는 최대 최소값 사이에 일정한
+분포를 가지고 있는 부동 소수점 집합이 존재합니다. 예를 들어 만약 우리가 -10을 
+최소 값으로 가지고 30을 최대값으로 가지면 8-bit 집합에서는 다음과 같이 양자화된
+값이 표현될 수 있습니다:
 
 ```
 Quantized | Float
@@ -179,40 +167,40 @@ Quantized | Float
 128       | 10.0
 ```
 
-The advantages of this format are that it can represent arbitrary magnitudes of
-ranges, they don't have to be symmetrical, it can represent signed and unsigned
-values, and the linear spread makes doing multiplications straightforward. There
-are alternatives like [Song Han's code books]
-(http://arxiv.org/pdf/1510.00149.pdf) that can use lower bit depths by
-non-linearly distributing the float values across the representation, but these
-tend to be more expensive to calculate on.
+이런 형식의 장점은 범위를 통해 그 값을 표현할 수 있다는 점이고, 대칭일 필요가 없
+습니다, 또한 signed 형식 혹은 unsigned 형식에 구애받지 않습니다, 선형 분포는 계산
+을 바로 수행할 수 있습니다. 다음 [Song Han's code books]에서와 같이 다른 양자 표
+현 방식 또한 존재합니다.
+(http://arxiv.org/pdf/1510.00149.pdf) 비 선형적 분포를 이용하여 부동 소수점을 표
+현하는 방법이지만, 계산은 복잡해지는 경향이 있습니다.
 
-The advantage of having a strong and clear definition of the quantized format is
-that it's always possible to convert back and forth from float for operations
-that aren't quantization-ready, or to inspect the tensors for debugging
-purposes. One implementation detail in TensorFlow that we're hoping to improve
-in the future is that the minimum and maximum float values need to be passed as
-separate tensors to the one holding the quantized values, so graphs can get a
-bit dense!
+이런 방식으로 양자화 하는 것의 장점은 언제든지 이리저리 부동 소수점에서 양자화 값
+으로 변환이 가능하다는 점 입니다, 또는 디버깅을 위해 tensor를 분석할 때도 항상 
+변환이 가능합니다. One implementation detail in TensorFlow that we're hoping to 
+improve in the future is that the minimum and maximum float values need to be 
+passed as separate tensors to the one holding the quantized values, so graphs can 
+get a bit dense!
 
-The nice thing about the minimum and maximum ranges is that they can often be
-pre-calculated. Weight parameters are constants known at load time, so their
-ranges can also be stored as constants. We often know the ranges for inputs (for
-examples images are usually RGB values in the range 0.0 to 255.0), and many
-activation functions have known ranges too. This can avoid having to analyze the
-outputs of an operation to determine the range, which we need to do for math ops
-like convolution or matrix multiplication which produce 32-bit accumulated
-results from 8-bit inputs.
+최대 최소값을 이용한 변환이 좋은 이유중 하나는 그 값들을 미리 알고 있을 수 있다는
+점입니다. 가중치 파라미터들은 저장된 값을 읽을 때 알 수 있습니다, 따라서 그 값들
+의 범위는 저장할 때 상수로 저장될 수 있습니다. 입력의 범위는 미리 알고 있는 경우가
+대부분 이고(예를 들어 RGB는 0부터 255사이의 값만을 갖고 있습니다), 또한 많은 활
+성 함수들의 범위도 알 고 있습니다. 이것은 행렬곱이나 convolution 같이 8bit 입력으
+로부터 누적되어 생성되는 32-bit 출력 값의 결과도 미리 알 수 있어 분석해야 하는 경
+우도 피할 수 있습니다.
 
-## What's Next?
+## 다음으로는 무엇 인가요?
 
-We've found that we can get extremely good performance on mobile and embedded
-devices by using eight-bit arithmetic rather than floating-point. You can see
-the framework we use to optimize matrix multiplications at [gemmlowp]
-(https://github.com/google/gemmlowp). We still need to apply all the lessons
-we've learned to the TensorFlow ops to get maximum performance on mobile, but
-we're actively working on that. Right now, this quantized implementation is a
-reasonably fast and accurate reference implementation that we're hoping will
-enable wider support for our eight-bit models on a wider variety of devices. We
-also hope that this demonstration will encourage the community to explore what's
-possible with low-precision neural networks.
+우리는 embedded 기기에서 8bit 수학적 연산을 통한 결과가 부동 소수점보다 훨씬
+우수한 성능을 보인다는 사실을 알게 되었습니다(연산 속도인것 같습니다.;번역자).
+우리가 사용하고 최적화한 행렬곱 framework를 [gemmlowp] 에서 확인 할 수 있습니다
+(https://github.com/google/gemmlowp). TensorFlow의 ops들의 최대 성능을 모바일 
+기기에서 얻기 위해 우리가 이번 실험등을 통해 얻은 결과들을 이용하여 활발히 연구
+하고 있습니다. 8-bit 모델을 더욱 폭넓고 다양한 기기들을 지원하기를 희망하고 있습
+니다. 그러기 위해 지금은 양자화 구현이 빠르고 정확한 reference 구현이 되어야 할
+것입니다. 또한 우리는 이번 데모가 낮은 수준의 정확도를 가진 신경망을 연구하는 
+그룹에게 힘을 주기를 바라고 있습니다.
+
+<번역 완료일: 2016. 06.30. 번역자: jjjhoon@gmail.com 의역 다수 존재>
+<중간 중간 의미 전달이 어려운 부분은 영어로 대체 및 번역을 하지 않았습니다>
+<피드백 및 오류 지적은 언제든 환영합니다>
