@@ -88,11 +88,10 @@ bazel-bin/tensorflow/contrib/quantization/tools/quantize_graph \
 --mode=eightbit
 ```
 
-This will produce a new model that runs the same operations as the original, but
-with eight bit calculations internally, and all weights quantized as well. If
-you look at the file size, you'll see it's about a quarter of the original (23MB
-versus 91MB). You can still run this model using exactly the same inputs and
-outputs though, and you should get equivalent results. Here's an example:
+이것은 내부적으로는 8bit 연산을 사용하고 가중치 또한 양자화 되었지만, 원본 모델
+과 동일하게 동작합니다. 파일의 크기를 본다면, 원본과 비교하여 25%밖에 되지 않습니
+다(원본은 91MB인 반면 새로 생성된 모델은 23MB이다). 같은 입력과 출력을 갖고, 같은
+결과를 얻을 수 있습니다. 아래에 예제가 있습니다:
 
 ```sh
 bazel build tensorflow/examples/label_image:label_image
@@ -106,49 +105,43 @@ bazel-bin/tensorflow/examples/label_image/label_image \
 --output_layer_name="softmax:0"
 ```
 
-You'll see that this runs the newly-quantized graph, and outputs a very similar
-answer to the original.
+새롭게 양자화(quantized)된 그래프를 볼 수 있으며, 출력이 원본과 굉장히 비슷한
+것을 볼 수 있습니다.
 
-You can run the same process on your own models saved out as GraphDefs, with the
-input and output names adapted to those your network requires. I recommend that
-you run them through the freeze_graph script first, to convert checkpoints into
-constants stored in the file.
+입력과 출력의 이름을 당신의 네트워크의 맞게 바꾸어 GraphDefs로 저장함으로서, 당
+신의 모델도 같은 처리를 할 수 있습니다. 상수값들이 저장되어 있는 파일을 변환하기
+위해 freeze_graph 스크립트를 수행하는 것을 추천합니다.
 
-## How Does the Quantization Process Work?
+## 양자화 프로세스가 어떻게 동작하나요?
 
-We've implemented quantization by writing equivalent eight-bit versions of
-operations that are commonly used during inference. These include convolution,
-matrix multiplication, activation functions, pooling operations and
-concatenation. The conversion script first replaces all the individual ops it
-knows about with quantized equivalents. These are small sub-graphs that have
-conversion functions before and after to move the data between float and
-eight-bit. Below is an example of what they look like. First here's the original
-Relu operation, with float inputs and outputs:
+추론과정에 주로 사용되는 연산(operations)들을 8bit 버전의 동일한 동작을 할 수 있
+는 코드를 구현하였습니다. Convolution, 행렬 곱셈기, 활성 함수, pooling 연산 그리
+고 행렬 합산기를 포함하고 있습니다. 기존 연산과 양자화 연산이 동일하게 각각의 연산
+(TensorFlow의 ops; 번역)들에 변환 스크립트를 적용하였습니다. 부동 소수점과 8bit간
+의 이동을 위한 작은 부-그래프(sub-graph) 변환기를 위한 스크립트입니다. 아래 예제는
+그것들이 어떻게 생겼는지에 대한 그림 입니다. 처음으로 소개할 것은 입력과 출력이 
+부동 소수점으로 이루어진 원본 ReLU 연산입니다:
 
 ![Relu Diagram](../../images/quantization0.png)
 
-Then, this is the equivalent converted subgraph, still with float inputs and
-outputs, but with internal conversions so the calculations are done in eight
-bit.
+그리고, 아래 그림은 동일하지만 변환된 subgraph입니다, 여전히 부동 소수점 입력과
+출력을 갖고 있지만 내부 변환을 통해 연산은 8bit로 진행되는 것을 알 수 있습니다.
 
 ![Converted Diagram](../../images/quantization1.png)
 
-The min and max operations actually look at the values in the input float
-tensor, and then feeds them into the Dequantize operation that converts the
-tensor into eight-bits. There's more details on how the quantized representation
-works later on.
+최대, 최소값 연산은 처음의 부동 소수점 tensor를 확인하고 역양자화(dequantize)연
+산을 위해 공급됩니다. 양자화 표현 방법에 관한 설명은 나중에 언급하도록 하겠습
+니다.
 
-Once the individual operations have been converted, the next stage is to remove
-unnecessary conversions to and from float. If there are consecutive sequences of
-operations that all have float equivalents, then there will be a lot of adjacent
-Dequantize/Quantize ops. This stage spots that pattern, recognizes that they
-cancel each other out, and removes them, like this:
+처음 각각의 연산(ReLU, convolution 등)이 변환 되었으면, 다음 단계는 부동 소수점
+으로(부터, to/from)의 불필요한 변환을 없애는 것입니다. 만약 연속된 연산들이 부동
+소수점과 동일(여기서는 8bit quantize를 의미)하다면, 양자화와 역 양자화는 필요가
+없게 되고 서로 상쇄될 것입니다 아래와 같이요:
 
 ![Stripping Diagram](../../images/quantization2.png)
 
-Applied on a large scale to models where all of the operations have quantized
-equivalents, this gives a graph where all of the tensor calculations are done in
-eight bit, without having to convert to float.
+모든 연산(graph in tensorflow)들이 양자화 된 거대한 모델에 적용된다면 tensor들의
+연산은 모두 부동 소수점으로의 변환 없이 8bit로 끝낼 수 있습니다.
 
 ## What Representation is Used for Quantized Tensors?
 
