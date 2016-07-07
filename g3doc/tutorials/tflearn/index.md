@@ -29,7 +29,7 @@ test_set = tf.contrib.learn.datasets.base.load_csv(filename=IRIS_TEST, target_dt
 x_train, x_test, y_train, y_test = training_set.data, test_set.data, \
   training_set.target, test_set.target
 
-# 10-20-10의 layer 구조를 갖는 3 layer DNN를 만듭니다
+# 10-20-10의 구조를 갖는 3층 DNN를 만듭니다
 classifier = tf.contrib.learn.DNNClassifier(hidden_units=[10, 20, 10], n_classes=3)
 
 # 모델을 피팅합니다.
@@ -67,65 +67,47 @@ print ('Predictions: {}'.format(str(y)))
 5.9          | 3.0         | 5.1          | 1.8         | 2
 
 <!-- 유의사항 : 이 문단의 나머지에서는 CSV 파일이 튜토리얼 예제 파일과 같은 경로에 있다고 가정합니다 : 만약 그렇지 않다면, 링크와 코드를 갱신하십시오. -->
-이 튜토리얼을 위해서는 Iris data는 임의적으로 섞인 후에, 두 개의 따로 떨어진 CSV 파일로 나누어져야 합니다. 이는 120개의 표본을 갖는 훈련 데이터(([iris_training.csv](http://download.tensorflow.org/data/iris_training.csv)))와 30개의 표본을 갖는 테스트 데이터(([iris_test.csv](http://download.tensorflow.org/data/iris_test.csv)))입니다.
+이 튜토리얼을 위해서는 Iris data는 임의적으로 섞인 후에, 두 개의 따로 떨어진 CSV 파일로 나누어져야 합니다. 이는 120개의 표본을 갖는 훈련 데이터([iris_training.csv](http://download.tensorflow.org/data/iris_training.csv))와 30개의 표본을 갖는 테스트 데이터([iris_test.csv](http://download.tensorflow.org/data/iris_test.csv))입니다.
 
-To get started, first import TensorFlow and numpy:
+시작하기 위해선, 먼저 텐서플로우와 numpy를 불러옵니다 : 
 
 ```python
 import tensorflow as tf
 import numpy as np
 ```
 
-Next, load the training and test sets into `Dataset`s using the [`load_csv()`]
-(https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/datasets/base.py)  method in `learn.datasets.base`. The
-`load_csv()` method has two required arguments:
+그 다음, `learn.datasets.base`에 있는 [`load_csv()`] 함수를 이용하여 훈련 셋과 테스트 셋을 `Dataset`으로 불러옵니다. `load_csv()` 함수는 두 개의 인자를 요구합니다.
 
-*   `filename`, which takes the filepath to the CSV file, and 
-*   `target_dtype`, which takes the [`numpy` datatype](http://docs.scipy.org/doc/numpy/user/basics.types.html) of the dataset's target value.
+*   `filename`, CSV 파일이 존재하는 파일의 경로
+*   `target_dtype`, dataset의 목표 값의 [`numpy` datatype](http://docs.scipy.org/doc/numpy/user/basics.types.html)
 
-Here, the target (the value you're training the model to predict) is flower
-species, which is an integer from 0&ndash;2, so the appropriate `numpy`
-datatype is `np.int`:
+여기에서 목표 값(당신이 모델을 훈련시켜 예측하려고 하는 값)은 0&ndash;2의 정수로 구성된 꽃의 종입니다. 따라서, 적절한 `numpy` 데이터형은 `np.int`입니다.
 
 ```python
-# Data sets
+# 데이터셋
 IRIS_TRAINING = "iris_training.csv"
 IRIS_TEST = "iris_test.csv"
 
-# Load datasets.
+# 데이터셋을 불러옵니다.
 training_set = tf.contrib.learn.datasets.base.load_csv(filename=IRIS_TRAINING, target_dtype=np.int)
 test_set = tf.contrib.learn.datasets.base.load_csv(filename=IRIS_TEST, target_dtype=np.int)
 ```
 
-Next, assign variables to the feature data and target values: `x_train` for
-training-set feature data, `x_test` for test-set feature data, `y_train` for
-training-set target values, and `y_test` for test-set target values. `Dataset`s
-in tf.contrib.learn are [named tuples](https://docs.python.org/2/library/collections.h
-tml#collections.namedtuple), and you can access feature data and target values
-via the `data` and `target` fields, respectively:
+그 다음, 길이 및 너비 등의 특성 데이터와 목표 값에 변수를 할당합니다. 훈련 데이터 집합의 특성 데이터는 `x_train`, 테스트 데이터 집합의 특성 데이터는 `x_test`, 훈련 데이터 집합의 목표 값은 `y_train`, 테스트 데이터 집합의 목표 값은 `y_test`입니다. tf.contrib.learn의 `Dataset`은 [named tuples](https://docs.python.org/3/library/collections.html#collections.namedtuple)이며, 순차적으로 데이터와 목표 필드(역자 주 : namedtuple의 field_name을 말합니다)를 거쳐 특성 데이터와 목표 값에 접근할 수 있습니다.
 
 ```python
 x_train, x_test, y_train, y_test = training_set.data, test_set.data, \
   training_set.target, test_set.target
 ```
 
-Later on, in "Fit the DNNClassifier to the Iris Training Data," you'll use
-`x_train` and `y_train` to  train your model, and in "Evaluate Model
-Accuracy", you'll use `x_test` and `y_test`. But first, you'll construct your
-model in the next section.
+후술할 “Iris 훈련 데이터로 DNNClassifier 피팅하기”에서, `x_train`과 `y_train`을 이용하여 모델을 훈련시키고, “모델 정확도 평가하기”에서는 `x_test`와 `y_test`를 이용할 것입니다. 하지만 먼저, 다음 문단에선 모델을 구성해봅시다.
 
-## Construct a Deep Neural Network Classifier
+## 딥 인공신경망 분류기 만들기
 
-tf.contrib.learn offers a variety of predefined models, called [`Estimator`s
-](../../api_docs/python/contrib.learn.html#estimators),  which you can use "out
-of the box" to run training and evaluation operations on your data.  Here,
-you'll configure a Deep Neural Network Classifier model to fit the Iris data.
-Using tf.contrib.learn, you can instantiate your
-[`DNNClassifier`](../../api_docs/python/contrib.learn.html#DNNClassifier) with
-just one line of code:
+tf.contrib.learn은 데이터로 훈련과 평가를 실행할 수 있도록 곧장 사용할 수 있는, [`Estimator`](../../api_docs/python/contrib.learn.html#estimators)라 불리는 여러 가지의 미리 정의된 모델을 제공합니다. 여기에서는 Iris data를 적합화하기 위해 딥 인공 신경망 모델을 설정하도록 합시다. tf.contrib.learn을 이용하면, [`DNNClassifier`](../../api_docs/python/contrib.learn.html#DNNClassifier)를 한 줄 만에 인스턴스화할 수 있습니다.
 
 ```python
-# Build 3 layer DNN with 10, 20, 10 units respectively. 
+# 10-20-10의 구조를 갖는 3층 DNN를 만듭니다
 classifier = tf.contrib.learn.DNNClassifier(hidden_units=[10, 20, 10], n_classes=3)
 ```
 
@@ -133,13 +115,12 @@ The code above creates a `DNNClassifier` model with three [hidden layers](http:/
 containing 10, 20, and 10 neurons, respectively (`hidden_units=[10, 20, 10]`), and three target
 classes (`n_classes=3`).
 
+위의 코드는 각각 10, 20, 10개의 뉴런으로 이루어진 3개의 [은닉층](http://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw)을 포함한 `DNNClassifier` 모델을 생성합니다. 이는 (`hidden_units=[10, 20, 10]`), 그리고 세 개의 목표 분류 (`n_classes=3`)에 순차적으로 따른 것입니다.
 
-## Fit the DNNClassifier to the Iris Training Data
 
-Now that you've configured your DNN `classifier` model, you can fit it to the Iris training data
-using the [`fit`](../../api_docs/python/contrib.learn.html#BaseEstimator.fit) 
-method. Pass as arguments your feature data (`x_train`), target values
-(`y_train`), and the number of steps to train (here, 200):
+## Iris 훈련 데이터로 DNNClassifier 피팅하기
+
+이제 DNN `분류기` 모델을 설정했고, [`fit`](../../api_docs/python/contrib.learn.html#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 적합화할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
 
 ```python
 # Fit model
@@ -149,8 +130,8 @@ classifier.fit(x=x_train, y=y_train, steps=200)
 <!-- Style the below (up to the next section) as an aside (note?) -->
 
 <!-- Pretty sure the following is correct, but maybe a SWE could verify? -->
-The state of the model is preserved in the `classifier`, which means you can train iteratively if
-you like. For example, the above is equivalent to the following:
+
+`분류기`에서 모델의 상태는 유지됩니다. 이는, 만약 원한다면 모델을 반복하여 학습시킬 수 있다는 것을 의미합니다. 예를 덜어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
 
 ```python
 classifier.fit(x=x_train, y=y_train, steps=100)
@@ -158,73 +139,59 @@ classifier.fit(x=x_train, y=y_train, steps=100)
 ```
 
 <!-- TODO: When tutorial exists for monitoring, link to it here -->
-However, if you're looking to track the model while it trains, you'll likely
-want to instead use a TensorFlow [`monitor`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/monitors.py)
-to perform logging operations.
+하지만, 만약 학습되는 동안에 모델을 추적하고 싶은 것이라면, (위와 같은 두 줄) 대신에 로그를 남기기 위해서 텐서플로우의 [`monitor`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/monitors.py)를 사용하는 게 낫습니다.
 
-## Evaluate Model Accuracy
+## 모델 정확도 평가하기
 
-You've fit your `DNNClassifier` model on the Iris training data; now, you can
-check its accuracy on the Iris test data using the [`evaluate`
-](../../api_docs/python/contrib.learn.html#BaseEstimator.evaluate) method.
-Like `fit`, `evaluate` takes feature data and target values as
-arguments, and returns a `dict` with the evaluation results. The following
-code passes the Iris test data&mdash;`x_test` and `y_test`&mdash;to `evaluate`
-and prints the `accuracy` from the results:
+이제 Iris 테스트 데이터에 맞춰 `DNNClassifier` 모델을 적합화했습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.html#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 목표 값을 인자로 건내받고, 평가 결과로서 `dict`를 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`x_test`와 `y_test`&mdash;를 건내받아, 결과값으로 `정확도`를 출력합니다.
 
 ```python
 accuracy_score = classifier.evaluate(x=x_test, y=y_test)["accuracy"]
 print('Accuracy: {0:f}'.format(accuracy_score))
 ```
 
-Run the full script, and check the accuracy results. You should get:
+전체 스크립트를 실행하고 나서 정확도의 결과를 확인합시다. 다음과 같은 결과를 얻을 수 있을 것입니다:
 
 ```
 Accuracy: 0.933333
 ```
 
-Not bad for a relatively small data set!
+비교적 적은 데이터셋 치고는 나쁘지 않습니다!
 
-## Classify New Samples
+## 새로운 표본 분류하기
 
-Use the estimator's `predict()` method to classify new samples. For example,
-say you have these two new flower samples:
+새로운 표본을 분류하기 위해 estimator의 `predict()` 메소드를 이용합시다. 예를 들어, 다음의 두 가지 새로운 꽃의 표본이 있다고 해봅시다 : 
 
-Sepal Length | Sepal Width | Petal Length | Petal Width
+꽃받침 길이 | 꽃받침 너비 | 꽃잎 길이 | 꽃잎 너비
 :----------- | :---------- | :----------- | :----------
 6.4          | 3.2         | 4.5          | 1.5
 5.8          | 3.1         | 5.0          | 1.7        
 
-You can predict their species with the following code:
+다음의 코드로 이들의 종을 예측할 수 있습니다 : 
 
 ```python
-# Classify two new flower samples.
+# 새로운 두 꽃의 표본을 분류합니다.
 new_samples = np.array(
     [[6.4, 3.2, 4.5, 1.5], [5.8, 3.1, 5.0, 1.7]], dtype=float)
 y = classifier.predict(new_samples)
 print ('Predictions: {}'.format(str(y)))
 ```
 
-The `predict()` method returns an array of predictions, one for each sample:
+`predict()` 메소드는 각 표본의 예측 결과를 하나씩 배열로 반환합니다.
 
 ```python
 Prediction: [1 2]
 ```
 
-The model thus predicts that the first sample is *Iris versicolor*, and the
-second sample is *Iris virginica*.
+따라서 모델은 첫 번째 표본은 *Iris versicolor*, 두 번째 표본은 *Iris virginica*로 예측하였습니다.
 
-## Additional Resources
+## 추가적인 자료
 
-* For further reference materials on tf.contrib.learn, see the official
-[API docs](../../api_docs/python/contrib.learn.md).
+* tf.contrib.learn에 대해 추가적인 참고 자료를 원한다면, 공식적인 [API docs](../../api_docs/python/contrib.learn.md)를 살펴보십시오.
 
 <!-- David, will the below be live when this tutorial is released? -->
-* To learn more about using tf.contrib.learn to create linear models, see 
-[Large-scale Linear Models with TensorFlow](../linear/).
+* 선형 모델을 생성하기 위해서 tf.contrib.learn을 이용하는 것에 대해 좀 더 배우기 위해선 [Large-scale Linear Models with TensorFlow](../linear/)를 살펴보십시오.
 
-* To experiment with neural network modeling and visualization in the browser,
-check out [Deep Playground](http://playground.tensorflow.org/).
+* 브라우저에서의 신경망 모델링과 시각화를 체험해보기 위해선, [Deep Playground](http://playground.tensorflow.org/)를 살펴보십시오.
 
-* For more advanced tutorials on neural networks, see [Convolutional Neural
-Networks](../deep_cnn/) and [Recurrent Neural Networks](../recurrent/).
+* 신경망에 대한 좀 더 심화된 튜토리얼을 원한다면 [Convolutional Neural Networks](../deep_cnn/)와 [Recurrent Neural Networks](../recurrent/)를 살펴보십시오.
