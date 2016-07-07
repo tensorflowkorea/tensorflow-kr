@@ -140,7 +140,7 @@ classifier.fit(x=x_train, y=y_train, steps=100)
 
 ## 모델 정확도 평가하기
 
-이제 Iris 테스트 데이터에 맞춰 `DNNClassifier` 모델을 피팅했습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.md#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 목표 값을 인자로 건내받고, 평가 결과로서 `dict`를 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`x_test`와 `y_test`&mdash;를 건내받아, 결과값으로 `정확도`를 출력합니다.
+이제 Iris 테스트 데이터에 맞춰 `DNNClassifier` 모델을 피팅했습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.md#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 목표 값을 인자로 건내받고, 평가 결과로서 `dict`를 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`x_test`와 `y_test`&mdash;를 건내받아, 결과값으로 `accuracy`를 출력합니다.
 
 ```python
 accuracy_score = classifier.evaluate(x=x_test, y=y_test)["accuracy"]
