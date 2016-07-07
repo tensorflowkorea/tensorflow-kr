@@ -66,15 +66,8 @@ print ('Predictions: {}'.format(str(y)))
 6.2          | 3.4         | 5.4          | 2.3         | 2
 5.9          | 3.0         | 5.1          | 1.8         | 2
 
-<!-- TODO: The rest of this section presumes that CSVs will live in same
-directory as tutorial examples; if not, update links and code --> For this
-tutorial, the Iris data has been randomized and split into two separate CSVs:
-a training set of 120 samples
-([iris_training.csv](http://download.tensorflow.org/data/iris_training.csv)).
-and a test set of 30 samples
-([iris_test.csv](http://download.tensorflow.org/data/iris_test.csv)).
-samples (iris_training.csv). and a test set of 30 samples (iris_test.csv).
-<!-- 유의사항 : 이 문단의 나머지에서는 CSV 파일이 튜토리얼 예제 파일과 같은 경로에 있다고 가정합니다 : 만약 그렇지 않다면, 링크와 코드를 갱신하십시오. 이 튜토리얼을 위해서는 Iris data는 임의적으로 섞인 후에, 두 개의 따로 떨어진 CSV 파일로 나누어져야 합니다. 이는 120개의 표본을 갖는 훈련 데이터(([iris_training.csv](http://download.tensorflow.org/data/iris_training.csv)))와 30개의 표본을 갖는 테스트 데이터(([iris_test.csv](http://download.tensorflow.org/data/iris_test.csv)))입니다.>
+<!-- 유의사항 : 이 문단의 나머지에서는 CSV 파일이 튜토리얼 예제 파일과 같은 경로에 있다고 가정합니다 : 만약 그렇지 않다면, 링크와 코드를 갱신하십시오. -->
+이 튜토리얼을 위해서는 Iris data는 임의적으로 섞인 후에, 두 개의 따로 떨어진 CSV 파일로 나누어져야 합니다. 이는 120개의 표본을 갖는 훈련 데이터(([iris_training.csv](http://download.tensorflow.org/data/iris_training.csv)))와 30개의 표본을 갖는 테스트 데이터(([iris_test.csv](http://download.tensorflow.org/data/iris_test.csv)))입니다.
 
 To get started, first import TensorFlow and numpy:
 
