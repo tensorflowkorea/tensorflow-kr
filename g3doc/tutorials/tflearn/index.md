@@ -1,13 +1,6 @@
-## tf.contrib.learn Quickstart
+## tf.contrib.learn 시작하기
 
-TensorFlow’s high-level machine learning API (tf.contrib.learn) makes it easy
-to configure, train, and evaluate a variety of machine learning models. In
-this quickstart tutorial, you’ll use tf.contrib.learn to construct a [neural
-network](https://en.wikipedia.org/wiki/Artificial_neural_network) classifier
-and train it on [Fisher’s Iris data
-set](https://en.wikipedia.org/wiki/Iris_flower_data_set) to predict flower
-species based on sepal/petal geometry. You’ll perform the following five
-steps:
+텐서플로우의 고수준 머신러닝 API(tf.contrib.learn)는 다양한 머신러닝 모델을 쉽게 설정하고, 훈련하고, 평가할 수 있도록 해줍니다. 이 간단한 튜토리얼에서는  [신경망](https://en.wikipedia.org/wiki/Artificial_neural_network) 분류기를 만들고, [피셔의 Iris 데이터셋](https://en.wikipedia.org/wiki/Iris_flower_data_set)으로 꽃받침과 꽃잎의 정보를 이용하여 꽃의 종류를 예측할 수 있도록 분류기를 훈련시킬 것입니다. 당신은 다음의 다섯 단계를 수행할 것입니다:
 
 1. Load CSVs containing Iris training/test data into a TensorFlow `Dataset`
 2. Construct a [neural network classifier](
