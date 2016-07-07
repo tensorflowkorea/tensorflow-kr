@@ -104,7 +104,7 @@ x_train, x_test, y_train, y_test = training_set.data, test_set.data, \
 
 ## 딥 인공신경망 분류기 만들기
 
-tf.contrib.learn은 데이터로 훈련과 평가를 실행할 수 있도록 곧장 사용할 수 있는, [`Estimator`](../../api_docs/python/contrib.learn.html#estimators)라 불리는 여러 가지의 미리 정의된 모델을 제공합니다. 여기에서는 Iris data를 피팅하기 위해 딥 인공 신경망 모델을 설정하도록 합시다. tf.contrib.learn을 이용하면, [`DNNClassifier`](../../api_docs/python/contrib.learn.html#DNNClassifier)를 한 줄 만에 인스턴스화할 수 있습니다.
+tf.contrib.learn은 데이터로 훈련과 평가를 실행할 수 있도록 곧장 사용할 수 있는, [`Estimator`](../../api_docs/python/contrib.learn.md#estimators)라 불리는 여러 가지의 미리 정의된 모델을 제공합니다. 여기에서는 Iris data를 피팅하기 위해 딥 인공 신경망 모델을 설정하도록 합시다. tf.contrib.learn을 이용하면, [`DNNClassifier`](../../api_docs/python/contrib.learn.md#DNNClassifier)를 한 줄 만에 인스턴스화할 수 있습니다.
 
 ```python
 # 10-20-10의 구조를 갖는 3층 DNN를 만듭니다
