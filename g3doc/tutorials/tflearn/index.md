@@ -76,7 +76,7 @@ import tensorflow as tf
 import numpy as np
 ```
 
-그 다음, `learn.datasets.base`에 있는 [`load_csv()`] 함수를 이용하여 훈련 셋과 테스트 셋을 `Dataset`으로 불러옵니다. `load_csv()` 함수는 두 개의 인자를 요구합니다.
+그 다음, `learn.datasets.base`에 있는 [`load_csv()`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/datasets/base.py) 함수를 이용하여 훈련 셋과 테스트 셋을 `Dataset`으로 불러옵니다. `load_csv()` 함수는 두 개의 인자를 요구합니다.
 
 *   `filename`, CSV 파일이 존재하는 파일의 경로
 *   `target_dtype`, dataset의 목표 값의 [`numpy` datatype](http://docs.scipy.org/doc/numpy/user/basics.types.html)
