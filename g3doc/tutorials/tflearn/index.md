@@ -128,7 +128,7 @@ classifier.fit(x=x_train, y=y_train, steps=200)
 
 <!-- Pretty sure the following is correct, but maybe a SWE could verify? -->
 
-`classifier`에서 모델의 상태는 유지됩니다. 이는, 만약 원한다면 모델을 반복하여 학습시킬 수 있다는 것을 의미합니다. 예를 덜어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
+`classifier`에서 모델의 상태는 유지됩니다. 이는, 만약 원한다면 모델을 반복하여 학습시킬 수 있다는 것을 의미합니다. 예를 들어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
 
 ```python
 classifier.fit(x=x_train, y=y_train, steps=100)
