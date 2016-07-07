@@ -1,9 +1,11 @@
+<!-- 160708 @mikibear : 최종 배포시에 md로 링크된 것을 html로 변경할 것입니다. 혹시 발견하신다면, 변경해주시면 감사하겠습니다. -->
+
 ## tf.contrib.learn 시작하기
 
 텐서플로우의 고수준 머신러닝 API(tf.contrib.learn)는 다양한 머신러닝 모델을 쉽게 설정하고, 훈련하고, 평가할 수 있도록 해줍니다. 이 간단한 튜토리얼에서는  [신경망](https://en.wikipedia.org/wiki/Artificial_neural_network) 분류기를 만들고, [피셔의 Iris 데이터셋](https://en.wikipedia.org/wiki/Iris_flower_data_set)으로 꽃받침과 꽃잎의 정보를 이용하여 꽃의 종류를 예측할 수 있도록 분류기를 훈련시킬 것입니다. 당신은 다음의 다섯 단계를 수행할 것입니다:
 
 1. Iris 훈련/테스트 데이터를 담은 CSV 파일을 텐서플로우 Dataset으로 불러옵니다
-2. [신경망 분류기](../../api_docs/python/contrib.learn.html#DNNClassifier)를 만듭니다
+2. [신경망 분류기](../../api_docs/python/contrib.learn.md#DNNClassifier)를 만듭니다
 3. 훈련 데이터를 이용하여 모델을 피팅합니다
 4. 모델의 정확도를 평가합니다
 5. 새로운 표본을 분류합니다
@@ -79,7 +81,7 @@ import numpy as np
 그 다음, `learn.datasets.base`에 있는 [`load_csv()`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/datasets/base.py) 함수를 이용하여 훈련 셋과 테스트 셋을 `Dataset`으로 불러옵니다. `load_csv()` 함수는 두 개의 인자를 요구합니다.
 
 *   `filename`, CSV 파일이 존재하는 파일의 경로
-*   `target_dtype`, dataset의 목표 값의 [`numpy` 데이터형](http://docs.scipy.org/doc/numpy/user/basics.types.html)
+*   `target_dtype`, dataset의 목표 값의 [`numpy` 데이터형](http://docs.scipy.org/doc/numpy/user/basics.types.md)
 
 여기에서 목표 값(모델을 훈련시켜 예측하려고 하는 값)은 0&ndash;2의 정수로 구성된 꽃의 종입니다. 따라서, 적절한 `numpy` 데이터형은 `np.int`입니다.
 
@@ -93,7 +95,7 @@ training_set = tf.contrib.learn.datasets.base.load_csv(filename=IRIS_TRAINING, t
 test_set = tf.contrib.learn.datasets.base.load_csv(filename=IRIS_TEST, target_dtype=np.int)
 ```
 
-그 다음, 길이 및 너비 등의 특성 데이터와 목표 값에 변수를 할당합니다. 훈련 데이터셋의 특성 데이터는 `x_train`, 테스트 데이터셋의 특성 데이터는 `x_test`, 훈련 데이터셋의 목표 값은 `y_train`, 테스트 데이터셋의 목표 값은 `y_test`입니다. tf.contrib.learn의 `Dataset`은 [named tuples](https://docs.python.org/3/library/collections.html#collections.namedtuple)이며, 순차적으로 데이터와 목표 필드(`역주 : namedtuple의 field_name을 말합니다`)를 통해 특성 데이터와 목표 값에 접근할 수 있습니다.
+그 다음, 길이 및 너비 등의 특성 데이터와 목표 값에 변수를 할당합니다. 훈련 데이터셋의 특성 데이터는 `x_train`, 테스트 데이터셋의 특성 데이터는 `x_test`, 훈련 데이터셋의 목표 값은 `y_train`, 테스트 데이터셋의 목표 값은 `y_test`입니다. tf.contrib.learn의 `Dataset`은 [named tuples](https://docs.python.org/3/library/collections.md#collections.namedtuple)이며, 순차적으로 데이터와 목표 필드(`역주 : namedtuple의 field_name을 말합니다`)를 통해 특성 데이터와 목표 값에 접근할 수 있습니다.
 
 ```python
 x_train, x_test, y_train, y_test = training_set.data, test_set.data, \
@@ -115,7 +117,7 @@ classifier = tf.contrib.learn.DNNClassifier(hidden_units=[10, 20, 10], n_classes
 
 ## Iris 훈련 데이터로 DNNClassifier 피팅하기
 
-이제 DNN `분류기` 모델을 설정했고, [`fit`](../../api_docs/python/contrib.learn.html#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
+이제 DNN `분류기` 모델을 설정했고, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
 
 ```python
 # Fit model
@@ -138,7 +140,7 @@ classifier.fit(x=x_train, y=y_train, steps=100)
 
 ## 모델 정확도 평가하기
 
-이제 Iris 테스트 데이터에 맞춰 `DNNClassifier` 모델을 피팅했습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.html#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 목표 값을 인자로 건내받고, 평가 결과로서 `dict`를 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`x_test`와 `y_test`&mdash;를 건내받아, 결과값으로 `정확도`를 출력합니다.
+이제 Iris 테스트 데이터에 맞춰 `DNNClassifier` 모델을 피팅했습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.md#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 목표 값을 인자로 건내받고, 평가 결과로서 `dict`를 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`x_test`와 `y_test`&mdash;를 건내받아, 결과값으로 `정확도`를 출력합니다.
 
 ```python
 accuracy_score = classifier.evaluate(x=x_test, y=y_test)["accuracy"]
