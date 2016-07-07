@@ -117,7 +117,7 @@ classifier = tf.contrib.learn.DNNClassifier(hidden_units=[10, 20, 10], n_classes
 
 ## Iris 훈련 데이터로 DNNClassifier 피팅하기
 
-이제 DNN `분류기` 모델을 설정했고, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
+이제 DNN `classifier` 모델을 설정했고, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
 
 ```python
 # Fit model
@@ -128,7 +128,7 @@ classifier.fit(x=x_train, y=y_train, steps=200)
 
 <!-- Pretty sure the following is correct, but maybe a SWE could verify? -->
 
-`분류기`에서 모델의 상태는 유지됩니다. 이는, 만약 원한다면 모델을 반복하여 학습시킬 수 있다는 것을 의미합니다. 예를 덜어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
+`classifier`에서 모델의 상태는 유지됩니다. 이는, 만약 원한다면 모델을 반복하여 학습시킬 수 있다는 것을 의미합니다. 예를 덜어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
 
 ```python
 classifier.fit(x=x_train, y=y_train, steps=100)
