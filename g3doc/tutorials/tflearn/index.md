@@ -117,7 +117,7 @@ classifier = tf.contrib.learn.DNNClassifier(hidden_units=[10, 20, 10], n_classes
 
 ## Iris 훈련 데이터로 DNNClassifier 피팅하기
 
-이제 DNN `classifier` 모델을 설정했고, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
+이제 DNN `classifier` 모델을 설정했으니, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
 
 ```python
 # Fit model
