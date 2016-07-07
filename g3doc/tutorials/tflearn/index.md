@@ -52,7 +52,7 @@ print ('Predictions: {}'.format(str(y)))
 
 [Iris 데이터셋](https://en.wikipedia.org/wiki/Iris_flower_data_set)은 Iris 종 내에서 서로 연관된 *Iris setosa*, *Iris virginica*, and *Iris versicolor* 세 종이 각각 50개씩의 표본으로 구성되어 150개 행의 데이터로 되어있습니다. 각각의 행은 각 꽃의 표본에 대한 다음의 정보를 담고 있습니다 : [꽃받침](https://en.wikipedia.org/wiki/Sepal) 길이, 꽃받침 너비, [꽃잎](https://en.wikipedia.org/wiki/Petal) 길이, 꽃잎 너비, 그리고 꽃의 종류. 꽃의 종류는 정수로 표현되어 있으며, 0은 *Iris setosa*, 1은 *Iris versicolor*, 그리고 2는 *Iris virginica*를 나타냅니다.
 
-꽃받침 길이 | 꽃받침 너비 | 꽃받침 길이 | 꽃받침 너비 | 종
+꽃받침 길이 | 꽃받침 너비 | 꽃잎 길이 | 꽃잎 너비 | 종
 :----------- | :---------- | :----------- | :---------- | :------
 5.1          | 3.5         | 1.4          | 0.2         | 0
 4.9          | 3.0         | 1.4          | 0.2         | 0
