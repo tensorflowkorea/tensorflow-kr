@@ -180,7 +180,7 @@ print ('Predictions: {}'.format(str(y)))
 Prediction: [1 2]
 ```
 
-따라서 모델은 첫 번째 표본은 *Iris versicolor*, 두 번째 표본은 *Iris virginica*로 예측하였습니다.
+따라서 모델은 첫 번째 표본을 *Iris versicolor*, 두 번째 표본을 *Iris virginica*로 예측하였습니다.
 
 ## 추가적인 자료
 
