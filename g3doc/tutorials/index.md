@@ -80,7 +80,7 @@ ImageNet Challenge 데이터와 라벨 데이터셋으로 훈련된 콘볼루션
 
 ### Deep Dream 시각 환상
 
-인셉션 인식 모델을 구축하여, 우리는 [Deep Dream](https://github.com/google/deepdream) 신경망 시각 환상 소프트웨어의 텐서플로우 버전을 공개합니다.
+인셉션 인식 모델을 구축한, [Deep Dream](https://github.com/google/deepdream) 신경망 시각 환상 소프트웨어의 텐서플로우 버전을 배포합니다.
 
 [튜토리얼 보기](https://www.tensorflow.org/code/tensorflow/examples/tutorials/deepdream/deepdream.ipynb)
 
