@@ -1,156 +1,149 @@
-# Tutorials
+# 튜토리얼
 
-## Basic Neural Networks
+## 기본적인 인공신경망
 
-### MNIST For ML Beginners
+### 기계학습 초심자를 위한 MNIST
 
-If you're new to machine learning, we recommend starting here.  You'll learn
-about a classic problem, handwritten digit classification (MNIST), and get a
-gentle introduction to multiclass classification.
+만약 기계학습을 처음 배우신다면, 여기서부터 출발하기를 권장드립니다. MNIST라는 손으로 쓰여진 숫자를 분류하는 전통적인 문제에 대해 배워, 다중 분류에 관한 가벼운 입문을 할 수 있습니다.
 
-[View Tutorial](../tutorials/mnist/beginners/index.md)
+[튜토리얼 보기](../tutorials/mnist/beginners/index.md)
 
 
-### Deep MNIST for Experts
+### 숙련자를 위한 심화된 MNIST
 
-If you're already familiar with other deep learning software packages, and are
-already familiar with MNIST, this tutorial will give you a very brief primer
-on TensorFlow.
+만약 이미 다른 딥러닝 소프트웨어 패키지와 MNIST에 익숙하시다면, 이 튜토리얼이 텐서플로우에 관한 매우 간단한 시작점이 될 것입니다.
 
-[View Tutorial](../tutorials/mnist/pros/index.md)
+[튜토리얼 보기](../tutorials/mnist/pros/index.md)
 
-### TensorFlow Mechanics 101
+### 기본 텐서플로우 기법
 
 This is a technical tutorial, where we walk you through the details of using
 TensorFlow infrastructure to train models at scale.  We use MNIST as the
 example.
+규모 있는 모델을 학습시키기 위해 텐서플로우의 인프라를 조금 더 자세하게 알아보고자 할 때의 기술적인 튜토리얼입니다. MNIST를 예시로 이용합니다.
 
-[View Tutorial](../tutorials/mnist/tf/index.md)
+[튜토리얼 보기](../tutorials/mnist/tf/index.md)
 
-### MNIST Data Download
+### MNIST 데이터 다운로드
 
-Details about downloading the MNIST handwritten digits data set.  Exciting
-stuff.
+MNIST 숫자 데이터셋을 다운로드하는 것에 대한 자세한 사항입니다. 꽤 흥미로운 자료입니다.
 
-[View Tutorial](../tutorials/mnist/download/index.md)
+[튜토리얼 보기](../tutorials/mnist/download/index.md)
 
 
 ## Easy ML with tf.contrib.learn
+## tf.contrib.learn로 하는 쉬운 기계학습
 
-### tf.contrib.learn Quickstart
+### tf.contrib.learn 시작하기
 
-A quick introduction to tf.contrib.learn, a high-level API for TensorFlow.
-Build, train, and evaluate a neural network with just a few lines of
-code.
+텐서플로우의 고수준 API인 tf.contrib.learn의 간략한 입문입니다. 단 몇 줄의 코드로 신경망을 만들고, 훈련하고, 평가합니다.
 
-[View Tutorial](../tutorials/tflearn/index.md)
+[튜토리얼 보기](../tutorials/tflearn/index.md)
 
-### Overview of Linear Models with tf.contrib.learn
+### tf.contrib.learn으로 선형 모델 훑어보기
 
-An overview of tf.contrib.learn's rich set of tools for working with linear
-models in TensorFlow.
+텐서플로우에서 선형 모델을 작업하기 위해서, tf.contrib.learn의 풍부한 도구에 대해 훑어봅니다.
 
-[View Tutorial](../tutorials/linear/overview.md)
+[튜토리얼 보기](../tutorials/linear/overview.md)
 
-### Linear Model Tutorial
+### 선형 모델 튜토리얼
 
 This tutorial walks you through the code for building a linear model using
 tf.contrib.learn.
+이 튜토리얼은 tf.contrib.learn을 이용해 선형 모델을 만드는 코드를 살펴볼 수 있습니다.
 
-[View Tutorial](../tutorials/wide/index.md)
+[튜토리얼 보기](../tutorials/wide/index.md)
 
 ### Wide and Deep Learning Tutorial
+### Wide and Deep Learning Tutorial
 
-This tutorial shows you how to use tf.contrib.learn to jointly train a linear
-model and a deep neural net to harness the advantages of each type of model.
+이 튜토리얼은 각 모델의 장점을 결합하기 위해 선형 모델과 딥 신경망을 tf.contrib.learn을 이용해 동시에 학습시키는 방법을 보여줍니다.
 
-[View Tutorial](../tutorials/wide_and_deep/index.md)
-
-
-## TensorFlow Serving
-
-### TensorFlow Serving
-
-An introduction to TensorFlow Serving, a flexible, high-performance system for
-serving machine learning models, designed for production environments.
-
-[View Tutorial](../tutorials/tfserve/index.md)
+[튜토리얼 보기](../tutorials/wide_and_deep/index.md)
 
 
-## Image Processing
+## 텐서플로우 서빙
 
-### Convolutional Neural Networks
+### 텐서플로우 서빙
 
-An introduction to convolutional neural networks using the CIFAR-10 data set.
-Convolutional neural nets are particularly tailored to images, since they
-exploit translation invariance to yield more compact and effective
-representations of visual content.
+생산적인 환경 마련을 위한, 기계학습 모델을 제공하는 유연하고 우수한 시스템인 텐서플로우 서빙에 입문합니다.
 
-[View Tutorial](../tutorials/deep_cnn/index.md)
+[튜토리얼 보기](../tutorials/tfserve/index.md)
 
-### Image Recognition
 
-How to run object recognition using a convolutional neural network
-trained on ImageNet Challenge data and label set.
+## 이미지 처리
 
-[View Tutorial](../tutorials/image_recognition/index.md)
+### 콘볼루션 신경망
+
+CIFAR-10 데이터셋을 이용한 콘볼루션 신경망에 관한 입문입니다. 시각적인 자료에 관해 더 함축적이고 효과적인 표현을 산출하기 위해 변환 불변성을 이용하기 때문에, 콘볼루션 신경망은 특별히 이미지 처리에 맞게 설계되어 있습니다.
+
+[튜토리얼 보기](../tutorials/deep_cnn/index.md)
+
+### 이미지 인식
+
+ImageNet Challenge 데이터와 라벨 데이터셋으로 훈련된 콘볼루션 신경망을 이용해 물체를 인식하는 법을 배웁니다.
+
+[튜토리얼 보기](../tutorials/image_recognition/index.md)
 
 ### Deep Dream Visual Hallucinations
+### Deep Dream 시각 환상
 
-Building on the Inception recognition model, we will release a TensorFlow
-version of the [Deep Dream](https://github.com/google/deepdream) neural network
-visual hallucination software.
+인셉션 인식 모델을 구축하여, 우리는 [Deep Dream](https://github.com/google/deepdream) 신경망 시각 환상 소프트웨어의 텐서플로우 버전을 공개합니다.
 
-[View Tutorial](https://www.tensorflow.org/code/tensorflow/examples/tutorials/deepdream/deepdream.ipynb)
+[튜토리얼 보기](https://www.tensorflow.org/code/tensorflow/examples/tutorials/deepdream/deepdream.ipynb)
 
 
 ## Language and Sequence Processing
+## 언어와 시퀀스 처리
 
 ### Vector Representations of Words
+### 단어의 벡터 표현
 
 This tutorial motivates why it is useful to learn to represent words as vectors
 (called *word embeddings*). It introduces the word2vec model as an efficient
 method for learning embeddings. It also covers the high-level details behind
 noise-contrastive training methods (the biggest recent advance in training
 embeddings).
+이 튜토리얼은 단어를 벡터로 표현하는 방법(*워드 임베딩*)을 배우는 게 어째서 유용한지에 관해 여러분의 흥미를 자극할 것입니다. 임베딩을 학습하기 위한 효과적인 모델로 word2vec 모델을 소개합니다. 또한, 노이즈-대조 학습 방법 학습 방법을 지지하는 높은 수준의 디테일도 다룰 것입니다.
 
-[View Tutorial](../tutorials/word2vec/index.md)
+[튜토리얼 보기](../tutorials/word2vec/index.md)
 
-### Recurrent Neural Networks
+### 순환 신경망
 
 An introduction to RNNs, wherein we train an LSTM network to predict the next
 word in an English sentence.  (A task sometimes called language modeling.)
+영어 문장에서 다음 단어를 예측하기 위해 LSTM 네트워크를 학습하는 RNN에 관한 입문입니다. (언어 모델링이라고도 부르는 작업입니다.)
 
-[View Tutorial](../tutorials/recurrent/index.md)
+[튜토리얼 보기](../tutorials/recurrent/index.md)
 
 ### Sequence-to-Sequence Models
+### 시퀀스-시퀀스 모델
 
 A follow on to the RNN tutorial, where we assemble a sequence-to-sequence model
 for machine translation.  You will learn to build your own English-to-French
 translator, entirely machine learned, end-to-end.
+RNN 튜토리얼에 이어, 기계 번역을 위해 시퀀스-시퀀스 모델을 결합합니다. 전체적으로 머신이 학습해, 한쪽과 다른 한쪽을 잇는 자신 만의 영어-프랑스어 번역기를 만드는 것을 배울 것입니다.
 
-[View Tutorial](../tutorials/seq2seq/index.md)
+[튜토리얼 보기](../tutorials/seq2seq/index.md)
 
 ### SyntaxNet: Neural Models of Syntax
+### SyntaxNet: 문법의 신경 모델
 
-An introduction to SyntaxNet, a Natural Language Processing framework for
-TensorFlow.
+텐서플로우를 위한 자연언어처리 프레임워크인 SyntaxNet을 소개합니다.
 
-[View Tutorial](../tutorials/syntaxnet/index.md)
+[튜토리얼 보기](../tutorials/syntaxnet/index.md)
 
 
-## Non-ML Applications
+## 기계학습을 제외한 적용 사례
 
-### Mandelbrot Set
+### 만델브로트
 
-TensorFlow can be used for computation that has nothing to do with machine
-learning.  Here's a naive implementation of Mandelbrot set visualization.
+텐서플로우는 기계학습과 관련이 없는 연산 작업에도 활용될 수 있습니다. 여기서는 만델브로트 데이터셋을 시각화하는 나이브한 구현을 보여줍니다.
 
-[View Tutorial](../tutorials/mandelbrot/index.md)
+[튜토리얼 보기](../tutorials/mandelbrot/index.md)
 
-### Partial Differential Equations
+### 편미분 방정식
 
-As another example of non-machine learning computation, we offer an example of
-a naive PDE simulation of raindrops landing on a pond.
+기계학습과 관련이 없는 또 다른 예시로, 연못에 떨어지는 빗방울에 관한 나이브한 PDF 시뮬레이션의 예시를 제공합니다.
 
-[View Tutorial](../tutorials/pdes/index.md)
+[튜토리얼 보기](../tutorials/pdes/index.md)
