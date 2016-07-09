@@ -85,7 +85,6 @@ ImageNet Challenge 데이터와 라벨 데이터셋으로 훈련된 콘볼루션
 
 [튜토리얼 보기](../tutorials/image_recognition/index.md)
 
-### Deep Dream Visual Hallucinations
 ### Deep Dream 시각 환상
 
 인셉션 인식 모델을 구축하여, 우리는 [Deep Dream](https://github.com/google/deepdream) 신경망 시각 환상 소프트웨어의 텐서플로우 버전을 공개합니다.
