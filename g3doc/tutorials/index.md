@@ -51,8 +51,7 @@ tf.contrib.learn.
 
 [튜토리얼 보기](../tutorials/wide/index.md)
 
-### Wide and Deep Learning Tutorial
-### Wide and Deep Learning Tutorial
+### Wide and deep learning 튜토리얼
 
 이 튜토리얼은 각 모델의 장점을 결합하기 위해 선형 모델과 딥 신경망을 tf.contrib.learn을 이용해 동시에 학습시키는 방법을 보여줍니다.
 
