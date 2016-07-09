@@ -17,9 +17,6 @@
 
 ### 기본 텐서플로우 기법
 
-This is a technical tutorial, where we walk you through the details of using
-TensorFlow infrastructure to train models at scale.  We use MNIST as the
-example.
 규모 있는 모델을 학습시키기 위해 텐서플로우의 인프라를 조금 더 자세하게 알아보고자 할 때의 기술적인 튜토리얼입니다. MNIST를 예시로 이용합니다.
 
 [튜토리얼 보기](../tutorials/mnist/tf/index.md)
@@ -98,34 +95,22 @@ ImageNet Challenge 데이터와 라벨 데이터셋으로 훈련된 콘볼루션
 ### Vector Representations of Words
 ### 단어의 벡터 표현
 
-This tutorial motivates why it is useful to learn to represent words as vectors
-(called *word embeddings*). It introduces the word2vec model as an efficient
-method for learning embeddings. It also covers the high-level details behind
-noise-contrastive training methods (the biggest recent advance in training
-embeddings).
 이 튜토리얼은 단어를 벡터로 표현하는 방법(*워드 임베딩*)을 배우는 게 어째서 유용한지에 관해 여러분의 흥미를 자극할 것입니다. 임베딩을 학습하기 위한 효과적인 모델로 word2vec 모델을 소개합니다. 또한, 노이즈-대조 학습 방법 학습 방법을 지지하는 높은 수준의 디테일도 다룰 것입니다.
 
 [튜토리얼 보기](../tutorials/word2vec/index.md)
 
 ### 순환 신경망
 
-An introduction to RNNs, wherein we train an LSTM network to predict the next
-word in an English sentence.  (A task sometimes called language modeling.)
 영어 문장에서 다음 단어를 예측하기 위해 LSTM 네트워크를 학습하는 RNN에 관한 입문입니다. (언어 모델링이라고도 부르는 작업입니다.)
 
 [튜토리얼 보기](../tutorials/recurrent/index.md)
 
-### Sequence-to-Sequence Models
 ### 시퀀스-시퀀스 모델
 
-A follow on to the RNN tutorial, where we assemble a sequence-to-sequence model
-for machine translation.  You will learn to build your own English-to-French
-translator, entirely machine learned, end-to-end.
 RNN 튜토리얼에 이어, 기계 번역을 위해 시퀀스-시퀀스 모델을 결합합니다. 전체적으로 머신이 학습해, 한쪽과 다른 한쪽을 잇는 자신 만의 영어-프랑스어 번역기를 만드는 것을 배울 것입니다.
 
 [튜토리얼 보기](../tutorials/seq2seq/index.md)
 
-### SyntaxNet: Neural Models of Syntax
 ### SyntaxNet: 문법의 신경 모델
 
 텐서플로우를 위한 자연언어처리 프레임워크인 SyntaxNet을 소개합니다.
