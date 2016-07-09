@@ -28,7 +28,6 @@ MNIST 숫자 데이터셋을 다운로드하는 것에 대한 자세한 사항�
 [튜토리얼 보기](../tutorials/mnist/download/index.md)
 
 
-## Easy ML with tf.contrib.learn
 ## tf.contrib.learn로 하는 쉬운 기계학습
 
 ### tf.contrib.learn 시작하기
