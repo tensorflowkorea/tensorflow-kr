@@ -85,10 +85,8 @@ ImageNet Challenge 데이터와 라벨 데이터셋으로 훈련된 콘볼루션
 [튜토리얼 보기](https://www.tensorflow.org/code/tensorflow/examples/tutorials/deepdream/deepdream.ipynb)
 
 
-## Language and Sequence Processing
 ## 언어와 시퀀스 처리
 
-### Vector Representations of Words
 ### 단어의 벡터 표현
 
 이 튜토리얼은 단어를 벡터로 표현하는 방법(*워드 임베딩*)을 배우는 게 어째서 유용한지에 관해 여러분의 흥미를 자극할 것입니다. 임베딩을 학습하기 위한 효과적인 모델로 word2vec 모델을 소개합니다. 또한, 노이즈-대조 학습 방법 학습 방법을 지지하는 높은 수준의 디테일도 다룰 것입니다.
