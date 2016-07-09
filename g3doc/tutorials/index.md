@@ -44,8 +44,6 @@ MNIST 숫자 데이터셋을 다운로드하는 것에 대한 자세한 사항�
 
 ### 선형 모델 튜토리얼
 
-This tutorial walks you through the code for building a linear model using
-tf.contrib.learn.
 이 튜토리얼은 tf.contrib.learn을 이용해 선형 모델을 만드는 코드를 살펴볼 수 있습니다.
 
 [튜토리얼 보기](../tutorials/wide/index.md)
