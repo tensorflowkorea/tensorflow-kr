@@ -105,7 +105,7 @@ RNN 튜토리얼에 이어, 기계 번역을 위해 시퀀스-시퀀스 모델�
 
 [튜토리얼 보기](../tutorials/seq2seq/index.md)
 
-### 신텍스넷
+### SyntaxNet
 
 텐서플로우를 위한 자연언어처리 프레임워크인 SyntaxNet을 소개합니다.
 
