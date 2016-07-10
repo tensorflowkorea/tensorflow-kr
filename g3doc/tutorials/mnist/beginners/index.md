@@ -1,54 +1,25 @@
 # MNIST For ML Beginners
 # MNIST 초급
 
-*This tutorial is intended for readers who are new to both machine learning and
-TensorFlow. If you already
-know what MNIST is, and what softmax (multinomial logistic) regression is,
-you might prefer this [faster paced tutorial](../pros/index.md).
-Be sure to [install TensorFlow](../../../get_started/os_setup.md) before
-starting either tutorial.*
 *이 튜토리얼은 머신러닝과 텐서플로우을 처음 접해본 독자들을 위해서 구성되어 있습니다. 만약 MNIST가 무엇인지 알고 소프트맥스(다변량 로지스틱) 회귀가 무엇인지 이미 알고 계신다면, [더 깊이 있는 튜토리얼](../pros/index.md)을 선호하실 것이라고 생각합니다. 튜토리얼을 진행하시기 전에, 자신의 머신에 [텐서플로우가 설치](../../../get_started/os_setup.md)되어 있는지 확인해주세요.*
 
-When one learns how to program, there's a tradition that the first thing you do
-is print "Hello World." Just like programming has Hello World, machine learning
-has MNIST.
 프로그래밍을 어떻게 하는지 배울 때, 언제나 "Hello World."를 가장 먼저 출력해본다는 전통이 있습니다. 그것처럼, 머신러닝에선 MNIST를 가장 먼저 다룹니다.
 
-MNIST is a simple computer vision dataset. It consists of images of handwritten
-digits like these:
 MNIST는 간단한 컴퓨터 비전 데이터셋입니다. 이는 다음과 같이 손으로 쓰여진 이미지로 구성되어 있습니다.
 
 <div style="width:40%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../../images/MNIST.png">
 </div>
 
-It also includes labels for each image, telling us which digit it is. For
-example, the labels for the above images are 5, 0, 4, and 1.
 또한, 이것은 그 숫자가 어떤 숫자인지 알려주는 각 이미지에 관한 라벨을 포함하고 있습니다. 예를 들어서, 위의 이미지의 경우에 라벨은 5, 0, 4, 그리고 1입니다.
 
-In this tutorial, we're going to train a model to look at images and predict
-what digits they are. Our goal isn't to train a really elaborate model that
-achieves state-of-the-art performance -- although we'll give you code to do that
-later! -- but rather to dip a toe into using TensorFlow. As such, we're going
-to start with a very simple model, called a Softmax Regression.
 이 튜토리얼에서는 모델이 이미지를 보고 어떤 숫자인지 예측하는 모델을 훈련시킬 것입니다. 우리의 목적은 가장 최신의 성능을 발휘하는 정교한 시스템을 만드는 것이 아닙니다.(물론 뒤에 가서 하게될 것입니다!) 대신에, 여기서는 텐서플로우에 발을 살짝만 담궈봅시다. 우리는 소프트맥스 회귀라고 불리는 아주 간단한 모델로 시작할 것입니다.
 
-The actual code for this tutorial is very short, and all the interesting
-stuff happens in just three lines. However, it is very
-important to understand the ideas behind it: both how TensorFlow works and the
-core machine learning concepts. Because of this, we are going to very carefully
-work through the code.
 이 튜토리얼에 쓰이는 실제 코드는 매우 짧고, 흥미로운 일들은 단지 세 줄 안에 모두 일어납니다. 그러나 우리에게는 그 세 줄 안에 담겨있는 텐서플로우의 동작 원리와 머신러닝의 핵심 개념을 아는 것이 중요합니다. 때문에, 우리는 코드를 하나하나 주의깊게 다룰 것입니다.
 
 ## The MNIST Data
 ## MNIST 데이터셋
 
-The MNIST data is hosted on
-[Yann LeCun's website](http://yann.lecun.com/exdb/mnist/).  For your
-convenience, we've included some python code to download and install the data
-automatically. You can either download
-[the code](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/input_data.py)
-and import it as below, or simply copy and paste it in.
 MNIST 데이터셋은 [Yann LeCun의 웹사이트](http://yann.lecun.com/exdb/mnist/)에 호스팅되어 있습니다. 좀 편하게 하기 위해서, 우리는 이 데이터를 다운로드받고 설치하는 파이썬 코드를 넣어놨습니다. [여기](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/input_data.py)에서 코드를 다운받은 후 아래와 같이 코드를 불러올 수도 있습니다. 아니면 그냥 복사하고 붙여넣기를 하십시오.
 
 ```python
@@ -56,23 +27,10 @@ from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 ```
 
-The downloaded data is split into three parts, 55,000 data points of training
-data (`mnist.train`), 10,000 points of test data (`mnist.test`), and 5,000
-points of validation data (`mnist.validation`). This split is very important:
-it's essential in machine learning that we have separate data which we don't
-learn from so that we can make sure that what we've learned actually
-generalizes!
 다운로드된 데이터는 55,000개의 학습 데이터(`mnist.train`), 10,000개의 테스트 데이터(`mnist.text`), 그리고 5,000개의 검증 데이터(`mnist.validation`) 이렇게 세 부분으로 나뉩니다. 데이터가 이렇게 나뉜다는 것은 매우 중요합니다. 왜냐하면 우리가 학습시키지 않는 데이터를 통해, 우리가 학습한 것이 정말로 일반화되었다고 확신할 수 있기 때문입니다!
 
-As mentioned earlier, every MNIST data point has two parts: an image of a
-handwritten digit and a corresponding label. We will call the images "xs" and
-the labels "ys". Both the training set and test set contain xs and ys, for
-example the training images are `mnist.train.images` and the train labels are
-`mnist.train.labels`.
 앞서 언급했듯이, 각 MNIST 데이터셋은 두 부분으로 나뉩니다. 손으로 쓴 숫자와 그에 따른 라벨입니다. 우리는 이미지를 "xs"라고 부르고 라벨을 "ys"라고 부를 것입니다. 학습 데이터셋과 테스트 데이터셋은 둘 다 xs와 ys를 가집니다. 예를 들어, 학습 이미지는 `mnist.train.images`이며, 학습 라벨은 `mnist.train.labels`입니다.
 
-Each image is 28 pixels by 28 pixels. We can interpret this as a big array of
-numbers:
 각 이미지는 28 * 28 픽셀입니다. 우리는 이를 숫자의 큰 배열로 해석할 수 있습니다.
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
