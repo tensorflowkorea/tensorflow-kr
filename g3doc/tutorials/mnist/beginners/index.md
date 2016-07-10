@@ -37,43 +37,23 @@ mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 <img style="width:100%" src="../../../images/MNIST-Matrix.png">
 </div>
 
-We can flatten this array into a vector of 28x28 = 784 numbers. It doesn't
-matter how we flatten the array, as long as we're consistent between images.
-From this perspective, the MNIST images are just a bunch of points in a
-784-dimensional vector space, with a
-[very rich structure](http://colah.github.io/posts/2014-10-Visualizing-MNIST/)
-(warning: computationally intensive visualizations).
+우리는 이 배열을 펼쳐서 28 * 28 = 784 개의 벡터로 만들 수 있습니다. 이미지들 간에 일관적으로 처리하기만 한다면, 배열을 어떻게 펼치던가는 상관없습니다. 이러한 관점에서, MNIST 이미지는 [매우 호화스러운 구조](http://colah.github.io/posts/2014-10-Visualizing-MNIST/)(주의 : 연산을 많이 요하는 시각화입니다)를 가진, 단지 784차원 벡터 공간에 있는 여러 개의 데이터일 뿐입니다.
 
-Flattening the data throws away information about the 2D structure of the image.
-Isn't that bad? Well, the best computer vision methods do exploit this
-structure, and we will in later tutorials. But the simple method we will be
-using here, a softmax regression, won't.
+데이터를 펼치면 이미지의 2D 구조에 대한 정보가 완벽하게 사라집니다. 그게 나빠보이지 않나요? 음, 가장 좋은 컴퓨터 비전의 방법론은 2D 구조를 쓰고, 나중의 튜토리얼에서 다룹니다. 하지만 여기서 사용하는 간단한 소프트맥스 회귀는 그렇지 않습니다.
 
-The result is that `mnist.train.images` is a tensor (an n-dimensional array)
-with a shape of `[55000, 784]`. The first dimension indexes the images and the
-second dimension indexes the pixels in each image. Each entry in the tensor is
-the pixel intensity between 0 and 1, for a particular pixel in a particular
-image.
+데이터를 펼친 결과로 `mnist.train.images`는 `[55000, 784]`의 형태를 가진 텐서(n차원 배열)가 됩니다. 첫 번째 차원은 이미지를 가리키며, 두 번째 차원은 각 이미지의 픽셀을 가르킵니다. 텐서의 모든 성분은 특정 이미지의 특정 픽셀을 특정하는 0과 1사이의 픽셀 강도입니다.
 
 <div style="width:40%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../../images/mnist-train-xs.png">
 </div>
 
-The corresponding labels in MNIST are numbers between 0 and 9, describing
-which digit a given image is of.
-For the purposes of this tutorial, we're going to want our labels
-as "one-hot vectors". A one-hot vector is a vector which is 0 in most
-dimensions, and 1 in a single dimension. In this case, the \\(n\\)th digit will
-be represented as a vector which is 1 in the \\(n\\)th dimensions. For example,
-3 would be \\([0,0,0,1,0,0,0,0,0,0]\\).
-Consequently, `mnist.train.labels` is a
-`[55000, 10]` array of floats.
+MNIST에서 각각에 대응하는 라벨은 0과 9사이의 숫자이며, 각 이미지가 어떤 숫자인지를 말해줍니다. 이 튜토리얼의 목적을 위해서 우리는 라벨을 "원-핫 벡터"로 바꾸길 원합니다. 원-핫 벡터는 단 하나의 차원에서만 1이고, 나머지 차원에서는 0인 벡터입니다. 이 경우, n번째 숫자는 n번째 차원이 1인 벡터로 표현될 것입니다. 예를 들어서, 3은 `[0,0,0,1,0,0,0,0,0,0]`입니다. 결과적으로, `mnist.train.labels`는 `[55000, 10]` 배열이 됩니다.
 
 <div style="width:40%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../../images/mnist-train-ys.png">
 </div>
 
-We're now ready to actually make our model!
+그럼 이제 실제로 우리의 모델을 만들 준비가 되었습니다~
 
 ## Softmax Regressions
 
