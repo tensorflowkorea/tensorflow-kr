@@ -1,12 +1,19 @@
 # Basic Usage
 
 To use TensorFlow you need to understand how TensorFlow:
+TensorFlow 를 사용하기 위해서는 TensorFlow 가 어떻게 동작하는지 이해할 필요가 있다.
 
 * Represents computations as graphs.
 * Executes graphs in the context of `Sessions`.
 * Represents data as tensors.
 * Maintains state with `Variables`.
 * Uses feeds and fetches to get data into and out of arbitrary operations.
+
+* `Graphs`는 컴퓨터 계산을 나타냅니다.
+* `Sessions`이라는 컨텍스트 안에서 그래프는 실행 됩니다.
+* `Tensors`는 데이터를 나타냅니다.
+* `Variables`은 상태를 유지합니다.
+* `Feeds & Fetches`은 임의의 작업의 데이터 입출력에 사용 됩니다.
 
 ## Overview
 
@@ -16,6 +23,8 @@ takes zero or more `Tensors`, performs some computation, and produces zero or
 more `Tensors`.  A `Tensor` is a typed multi-dimensional array. For example,
 you can represent a  mini-batch of images as a 4-D array of floating point
 numbers with dimensions `[batch, height, width, channels]`.
+
+
 
 A TensorFlow graph is a *description* of computations.  To compute anything,
 a graph must be launched in a `Session`.  A `Session` places the graph ops onto
@@ -321,4 +330,3 @@ it. See the
 [MNIST fully-connected feed tutorial](../tutorials/mnist/tf/index.md)
 ([source code](https://www.tensorflow.org/code/tensorflow/g3doc/tutorials/mnist/fully_connected_feed.py))
 for a larger-scale example of feeds.
-
