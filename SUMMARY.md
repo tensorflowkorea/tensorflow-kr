@@ -25,7 +25,7 @@
         * [word2vec 모델](g3doc/tutorials/word2vec/index.md)
         * [리커런트 뉴럴 네트워크](g3doc/tutorials/recurrent/index.md)
         * [seq2seq 모델](g3doc/tutorials/seq2seq/index.md)
-        * [신택스넷](g3doc/tutorials/syntaxnet/index.md)
+        * [SyntaxNet](g3doc/tutorials/syntaxnet/index.md)
     * 비머신러닝 어플리케이션
         * [만델브로트](g3doc/tutorials/mandelbrot/index.md)
         * [편미분 방정식](g3doc/tutorials/pdes/index.md)

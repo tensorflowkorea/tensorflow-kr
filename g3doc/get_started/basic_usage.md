@@ -1,28 +1,26 @@
 # Basic Usage
 
-To use TensorFlow you need to understand how TensorFlow:
+TensorFlow 를 사용하기 위해서는 TensorFlow 가 어떻게 동작하는지 이해할 필요가 있다.
 
-* Represents computations as graphs.
-* Executes graphs in the context of `Sessions`.
-* Represents data as tensors.
-* Maintains state with `Variables`.
-* Uses feeds and fetches to get data into and out of arbitrary operations.
+* `Graphs`는 컴퓨터 연산을 나타냅니다.
+* `Sessions`이라는 컨텍스트 안에서 그래프는 실행 됩니다.
+* `Tensors`는 데이터를 나타냅니다.
+* `Variables`은 상태를 유지합니다.
+* `Feeds & Fetches`은 임의의 작업의 데이터 입출력에 사용 됩니다.
 
 ## Overview
 
-TensorFlow is a programming system in which you represent computations as
-graphs.  Nodes in the graph are called *ops* (short for operations).  An op
-takes zero or more `Tensors`, performs some computation, and produces zero or
-more `Tensors`.  A `Tensor` is a typed multi-dimensional array. For example,
-you can represent a  mini-batch of images as a 4-D array of floating point
-numbers with dimensions `[batch, height, width, channels]`.
+TensorFlow 의 프로그램 시스템은 `Graphs`를 통해서 컴퓨터 연산을 나타낸다.  `Graph` 안에서 노드는
+*ops* (작은 단위의 동작) 불리우며, 한개의 OP는 제로 또는 하나 이상의 `Tensors` 가지게 된다.
+OP는 몇 가지의 연산을 하기 되고, 제로 또는 하나 이상의 `Tensors` 만들어 냅니다.
+`Tensor` 는 다차원 배열을 타입으로 가지게 된다.
+예를 들어, 이미지를 다음과 같이 `[batch, height, width, channels]`4차원 배열로 나타낼 수 있다.
 
-A TensorFlow graph is a *description* of computations.  To compute anything,
-a graph must be launched in a `Session`.  A `Session` places the graph ops onto
-`Devices`, such as CPUs or GPUs, and provides methods to execute them.  These
-methods return tensors produced by ops as [numpy](http://www.numpy.org)
-`ndarray` objects in Python, and as `tensorflow::Tensor` instances in C and
-C++.
+TensorFlow의 graph는 컴퓨터 연산의 *description* 설명이다. 어떤것을 연산하든, graph는
+반드시 `Session` 안에서 실행되어야 한다. `Session`은 graph 작은 단위 연산들을 CPUs 또는 GPUs
+불리우는 `Devices`에 배치시키고, 작은 단위 연산(ops)들이 작동할수 있는 기능을 제공한다.
+이런 기능은 단위 연산(ops)에 의해서 tensors 들이 만들어진다. 파이션에서는 `ndarray` 오프젝트로
+C 와 C++ 에서는 `TensorFlow::Tensor` 오프젝트를 만들어내게 된다.
 
 ## The computation graph
 
@@ -321,4 +319,3 @@ it. See the
 [MNIST fully-connected feed tutorial](../tutorials/mnist/tf/index.md)
 ([source code](https://www.tensorflow.org/code/tensorflow/g3doc/tutorials/mnist/fully_connected_feed.py))
 for a larger-scale example of feeds.
-
