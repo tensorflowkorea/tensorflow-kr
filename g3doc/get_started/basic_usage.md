@@ -36,8 +36,8 @@ TensorFlow는 C, C++, Python에서 사용할 수 있다. 현재, Python 라이�
 session 라이브러리는 세 언어에서 동등한 기능을 사용할 수 있다.
 
 ### Building the graph
-graph를 만드는 것은 `Constant`와 같이 어떠한 input도 필요하지 않는 작은 단위의 동작(ops)로 시작한다.
-Python 라이브러리에서 단은 단위 연산 생성자는 구성된 작은 단위 연산(ops)의 결과(output)을 대기하는
+graph를 만드는 것은 `Constant`와 같이 어떠한 input도 필요하지 않는 작은 단위의 동작(ops)으로 시작한다.
+Python 라이브러리에서 단은 단위 연산(ops) 생성자는 구성된 작은 단위 연산(ops)의 결과(output)를 대기하는
 객체를 반환한다. 그리고 이 객체들은 다른 작은 단위 연산(ops) 생성자의 input으로 전달할 수 있다.
 
 Python 라이브러리로 사용하는 TensorFlow는 작은 단위 연산(ops) 생성자가 노드를 추가한 
