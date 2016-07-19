@@ -33,7 +33,7 @@ TensorFlow 프로그램들은 대개 graph를 조립하는 '구성 단계'와 se
 TensorFlowsms C, C++, Python으로 사용할 수 있다. 현재, Python 라이브러리에서 C/C++에서 제공하지 않는
 많은 유용한 함수들을 제공하고 있어 Python을 사용하는 것이 graph를 조립하는데 더 편할 것이다.
 
-session 라이브러시는 세 언어에서 동등한 기능을 사용할 수 있다.
+session 라이브러리는 세 언어에서 동등한 기능을 사용할 수 있다.
 
 ### Building the graph
 
