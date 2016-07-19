@@ -30,7 +30,7 @@ TensorFlow 프로그램들은 대개 graph를 조립하는 '구성 단계'와 se
 예를 들어, 일반적으로 '구성 단계'에선 neural network를 대표하고 훈련시키기 위한 graph를 만들고,
 '실행 단계'에선 트레이닝할 작은 단위의 동작(ops) 셋을 session을 이용해 반복 실행 시킨다.
 
-TensorFlowsms C, C++, Python으로 사용할 수 있다. 현재, Python 라이브러리에서 C/C++에서 제공하지 않는
+TensorFlow는 C, C++, Python에서 사용할 수 있다. 현재, Python 라이브러리에서 C/C++에서 제공하지 않는
 많은 유용한 함수들을 제공하고 있어 Python을 사용하는 것이 graph를 조립하는데 더 편할 것이다.
 
 session 라이브러리는 세 언어에서 동등한 기능을 사용할 수 있다.
