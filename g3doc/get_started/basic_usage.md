@@ -24,19 +24,16 @@ C 와 C++ 에서는 `TensorFlow::Tensor` 오프젝트를 만들어내게 된다.
 
 ## The computation graph
 
-TensorFlow programs are usually structured into a construction phase, that
-assembles a graph, and an execution phase that uses a session to execute ops in
-the graph.
+TensorFlow 프로그램들은 대개 graph를 조립하는 '구성 단계'와 session을 이용해 graph 안에
+작은 단위의 동작(ops)을 실행시키는 '실행 단계'로 구성돼 있다.
 
-For example, it is common to create a graph to represent and train a neural
-network in the construction phase, and then repeatedly execute a set of
-training ops in the graph in the execution phase.
+예를 들어, 일반적으로 '구성 단계'에선 neural network를 대표하고 훈련시키기 위한 graph를 만들고,
+'실행 단계'에선 트레이닝할 작은 단위의 동작(ops) 셋을 session을 이용해 반복 실행 시킨다.
 
-TensorFlow can be used from C, C++, and Python programs.  It is presently much
-easier to use the Python library to assemble graphs, as it provides a large set
-of helper functions not available in the C and C++ libraries.
+TensorFlowsms C, C++, Python으로 사용할 수 있다. 현재, Python 라이브러리에서 C/C++에서 제공하지 않는
+많은 유용한 함수들을 제공하고 있어 Python을 사용하는 것이 graph를 조립하는데 더 편할 것이다.
 
-The session libraries have equivalent functionalities for the three languages.
+session 라이브러리는 세 언어에서 동등한 기능을 사용할 수 있다.
 
 ### Building the graph
 
