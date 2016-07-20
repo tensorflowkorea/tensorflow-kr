@@ -24,33 +24,26 @@ C 와 C++ 에서는 `TensorFlow::Tensor` 오프젝트를 만들어내게 된다.
 
 ## The computation graph
 
-TensorFlow programs are usually structured into a construction phase, that
-assembles a graph, and an execution phase that uses a session to execute ops in
-the graph.
+TensorFlow 프로그램들은 대개 graph를 조립하는 '구성 단계'와 session을 이용해 graph 안에
+작은 단위의 연산(ops)을 실행시키는 '실행 단계'로 구성돼 있다.
 
-For example, it is common to create a graph to represent and train a neural
-network in the construction phase, and then repeatedly execute a set of
-training ops in the graph in the execution phase.
+예를 들어, 일반적으로 '구성 단계'에선 neural network를 대표하고 훈련시키기 위한 graph를 만들고,
+'실행 단계'에선 트레이닝할 작은 단위의 연산(ops) 세트를 session을 이용해 반복 실행 시킨다.
 
-TensorFlow can be used from C, C++, and Python programs.  It is presently much
-easier to use the Python library to assemble graphs, as it provides a large set
-of helper functions not available in the C and C++ libraries.
+TensorFlow는 C, C++, Python에서 사용할 수 있다. 현재, Python 라이브러리에서 C/C++에서 제공하지 않는
+많은 유용한 함수들을 제공하고 있어 Python을 사용하는 것이 graph를 조립하는데 더 편할 것이다.
 
-The session libraries have equivalent functionalities for the three languages.
+session 라이브러리는 세 언어에서 동등한 기능을 사용할 수 있다.
 
 ### Building the graph
+graph를 만드는 것은 `Constant`와 같이 어떠한 input도 필요하지 않는 작은 단위의 동작(ops)으로 시작한다.
+Python 라이브러리에서 단은 단위 연산(ops) 생성자는 구성된 작은 단위 연산(ops)의 결과(output)를 대기하는
+객체를 반환한다. 그리고 이 객체들은 다른 작은 단위 연산(ops) 생성자의 input으로 전달할 수 있다.
 
-To build a graph start with ops that do not need any input (source ops), such as
-`Constant`, and pass their output to other ops that do computation.
-
-The ops constructors in the Python library return objects that stand for the
-output of the constructed ops.  You can pass these to other ops constructors to
-use as inputs.
-
-The TensorFlow Python library has a *default graph* to which ops constructors
-add nodes.  The default graph is sufficient for many applications.  See the
-[Graph class](../api_docs/python/framework.md#Graph) documentation for how
-to explicitly manage multiple graphs.
+Python 라이브러리로 사용하는 TensorFlow는 작은 단위 연산(ops) 생성자가 노드를 추가한 
+*default graph*를 가지고 있다. default graph는 많은 어플리케이션용으로 충분하다.
+[Graph class](../api_docs/python/framework.md#Graph) documentation에서 어떻게 많은 graph를
+명시적으로 관리할 수 있는지 알 수 있다.
 
 ```python
 import tensorflow as tf
@@ -71,9 +64,8 @@ matrix2 = tf.constant([[2.],[2.]])
 product = tf.matmul(matrix1, matrix2)
 ```
 
-The default graph now has three nodes: two `constant()` ops and one `matmul()`
-op. To actually multiply the matrices, and get the result of the multiplication,
-you must launch the graph in a session.
+default graph는 3개의 노드(`constant()` ops 2개와 `matmul()` op 한개)를 가지고 있다.
+실제 매트릭스들을 곱하고 곱셈한 연산의 결과를 얻기 위해선, session에서 graph를 실행해야 한다.
 
 ### Launching the graph in a session
 
