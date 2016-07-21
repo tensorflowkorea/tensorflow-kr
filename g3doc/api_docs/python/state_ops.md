@@ -13,20 +13,23 @@ Note: 함수의 `Tensor` 인자는 [`tf.convert_to_tensor`](framework.md#convert
 
 ### `class tf.Variable` {#Variable}
 
-[Variables How To](../../how_tos/variables/index.md)에서 자세한 개요를 확인할 수 있다.
+[Variables How To](../../how_tos/variables/index.md)에서 자세한 개요를 확인할
+수 있습니다.
 
-변수는 graph에서 `run()`의 호출로 상태를 유지한다. `Variable`의 객체를 만들어 graph에
-변수를 추가한다.
+변수는 graph에서 `run()`의 호출로 상태를 유지합니다. `Variable`의 객체를 만들어
+graph에 변수를 추가합니다.
 
-`Variable()` 생성자는 변수의 초기값으로 `Tensor`의 type과 shape이 필요하다. 초기값은
-변수의 type과 shape를 정의한다. 생성 후, 변수의 type과 shape은 고정된다.
-변수의 값은 assign 메소드를 사용해 변경할 수 있다.
+`Variable()` 생성자는 변수의 초기값으로 `Tensor`의 type과 shape이 필요합니다.
+초기값은 변수의 type과 shape를 정의합니다. 생성 후, 변수의 type과 shape은
+고정됩니다. 변수의 값은 assign 메소드를 사용해 변경할 수 있습니다.
 
-후에 변수의 shape를 변경하고 싶다면 `assign`에서 `validate_shape=False`로 해야한다.
+후에 변수의 shape를 변경하고 싶다면 `assign`에서 `validate_shape=False`로
+해야합니다.
 
 `Tensor`의 경우, `Variable()`로 만들어진 변수는 graph의 ops의 input으로
-사용될 수 있다. 추가적으로, `Tensor` 클래스로 오버로드 되는 모든 연산(operators)은 변수로
-넘어간다. 그리고 변수의 산술연산만으로도 graph에 노드를 추가할 수 있다.
+사용될 수 있습니다. 추가적으로, `Tensor` 클래스로 오버로드 되는 모든
+연산(operators)은 변수로 넘겨집니다. 그래서 변수의 산술연산만으로도 graph에
+노드를 추가할 수 있습니다.
 
 ```python
 import tensorflow as tf
@@ -46,10 +49,10 @@ w.assign_add(1.0)
 ```
 
 graph를 실행할 때, 변수는 그 값을 사용하는 ops를 실행하기 전에
-명시적으로 초기화해야 한다. 변수는 1)*initializer op*를 실행하거나, 2)저장된
-파일로부터 변수를 다시 저장(restoring)하거나, 3)간단하게 변수에 값을 할당하는
-`assign` Op을 실행하여 초기화 할 수 있다. 사실, 변수 *initializer op*는
-단지 변수의 초기값을 할당하는 `assign` Op이다.
+명시적으로 초기화해야 합니다. 변수는 1)*initializer op*를 실행하거나,
+2)저장된 파일로부터 변수를 다시 저장(restoring)하거나, 3)간단하게 변수에
+값을 할당하는 `assign` Op을 실행하여 초기화 할 수 있습니다. 사실, 변수
+*initializer op*는 단지 변수의 초기값을 할당하는 `assign` Op 입니다.
 
 ```python
 # Launch the graph in a session.
@@ -60,8 +63,8 @@ with tf.Session() as sess:
 ```
 
 가장 일반적인 초기화 방법은 모든 변수를 초기화 할 graph에 편의 함수인
-`initialize_all_variables()`으로 Op를 추가하는 것이다. 그런 다음 graph를
-실행한 후 Op를 실행한다.
+`initialize_all_variables()`으로 Op를 추가하는 것 입니다. 그런 다음
+graph를 실행한 후 Op를 실행합니다.
 
 ```python
 # Add an Op to initialize all variables.
@@ -74,13 +77,21 @@ with tf.Session() as sess:
     # ...you can now run any Op that uses variable values...
 ```
 
-다른 변수의 결과로 초기화 하는 변수를 만들어야한다면, 다른 변수의
-`initialized_value()`를 사용한다. 이것은 변수가 올바는 순서로 초기화되도록
-한다.
+다른 변수의 결과로 초기되는 변수를 만들어야한다면, 다른 변수의
+`initialized_value()`를 사용합니다. 이것은 변수가 올바는 순서로 초기화되도록
+합니다.
 
-모든 변수들은 자동적으로 그들이 만들어진 graph에 쌓인다. 기본적으로, 생성자는
-그래프 컬렉션(graph collection) `GraphKeys.VARIABLES`에 변수를 추가한다.
-편의 함수인 `all_variables()`은 컬렉션의 내용을 반환한다.
+모든 변수들은 자동적으로 그들이 만들어진 graph에 쌓입니다. 기본적으로,
+생성자는 그래프 컬렉션(graph collection) `GraphKeys.VARIABLES`에 변수를
+추가합니다. 편의 함수인 `all_variables()`은 컬렉션의 내용을 반환합니다.
+
+머신 러닝 모델을 만들 때, 학습 가능한 모델 매개변수를 가지고 있는 변수와
+`global step` 변수과 같이 학습 단계를 계산하기 위한 다른 변수로 구분하는 것은
+종종 편리합니다. 이것을 더 쉽게 하기위해, 변수 생성자는 `trainable=<bool>`
+매개변수를 지원합니다. `True`일 때 새로운 변수는 그래프 컬렉션
+`GraphKeys.TRAINABLE_VARIABLES`에 추가됩니다. 편의 함수 `trainable_variables()`는
+이 컬렉션의 내용을 반환합니다. 다양한 `Optimizer` 클래스는 이 컬렉션을 
+최적화(optimize) 변수의 기본 리스트로 사용합니다.
 
 
 When building a machine learning model it is often convenient to distinguish
