@@ -36,12 +36,12 @@ TensorFlow는 C, C++, Python에서 사용할 수 있다. 현재, Python 라이�
 session 라이브러리는 세 언어에서 동등한 기능을 사용할 수 있다.
 
 ### Building the graph
-graph를 만드는 것은 `Constant`와 같이 어떠한 input도 필요하지 않는 작은 단위의 동작(ops)으로 시작한다.
-Python 라이브러리에서 단은 단위 연산(ops) 생성자는 구성된 작은 단위 연산(ops)의 결과(output)를 대기하는
-객체를 반환한다. 그리고 이 객체들은 다른 작은 단위 연산(ops) 생성자의 input으로 전달할 수 있다.
+graph를 만드는 것은 `Constant`와 같이 어떠한 input도 필요하지 않는 단위의 동작(ops)으로 시작한다.
+Python 라이브러리에서 단위 연산(ops) 생성자는 구성된 단위 연산(ops)의 결과(output)를 대기하는
+객체를 반환한다. 그리고 이 객체들은 다른 단위 연산(ops) 생성자의 input으로 전달할 수 있다.
 
-Python 라이브러리로 사용하는 TensorFlow는 작은 단위 연산(ops) 생성자가 노드를 추가한 
-*default graph*를 가지고 있다. default graph는 많은 어플리케이션용으로 충분하다.
+Python 라이브러리로 사용하는 TensorFlow는 단위 연산(ops) 생성자가 노드를 추가한
+*graph* 를 가지고 된다. *graph* 는 많은 어플리케이션용으로 충분하다.
 [Graph class](../api_docs/python/framework.md#Graph) documentation에서 어떻게 많은 graph를
 명시적으로 관리할 수 있는지 알 수 있다.
 
@@ -64,16 +64,16 @@ matrix2 = tf.constant([[2.],[2.]])
 product = tf.matmul(matrix1, matrix2)
 ```
 
-default graph는 3개의 노드(`constant()` ops 2개와 `matmul()` op 한개)를 가지고 있다.
+예시 graph는 3개의 노드(`constant()` ops 2개와 `matmul()` ops 한개)를 가지고 있다.
 실제 매트릭스들을 곱하고 곱셈한 연산의 결과를 얻기 위해선, session에서 graph를 실행해야 한다.
 
 ### Launching the graph in a session
 
-Launching follows construction.  To launch a graph, create a `Session` object.
-Without arguments the session constructor launches the default graph.
+아래와 같은 구성으로 동작하게 된다. 'graph' 동작 시키기 위해서는 `Session` 을 만든다.
+예시 graph 에서는 변수 없이 session 이 동작하게 된다.
 
-See the [Session class](../api_docs/python/client.md#session-management) for
-the complete session API.
+모든 session API 는 [Session class](../api_docs/python/client.md#session-management)
+에서 볼수 있다.
 
 ```python
 # Launch the default graph.
@@ -98,9 +98,8 @@ print(result)
 sess.close()
 ```
 
-Sessions should be closed to release resources. You can also enter a `Session`
-with a "with" block. The `Session` closes automatically at the end of the
-`with` block.
+Sessions 은 자원을 해체하기 위해서 close()을 사용해야 한다. 또한 `Session`을 "with" 블럭 안에서
+사용할 수 있다. `with` 블럭이 끝날때 `Session`은 자동적으로 자원을 해체하고 close 된다.
 
 ```python
 with tf.Session() as sess:
@@ -108,15 +107,13 @@ with tf.Session() as sess:
   print(result)
 ```
 
-The TensorFlow implementation translates the graph definition into executable
-operations distributed across available compute resources, such as the CPU or
-one of your computer's GPU cards. In general you do not have to specify CPUs
-or GPUs explicitly. TensorFlow uses your first GPU, if you have one, for as
-many operations as possible.
+TensorFlow는 graph 에 정의된 단위 연산들이 컴퓨터 자원(CPU or GPU)을 분배해서 사용 할수 있게
+구현되어 있다.
+만약에 CPU or GPU 를 명시적으로 지정하지 않는다면, TensorFlow 는 당신이 가지고 있는 첫번째 GPU를
+사용하게 될것이다. 이것은 보다 많은 연산처리를 가능하게 한다.
 
-If you have more than one GPU available on your machine, to use a GPU beyond
-the first you must assign ops to it explicitly. Use `with...Device` statements
-to specify which CPU or GPU to use for operations:
+만약에 당신의 컴퓨터에 하나 이상의 GPU가 있다면, 당신은 명시적으로 GPU를 지정해서 사용할수 있다.
+`with...Device` 라는 문법을 사용해서 연산에 사용될 CPU or GPU를 지정할 수 있다.
 
 ```python
 with tf.Session() as sess:
@@ -127,43 +124,36 @@ with tf.Session() as sess:
     ...
 ```
 
-Devices are specified with strings.  The currently supported devices are:
+CPU or GPU 는 문자열로 지정 한다. 현재 제공하는 CPU or GPU는 아래와 같다.
 
-*  `"/cpu:0"`: The CPU of your machine.
-*  `"/gpu:0"`: The GPU of your machine, if you have one.
-*  `"/gpu:1"`: The second GPU of your machine, etc.
+*  `"/cpu:0"`: 컴퓨터의 CPU.
+*  `"/gpu:0"`: 컴퓨터의 1번째 GPU.
+*  `"/gpu:1"`: 컴퓨터의 2번쨰 GPU.
 
-See [Using GPUs](../how_tos/using_gpu/index.md) for more information about GPUs
-and TensorFlow.
+GPU 와 TensorFlow 보다 많은 정보는 [Using GPUs](../how_tos/using_gpu/index.md) 보면 된다.
 
 ### Launching the graph in a distributed session
 
-To create a TensorFlow cluster, launch a TensorFlow server on each of the
-machines in the cluster. When you instantiate a Session in your client, you
-pass it the network location of one of the machines in the cluster:
+TensorFlow 클러스터 만들기, TensorFlow 는 클러스터 안의 여러 머신에서 동작 시킬수 있다.
+너의 클라이언의 Session을 인스턴스화 시키고, 클러스터 안의 머신 네트워크에 보내면 된다.
 
 ```python
 with tf.Session("grpc://example.org:2222") as sess:
   # Calls to sess.run(...) will be executed on the cluster.
   ...
 ```
+해당 머신은 현재 Session의 마스터가 된다. 마스터는 클러스터(workers) 안의 여러 머신들과 graph 를
+교차해서 분배하게 된다. 이런 분배는 머신의 사용 가능한 컴퓨팅 자원을 고려해서 이러어 진다.
 
-This machine becomes the master for the session. The master distributes the
-graph across other machines in the cluster (workers), much as the local
-implementation distributes the graph across available compute resources within
-a machine.
-
-You can use "with tf.device():" statements to directly specify workers for
-particular parts of the graph:
+"with tf.device():" 문법을 이용해서 특정 머신에게 graph의 특정 연산을 지정해 줄 수 있다.
 
 ```python
 with tf.device("/job:ps/task:0"):
   weights = tf.Variable(...)
   biases = tf.Variable(...)
 ```
-
-See the [Distributed TensorFlow How To](../how_tos/distributed/) for more
-information about distributed sessions and clusters.
+Session 과 클러스터 의 분산처리에 대한 더 많은 정보는 [Distributed TensorFlow How To](../how_tos/distributed/)
+볼 수 있다.
 
 ## Interactive Usage
 
