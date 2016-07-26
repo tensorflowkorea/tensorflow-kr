@@ -93,18 +93,6 @@ with tf.Session() as sess:
 이 컬렉션의 내용을 반환합니다. 다양한 `Optimizer` 클래스는 이 컬렉션을 
 최적화(optimize) 변수의 기본 리스트로 사용합니다.
 
-
-When building a machine learning model it is often convenient to distinguish
-betwen variables holding the trainable model parameters and other variables
-such as a `global step` variable used to count training steps. To make this
-easier, the variable constructor supports a `trainable=<bool>` parameter. If
-`True`, the new variable is also added to the graph collection
-`GraphKeys.TRAINABLE_VARIABLES`. The convenience function
-`trainable_variables()` returns the contents of this collection. The
-various `Optimizer` classes use this collection as the default list of
-variables to optimize.
-
-
 Creating a variable.
 
 - - -
