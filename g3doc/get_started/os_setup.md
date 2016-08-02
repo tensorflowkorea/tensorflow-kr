@@ -195,6 +195,7 @@ $ source ~/tensorflow/bin/activate.csh  # csh을 사용할 경우
 (tensorflow)$ deactivate
 ```
 
+<a id="anaconda-installation"></a>
 ## Anaconda 설치
 
 [Anaconda](https://www.continuum.io/why-anaconda) 는 여러 수학, 과학 패키지를 기본적으로 포함하고 있는 파이썬 배포판입니다. Anaconda 는 "conda" 로 불리는 패키지 매니저를 사용하여 Virtualenv 와 유사한 [환경 시스템](http://conda.pydata.org/docs/using/envs.html)을 제공합니다.
@@ -296,6 +297,7 @@ $ source activate tensorflow
 (tensorflow)$ source deactivate
 ```
 
+<a id="docker-installation"></a>
 ## 도커(Docker) 설치
 
 [Docker](http://docker.com/)는 로컬 컴퓨터에서 컨테이너로 리눅스 운영체제를
@@ -739,7 +741,8 @@ Validation error: 7.0%
 ...
 ```
 
-## 공통적인 문제들
+<a id="common-problems"></a>
+## 자주 발생하는 문제
 
 ### GPU 관련 이슈들
 
