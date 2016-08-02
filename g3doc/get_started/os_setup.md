@@ -425,9 +425,7 @@ $ python /usr/local/lib/python2.7/dist-packages/tensorflow/models/image/mnist/co
 <a id="installing-from-sources"></a>
 ## 소스에서 설치
 
-When installing from source you will build a pip wheel that you then install
-using pip. You'll need pip for that, so install it as described
-[above](#pip-installation).
+소스에서 설치하려면 pip를 사용해서 진행할 수 있도록 pip 휠(wheel)을 만듭니다. pip를 설치하려면 [Pip 설치](#pip-installation) 섹션을 참고하세요.
 
 ### 텐서플로우 레파지토리 클론(Clone)하기
 
@@ -457,64 +455,58 @@ $ ./PATH_TO_INSTALL.SH --user
 
 마지막으로 실행 경로에 `bazel`을 추가하기 위해 화면의 설명을 따릅니다.
 
-#### Install other dependencies
+#### 다른 의존성 라이브러리 설치
 
 ```bash
-# For Python 2.7:
+# Python 2.7:
 $ sudo apt-get install python-numpy swig python-dev python-wheel
-# For Python 3.x:
+# Python 3.x:
 $ sudo apt-get install python3-numpy swig python3-dev python3-wheel
 ```
 
-#### Configure the installation
+#### 설치환경 설정
 
-Run the `configure` script at the root of the tree.  The configure script
-asks you for the path to your python interpreter and allows (optional)
-configuration of the CUDA libraries (see [below](#configure-tensorflows-canonical-view-of-cuda-libraries)).
+루트 디렉토리에 있는 `configure` 스크립트를 실행합니다. 환경설정 스크립트는 파이썬 인터프리터의 경로를 요청하고 (선택사항으로)CUDA 라이브러리를 설정합니다 ([아래](#configure-tensorflows-canonical-view-of-cuda-libraries)를 참고하세요).
 
-This step is used to locate the python and numpy header files.
+이 단계에서는 파이썬과 넘파이(numpy) 헤더파일을 찾습니다.
 
 ```bash
 $ ./configure
 Please specify the location of python. [Default is /usr/bin/python]:
 ```
 
-<a id="optional-install-cuda-gpus-on-linux"></a>
-#### Optional: Install CUDA (GPUs on Linux)
+<a name="optional-install-cuda-gpus-on-linux"></a>
+#### 선택사항: CUDA 설치 (리눅스 GPU)
 
-In order to build or run TensorFlow with GPU support, both NVIDIA's Cuda Toolkit (>= 7.0) and
-cuDNN (>= v2) need to be installed.
+GPU 버전의 텐서플로우를 설치하고 실행하기 위해서는 엔비디아(NVIDIA)의 쿠다 툴킷(Cuda Toolkit) (>= 7.0)과 cuDNN(>= v2)을 설치해야 합니다.
 
-TensorFlow GPU support requires having a GPU card with NVidia Compute Capability >= 3.0.
-Supported cards include but are not limited to:
+텐서플로우 GPU 버전은 엔비디아(NVidia)의 Compute Capability >= 3.0 이상을 지원하는 GPU 카드를 필요로 합니다.
+지원되는 카드는 아래 목록을 포함하고 있습니다:
 
 * NVidia Titan
 * NVidia Titan X
 * NVidia K20
 * NVidia K40
 
-##### Check NVIDIA Compute Capability of your GPU card
+##### GPU 카드의 NVIDIA Compute Capability 체크
 
 https://developer.nvidia.com/cuda-gpus
 
-##### Download and install Cuda Toolkit
+##### Cuda Toolkit 다운로드 및 설치
 
 https://developer.nvidia.com/cuda-downloads
 
-Install version 7.5 if using our binary releases.
+텐서플로우의 바이너리 릴리즈를 사용하려면 버전 7.5를 설치하세요.
 
-Install the toolkit into e.g. `/usr/local/cuda`
+`/usr/local/cuda` 등에 툴킷을 설치합니다.
 
-##### Download and install cuDNN
+##### cuDNN 다운로드 및 설치
 
 https://developer.nvidia.com/cudnn
 
-Download cuDNN v4 (v5 is currently a release candidate and is only supported when
-installing TensorFlow from sources).
+cuDNN v4를 다운로드합니다(v5는 현재 릴리즈 후보 상태로 텐서플로우를 소스에서 설치할 때만 사용할 수 있습니다).
 
-Uncompress and copy the cuDNN files into the toolkit directory.  Assuming the
-toolkit is installed in `/usr/local/cuda`, run the following commands (edited
-to reflect the cuDNN version you downloaded):
+압축을 풀어 툴킷 디렉토리에 cuDNN 파일을 복사합니다. `/usr/local/cuda`에 툴킷이 설치되어 있다고 가정하고 아래 명령을 실행합니다(다운로드 받은 cuDNN의 적절한 버전을 반영해 주세요):
 
 ``` bash
 tar xvzf cudnn-7.5-linux-x64-v4.tgz
@@ -523,13 +515,10 @@ sudo cp cudnn-7.5-linux-x64-v4/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
 ```
 
-##### Configure TensorFlow's canonical view of Cuda libraries
+<a id='configure-tensorflows-canonical-view-of-cuda-libraries'></a>
+##### 텐서플로우에서 Cuda 라이브러리 선택
 
-When running the `configure` script from the root of your source tree, select
-the option `Y` when asked to build TensorFlow with GPU support. If you have
-several versions of Cuda or cuDNN installed, you should definitely select
-one explicitly instead of relying on the system default. You should see
-prompts like the following:
+소스 디렉토리의 맨 위에서 `configure` 스크립트를 실행하고 텐서플로를 GPU 지원하도록 빌드할 지 물어볼 때 `Y`를 선택하세요. 만약 여러가지 버전의 Cuda와 cuDNN이 설치되어 있다면 디폴트 대신 구체적으로 어떤 버전을 사용할지 지정해야 합니다. 아래와 같은 질문들을 보게됩니다:
 
 ``` bash
 $ ./configure
@@ -556,7 +545,7 @@ Please specify a list of comma-separated Cuda compute capabilities you want to
 build with. You can find the compute capability of your device at:
 https://developer.nvidia.com/cuda-gpus.
 Please note that each additional compute capability significantly increases your
-build time and binary size. [Default is: \"3.5,5.2\"]: 3.5
+build time and binary size. [Default is: "3.5,5.2"]: 3.5
 
 Setting up Cuda include
 Setting up Cuda lib64
@@ -567,57 +556,46 @@ Setting up CUPTI lib64
 Configuration finished
 ```
 
-This creates a canonical set of symbolic links to the Cuda libraries on your system.
-Every time you change the Cuda library paths you need to run this step again before
-you invoke the bazel build command. For the Cudnn libraries, use '6.5' for R2, '7.0'
-for R3, and '4.0.4' for R4-RC.
+시스템에 있는 Cuda 라이브러리를 가리키는 기본으로 사용할 심볼릭 링크들을 만듭니다. bazel 빌드 명령을 실행하기 전에 Cuda 라이브러리 경로를 바꾸게 되면 이 단계를 다시 거쳐야 합니다. Cudnn 라이브러리 R2는 '6.5'를 R3는 '7.0'을 R4-RC는 '4.0.4'를 선택합니다.
 
 
-##### Build your target with GPU support
-From the root of your source tree, run:
+##### GPU를 지원하도록 빌드하기
+소스 트리 맨 위에서 실행:
 
 ```bash
 $ bazel build -c opt --config=cuda //tensorflow/cc:tutorials_example_trainer
 
 $ bazel-bin/tensorflow/cc/tutorials_example_trainer --use_gpu
-# Lots of output. This tutorial iteratively calculates the major eigenvalue of
-# a 2x2 matrix, on GPU. The last few lines look like this.
+# 많은 출력이 나옵니다. 이 튜토리얼은 GPU에서 2x2 행렬의 고유값을 반복해서 계산합니다.
+# 마지막 몇 줄은 아래와 같습니다.
 000009/000005 lambda = 2.000000 x = [0.894427 -0.447214] y = [1.788854 -0.894427]
 000006/000001 lambda = 2.000000 x = [0.894427 -0.447214] y = [1.788854 -0.894427]
 000009/000009 lambda = 2.000000 x = [0.894427 -0.447214] y = [1.788854 -0.894427]
 ```
 
-Note that "--config=cuda" is needed to enable the GPU support.
+GPU 지원을 활성화하기 위해서는 "--config=cuda" 옵션이 필요합니다.
 
-##### Known issues
+##### 알려진 이슈
 
-* Although it is possible to build both Cuda and non-Cuda configs under the same
-source tree, we recommend to run `bazel clean` when switching between these two
-configs in the same source tree.
+* 하나의 소스 트리에서 Cuda 와 non-Cuda 두가지 설정으로 모두 빌드가 가능하지만 설정을 바꾸려면 `bazel clean`을 실행해 주세요.
 
-* You have to run configure before running bazel build. Otherwise, the build
-will fail with a clear error message. In the future, we might consider making
-this more convenient by including the configure step in our build process.
+* bazel 빌드를 하기 전에 환경 설정을 해야 합니다. 그렇지 않으면 빌드가 실패합니다. 향후에는 빌드 프로세스 안에 환경 설정 단계를 포함시켜 좀 더 편리하게 만드려고 생각하고 있습니다.
 
-### Installation for Mac OS X
+### Mac OS X 설치
 
-We recommend using [homebrew](http://brew.sh) to install the bazel and SWIG
-dependencies, and installing python dependencies using easy_install or pip.
+bazel과 SWIG 설치를 위해서는 [homebrew](http://brew.sh)를 사용하고 easy_install 이나 pip를 사용하여 파이썬 라이브러리를 설치하길 권장합니다.
 
-Of course you can also install Swig from source without using homebrew. In that
-case, be sure to install its dependency [PCRE](http://www.pcre.org) and not PCRE2.
+물론 homebrew를 사용하지 않고 소스에서 Swig를 설치할 수도 있습니다. 그런 경우에 의존성 라이브러리인 [PCRE](http://www.pcre.org)를 설치해야 합니다. PCRE2가 아닙니다.
 
-#### Dependencies
+#### 의존성 라이브러리
 
-Follow instructions [here](http://bazel.io/docs/install.html) to install the
-dependencies for bazel. You can then use homebrew to install bazel and SWIG:
+bazel의 의존성 라이브러리를 설치하려면 [이곳](http://bazel.io/docs/install.html)의 안내를 따르세요. bazel과 SWIG 설치를 위해 homebrew를 사용할 수 있습니다:
 
 ```bash
 $ brew install bazel swig
 ```
 
-You can install the python dependencies using easy_install or pip. Using
-easy_install, run
+easy_install이나 pip를 사용하여 파이썬 의존성을 설치할 수 있습니다. easy_install을 사용할 경우 아래를 실행합니다
 
 ```bash
 $ sudo easy_install -U six
@@ -625,33 +603,28 @@ $ sudo easy_install -U numpy
 $ sudo easy_install wheel
 ```
 
-We also recommend the [ipython](https://ipython.org) enhanced python shell,
-which you can install as follows:
+기능이 강화된 파이썬 쉘인 [ipython](https://ipython.org)을 권장합니다. 다음과 같이 설치합니다:
 
 ```bash
 $ sudo easy_install ipython
 ```
 
-If you plan to  build with GPU support you will need to make sure you have
-GNU coreutils installed via homebrew:
+GPU 지원이 되도록 빌드하려면 homebrew를 사용해 GNU coreutils가 설치되어 있어야 합니다:
 
 ```bash
 $ brew install coreutils
 ```
 
-Next you will need to make sure you have a recent [CUDA
-Toolkit](https://developer.nvidia.com/cuda-toolkit) installed by either
-downloading the package for your version of OSX directly from
-[NVIDIA](https://developer.nvidia.com/cuda-downloads) or by using the [Homebrew
-Cask](https://caskroom.github.io/) extension:
+다음은 [NVIDIA](https://developer.nvidia.com/cuda-downloads) 사이트에서 OSX 버전에 맞는 패키지를 다운로드 하거나 [Homebrew
+Cask](https://caskroom.github.io/) 확장을 사용하여 최신의 [CUDA
+Toolkit](https://developer.nvidia.com/cuda-toolkit)을 설치해야 합니다:
 
 ```bash
 $ brew tap caskroom/cask
 $ brew cask install cuda
 ```
 
-Once you have the CUDA Toolkit installed you will need to setup the required
-environment variables by adding the following to your `~/.bash_profile`:
+CUDA 툴킷을 설치하면 필요한 환경 변수를 `~/.bash_profile` 파일에 아래와 같이 셋팅해야 합니다:
 
 ```bash
 export CUDA_HOME=/usr/local/cuda
@@ -659,12 +632,9 @@ export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:$CUDA_HOME/lib"
 export PATH="$CUDA_HOME/bin:$PATH"
 ```
 
-Finally, you will also want to install the [CUDA Deep Neural
-Network](https://developer.nvidia.com/cudnn) (cuDNN) library which currently
-requires an [Accelerated Computing Developer
-Program](https://developer.nvidia.com/accelerated-computing-developer) account.
-Once you have it downloaded locally, you can unzip and move the header and
-libraries to your local CUDA Toolkit folder:
+마지막으로 [Accelerated Computing Developer
+Program](https://developer.nvidia.com/accelerated-computing-developer) 계정이 필요한 [CUDA Deep Neural
+Network](https://developer.nvidia.com/cudnn) (cuDNN)를 설치할 수도 있습니다. 로컬 컴퓨터에 다운로드 받고 난 후 압축을 풀고 헤더 파일과 라이브러리를 CUDA 툴킷 폴더에 옮깁니다:
 
 ```bash
 $ sudo mv include/cudnn.h /Developer/NVIDIA/CUDA-7.5/include/
@@ -672,14 +642,11 @@ $ sudo mv lib/libcudnn* /Developer/NVIDIA/CUDA-7.5/lib
 $ sudo ln -s /Developer/NVIDIA/CUDA-7.5/lib/libcudnn* /usr/local/cuda/lib/
 ```
 
-#### Configure the installation
+#### 설치환경 설정
 
-Run the `configure` script at the root of the tree.  The configure script
-asks you for the path to your python interpreter.
+소스 트리 맨 위에서 `configure` 명령을 실행합니다. 이 스크립트는 파이썬 인터프리터의 경로를 묻습니다.
 
-This step is used to locate the python and numpy header files as well as
-enabling GPU support if you have a CUDA enabled GPU and Toolkit installed. For
-example:
+이 단계에서 CUDA와 툴킷이 설치되어 있을 때 GPU 지원을 활성화 하는 것은 물론 파이썬과 numpy 헤더 파일들의 위치를 찾습니다. 예를 들면:
 
 
 ```bash
@@ -707,9 +674,9 @@ Setting up CUPTI lib64
 Configuration finished
 ```
 
-### Create the pip package and install
+### pip 패키지 생성 및 설치
 
-When building from source, you will still build a pip package and install that.
+소스에서 설치할 때 pip 패키지를 만들고 설치해야 합니다.
 
 ```bash
 $ bazel build -c opt //tensorflow/tools/pip_package:build_pip_package
@@ -723,14 +690,11 @@ $ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 $ sudo pip install /tmp/tensorflow_pkg/tensorflow-0.9.0-py2-none-any.whl
 ```
 
-## Setting up TensorFlow for Development
+## 텐서플로우 개발자 셋팅
 
-If you're working on TensorFlow itself, it is useful to be able to test your
-changes in an interactive python shell without having to reinstall TensorFlow.
+텐서플로우 자체를 수정할 때 텐서플로우를 재 설치하지 않고 파이썬 대화식 쉘에서 변경 내용을 테스트할 수 있다면 매우 유용할 것입니다.
 
-To set up TensorFlow such that all files are linked (instead of copied) from the
-system directories, run the following commands inside the TensorFlow root
-directory:
+모든 파일이 시스템 디렉토리로 부터 링크(복사가 아닌)되도록 텐서플로우를 셋팅하기 위해서는 텐서플로우 루트 디렉토리에서 다음 명령을 실행합니다:
 
 ```bash
 bazel build -c opt //tensorflow/tools/pip_package:build_pip_package
@@ -745,14 +709,11 @@ ln -s ../tensorflow/tools/pip_package/* .
 python setup.py develop
 ```
 
-Note that this setup still requires you to rebuild the
-`//tensorflow/tools/pip_package:build_pip_package` target every time you change
-a C++ file; add, delete, or move any python file; or if you change bazel build
-rules.
+C++ 파일을 변경하거나 어떤 파이썬 파일이든지 추가, 삭제, 이동될 때 혹은 bazel 빌드 룰을 바꿀 때마다 `//tensorflow/tools/pip_package:build_pip_package`을 다시 빌드해야 합니다.
 
-## Train your first TensorFlow neural net model
+## 텐서플로우로 첫번째 뉴럴 네트워크 모델을 학습 시키기
 
-Starting from the root of your source tree, run:
+소스 트리 루트에서 실행합니다:
 
 ```bash
 $ cd tensorflow/models/image/mnist
@@ -778,32 +739,21 @@ Validation error: 7.0%
 ...
 ```
 
-## Common Problems
+## 공통적인 문제들
 
-### GPU-related issues
+### GPU 관련 이슈들
 
-If you encounter the following when trying to run a TensorFlow program:
+텐서플로우 프로그램을 실행할 때 다음과 같은 에러를 만날 경우:
 
 ```python
 ImportError: libcudart.so.7.0: cannot open shared object file: No such file or directory
 ```
 
-Make sure you followed the GPU installation [instructions](#optional-install-cuda-gpus-on-linux).
-If you built from source, and you left the Cuda or cuDNN version empty, try specifying them
-explicitly.
+GPU 설치 [가이드](#optional-install-cuda-gpus-on-linux)를 따랐는지 확인하세요. 소스에서 설치할 때 Cuda나 cuDNN 버전은 비워둔 채 진행했다면 명시적으로 지정하여 다시 시도해 보세요.
 
-### Protobuf library related issues
+### Protobuf 라이브러리 관련 이슈들
 
-TensorFlow pip package depends on protobuf pip package version
-3.0.0b2. Protobuf's pip package downloaded from [PyPI](https://pypi.python.org)
-(when running `pip install protobuf`) is a Python only library, that has
-Python implementations of proto serialization/deserialization which can be 10x-50x
-slower than the C++ implementation. Protobuf also supports a binary extension
-for the Python package that contains fast C++ based proto parsing. This
-extension is not available in the standard Python only PIP package. We have
-created a custom binary pip package for protobuf that contains the binary
-extension. Follow these instructions to install the custom binary protobuf pip
-package :
+텐서플로우 pip 패키지는 protobuf pip 패키지 버전 3.0.0b2를 필요로 합니다. [PyPI](https://pypi.python.org)에서 다운받을 수 있는(`pip install protobuf`를 사용해서) Protobuf의 pip 패키지는 파이썬 만으로 개발된 라이브러리로 C++ 구현보다 직렬화/역직렬화시 10~50배 느립니다. Protobuf는 빠른 프로토콜 파싱을 위한 C++ 바이너리 확장을 지원합니다. 이 확장은 표준 파이썬 PIP 패키지에는 포함되어 있지 않습니다. 우리는 이 바이너리 확장을 포함한 protobuf pip 패키지를 자체적으로 만들었습니다. 다음 명령을 사용해 자체적으로 만든 protobuf pip 패키지를 설치할 수 있습니다:
 
 ```bash
 # Ubuntu/Linux 64-bit:
@@ -813,7 +763,7 @@ $ pip install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/prot
 $ pip install --upgrade https://storage.googleapis.com/tensorflow/mac/protobuf-3.0.0b2.post2-cp27-none-any.whl
 ```
 
-and for Python 3 :
+Python 3 에서는 :
 
 ```bash
 # Ubuntu/Linux 64-bit:
@@ -823,11 +773,7 @@ $ pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/pro
 $ pip3 install --upgrade https://storage.googleapis.com/tensorflow/mac/protobuf-3.0.0b2.post2-cp35-none-any.whl
 ```
 
-Install the above package _after_ you have installed TensorFlow via pip, as the
-standard `pip install tensorflow` would install the python only pip package. The
-above pip package will over-write the existing protobuf package.
-Note that the binary pip package already has support for protobuf larger than
-64MB, that should fix errors such as these :
+`pip install tensorflow` 명령은 파이썬으로된 기본 pip 패키지를 설치하므로 위 패키지를 설치하려면 반드시 텐서플로우를 설치하고 난 후에 합니다. 위 pip 패키지는 이미 설치된 protobuf 패키지를 덮어 씁니다. 바이너리 pip 패키지는 64M 넘는 메세지에 대한 지원을 이미 하고 있어 아래와 같은 에러가 이미 해결 되었습니다:
 
 ```bash
 [libprotobuf ERROR google/protobuf/src/google/protobuf/io/coded_stream.cc:207] A
@@ -837,7 +783,7 @@ CodedInputStream::SetTotalBytesLimit() in google/protobuf/io/coded_stream.h.
 
 ```
 
-### Pip installation issues
+### Pip 설치 이슈들
 
 #### Cannot import name 'descriptor'
 
@@ -848,42 +794,40 @@ ImportError: Traceback (most recent call last):
 ImportError: cannot import name 'descriptor'
 ```
 
-If you the above error when upgrading to a newer version of TensorFlow, try
-uninstalling both TensorFlow and protobuf (if installed) and re-installing
-TensorFlow (which will also install the correct protobuf dependency).
+최신 버전의 텐서플로우로 업그레이드할 때 위와 같은 에러가 발생하면 텐서플로우와 protobuf를 모두 언인스톨하고 텐서플로우를 다시 재설치합니다(올바른 protobuf 의존성을 찾기 위해서).
 
 #### Can't find setup.py
 
-If, during `pip install`, you encounter an error like:
+`pip install`하는 동안 아래와 같은 에러를 만나면:
 
 ```bash
 ...
 IOError: [Errno 2] No such file or directory: '/tmp/pip-o6Tpui-build/setup.py'
 ```
 
-Solution: upgrade your version of pip:
+해결책: pip를 업그레이드 합니다:
 
 ```bash
 pip install --upgrade pip
 ```
 
-This may require `sudo`, depending on how pip is installed.
+pip 설치가 어떻게 되어 있느냐에 따라 `sudo`를 필요로 할지 모릅니다.
 
 #### SSLError: SSL_VERIFY_FAILED
 
-If, during pip install from a URL, you encounter an error like:
+URL로 부터 pip 인스톨을 하는 동안 아래와 같은 에러를 만다면:
 
 ```bash
 ...
 SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
 ```
 
-Solution: Download the wheel manually via curl or wget, and pip install locally.
+해결책: curl이나 wget으로 수동으로 wheel을 다운로드 받아 로컬에서 pip install 합니다.
 
 
 #### Operation not permitted
 
-If, despite using `sudo`, you encounter an error like:
+`sudo`를 사용함에도 아래와 같은 에러를 만나면:
 
 ```bash
 ...
@@ -895,12 +839,12 @@ Exception:
 [Errno 1] Operation not permitted: '/tmp/pip-a1DXRT-uninstall/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/_markerlib'
 ```
 
-Solution: Add an `--ignore-installed` flag to the pip command.
+해결책: pip 명령에 `--ignore-installed` 플래그를 추가합니다.
 
 
-### Linux issues
+### Linux 이슈들
 
-If you encounter:
+이런 에러가 나오면:
 
 ```python
 ...
@@ -909,11 +853,11 @@ If you encounter:
 SyntaxError: invalid syntax
 ```
 
-Solution: make sure you are using Python 2.7.
+해결책: 파이썬 2.7을 사용하고 있는지 확인합니다.
 
 ### Mac OS X: ImportError: No module named copyreg
 
-On Mac OS X, you may encounter the following when importing tensorflow.
+Mac OS X 에서 텐서플로우를 임포트할 때 아래와 같은 에러가 나올 수 있습니다.
 
 ```python
 >>> import tensorflow as tf
@@ -921,38 +865,34 @@ On Mac OS X, you may encounter the following when importing tensorflow.
 ImportError: No module named copyreg
 ```
 
-Solution: TensorFlow depends on protobuf, which requires the Python package
-`six-1.10.0`. Apple's default Python installation only provides `six-1.4.1`.
+해결책: 텐서플로우는 `six-1.10.0` 파이썬 패키지를 필요로하는 protobuf에 의존성이 있습니다. 애플의 기본 파이썬 설치에는 `six-1.4.1`이 제공됩니다.
 
-You can resolve the issue in one of the following ways:
+다음과 같은 방법으로 이를 해결 할 수 있습니다:
 
-* Upgrade the Python installation with the current version of `six`:
+* 최신 버전의 `six`로 업그레이드 합니다:
 
 ```bash
 $ sudo easy_install -U six
 ```
 
-* Install TensorFlow with a separate Python library:
+* 별도의 파이썬 환경에서 텐서플로우를 설치합니다:
 
-    *  Using [Virtualenv](#virtualenv-installation).
-    *  Using [Docker](#docker-installation).
+    *  [Virtualenv](#virtualenv-installation) 사용.
+    *  [Docker](#docker-installation) 사용.
 
-* Install a separate copy of Python via [Homebrew](http://brew.sh/) or
-[MacPorts](https://www.macports.org/) and re-install TensorFlow in that
-copy of Python.
+* [Homebrew](http://brew.sh/)나 [MacPorts](https://www.macports.org/)를 사용하여 
+별도의 파이썬 버전을 설치한 후 텐서플로우를 그 파이썬에서 재 설치합니다.
 
 ### Mac OS X: OSError: [Errno 1] Operation not permitted:
 
-On El Capitan, "six" is a special package that can't be modified, and this
-error is reported when "pip install" tried to modify this package. To fix use
-"ignore-installed" flag, ie
+엘 캐피탄에서 "six"는 수정할 수 없는 스페셜 패키지라서 이 에러는 "pip install" 명령으로 이 패키지를 수정하려고 할 때 나타납니다. 이 문제를 해결하기 위해서는 "ignore-installed" 플래그를 사용합니다.
 
 sudo pip install --ignore-installed six https://storage.googleapis.com/....
 
 
 ### Mac OS X: TypeError: `__init__()` got an unexpected keyword argument 'syntax'
 
-On Mac OS X, you may encounter the following when importing tensorflow.
+Mac OS X 에서 텐서플로우를 임포트할 때 이런 에러가 나타날 수 있습니다.
 
 ```
 >>> import tensorflow as tf
@@ -968,9 +908,8 @@ Traceback (most recent call last):
 TypeError: __init__() got an unexpected keyword argument 'syntax'
 ```
 
-This is due to a conflict between protobuf versions (we require protobuf 3.0.0).
-The best current solution is to make sure older versions of protobuf are not
-installed, such as:
+이 에러는 protobuf 버전간의 충돌 때문입니다(protobuf 3.0.0이 필요합니다).
+가장 좋은 해결책은 예전 버전의 protobuf를 업그레이드 하는 것입니다:
 
 ```bash
 $ pip install --upgrade protobuf
