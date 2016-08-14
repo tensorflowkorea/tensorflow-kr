@@ -164,11 +164,6 @@ Session 과 클러스터 의 분산처리에 대한 더 많은 정보는 [Distri
 [`Session.run()`](../api_docs/python/client.md#Session.run) 함수를 사용해서 graph
 의 연산들을 동작 시킨다.
 
-The Python examples in the documentation launch the graph with a
-[`Session`](../api_docs/python/client.md#Session) and use the
-[`Session.run()`](../api_docs/python/client.md#Session.run) method to execute
-operations.
-
 인터렉티브 파이선 환경 [IPython](http://ipython.org) 에서는 [`InteractiveSession`](../api_docs/python/client.md#InteractiveSession) 클래스,
 [`Tensor.eval()`](../api_docs/python/framework.md#Tensor.eval) 와 [`Operation.run()`](../api_docs/python/framework.md#Operation.run) 함수를 사용 할 수 있다.
 이것은 세션안에서 변수의 홀딩을 피할수 있기 한다.
