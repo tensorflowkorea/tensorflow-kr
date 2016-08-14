@@ -138,7 +138,7 @@ GPU 와 TensorFlow 보다 많은 정보는 [Using GPUs](../how_tos/using_gpu/ind
 ### Launching the graph in a distributed session
 
 TensorFlow 클러스터 만들기, TensorFlow 는 클러스터 안의 여러 머신에서 동작 시킬수 있다.
-너의 클라이언의 Session을 인스턴스화 시키고, 클러스터 안의 머신 네트워크에 보내면 된다.
+너의 클라이언트의 Session을 인스턴스화 시키고, 클러스터 안의 머신 네트워크에 보내면 된다.
 
 ```python
 with tf.Session("grpc://example.org:2222") as sess:
