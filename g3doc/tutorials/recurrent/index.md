@@ -1,158 +1,144 @@
-# Recurrent Neural Networks
+# 순환 신경망(Recurrent Neural Networks)
 
-## Introduction
+## 소개
 
-Take a look at [this great article]
-(http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
-for an introduction to recurrent neural networks and LSTMs in particular.
+순환 신경망과 LSTM에 관한 소개는 이
+[블로그](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)를 참고하세요.
 
-## Language Modeling
+## 언어 모델링(Language Modeling)
 
-In this tutorial we will show how to train a recurrent neural network on
-a challenging task of language modeling. The goal of the problem is to fit a
-probabilistic model which assigns probabilities to sentences. It does so by
-predicting next words in a text given a history of previous words. For this
-purpose we will use the [Penn Tree Bank](http://www.cis.upenn.edu/~treebank/)
-(PTB) dataset, which is a popular benchmark for measuring quality of these
-models, whilst being small and relatively fast to train.
+이 튜토리얼에서 언어 모델링 문제에 대해 순환 신경망을 어떻게 학습시키는지 살펴 보겠습니다.
+여기서 풀려고 하는 문제는 문장 구성에 대한 확률을 부여하는 모델을 최적화시키는 것입니다.
+즉 이전에 나타난 단어의 기록을 보고 다음의 단어를 예측하는 것입니다.
+우리가 사용할 데이터는 이런 종류의 모델의 성능을 평가하는 데 널리 사용되고
+비교적 크기가 작아 학습하는 데 시간이 많이 걸리지 않는
+[Penn Tree Bank](http://www.cis.upenn.edu/~treebank/) (PTB) 데이터셋입니다.
 
-Language modeling is key to many interesting problems such as speech
-recognition, machine translation, or image captioning. It is also fun, too --
-take a look [here] (http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
+언어 모델링은 음성 인식, 기계 번역, 이미지 캡셔닝(captioning) 같이 인기있는 여러 분야의 핵심 요소입니다.
+또한 매우 재미있습니다.
+[여기](http://karpathy.github.io/2015/05/21/rnn-effectiveness/)를 한번 둘러보세요.
 
-For the purpose of this tutorial, we will reproduce the results from
-[Zaremba et al., 2014] (http://arxiv.org/abs/1409.2329)
-([pdf](http://arxiv.org/pdf/1409.2329.pdf)), which achieves very good results
-on the PTB dataset.
+이 튜토리얼에서는 PTB 데이터셋을 사용하여 뛰어난 성과를 낸
+[Zaremba 외., 2014](http://arxiv.org/abs/1409.2329)
+([pdf](http://arxiv.org/pdf/1409.2329.pdf))의 결과를 재현할 것 입니다.
 
-## Tutorial Files
+## 튜토리얼 파일
 
-This tutorial references the following files from `models/rnn/ptb`:
+이 튜토리얼에서 사용할 파일들은 `models/rnn/ptb`에 있습니다.
 
-File | Purpose
+파일 | 설명
 --- | ---
-`ptb_word_lm.py` | The code to train a language model on the PTB dataset.
-`reader.py` | The code to read the dataset.
+`ptb_word_lm.py` | 이 코드는 PTB 데이터셋을 사용하여 언어 모델을 학습시킵니다.
+`reader.py` | 이 코드는 데이터를 읽어 들이는데 사용됩니다.
 
-## Download and Prepare the Data
+## 데이터 다운로드하여 준비하기
 
-The data required for this tutorial is in the data/ directory of the
-PTB dataset from Tomas Mikolov's webpage:
-http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz
+이 튜토리얼에서 필요한 데이터는 Tomas Mikolov의 웹 페이지에서 다운 받은 파일의 data 디렉토리
+안에 있습니다: http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz
 
-The dataset is already preprocessed and contains overall 10000 different words,
-including the end-of-sentence marker and a special symbol (\<unk\>) for rare
-words. We convert all of them in the `reader.py` to unique integer identifiers
-to make it easy for the neural network to process.
+이 데이터셋은 전처리된 총 만개의 단어를 가지고 있고 문장 끝을 나타내는 표시와 희귀 단어를 표시하는
+심볼(&lt;unk&gt;)을 포함하고 있습니다. 이 데이터를 신경망에서 처리하기 적합하도록
+`reader.py` 에서 모든 단어를 고유한 정수 숫자로 바꿉니다.
 
-## The Model
+## 학습 모델
 
 ### LSTM
 
-The core of the model consists of an LSTM cell that processes one word at a
-time and computes probabilities of the possible continuations of the sentence.
-The memory state of the network is initialized with a vector of zeros and gets
-updated after reading each word. Also, for computational reasons, we will
-process data in mini-batches of size `batch_size`.
+학습 모델의 핵심 부분은 한번에 하나의 단어를 입력받아 문장에서 나타날 다음 단어의 확률을
+계산하는 LSTM 셀(cell)로 이루어져 있습니다. 신경망의 메모리 상태는 0으로 초기화되고 단어를
+읽으면서 업데이트 됩니다. 계산 효율을 높이기 위해 `batch_size` 크기의 미니배치(mini-batch)로
+모델을 학습시킬 것입니다.
 
-The basic pseudocode looks as follows:
+기본적인 의사코드는 아래와 같습니다:
 
 ```python
 lstm = rnn_cell.BasicLSTMCell(lstm_size)
-# Initial state of the LSTM memory.
+# LSTM 상태 메모리 초기화.
 state = tf.zeros([batch_size, lstm.state_size])
 
 loss = 0.0
 for current_batch_of_words in words_in_dataset:
-    # The value of state is updated after processing each batch of words.
+    # 상태 값은 배치를 처리한 후 업데이트 됩니다.
     output, state = lstm(current_batch_of_words, state)
 
-    # The LSTM output can be used to make next word predictions
+    # LSTM의 출력 값을 사용하여 다음 단어를 예측합니다.
     logits = tf.matmul(output, softmax_w) + softmax_b
     probabilities = tf.nn.softmax(logits)
     loss += loss_function(probabilities, target_words)
 ```
 
-### Truncated Backpropagation
+### 부분 역전파(Truncated Backpropagation)
 
-In order to make the learning process tractable, it is a common practice to
-truncate the gradients for backpropagation to a fixed number (`num_steps`)
-of unrolled steps.
-This is easy to implement by feeding inputs of length `num_steps` at a time and
-doing backward pass after each iteration.
+학습 과정을 지켜보기 위해서 일정 횟수(`num_steps`)만큼 학습을 진행한 후에 그 만큼의
+그래디언트만 역전파 시키는 것이 보통입니다. 반복 루프안에서 한번에 `num_steps` 길이 만큼
+입력 값을 주입하고 나서 역전파 시키면 됩니다.
 
-A simplified version of the code for the graph creation for truncated
-backpropagation:
+부분 역전파를 위한 그래프를 만드는 코드의 간소화 버전은 아래와 같습니다:
 
 ```python
-# Placeholder for the inputs in a given iteration.
+# 한번 반복에서 처리할 입력 값을 위한 플레이스홀더
 words = tf.placeholder(tf.int32, [batch_size, num_steps])
 
 lstm = rnn_cell.BasicLSTMCell(lstm_size)
-# Initial state of the LSTM memory.
+# LSTM 상태 메모리 초기화.
 initial_state = state = tf.zeros([batch_size, lstm.state_size])
 
 for i in range(num_steps):
-    # The value of state is updated after processing each batch of words.
+    # 상태 값은 배치를 처리한 후 업데이트 됩니다.
     output, state = lstm(words[:, i], state)
 
-    # The rest of the code.
+    # 이어진 코드
     # ...
 
 final_state = state
 ```
 
-And this is how to implement an iteration over the whole dataset:
+그리고 아래는 전체 데이터셋에 대해 반복하는 부분을 구현한 것입니다:
 
 ```python
-# A numpy array holding the state of LSTM after each batch of words.
+# 배치를 처리한 후 LSTM의 상태를 저장하는 numpy 배열.
 numpy_state = initial_state.eval()
 total_loss = 0.0
 for current_batch_of_words in words_in_dataset:
     numpy_state, current_loss = session.run([final_state, loss],
-        # Initialize the LSTM state from the previous iteration.
+        # 이전 반복에서 얻은 결과를 사용해 LSTM 상태를 초기화.
         feed_dict={initial_state: numpy_state, words: current_batch_of_words})
     total_loss += current_loss
 ```
 
-### Inputs
+### 입력
 
-The word IDs will be embedded into a dense representation (see the
-[Vector Representations Tutorial](../../tutorials/word2vec/index.md)) before feeding to
-the LSTM. This allows the model to efficiently represent the knowledge about
-particular words. It is also easy to write:
+단어의 아이디(ID)는 LSTM에 주입되기 전에 밀집 행렬(dense representation)([벡터 표현 튜토리얼](../../tutorials/word2vec/index.md)을 참고하세요)에 임베딩(embedding)될 것입니다.
+이 방식은 특정 단어에 대한 정보를 효과적으로 표현할 수 있습니다. 아래와 같이 만들 수 있습니다:
 
 ```python
-# embedding_matrix is a tensor of shape [vocabulary_size, embedding size]
+# embedding_matrix는 [단어수, 임베딩사이즈] 크기의 텐서입니다.
 word_embeddings = tf.nn.embedding_lookup(embedding_matrix, word_ids)
 ```
 
-The embedding matrix will be initialized randomly and the model will learn to
-differentiate the meaning of words just by looking at the data.
+임베딩 행렬은 랜덤하게 초기화되고 데이터를 처리하면서 단어의 의미를 구분하도록 학습됩니다.
 
-### Loss Function
+### 손실 함수(Loss Function)
 
-We want to minimize the average negative log probability of the target words:
+우리는 목적 단어의 로그 확률의 음수 평균을 최소화하려고 합니다:
 
 $$ \text{loss} = -\frac{1}{N}\sum_{i=1}^{N} \ln p_{\text{target}_i} $$
 
-It is not very difficult to implement but the function
-`sequence_loss_by_example` is already available, so we can just use it here.
+직접 구현하는 것도 어렵지 않으나 이미 `sequence_loss_by_example` 함수가 있어 이를 사용하겠습니다.
 
-The typical measure reported in the papers is average per-word perplexity (often
-just called perplexity), which is equal to
+이 페이퍼에서 사용한 측정법은 평균 단어당 복잡도(perplexity)입니다(종종 그냥 복잡도라고 부릅니다).
+아래 식과 같습니다.
 
 $$e^{-\frac{1}{N}\sum_{i=1}^{N} \ln p_{\text{target}_i}} = e^{\text{loss}} $$
 
-and we will monitor its value throughout the training process.
+학습 과정 동안 이 값을 모니터링하도록 하겠습니다.
 
-### Stacking multiple LSTMs
+### LSTM 레이어 만들기
 
-To give the model more expressive power, we can add multiple layers of LSTMs
-to process the data. The output of the first layer will become the input of
-the second and so on.
+모델의 성능을 높이기 위해 데이터를 처리할 여러개의 LSTM 레이어를 만들 수 있습니다.
+첫번째 레이어의 출력은 두번째 레이어의 입력이 되는 식입니다.
 
-We have a class called `MultiRNNCell` that makes the implementation seamless:
+이런 작업을 위해 구현된 `MultiRNNCell` 클래스가 있습니다:
 
 ```python
 lstm = rnn_cell.BasicLSTMCell(lstm_size)
@@ -160,43 +146,39 @@ stacked_lstm = rnn_cell.MultiRNNCell([lstm] * number_of_layers)
 
 initial_state = state = stacked_lstm.zero_state(batch_size, tf.float32)
 for i in range(num_steps):
-    # The value of state is updated after processing each batch of words.
+    # 상태 값은 배치를 처리한 후 업데이트 됩니다.
     output, state = stacked_lstm(words[:, i], state)
 
-    # The rest of the code.
+    # 이어진 코드
     # ...
 
 final_state = state
 ```
 
-## Run the Code
+## 코드 실행
 
-We are assuming you have already installed via the pip package, have cloned the
-tensorflow git repository, and are in the root of the git tree. (If [building
-from source](
-https://github.com/tensorflow/tensorflow/blob/master/tensorflow/g3doc/get_started/os_setup.md#installing-from-sources), build the `tensorflow/models/rnn/ptb:ptb_word_lm` target using
-[bazel](https://github.com/bazelbuild/bazel)).
+독자가 이미 pip 패키지를 통해 텐서플로우를 설치했고 텐서플로우 깃 저장소(git repository)에서
+클론하여 깃 트리의 최상위 디렉토리에 있다고 가정합니다. (만약 [소스에서 직접 빌드](
+https://github.com/tensorflow/tensorflow/blob/master/tensorflow/g3doc/get_started/os_setup.md#installing-from-sources) 했다면 [bazel](https://github.com/bazelbuild/bazel)을 이용해서
+`tensorflow/models/rnn/ptb:ptb_word_lm` 타겟을 빌드하세요).
 
-Next:
+그 다음은:
 ```
 cd tensorflow/models/rnn/ptb
 python ptb_word_lm --data_path=/tmp/simple-examples/data/ --model small
 ```
 
-There are 3 supported model configurations in the tutorial code: "small",
-"medium" and "large". The difference between them is in size of the LSTMs and
-the set of hyperparameters used for training.
+이 튜토리얼에 포함된 코드에는 세가지의 모델 환경을 제공합니다: "small", "medium", "large" 입니다.
+이들간의 차이는 LSTM 레이어의 크기와 학습에 사용될 하이퍼파라메타(hyperparameter) 설정입니다.
 
-The larger the model, the better results it should get. The `small` model should
-be able to reach perplexity below 120 on the test set and the `large` one below
-80, though it might take several hours to train.
+큰 모델일수록 더 좋은 결과가 나와야 합니다. 'small' 모델은 테스트 셋에 대한 복잡도가 120 아래에 도달하며
+'large' 모델은 80 이하가 나오지만 학습에 여러시간이 소요될 수 있습니다.
 
-## What Next?
+## 그 다음엔?
 
-There are several tricks that we haven't mentioned that make the model better,
-including:
+여기서 언급하지 않았지만 모델의 성능을 더 좋게 만들기 위한 몇가지 기법이 있습니다:
 
-* decreasing learning rate schedule,
-* dropout between the LSTM layers.
+* 학습 속도 감소를 스케줄링 하기,
+* LSTM 레이어 간에 드롭아웃 적용.
 
-Study the code and modify it to improve the model even further.
+코드를 연구하고 수정해서 모델의 성능을 개선해 보십시요.
