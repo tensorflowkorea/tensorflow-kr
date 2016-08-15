@@ -268,7 +268,7 @@ All the ops needed to produce the values of the requested tensors are run once
 위의 예제에서 살펴본 graph에 tensor들은 `Constants` 와 `Variables` 에 저장되어 있다.
 TensorFlow는 graph의 연산에게 직접 tensor의 값을 줄 수 있는 feed 메카니즘을 제공한다.
 
-Feed 값에 따라 연산의 출력값 대체 된다. feed 데이터의 변수는 `run()` 제공된다. Feed 는 오직 `run()`
+Feed 값에 따라 연산의 출력값이 대체 된다. feed 데이터의 변수는 `run()` 제공된다. Feed 는 오직 `run()`
 에서만 사용 되어 진다. 가장 일반적인 사용방법은 tf.placeholder() 을 사용해서 "feed" 작업을 지정해 주는것이다.
 
 ```python
