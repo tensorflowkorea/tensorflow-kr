@@ -138,7 +138,7 @@ GPU 와 TensorFlow 보다 많은 정보는 [Using GPUs](../how_tos/using_gpu/ind
 ### Launching the graph in a distributed session
 
 TensorFlow 클러스터 만들기, TensorFlow 는 클러스터 안의 여러 머신에서 동작 시킬수 있다.
-너의 클라이언의 Session을 인스턴스화 시키고, 클러스터 안의 머신 네트워크에 보내면 된다.
+너의 클라이언트의 Session을 인스턴스화 시키고, 클러스터 안의 머신 네트워크에 보내면 된다.
 
 ```python
 with tf.Session("grpc://example.org:2222") as sess:
@@ -163,11 +163,6 @@ Session 과 클러스터 의 분산처리에 대한 더 많은 정보는 [Distri
 이 문서에 있는 파이션 예제들은 [`Session`](../api_docs/python/client.md#Session) 과
 [`Session.run()`](../api_docs/python/client.md#Session.run) 함수를 사용해서 graph
 의 연산들을 동작 시킨다.
-
-The Python examples in the documentation launch the graph with a
-[`Session`](../api_docs/python/client.md#Session) and use the
-[`Session.run()`](../api_docs/python/client.md#Session.run) method to execute
-operations.
 
 인터렉티브 파이선 환경 [IPython](http://ipython.org) 에서는 [`InteractiveSession`](../api_docs/python/client.md#InteractiveSession) 클래스,
 [`Tensor.eval()`](../api_docs/python/framework.md#Tensor.eval) 와 [`Operation.run()`](../api_docs/python/framework.md#Operation.run) 함수를 사용 할 수 있다.
@@ -273,7 +268,7 @@ All the ops needed to produce the values of the requested tensors are run once
 위의 예제에서 살펴본 graph에 tensor들은 `Constants` 와 `Variables` 에 저장되어 있다.
 TensorFlow는 graph의 연산에게 직접 tensor의 값을 줄 수 있는 feed 메카니즘을 제공한다.
 
-Feed 값에 따라 연산의 출력값 대체 된다. feed 데이터의 변수는 `run()` 제공된다. Feed 는 오직 `run()`
+Feed 값에 따라 연산의 출력값이 대체 된다. feed 데이터의 변수는 `run()` 제공된다. Feed 는 오직 `run()`
 에서만 사용 되어 진다. 가장 일반적인 사용방법은 tf.placeholder() 을 사용해서 "feed" 작업을 지정해 주는것이다.
 
 ```python
