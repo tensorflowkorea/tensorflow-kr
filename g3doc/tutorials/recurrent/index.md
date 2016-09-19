@@ -1,4 +1,5 @@
 # 순환 신경망(Recurrent Neural Networks)
+(v0.9)
 
 ## 소개
 
