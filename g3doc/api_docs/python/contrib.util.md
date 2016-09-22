@@ -17,7 +17,7 @@
 
 해야할일(mrry): 이 함수는 손쉽게 확장이 가능하도록 gradients와 ShapeFunctions과 같은 등록 매커니즘을 고려합니다.
 
-주의: 만약 `constant_value(tensor)` 가 non-`None` 결과를 반하면 tensor에 별다른 값을 부여할 수 없게 됩니다. 이 함수는 구축된 그래프에 영향을 미치도록 허용합니다. 그리고 정적 형상 최적화(permits static shape optimizations)을 허용합니다. 
+주의: 만약 `constant_value(tensor)` 가 non-`None` 결과를 반환하면 tensor에 별다른 값을 부여할 수 없게 됩니다. 이 함수는 구축된 그래프에 영향을 미치도록 허용합니다. 그리고 정적 형상 최적화(permits static shape optimizations)을 허용합니다. 
 
 ##### Args:
 
@@ -43,31 +43,25 @@ Create a TensorProto.
 ##### Args:
 
 
-*  <b>`values`</b>: Values to put in the TensorProto.
-*  <b>`dtype`</b>: Optional tensor_pb2 DataType value.
-*  <b>`shape`</b>: List of integers representing the dimensions of tensor.
+*  <b>`values`</b>: Values 를 TensorProto에 둡니다.
+*  <b>`dtype`</b>: Optional tensor_pb2 데이터 타입 값
+*  <b>`shape`</b>: 정수 리스트 형태로 텐서의 차원을 나타냅니다.
 
-##### Returns:
+##### 반환(Returns):
 
-  A TensorProto. Depending on the type, it may contain data in the
-  "tensor_content" attribute, which is not directly useful to Python programs.
-  To access the values you should convert the proto back to a numpy ndarray
-  with tensor_util.MakeNdarray(proto).
+  TensorProto는 타입에 의존적입니다. TensorProto는 "tensor_content"를 포함합니다. 파이썬 프로그램에서 직접적으로 유용한 기능은 아닙니다.
+  값을 평가하기 위해 tensor_util.MakeNdarray(proto)를 이용해 proto를 다시 numpy ndarray로 변환해야합니다.
 
 ##### Raises:
 
 
-*  <b>`TypeError`</b>: if unsupported types are provided.
-*  <b>`ValueError`</b>: if arguments have inappropriate values.
+*  <b>`TypeError`</b>: 타입이 제공되지 않은 경우.
+*  <b>`ValueError`</b>: 인자가 부적절한 값일 경우
 
-make_tensor_proto accepts "values" of a python scalar, a python list, a
-numpy ndarray, or a numpy scalar.
+make_tensor_proto 는 파이썬 스칼라 값인 "values" 를 받아들입니다. values는 파이썬의 리스트 형태입니다. numpy ndarray 와 numpy scalar와 같습니다. 
 
-If "values" is a python scalar or a python list, make_tensor_proto
-first convert it to numpy ndarray. If dtype is None, the
-conversion tries its best to infer the right numpy data
-type. Otherwise, the resulting numpy array has a compatible data
-type with the given dtype.
+만약 "values" 가 파이썬의 스칼라 혹은 리스트 형태라면, make_tensor_proto
+first 는 numpy ndarray로 변환됩니다. 만약 dtype 이 없다면, numpy 데이터형을 추론을 시도합니다. 달리 말하면 반환되는 numpy 배열은 주어진 dtype에 호환되는 데이터타입이 됩니다.
 
 In either case above, the numpy ndarray (either the caller provided
 or the auto converted) must have the compatible type with dtype.
