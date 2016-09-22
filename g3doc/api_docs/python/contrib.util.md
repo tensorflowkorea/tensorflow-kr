@@ -61,13 +61,13 @@ Create a TensorProto.
 make_tensor_proto 는 파이썬 스칼라 값인 "values" 를 받아들입니다. values는 파이썬의 리스트 형태입니다. numpy ndarray 와 numpy scalar와 같습니다. 
 
 만약 "values" 가 파이썬의 스칼라 혹은 리스트 형태라면, make_tensor_proto
-first 는 numpy ndarray로 변환됩니다. 만약 dtype 이 없다면, numpy 데이터형을 추론을 시도합니다. 달리 말하면 반환되는 numpy 배열은 주어진 dtype에 호환되는 데이터타입이 됩니다.
+first 는 numpy ndarray로 변환됩니다. 만약 dtype 이 없다면, numpy 데이터형이 무엇인지 추론을 시도합니다. 달리 말하면 반환되는 numpy 배열은 주어진 dtype에 호환되는 데이터타입이 됩니다.
 
 위의 두 경우에 있어서 numpy ndarray (호출자가 제공되거나, 자동 변환이 이뤄짐)는 반드시 dtype을 참고하여 타입이 호환되도록 해야합니다.
 
 make_tensor_proto 는 numpy array에서 tensor proto로 변환을 담당합니다.
 
-만약 "모양"이 None 이라고 해봅시다. 결과 텐서 proto는 numpy array로 정확히 표현됩니다.
+만약 "모양"이 None 일때 결과 텐서 proto는 numpy array로 정확히 표현할 수 있습니다.
 
 다른말로 말하면 "모양"이 텐서의 모양으로 명시되며 numpy array는 더많은 엘리먼트가 필요 없게 됩니다.
 
@@ -98,9 +98,9 @@ numpy ndarray를 생성할때 텐서와 동일한 모양과 데이터가 되도�
 
 ### `tf.contrib.util.ops_used_by_graph_def(graph_def)` {#ops_used_by_graph_def}
 
-Collect the list of ops used by a graph.
+그래프에 사용된 ops의 리스트를 수집합니다.
 
-Does not validate that the ops are all registered.
+ops가 모두 등록되었다면 검증하지 않습니다.
 
 ##### Args:
 
@@ -110,7 +110,6 @@ Does not validate that the ops are all registered.
 ##### Returns:
 
   문자열 리스트를 반홥합니다. 그래프에 사용된 각 op를 네이밍합니다.
-
 
 - - -
 
