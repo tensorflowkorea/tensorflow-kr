@@ -1,44 +1,37 @@
 <!-- This file is machine generated: DO NOT EDIT! -->
 
-# Utilities (contrib)
+# 유틸리티 (contrib)
 [TOC]
 
-Utilities for dealing with Tensors.
+텐서를 처리하는 유틸리티
 
-## Miscellaneous Utility Functions
+## 여러 유틸리티 함수
 
 - - -
 
 ### `tf.contrib.util.constant_value(tensor)` {#constant_value}
 
-Returns the constant value of the given tensor, if efficiently calculable.
+만약 효율적으로 계산이 가능하다면 tensor의 상수 값을 반환합니다.
 
-This function attempts to partially evaluate the given tensor, and
-returns its value as a numpy ndarray if this succeeds.
+이 함수는 텐서가 주어지면 부분적으로 평가를 진행합니다. 성공하는 경우 numpy ndarray 값을 반환합니다.
 
-TODO(mrry): Consider whether this function should use a registration
-mechanism like gradients and ShapeFunctions, so that it is easily
-extensible.
+해야할일(mrry): 이 함수는 손쉽게 확장이 가능하도록 gradients와 ShapeFunctions과 같은 등록 매커니즘을 고려합니다.
 
-NOTE: If `constant_value(tensor)` returns a non-`None` result, it will no
-longer be possible to feed a different value for `tensor`. This allows the
-result of this function to influence the graph that is constructed, and
-permits static shape optimizations.
+주의: 만약 `constant_value(tensor)` 가 non-`None` 결과를 반하면 tensor에 별다른 값을 부여할 수 없게 됩니다. 이 함수는 구축된 그래프에 영향을 미치도록 허용합니다. 그리고 정적 형상 최적화(permits static shape optimizations)을 허용합니다. 
 
 ##### Args:
 
 
-*  <b>`tensor`</b>: The Tensor to be evaluated.
+*  <b>`tensor`</b>: 평가된 텐서
 
 ##### Returns:
 
-  A numpy ndarray containing the constant value of the given `tensor`,
-  or None if it cannot be calculated.
+  numpy ndarray는 'tensor'의 상수 값이거나 계산하지 않았다면 None을 포함합니다.
 
 ##### Raises:
 
 
-*  <b>`TypeError`</b>: if tensor is not an ops.Tensor.
+*  <b>`TypeError`</b>: 텐서가 작동하지 않는 경우에 타입에러가 발생함.
 
 
 - - -
