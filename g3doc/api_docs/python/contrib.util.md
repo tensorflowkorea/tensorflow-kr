@@ -15,7 +15,7 @@
 
 이 함수는 텐서가 주어지면 부분적으로 평가를 진행합니다. 성공하는 경우 numpy ndarray 값을 반환합니다.
 
-해야할일(mrry): 이 함수는 손쉽게 확장이 가능하도록 gradients와 ShapeFunctions과 같은 등록 매커니즘을 고려합니다.
+하는일(mrry): 이 함수는 손쉽게 확장이 가능하도록 gradients와 ShapeFunctions과 같은 등록 매커니즘을 고려합니다.
 
 주의: 만약 `constant_value(tensor)` 가 non-`None` 결과를 반환하면 tensor에 별다른 값을 부여할 수 없게 됩니다. 이 함수는 구축된 그래프에 영향을 미치도록 허용합니다. 그리고 정적 형상 최적화(permits static shape optimizations)을 허용합니다. 
 
@@ -61,50 +61,46 @@ Create a TensorProto.
 make_tensor_proto 는 파이썬 스칼라 값인 "values" 를 받아들입니다. values는 파이썬의 리스트 형태입니다. numpy ndarray 와 numpy scalar와 같습니다. 
 
 만약 "values" 가 파이썬의 스칼라 혹은 리스트 형태라면, make_tensor_proto
-first 는 numpy ndarray로 변환됩니다. 만약 dtype 이 없다면, numpy 데이터형을 추론을 시도합니다. 달리 말하면 반환되는 numpy 배열은 주어진 dtype에 호환되는 데이터타입이 됩니다.
+first 는 numpy ndarray로 변환됩니다. 만약 dtype 이 없다면, numpy 데이터형이 무엇인지 추론을 시도합니다. 달리 말하면 반환되는 numpy 배열은 주어진 dtype에 호환되는 데이터타입이 됩니다.
 
-In either case above, the numpy ndarray (either the caller provided
-or the auto converted) must have the compatible type with dtype.
+위의 두 경우에 있어서 numpy ndarray (호출자가 제공되거나, 자동 변환이 이뤄짐)는 반드시 dtype을 참고하여 타입이 호환되도록 해야합니다.
 
-make_tensor_proto then converts the numpy array to a tensor proto.
+make_tensor_proto 는 numpy array에서 tensor proto로 변환을 담당합니다.
 
-If "shape" is None, the resulting tensor proto represents the numpy
-array precisely.
+만약 "모양"이 None 일때 결과 텐서 proto는 numpy array로 정확히 표현할 수 있습니다.
 
-Otherwise, "shape" specifies the tensor's shape and the numpy array
-can not have more elements than what "shape" specifies.
-
+다른말로 말하면 "모양"이 텐서의 모양으로 명시되며 numpy array는 더많은 엘리먼트가 필요 없게 됩니다.
 
 - - -
 
 ### `tf.contrib.util.make_ndarray(tensor)` {#make_ndarray}
 
-Create a numpy ndarray from a tensor.
+텐서로부터 numpy ndarray 를 생성합니다.
 
-Create a numpy ndarray with the same shape and data as the tensor.
+numpy ndarray를 생성할때 텐서와 동일한 모양과 데이터가 되도록 합니다.
 
 ##### Args:
 
 
-*  <b>`tensor`</b>: A TensorProto.
+*  <b>`tensor`</b>: TensorProto
 
 ##### Returns:
 
-  A numpy array with the tensor contents.
+  텐서 컨텐츠로 이뤄진 numpy 배열
 
 ##### Raises:
 
 
-*  <b>`TypeError`</b>: if tensor has unsupported type.
+*  <b>`TypeError`</b>: 텐서가 타입을 지원하지 않을때 에러가 발생합니다.
 
 
 - - -
 
 ### `tf.contrib.util.ops_used_by_graph_def(graph_def)` {#ops_used_by_graph_def}
 
-Collect the list of ops used by a graph.
+그래프에 사용된 ops의 리스트를 수집합니다.
 
-Does not validate that the ops are all registered.
+ops가 모두 등록되었다면 검증하지 않습니다.
 
 ##### Args:
 
@@ -113,8 +109,7 @@ Does not validate that the ops are all registered.
 
 ##### Returns:
 
-  A list of strings, each naming an op used by the graph.
-
+  문자열 리스트를 반홥합니다. 그래프에 사용된 각 op를 네이밍합니다.
 
 - - -
 
@@ -122,23 +117,20 @@ Does not validate that the ops are all registered.
 
 Collect the stripped OpDefs for ops used by a graph.
 
-This function computes the `stripped_op_list` field of `MetaGraphDef` and
-similar protos.  The result can be communicated from the producer to the
-consumer, which can then use the C++ function
-`RemoveNewDefaultAttrsFromGraphDef` to improve forwards compatibility.
+이 함수는 'MetaGraphDef'의 `stripped_op_list` 필드와  protos를 계산합니다. 결과는 생산자(producer)에서 소비자(consumer)로 의사소통이 이뤄집니다. 이는 c++ 함수인 
+`RemoveNewDefaultAttrsFromGraphDef`를 이용해 호환성이 향상될 수 있도록 합니다.
 
 ##### Args:
-
 
 *  <b>`graph_def`</b>: A `GraphDef` proto, as from `graph.as_graph_def()`.
 
 ##### Returns:
 
-  An `OpList` of ops used by the graph.
+  ops의 `OpList` 는 그래프로서 사용됩니다.
 
 ##### Raises:
 
 
-*  <b>`ValueError`</b>: If an unregistered op is used.
+*  <b>`ValueError`</b>: 만약 등록되지 않은 op가 사용된 경우
 
 
