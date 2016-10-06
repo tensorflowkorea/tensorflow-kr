@@ -4,8 +4,8 @@
 C++ 로 부터 그래프 실행을 하는 것은 다음과 같습니다.
 
 1. [Python API](../python/)를 이용해서 산출 그래프를 빌드합니다.
-2. 그래프를 파일에 쓰기위해 [`tf.train.write_graph()`](../python/train.md#write_graph)를 이용합니다.
-3. C++ 세션 API를 이용해 그래프를 읽어옵니다. 예를 들면:
+1. 그래프를 파일에 쓰기위해 [`tf.train.write_graph()`](../python/train.md#write_graph)를 이용합니다.
+1. C++ 세션 API를 이용해 그래프를 읽어옵니다. 예를 들면:
 
   ```c++
   // Reads a model graph definition from disk, and creates a session object you
@@ -20,7 +20,7 @@ C++ 로 부터 그래프 실행을 하는 것은 다음과 같습니다.
   }
 ```
 
-4. `session->Run()`을 호출하여 그래프를 보여줍니다.
+1. `session->Run()`을 호출하여 그래프를 보여줍니다.
 
 ## Env
 
