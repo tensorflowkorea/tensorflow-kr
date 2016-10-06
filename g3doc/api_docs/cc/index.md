@@ -1,12 +1,11 @@
-# TensorFlow C++ Session API reference documentation
+# 텐서플로우 C++ 세션 API 레퍼런스 문서
 
-TensorFlow's public C++ API includes only the API for executing graphs, as of
-version 0.5. To control the execution of a graph from C++:
+0.5 버전의 텐서플로우의 퍼블릭 C++ API는 오직 그래프를 실행하는 API만을 포함합니다.
+C++ 로 부터 그래프 실행을 하는 것은 다음과 같습니다.
 
-1. Build the computation graph using the [Python API](../python/).
-1. Use [`tf.train.write_graph()`](../python/train.md#write_graph) to
-write the graph to a file.
-1. Load the graph using the C++ Session API. For example:
+1. [Python API](../python/)를 이용해서 산출 그래프를 빌드합니다.
+2. 그래프를 파일에 쓰기위해 [`tf.train.write_graph()`](../python/train.md#write_graph)를 이용합니다.
+3. C++ 세션 API를 이용해 그래프를 읽어옵니다. 예를 들면:
 
   ```c++
   // Reads a model graph definition from disk, and creates a session object you
@@ -21,7 +20,7 @@ write the graph to a file.
   }
 ```
 
-1. Run the graph with a call to `session->Run()`
+4. `session->Run()`을 호출하여 그래프를 보여줍니다.
 
 ## Env
 
