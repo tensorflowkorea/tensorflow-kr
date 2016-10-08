@@ -1,36 +1,66 @@
 # Convolutional Neural Networks
+# 컨볼루셔널 뉴럴 네트워크
 
 > **NOTE:** This tutorial is intended for *advanced* users of TensorFlow
 and assumes expertise and experience in machine learning.
+> **NOTE:** 이 튜토리얼은 텐서플로우에 *능숙한* 사용자를 대상으로 하며,
+기계학습에 대한 전문 지식과 경험을 갖고 있다는 전제로 쓰였습니다.
 
 ## Overview
+## 개요
 
 CIFAR-10 classification is a common benchmark problem in machine learning.  The
 problem is to classify RGB 32x32 pixel images across 10 categories:
 ```airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck.```
 
+CIFAR-10 분류는 기계학습에서 흔히 사용되는 벤치마크 문제입니다.
+이 분류 문제는 RGB 32x32 픽셀 이미지를 10개의 카테고리로 분류하는 것이 목표입니다.
+```비행기, 자동차, 새, 고양이, 사슴, 개, 개구리, 말, 배, 트럭.```
+
 For more details refer to the [CIFAR-10 page](http://www.cs.toronto.edu/~kriz/cifar.html)
 and a [Tech Report](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)
 by Alex Krizhevsky.
 
+더 자세한 설명을 원하신다면 [CIFAR-10 페이지](http://www.cs.toronto.edu/~kriz/cifar.html)와
+Alex Krizhevsky의 [기술 보고서](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)를
+참조하세요.
+
+
 ### Goals
+
+### 목표
 
 The goal of this tutorial is to build a relatively small [convolutional neural
 network](https://en.wikipedia.org/wiki/Convolutional_neural_network) (CNN) for
 recognizing images. In the process, this tutorial:
 
+이 튜토리얼의 목표는 이미지를 인식하는 상대적으로 작은 [컨볼루셔널 뉴럴 네트워크]를 만드는 것입니다.
+이 과정에서, 튜토리얼에서는
+
 1. Highlights a canonical organization for network architecture,
 training and evaluation.
 2. Provides a template for constructing larger and more sophisticated models.
+
+1. 네트워크 구조와 학습 및 평가의 표준적인 구성에 주목하고,
+2. 더 크고 복잡한 모델에 대한 예제를 제공합니다.
 
 The reason CIFAR-10 was selected was that it is complex enough to exercise
 much of TensorFlow's ability to scale to large models. At the same time,
 the model is small enough to train fast, which is ideal for trying out
 new ideas and experimenting with new techniques.
 
+CIFAR-10 분류가 선택된 이유는 더 큰 모델을 다루는 데에 필요한 텐서플로우의 많은 기능들을
+연습하기에 충분히 복잡하기 때문입니다. 그와 동시에, 충분히 작은 모델이기 때문에 학습이 빨라
+새로운 아이디어를 적용해보거나 새로운 테크닉을 실험해보기에 적합하기 때문입니다.
+
+
 ### Highlights of the Tutorial
 The CIFAR-10 tutorial demonstrates several important constructs for
 designing larger and more sophisticated models in TensorFlow:
+
+### 튜토리얼의 주안점
+CIFAR-10 튜토리얼은 텐서플로우로 더 크고 복잡한 모델을 디자인하기 위한
+몇몇의 주요 구성들을 시연합니다.
 
 * Core mathematical components including [convolution](
 ../../api_docs/python/nn.md#conv2d) ([wiki](
@@ -40,12 +70,28 @@ https://en.wikipedia.org/wiki/Rectifier_(neural_networks))), [max pooling](
 ../../api_docs/python/nn.md#max_pool) ([wiki](
 https://en.wikipedia.org/wiki/Convolutional_neural_network#Pooling_layer))
 and [local response normalization](
-../../api_docs/python/nn.md#local_response_normalization) 
+../../api_docs/python/nn.md#local_response_normalization)
 (Chapter 3.3 in [AlexNet paper](
 http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)).
+
+* 주요 수학적 요소 : [Convolution](
+../../api_docs/python/nn.md#conv2d) ([wiki](
+https://en.wikipedia.org/wiki/Convolution)), [rectified linear activations](
+../../api_docs/python/nn.md#relu) ([wiki](
+https://en.wikipedia.org/wiki/Rectifier_(neural_networks))), [Max Pooling](
+../../api_docs/python/nn.md#max_pool) ([wiki](
+https://en.wikipedia.org/wiki/Convolutional_neural_network#Pooling_layer))
+and [local response normalization](
+../../api_docs/python/nn.md#local_response_normalization)
+(Chapter 3.3 in [AlexNet paper](
+http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)).
+
 * [Visualization](../../how_tos/summaries_and_tensorboard/index.md)
 of network activities during training, including input images,
 losses and distributions of activations and gradients.
+
+* 입력된 이미지와  [시각화](../../how_tos/summaries_and_tensorboard/index.md)
+
 * Routines for calculating the
 [moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
 of learned parameters and using these averages
@@ -57,7 +103,7 @@ that systematically decrements over time.
 for input
 data to isolate the model from disk latency and expensive image pre-processing.
 
-We also provide a [multi-GPU version](#training-a-model-using-multiple-gpu-cards) 
+We also provide a [multi-GPU version](#training-a-model-using-multiple-gpu-cards)
 of the model which demonstrates:
 
 * Configuring a model to train across multiple GPU cards in parallel.
@@ -111,7 +157,7 @@ adds operations that perform inference, i.e. classification, on supplied images.
 add operations that compute the loss,
 gradients, variable updates and visualization summaries.
 
-### Model Inputs 
+### Model Inputs
 
 The input part of the model is built by the functions `inputs()` and
 `distorted_inputs()` which read images from the CIFAR-10 binary data files.
@@ -149,7 +195,7 @@ processing time. To prevent these operations from slowing down training, we run
 them inside 16 separate threads which continuously fill a TensorFlow
 [queue](../../api_docs/python/io_ops.md#shuffle_batch).
 
-### Model Prediction 
+### Model Prediction
 
 The prediction part of the model is constructed by the `inference()` function
 which adds operations to compute the *logits* of the predictions. That part of
@@ -188,7 +234,7 @@ layers of Alex's original model are locally connected and not fully connected.
 Try editing the architecture to exactly reproduce the locally connected
 architecture in the top layer.
 
-### Model Training 
+### Model Training
 
 The usual method for training a network to perform N-way classification is
 [multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression),
@@ -307,7 +353,7 @@ values.  See how the scripts use
 [`ExponentialMovingAverage`](../../api_docs/python/train.md#ExponentialMovingAverage)
 for this purpose.
 
-## Evaluating a Model 
+## Evaluating a Model
 
 Let us now evaluate how well the trained model performs on a hold-out data set.
 The model is evaluated by the script `cifar10_eval.py`.  It constructs the model
