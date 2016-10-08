@@ -1,7 +1,6 @@
 # 소개
 
 TensorFlow Learn을 시작하기 위한 간단한 몇 가지 API를 소개합니다.
-Below are few simple examples of the API to get you started with TensorFlow Learn.
 더 많은 예제들을 보시려면, 이 링크를 참고해주세요. [examples](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow).
 
 
@@ -98,19 +97,19 @@ TensorFlowEstimator에 커스텀 모델을 전달하는 예제:
 
     tensorboard --logdir=/tmp/tf_examples/my_model_1
 
-reported url로 가면.
+reported url로 가면 아래 내용 확인 가능.
 
 Graph visualization: Text classification RNN Graph image
 
 Loss visualization: Text classification RNN Loss image
 
 
-## More examples
+## 더 많은 예제들은
 
-See [examples folder](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow) for:
+이 링크를 참고해주세요. [examples folder](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow) for:
 
--  Easy way to handle categorical variables - words are just an example of categorical variable.
--  Text Classification - see examples for RNN, CNN on word and characters.
--  Language modeling and text sequence to sequence.
--  Images (CNNs) - see example for digit recognition.
--  More & deeper - different examples showing DNNs and CNNs
+-  카테고리 변수를 처리하는 간단한 방법 - 단어들은 단지 하나의 카테고리 변수에 지나지 않는다.
+-  텍스트 분류 - 단어와 문자들에 대한 RNN, CNN 예제들
+-  언어 모델링과 텍스트 sequence to sequence.
+-  이미지들( CNNs) - 숫자 인식 예제를 보시오.
+-  심화 내용 - 다양한 DNNs 과 CNNs에 관한 예제들
