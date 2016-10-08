@@ -1,84 +1,62 @@
 # MNIST Data Download
 
-Code: [tensorflow/examples/tutorials/mnist/](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/)
+코드: [tensorflow/examples/tutorials/mnist/](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/)
 
-The goal of this tutorial is to show how to download the dataset files required
-for handwritten digit classification using the (classic) MNIST data set.
+이 튜토리얼의 목적은 (고전적인) MNIST 데이터를 활용한 필기 숫자의 분류(classification)를 위해 데이터를 어떻게 다운로드 받아야 하는지를 알려주는 것입니다. 
 
-## Tutorial Files
+## 튜토리얼 파일
 
-This tutorial references the following files:
+이 튜토리얼은 다음 파일을 참조합니다.
 
-File | Purpose
+파일 | 목적
 --- | ---
-[`input_data.py`](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/input_data.py) | The code to download the MNIST dataset for training and evaluation.
+[`input_data.py`](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/input_data.py) | 학습과 추정을 위한 MNIST 데이터셋을 다운로드하는 코드
 
-## Prepare the Data
+## 데이터 준비
 
-MNIST is a classic problem in machine learning. The problem is to look at
-greyscale 28x28 pixel images of handwritten digits and determine which digit
-the image represents, for all the digits from zero to nine.
+MNIST는 머신러닝의 고전적인 문제입니다. 이 문제는 필기 숫자들의 그레이스케일 28x28 픽셀 이미지를 보고, 0부터 9까지의 모든 숫자들에 대해 이미지가 어떤 숫자를 나타내는지 판별하는 것입니다.
 
 ![MNIST Digits](../../../images/mnist_digits.png "MNIST Digits")
 
-For more information, refer to [Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/)
-or [Chris Olah's visualizations of MNIST](http://colah.github.io/posts/2014-10-Visualizing-MNIST/).
+좀 더 많은 정보를 원하시면, [Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/)
+또는 [Chris Olah's visualizations of MNIST](http://colah.github.io/posts/2014-10-Visualizing-MNIST/)를 참고하면 됩니다.
 
 ### Download
 
-[Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/)
-also hosts the training and test data for download.
+[Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/) 또한 다운로드를 위한 학습과 테스트 데이터를 호스팅하고 있습니다
 
-File | Purpose
+파일 | 목적
 --- | ---
-[`train-images-idx3-ubyte.gz`](http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz) | training set images - 55000 training images, 5000 validation images
-[`train-labels-idx1-ubyte.gz`](http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz) | training set labels matching the images
-[`t10k-images-idx3-ubyte.gz`](http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz) | test set images - 10000 images
-[`t10k-labels-idx1-ubyte.gz`](http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz) | test set labels matching the images
+[`train-images-idx3-ubyte.gz`](http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz) | 학습 셋 이미지 - 55000개의 트레이닝 이미지, 5000개의 검증 이미지
+[`train-labels-idx1-ubyte.gz`](http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz) | 이미지와 매칭되는 학습 셋 레이블 
+[`t10k-images-idx3-ubyte.gz`](http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz) | 테스트 셋 이미지 - 10000개의 이미지
+[`t10k-labels-idx1-ubyte.gz`](http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz) | 이미지와 매칭되는 테스트 셋 레이블
 
-In the `input_data.py` file, the `maybe_download()` function will ensure these
-files are downloaded into a local data folder for training.
+`input_data.py`파일에서 `maybe_download()`함수는 학습을 위한 파일들을 로컬 데이터 폴더에 넣을 수 있는지를 확인해줍니다. 
 
-The folder name is specified in a flag variable at the top of the
-`fully_connected_feed.py` file and may be changed to fit your needs.
+폴더명은 `fully_connected_feed.py`파일의 맨 위에 있는 플래그 변수에 의해 정해지며 원한다면 바꿀 수 있습니다.
 
-### Unpack and Reshape
+### 풀기(Unpack, 언팩)와 변형(Reshape) 
 
-The files themselves are not in any standard image format and are manually
-unpacked (following the instructions available at the website) by the
-`extract_images()` and `extract_labels()` functions in `input_data.py`.
+파일들 자체는 표준 이미지 포맷이 아니며 직접 `input_data.py`에 있는 `extract_images()`와 `extract_labels()` 함수를 사용하여 언패킹할 수 있습니다.
 
-The image data is extracted into a 2d tensor of: `[image index, pixel index]`
-where each entry is the intensity value of a specific pixel in a specific
-image, rescaled from `[0, 255]` to `[0, 1]`.  The "image index" corresponds
-to an image in the dataset, counting up from zero to the size of the dataset.
-And the "pixel index" corresponds to a specific pixel in that image, ranging
-from zero to the number of pixels in the image.
+이미지 데이터는 `[image index, pixel index]` 형태의 이차원 텐서(여기선 2차원 배열을 의미함)로 추출될 수 있습니다. 각 엔트리는 특정 이미지에서 특정 픽셀의 휘도값이며, `[0, 255]`에서 `[0, 1]`까지 재조정됩니다. "image index"는 데이터셋에 있는 이미지를 가리키며, 0부터 데이터셋의 크기까지 카운팅됩니다. 그리고 "pixel index"는 어떤 이미지에서의 특정 픽셀을 가리키며, 0부터 이미지에 존재하는 픽셀의 갯수까지 존재합니다.
 
-The 60000 examples in the `train-*` files are then split into 55000 examples
-for training and 5000 examples for validation. For all of the 28x28
-pixel greyscale images in the datasets the image size is 784 and so the output
-tensor for the training set images is of shape `[55000, 784]`.
+`train-*`파일들에 있는 60000개의 예시들은 학습을 위한 55000개의 예시들과 검증을 위한 5000개의 예시들로 나뉘어집니다. 데이터셋에 있는 모든 28x28 픽셀의 그레이스케일 이미지의 크기는 784이고 따라서 학습 셋 이미지를 위한 출력값 텐서는 `[55000, 784]`의 형태가 됩니다.
 
-The label data is extracted into a 1d tensor of: `[image index]`
-with the class identifier for each example as the value. For the training set
-labels, this would then be of shape `[55000]`.
+레이블 데이터는 각 예시를 위한 클래스 식별자를 값으로써 가지며 `[image index]` 형태의 일차원 텐서로 추출될 수 있습니다. 학습 셋 레이블은 `[55000]`의 형태가 될 것 입니다.
 
-### DataSet Object
+### 데이터셋 객체
 
-The underlying code will download, unpack, and reshape images and labels for
-the following datasets:
+이 기본 코드는 다운로드와 압축풀기 그리고 다음의 데이터셋들을 위해 이미지와 레이블을 변형할 것입니다.
 
-Dataset | Purpose
+데이터셋 | 목적
 --- | ---
-`data_sets.train` | 55000 images and labels, for primary training.
-`data_sets.validation` | 5000 images and labels, for iterative validation of training accuracy.
-`data_sets.test` | 10000 images and labels, for final testing of trained accuracy.
+`data_sets.train` | 초기 학습을 위한 55000개의 이미지들과 레이블들
+`data_sets.validation` | 학습 정확도의 반복적 검증을 위한 5000개의 이미지와 레이블들
+`data_sets.test` | 학습 정확도의 마지막 테스팅을 위한 10000개의 이미지와 레이블들
 
-The `read_data_sets()` function will return a dictionary with a `DataSet`
-instance for each of these three sets of data.  The `DataSet.next_batch()`
-method can be used to fetch a tuple consisting of `batch_size` lists of images
-and labels to be fed into the running TensorFlow session.
+`read_data_sets()`함수는 각 세가지 데이터 셋을 위한 `DataSet`인스턴스를 가진 딕셔너리를 리턴합니다. `DataSet.next_batch()`메서드는 `batch_size`개의 이미지 리스트와 레이블들로 이루어진 튜플을 실행중인 TensorFlow 세션에 넣기위해 사용될 수 있습니다.
 
 ```python
 images_feed, labels_feed = data_set.next_batch(FLAGS.batch_size)
