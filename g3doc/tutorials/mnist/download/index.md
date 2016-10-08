@@ -56,7 +56,7 @@ MNIST는 머신러닝의 고전적인 문제입니다. 이 문제는 필기 숫�
 `data_sets.validation` | 학습 정확도의 반복적 검증을 위한 5000개의 이미지와 레이블들
 `data_sets.test` | 학습 정확도의 마지막 테스팅을 위한 10000개의 이미지와 레이블들
 
-`read_data_sets()`함수는 각 세가지 데이터 셋을 위한 `DataSet`인스턴스를 가진 딕셔너리를 리턴합니다. `DataSet.next_batch()`메서드는 `batch_size`개의 이미지 리스트와 레이블들로 이루어진 튜플을 실행중인 텐서플로우 세션에 넣기위해 사용될 수 있습니다.
+`read_data_sets()`함수는 각 세가지 데이터 셋을 위한 `DataSet`인스턴스를 가진 딕셔너리를 리턴합니다. `DataSet.next_batch()`메서드는 `batch_size`개의 이미지 리스트와 레이블들로 이루어진 튜플을 실행중인 TensorFlow 세션에 넣기위해 사용될 수 있습니다.
 
 ```python
 images_feed, labels_feed = data_set.next_batch(FLAGS.batch_size)
