@@ -1,6 +1,6 @@
 #  MNIST 고급
 
-TensorFlow는 큰 규모의 수치 계산에 적합한 강력한 라이브러리입니다. TensorFlow가 강력한 힘을 발휘하는 작업 중 하나는, 깊은 인공 신경망을 구성하고 학습시키는 것입니다. 이 튜토리얼에서는 MNIST 데이터를 분류하는 깊은 합성곱(convolutional) 신경망을 구성하면서, TensorFlow에서 신경망 모델을 구성하는 기본 블록에 대해 알아볼 것입니다.
+TensorFlow는 큰 규모의 수치 계산에 적합한 강력한 라이브러리입니다. TensorFlow가 강력한 힘을 발휘하는 작업 중 하나는, 심층 신경망을 구성하고 학습시키는 것입니다. 이 튜토리얼에서는 MNIST 데이터를 분류하는 심층 합성곱(convolutional) 신경망을 구성하면서, TensorFlow에서 신경망 모델을 구성하는 기본 블록에 대해 알아볼 것입니다.
 
 *이 튜토리얼은 인공 신경망과 MNIST 데이터셋에 익숙한 독자를 위해 구성되어 있습니다. 만약 이들에 익숙하지 않다면, [MNIST 초급](../beginners/index.md) 튜토리얼이 도움이 될 것입니다. 진행하기 전, [Tensorflow가 설치](../../../get_started/os_setup.md)되어 있는지 확인해 주세요. *
 
@@ -131,21 +131,13 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 print(accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
 ```
 
-## Build a Multilayer Convolutional Network
+## 다중 계층 합성곱 신경망
 
-Getting 91% accuracy on MNIST is bad. It's almost embarrassingly bad. In this
-section, we'll fix that, jumping from a very simple model to something
-moderately sophisticated: a small convolutional neural network. This will get us
-to around 99.2% accuracy -- not state of the art, but respectable.
+MNIST 데이터에서 91% 정확도를 얻는 것은 그다지 좋은 결과라고 할 수 없습니다. 그래서 이번 장에서는, 정확도를 높이기 위해 합성곱 신경망(convolutional neural network)이라는 약간 복잡한 모형을 사용할 것입니다. 이를 통해 99.2% 정도의 정확도를 얻을 수 있습니다. 최신 결과에는 미치지 못하지만, 어느 정도 그럴듯한 결과입니다.
 
-### Weight Initialization
+### 가중치 초기화
 
-To create this model, we're going to need to create a lot of weights and biases.
-One should generally initialize weights with a small amount of noise for
-symmetry breaking, and to prevent 0 gradients. Since we're using ReLU neurons,
-it is also good practice to initialize them with a slightly positive initial
-bias to avoid "dead neurons." Instead of doing this repeatedly while we build
-the model, let's create two handy functions to do it for us.
+합성곱 신경망 모델을 구성하기 위해서는 많은 수의 가중치와 편향을 사용하게 됩니다. 대칭성을 깨뜨리고 기울기(gradient)가 0이 되는 것을 방지하기 위해, 가중치에 약간의 잡음을 주어 초기화합니다. 또한, 모델에 ReLU 뉴런이 포함되므로, "죽은 뉴런"을 방지하기 위해 편향을 작은 양수(0.1)로 초기화합니다. 매번 모델을 만들 때마다 반복하는 대신, 아래 코드와 같이 이러한 일을 해 주는 함수 두 개를 생성합니다.
 
 ```python
 def weight_variable(shape):
@@ -157,15 +149,9 @@ def bias_variable(shape):
   return tf.Variable(initial)
 ```
 
-### Convolution and Pooling
+### 합성곱(Convolution)과 풀링(Pooling)
 
-TensorFlow also gives us a lot of flexibility in convolution and pooling
-operations. How do we handle the boundaries? What is our stride size?
-In this example, we're always going to choose the vanilla version.
-Our convolutions uses a stride of one and are zero padded so that the
-output is the same size as the input. Our pooling is plain old max pooling
-over 2x2 blocks. To keep our code cleaner, let's also abstract those operations
-into functions.
+TensorFlow는 합성곱과 풀링 계층(layer)을 유연하게 다룰 수 있도록 해 줍니다. 경계의 패딩(padding)과 스트라이드(stride)에 대해 다양한 선택을 할 수 있습니다. 이번 예시에서는 스트라이드를 1로, 출력 크기가 입력과 같게 되도록 0으로 패딩하도록 설정합니다. 풀링은 2x2 크기의 맥스 풀링을 적용합니다. 마찬가지로 코드를 간단히 하기 위해 합성곱과 풀링을 위한 함수를 아래 코드와 같이 생성합니다.
 
 ```python
 def conv2d(x, W):
@@ -176,40 +162,31 @@ def max_pool_2x2(x):
                         strides=[1, 2, 2, 1], padding='SAME')
 ```
 
-### First Convolutional Layer
+### 첫 번째 합성곱 계층
 
-We can now implement our first layer. It will consist of convolution, followed
-by max pooling. The convolutional will compute 32 features for each 5x5 patch.
-Its weight tensor will have a shape of `[5, 5, 1, 32]`. The first two
-dimensions are the patch size, the next is the number of input channels, and
-the last is the number of output channels. We will also have a bias vector with
-a component for each output channel.
+이제 첫 번째 계층을 만들 것입니다. 이는 합성곱 계층과 맥스 풀링 계층으로 구성됩니다. 합성곱 계층에서는 5x5의 윈도우(patch라고도 함) 크기를 가지는 32개의 필터를 사용하며, 따라서 구조(shape)가 `[5, 5, 1, 32]`인 가중치 텐서를 정의해야 합니다. 처음 두 개의 차원은 윈도우의 크기, 세 번째는 입력 채널의 수, 마지막은 출력 채널의 수(즉, 얼마나 많은 특징을 사용할 것인가)를 나타냅니다. 또한, 각각의 출력 채널에 대한 편향을 정의해야 합니다. 이 과정에서 앞에서 만든 함수를 사용합니다.
 
 ```python
 W_conv1 = weight_variable([5, 5, 1, 32])
 b_conv1 = bias_variable([32])
 ```
 
-To apply the layer, we first reshape `x` to a 4d tensor, with the second and
-third dimensions corresponding to image width and height, and the final
-dimension corresponding to the number of color channels.
+이 계층에 이미지를 입력하려면 먼저 `x`를 4D 텐서로 `reshape`해야 합니다. 두 번째와 세 번째 차원은 이미지의 가로와 세로 길이, 그리고 마지막 차원은 컬러 채널의 수를 나타냅니다.
 
 ```python
 x_image = tf.reshape(x, [-1,28,28,1])
 ```
 
-We then convolve `x_image` with the weight tensor, add the
-bias, apply the ReLU function, and finally max pool.
+이제 `x_image`와 가중치 텐서에 합성곱을 적용하고, 편향을 더한 뒤 ReLU 함수를 적용합니다. 출력 값을 구하기 위해 마지막으로 맥스 풀링을 적용합니다.
 
 ```python
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1)
 ```
 
-### Second Convolutional Layer
+### 두 번째 합성곱 계층
 
-In order to build a deep network, we stack several layers of this type. The
-second layer will have 64 features for each 5x5 patch.
+심층 신경망을 구성하기 위해서, 앞에서 만든 것과 비슷한 계층을 쌓아올릴 수 있습니다. 여기서는 두 번째 합성곱 계층이 5x5 윈도우에 64개의 필터를 가집니다.
 
 ```python
 W_conv2 = weight_variable([5, 5, 32, 64])
@@ -219,12 +196,9 @@ h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
 h_pool2 = max_pool_2x2(h_conv2)
 ```
 
-### Densely Connected Layer
+### 완전 연결 계층 (Fully-Connected Layer)
 
-Now that the image size has been reduced to 7x7, we add a fully-connected layer
-with 1024 neurons to allow processing on the entire image. We reshape the tensor
-from the pooling layer into a batch of vectors,
-multiply by a weight matrix, add a bias, and apply a ReLU.
+두 번째 계층을 거친 뒤 이미지 크기는 7x7로 줄어들었습니다. 이제 여기에 1024개의 뉴런으로 연결되는 완전 연결 계층을 구성합니다. 이를 위해서 7x7 이미지의 배열을 `reshape`해야 하며, 완전 연결 계층에 맞는 가중치 행렬과 편향 행렬을 구성합니다. 최종적으로 완전 연결 계층의 끝에 ReLU 함수를 적용합니다.
 
 ```python
 W_fc1 = weight_variable([7 * 7 * 64, 1024])
@@ -234,25 +208,19 @@ h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
 h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 ```
 
-#### Dropout
+#### 드롭아웃 (Dropout)
 
-To reduce overfitting, we will apply [dropout](
-https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf) before the readout layer.
-We create a `placeholder` for the probability that a neuron's output is kept
-during dropout. This allows us to turn dropout on during training, and turn it
-off during testing.
-TensorFlow's `tf.nn.dropout` op automatically handles scaling neuron outputs in
-addition to masking them, so dropout just works without any additional scaling.<sup id="a1">[1](#f1)</sup>
+오버피팅(overfitting) 되는 것을 방지하기 위해, [드롭아웃](
+https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf)을 적용할 것입니다. 뉴런이 드롭아웃되지 않을 확률을 저장하는 `placeholder`를 만듭니다. 이렇게 하면 나중에 드롭아웃이 훈련 과정에는 적용되고, 테스트 과정에서는 적용되지 않도록 설정할 수 있습니다. TensorFlow의 `tf.nn.dropout` 함수는 뉴런의 출력을 자동으로 스케일링(scaling)하므로, 추가로 스케일링 할 필요 없이 그냥 드롭아웃을 적용할 수 있습니다.<sup id="a1">[1](#f1)</sup>
 
 ```python
 keep_prob = tf.placeholder(tf.float32)
 h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 ```
 
-### Readout Layer
+### 최종 소프트맥스 계층
 
-Finally, we add a softmax layer, just like for the one layer softmax regression
-above.
+마지막으로, 위에서 단일 계층 소프트맥스 회귀 모델을 구성할 때와 비슷하게 아래 코드와 같이 소프트맥스 계층을 추가합니다.
 
 ```python
 W_fc2 = weight_variable([1024, 10])
@@ -261,15 +229,11 @@ b_fc2 = bias_variable([10])
 y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 ```
 
-### Train and Evaluate the Model
+### 모델의 훈련 및 평가
 
-How well does this model do?
-To train and evaluate it we will use code that is nearly identical to that for
-the simple one layer SoftMax network above.
-The differences are that: we will replace the steepest gradient descent
-optimizer with the more sophisticated ADAM optimizer; we will include the
-additional parameter `keep_prob` in `feed_dict` to control the dropout rate;
-and we will add logging to every 100th iteration in the training process.
+이렇게 훈련된 모델은 얼마나 정확할까요?
+
+훈련 및 평가 또한 위의 단일 계층 모델과 거의 같습니다. 차이가 있다면, 이번에는 경사 하강법 알고리즘 대신 더 복잡한 ADAM 최적화 알고리즘을 사용합니다. 또한, 드롭아웃 확률을 설정하는 추가 변수인 `keep_prob`을 `feed_dict` 인수를 통해 전달합니다. 아래의 코드는 훈련 과정에서 100회 반복 시마다 로그를 작성합니다.
 
 ```python
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y_conv), reduction_indices=[1]))
@@ -289,9 +253,8 @@ print("test accuracy %g"%accuracy.eval(feed_dict={
     x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 ```
 
-The final test set accuracy after running this code should be approximately 99.2%.
+코드를 실행시켜서 얻은 최종 정확도는 약 99.2%가 될 것입니다.
 
-We have learned how to quickly and easily build, train, and evaluate a
-fairly sophisticated deep learning model using TensorFlow.
+이렇게 하여 TensorFlow를 이용해 쉽고 빠르게 '어느 정도 복잡한 딥 러닝 모델'을 구성하고, 훈련시키고, 평가하는 과정을 배워 보았습니다.
 
-<b id="f1">1</b>: For this small convolutional network, performance is actually nearly identical with and without dropout. Dropout is often very effective at reducing overfitting, but it is most useful when training very large neural networks. [↩](#a1)
+<b id="f1">1</b>: 드롭아웃은 오버피팅을 줄이는 데 매우 효과적이지만, 이번에 다룬 작은 합성곱 신경망에 대해서는, 성능이 드롭아웃을 적용한 경우와 하지 않은 경우가 비슷합니다. 드롭아웃은 큰 신경망을 훈련시킬 때 유용합니다. [↩](#a1)
