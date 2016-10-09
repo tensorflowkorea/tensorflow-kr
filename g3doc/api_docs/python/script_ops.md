@@ -1,49 +1,43 @@
 <!-- This file is machine generated: DO NOT EDIT! -->
 
-# Wraps python functions
+# 파이썬 함수 래핑하기
 
-Note: Functions taking `Tensor` arguments can also take anything accepted by
-[`tf.convert_to_tensor`](framework.md#convert_to_tensor).
+주의 : `Tensor`를 인자로 받는 함수들은 [`tf.convert_to_tensor`]((framework.md#convert_to_tensor))를 통해 나온값들 또한 받을 수 있습니다.
 
 [TOC]
 
-## Script Language Operators.
+## 스크립트 언어 연산자
 
-TensorFlow provides allows you to wrap python/numpy functions as
-TensorFlow operators.
+TensorFlow는 python/numpy 함수들을 TensorFlow의 연산자로써 래핑할 수 있도록 해줍니다.
 
-## Other Functions and Classes
+## 다른 함수와 클래스들
 - - -
 
 ### `tf.py_func(func, inp, Tout, name=None)` {#py_func}
 
-Wraps a python function and uses it as a tensorflow op.
+python 함수를 래핑하고 이를 tensorflow의 연산자로써 사용합니다.
 
-Given a python function `func`, which takes numpy arrays as its
-inputs and returns numpy arrays as its outputs. E.g.,
+`func`로 주어지는 python 함수는 numpy 배열을 입력으로 받고 numpy 배열을 출력합니다. 예를 들면,
 
 ```python
 def my_func(x):
-  # x will be a numpy array with the contents of the placeholder below
+  # x는 아래의 placeholder의 값을 가지는 numpy 배열이 될 것입니다.
   return np.sinh(x)
 inp = tf.placeholder(tf.float32, [...])
 y = py_func(my_func, [inp], [tf.float32])
 ```
 
-The above snippet constructs a tf graph which invokes a numpy
-sinh(x) as an op in the graph.
+위의 스니펫은  그래프의 연산으로 numpy의 sinh(x)를 호출하는 tf 그래프를 구성합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`func`</b>: A python function.
-*  <b>`inp`</b>: A list of `Tensor`.
-*  <b>`Tout`</b>: A list of tensorflow data types indicating what `func`
-        returns.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`func`</b>: python 함수.
+*  <b>`inp`</b>: `Tensor`의 리스트.
+*  <b>`Tout`</b>: `func`의 반환값을 나타내는 tensorflow 데이터 타입의 리스트.
+*  <b>`name`</b>: 연산의 명칭 (선택사항).
 
-##### Returns:
+##### 반환값:
 
-  A list of `Tensor` which `func` computes.
-
+  `func`를 통해 계산된 `Tensor`의 리스트.
 
