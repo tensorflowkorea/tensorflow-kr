@@ -82,4 +82,4 @@
 
 
 ---
-Powered by [Trnslation Coverage](https://github.com/hunkim/translation_coverage)
+Powered by [Translation Coverage](https://github.com/hunkim/translation_coverage)
