@@ -1,273 +1,264 @@
 <!-- This file is machine generated: DO NOT EDIT! -->
 
-# Tensor Transformations
+# 텐서 변환
 
-Note: Functions taking `Tensor` arguments can also take anything accepted by
-[`tf.convert_to_tensor`](framework.md#convert_to_tensor).
+참고: `Tensor`를 인자로 받는 함수들은, [`tf.convert_to_tensor`](framework.md#convert_to_tensor)의 인자가 될 수 있는 것들 또한 인자로 받을 수 있습니다.
 
-[TOC]
+<!--[TOC]는 gitbook에서 보이지 않아 주석 처리합니다.-->
 
-## Casting
+## 형변환 (Casting)
 
-TensorFlow provides several operations that you can use to cast tensor data
-types in your graph.
+TensorFlow는 그래프에 사용되는 텐서 자료형들을 형변환(cast)할 수 있는 몇 가지 함수를 제공합니다.
 
 - - -
 
 ### `tf.string_to_number(string_tensor, out_type=None, name=None)` {#string_to_number}
 
 Converts each string in the input Tensor to the specified numeric type.
+입력 텐서의 각 문자열(string)을 지정된 자료형의 값으로 변환합니다.
 
-(Note that int32 overflow results in an error while float overflow
-results in a rounded value.)
+(참고로, int32 오버플로우는 에러를 내며, float 오버플로우는 반올림한 결과를 냅니다.)
 
-##### Args:
+##### 인자:
 
+*  <b>`string_tensor`</b>: `string`형 `Tensor`.
+*  <b>`out_type`</b>: `tf.DType` 오브젝트. `tf.float32` 또는 `tf.int32`이어야 하며, 기본값은 `tf.float32`입니다. 이 자료형으로 `string_tensor`의 문자열이 변환됩니다. (선택사항)
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-*  <b>`string_tensor`</b>: A `Tensor` of type `string`.
-*  <b>`out_type`</b>: An optional `tf.DType` from: `tf.float32, tf.int32`. Defaults to `tf.float32`.
-    The numeric type to interpret each string in string_tensor as.
-*  <b>`name`</b>: A name for the operation (optional).
+##### 반환값:
 
-##### Returns:
-
-  A `Tensor` of type `out_type`.
-  A Tensor of the same shape as the input `string_tensor`.
+  `out_type`형의 `Tensor`.
+  출력 텐서는 입력 텐서 `string_tensor`와 같은 구조(shape)를 가집니다.
 
 
 - - -
 
 ### `tf.to_double(x, name='ToDouble')` {#to_double}
 
-Casts a tensor to type `float64`.
+텐서를 `float64`형으로 변환합니다.
 
-##### Args:
-
-
-*  <b>`x`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`name`</b>: A name for the operation (optional).
-
-##### Returns:
-
-  A `Tensor` or `SparseTensor` with same shape as `x` with type `float64`.
-
-##### Raises:
+##### 인자:
 
 
-*  <b>`TypeError`</b>: If `x` cannot be cast to the `float64`.
+*  <b>`x`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
+
+##### 반환값:
+
+  `x`와 구조(shape)가 같은 `float64`형의 `Tensor` 또는 `SparseTensor`.
+
+##### 예외:
+
+
+*  <b>`TypeError`</b>: `x`가 `float64`형으로 변환될 수 없는 경우.
 
 
 - - -
 
 ### `tf.to_float(x, name='ToFloat')` {#to_float}
 
-Casts a tensor to type `float32`.
+텐서를 `float32`형으로 변환합니다.
 
-##### Args:
-
-
-*  <b>`x`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`name`</b>: A name for the operation (optional).
-
-##### Returns:
-
-  A `Tensor` or `SparseTensor` with same shape as `x` with type `float32`.
-
-##### Raises:
+##### 인자:
 
 
-*  <b>`TypeError`</b>: If `x` cannot be cast to the `float32`.
+*  <b>`x`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
+
+##### 반환값:
+
+  `x`와 구조(shape)가 같은 `float32`형의 `Tensor` 또는 `SparseTensor`.
+
+##### 예외:
+
+
+*  <b>`TypeError`</b>: `x`가 `float32`형으로 변환될 수 없는 경우.
 
 
 - - -
 
 ### `tf.to_bfloat16(x, name='ToBFloat16')` {#to_bfloat16}
 
-Casts a tensor to type `bfloat16`.
+텐서를 `bfloat16`형으로 변환합니다.
 
-##### Args:
-
-
-*  <b>`x`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`name`</b>: A name for the operation (optional).
-
-##### Returns:
-
-  A `Tensor` or `SparseTensor` with same shape as `x` with type `bfloat16`.
-
-##### Raises:
+##### 인자:
 
 
-*  <b>`TypeError`</b>: If `x` cannot be cast to the `bfloat16`.
+*  <b>`x`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
+
+##### 반환값:
+
+  `x`와 구조(shape)가 같은 `bfloat16`형의 `Tensor` 또는 `SparseTensor`.
+
+##### 예외:
+
+
+*  <b>`TypeError`</b>: `x`가 `bfloat16`형으로 변환될 수 없는 경우.
 
 
 - - -
 
 ### `tf.to_int32(x, name='ToInt32')` {#to_int32}
 
-Casts a tensor to type `int32`.
+텐서를 `int32`형으로 변환합니다.
 
-##### Args:
-
-
-*  <b>`x`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`name`</b>: A name for the operation (optional).
-
-##### Returns:
-
-  A `Tensor` or `SparseTensor` with same shape as `x` with type `int32`.
-
-##### Raises:
+##### 인자:
 
 
-*  <b>`TypeError`</b>: If `x` cannot be cast to the `int32`.
+*  <b>`x`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
+
+##### 반환값:
+
+  `x`와 구조(shape)가 같은 `int32`형의 `Tensor` 또는 `SparseTensor`.
+
+##### 예외:
+
+
+*  <b>`TypeError`</b>: `x`가 `int32`형으로 변환될 수 없는 경우.
 
 
 - - -
 
 ### `tf.to_int64(x, name='ToInt64')` {#to_int64}
 
-Casts a tensor to type `int64`.
+텐서를 `int64`형으로 변환합니다.
 
-##### Args:
-
-
-*  <b>`x`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`name`</b>: A name for the operation (optional).
-
-##### Returns:
-
-  A `Tensor` or `SparseTensor` with same shape as `x` with type `int64`.
-
-##### Raises:
+##### 인자:
 
 
-*  <b>`TypeError`</b>: If `x` cannot be cast to the `int64`.
+*  <b>`x`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
+
+##### 반환값:
+
+  `x`와 구조(shape)가 같은 `int64`형의 `Tensor` 또는 `SparseTensor`.
+
+##### 예외:
+
+
+*  <b>`TypeError`</b>: `x`가 `int64`형으로 변환될 수 없는 경우.
 
 
 - - -
 
 ### `tf.cast(x, dtype, name=None)` {#cast}
 
-Casts a tensor to a new type.
+텐서를 새로운 자료형으로 변환합니다.
 
-The operation casts `x` (in case of `Tensor`) or `x.values`
-(in case of `SparseTensor`) to `dtype`.
+`x`(`Tensor`의 경우) 또는 `x.values`(`SparseTensor`의 경우)를 `dtype`형으로 변환합니다.
 
-For example:
+예시:
 
 ```python
-# tensor `a` is [1.8, 2.2], dtype=tf.float
+# 텐서 `a`는 [1.8, 2.2], 자료형은 tf.float
 tf.cast(a, tf.int32) ==> [1, 2]  # dtype=tf.int32
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`x`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`dtype`</b>: The destination type.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`x`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`dtype`</b>: 변환될 자료형.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor` or `SparseTensor` with same shape as `x`.
+  `x`와 구조(shape)가 같은 `int64`형의 `Tensor` 또는 `SparseTensor`.
 
-##### Raises:
+##### 예외:
 
 
-*  <b>`TypeError`</b>: If `x` cannot be cast to the `dtype`.
+*  <b>`TypeError`</b>: `x`가 `dtype`형으로 변환될 수 없는 경우.
 
 
 - - -
 
 ### `tf.saturate_cast(value, dtype, name=None)` {#saturate_cast}
 
-Performs a safe saturating cast of `value` to `dtype`.
+`value`를 `dtype` 형으로 안전하게 포화 형변환(saturating cast)합니다.
 
-This function casts the input to `dtype` without applying any scaling.  If
-there is a danger that values would over or underflow in the cast, this op
-applies the appropriate clamping before the cast.
+이 함수는 입력을 `dtype`으로 스케일링(scaling) 없이 변환합니다. 형변환 시 오버플로우나 언더플로우가 발생할 수 있는 값들에 대해, 이 함수는 해당 값들을 허용되는 값 범위로 넣은 뒤 형변환을 진행합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`value`</b>: A `Tensor`.
-*  <b>`dtype`</b>: The desired output `DType`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`value`</b>: `Tensor`.
+*  <b>`dtype`</b>: `DType` 오브젝트. 변환될 자료형.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  `value` safely cast to `dtype`.
+  `dtype`형으로 안전하게 변환된 `value`.
 
 
 
-## Shapes and Shaping
+## 구조(Shape) 및 구조 변형(Shaping)
 
-TensorFlow provides several operations that you can use to determine the shape
-of a tensor and change the shape of a tensor.
+TensorFlow는 텐서의 구조(shape)를 확인하거나 구조를 변형하는 데 사용할 수 있는 몇 가지 함수를 제공합니다.
 
 - - -
 
 ### `tf.shape(input, name=None)` {#shape}
 
-Returns the shape of a tensor.
+텐서의 구조(shape)를 반환합니다.
 
-This operation returns a 1-D integer tensor representing the shape of `input`.
+이 함수는 `input` 텐서의 구조(shape)를 1-D 정수형 텐서로 반환합니다.
 
-For example:
+예시:
 
-```prettyprint
-# 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
+```python
+# 't'는 [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
 shape(t) ==> [2, 2, 3]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor` of type `int32`.
+  `int32`형 `Tensor`.
 
 
 - - -
 
 ### `tf.size(input, name=None)` {#size}
 
-Returns the size of a tensor.
+텐서의 크기(size)를 반환합니다.
 
-This operation returns an integer representing the number of elements in
-`input`.
+이 함수는 `input` 텐서의 원소의 수를 정수로 반환합니다.
 
-For example:
+예시:
 
-```prettyprint
-# 't' is [[[1, 1,, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]]
+```python
+# 't'는 [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]]
 size(t) ==> 12
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor` of type `int32`.
+  `int32`형 `Tensor`.
 
 
 - - -
 
 ### `tf.rank(input, name=None)` {#rank}
 
-Returns the rank of a tensor.
+텐서의 랭크(rank)를 반환합니다.
 
-This operation returns an integer representing the rank of `input`.
+이 함수는 `input` 텐서의 랭크를 정수로 반환합니다.
 
-For example:
+예시:
 
 ```python
 # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
@@ -275,72 +266,65 @@ For example:
 rank(t) ==> 3
 ```
 
-**Note**: The rank of a tensor is not the same as the rank of a matrix. The
-rank of a tensor is the number of indices required to uniquely select each
-element of the tensor. Rank is also known as "order", "degree", or "ndims."
+**참고**: 텐서의 랭크는 행렬의 랭크와는 다른 개념입니다. 텐서의 랭크는 텐서의 각 원소를 선택하기 위해 필요한 인덱스의 수입니다. 랭크는 order, degree, ndims 등으로 부르기도 합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor` or `SparseTensor`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor` 또는 `SparseTensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor` of type `int32`.
+  `int32`형 `Tensor`.
 
 
 - - -
 
 ### `tf.reshape(tensor, shape, name=None)` {#reshape}
 
-Reshapes a tensor.
+텐서의 구조를 변형합니다.
 
-Given `tensor`, this operation returns a tensor that has the same values
-as `tensor` with shape `shape`.
+`tensor`가 주어졌을 때, 이 함수는 해당 텐서와 같은 원소들을 가지며 구조가 `shape`인 텐서를 반환합니다.
 
-If one component of `shape` is the special value -1, the size of that dimension
-is computed so that the total size remains constant.  In particular, a `shape`
-of `[-1]` flattens into 1-D.  At most one component of `shape` can be -1.
+만약 `shape`의 한 원소가 -1이라면, 전체 크기가 일정하게 유지되도록 해당 차원의 길이가 자동으로 계산됩니다. 특별히, `shape`가 `[-1]`이라면, 텐서는 1-D로 펴지게 됩니다. `shape`에서 최대 한 개의 원소만 -1이 될 수 있습니다.
 
-If `shape` is 1-D or higher, then the operation returns a tensor with shape
-`shape` filled with the values of `tensor`. In this case, the number of elements
-implied by `shape` must be the same as the number of elements in `tensor`.
+만약 `shape`가 1-D이거나 그 이상이라면, 오퍼레이션은 `tensor`의 원소로 `shape`의 구조가 채워진 텐서를 반환합니다. 이 경우, `shape`에 의해 지정된 원소의 전체 수는 `tensor`의 원소의 전체 수와 동일해야 합니다.
 
-For example:
+예시:
 
-```prettyprint
-# tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
-# tensor 't' has shape [9]
+```python
+# tensor 't'는 [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# tensor 't'의 구조(shape)는 [9]
 reshape(t, [3, 3]) ==> [[1, 2, 3],
                         [4, 5, 6],
                         [7, 8, 9]]
 
-# tensor 't' is [[[1, 1], [2, 2]],
-#                [[3, 3], [4, 4]]]
-# tensor 't' has shape [2, 2, 2]
+# tensor 't'는 [[[1, 1], [2, 2]],
+#               [[3, 3], [4, 4]]]
+# tensor 't'의 구조(shape)는 [2, 2, 2]
 reshape(t, [2, 4]) ==> [[1, 1, 2, 2],
                         [3, 3, 4, 4]]
 
-# tensor 't' is [[[1, 1, 1],
-#                 [2, 2, 2]],
-#                [[3, 3, 3],
-#                 [4, 4, 4]],
-#                [[5, 5, 5],
-#                 [6, 6, 6]]]
-# tensor 't' has shape [3, 2, 3]
-# pass '[-1]' to flatten 't'
+# tensor 't'는 [[[1, 1, 1],
+#                [2, 2, 2]],
+#               [[3, 3, 3],
+#                [4, 4, 4]],
+#               [[5, 5, 5],
+#                [6, 6, 6]]]
+# tensor 't'의 구조(shape)는 [3, 2, 3]
+# shape를 '[-1]'로 하여 't'를 1-D로 펴기
 reshape(t, [-1]) ==> [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6]
 
-# -1 can also be used to infer the shape
+# 구조를 암시(infer)하기 위한 -1의 사용
 
-# -1 is inferred to be 9:
+# -1은 9를 의미:
 reshape(t, [2, -1]) ==> [[1, 1, 1, 2, 2, 2, 3, 3, 3],
                          [4, 4, 4, 5, 5, 5, 6, 6, 6]]
-# -1 is inferred to be 2:
+# -1은 2를 의미:
 reshape(t, [-1, 9]) ==> [[1, 1, 1, 2, 2, 2, 3, 3, 3],
                          [4, 4, 4, 5, 5, 5, 6, 6, 6]]
-# -1 is inferred to be 3:
+# -1은 3을 의미:
 reshape(t, [ 2, -1, 3]) ==> [[[1, 1, 1],
                               [2, 2, 2],
                               [3, 3, 3]],
@@ -348,153 +332,128 @@ reshape(t, [ 2, -1, 3]) ==> [[[1, 1, 1],
                               [5, 5, 5],
                               [6, 6, 6]]]
 
-# tensor 't' is [7]
-# shape `[]` reshapes to a scalar
+# tensor 't'는 [7]
+# shape를 `[]`로 하면 스칼라(scalar)로 구조 변환
 reshape(t, []) ==> 7
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`tensor`</b>: A `Tensor`.
-*  <b>`shape`</b>: A `Tensor` of type `int32`. Defines the shape of the output tensor.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`tensor`</b>: `Tensor`.
+*  <b>`shape`</b>: `int32`형 `Tensor`. 출력 텐서의 구조(shape) 지정.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `tensor`.
+  `tensor`와 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.squeeze(input, squeeze_dims=None, name=None)` {#squeeze}
 
-Removes dimensions of size 1 from the shape of a tensor.
+텐서에서 크기 1인 차원을 제거합니다.
 
-Given a tensor `input`, this operation returns a tensor of the same type with
-all dimensions of size 1 removed. If you don't want to remove all size 1
-dimensions, you can remove specific size 1 dimensions by specifying
-`squeeze_dims`.
+`input` 텐서가 주어졌을 때, 이 함수는 그와 같은 자료형의 크기 1인 차원이 모두 제거된 텐서를 반환합니다. 만약 모든 크기 1인 차원을 제거하고 싶은 것이 아니라면, 제거하고 싶은 특정한 크기 1인 차원들을 `squeeze_dims`으로 지정할 수 있습니다.
 
-For example:
+예시:
 
-```prettyprint
-# 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+```python
+# 't'는 구조(shape) [1, 2, 1, 3, 1, 1]의 텐서
 shape(squeeze(t)) ==> [2, 3]
 ```
 
-Or, to remove specific size 1 dimensions:
+제거할 크기 1인 차원들을 `squeeze_dims`으로 지정하기:
 
-```prettyprint
-# 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+```python
+# 't'는 구조(shape) [1, 2, 1, 3, 1, 1]의 텐서
 shape(squeeze(t, [2, 4])) ==> [1, 2, 3, 1]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`. The `input` to squeeze.
-*  <b>`squeeze_dims`</b>: An optional list of `ints`. Defaults to `[]`.
-    If specified, only squeezes the dimensions listed. The dimension
-    index starts at 0. It is an error to squeeze a dimension that is not 1.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`.
+*  <b>`squeeze_dims`</b>: `int`의 리스트. 기본값은 `[]`. 지정된 경우, 리스트 안의 차원만 제거합니다. 크기가 1이 아닌 차원을 제거하는 것은 오류입니다. (선택사항)
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
-  Contains the same data as `input`, but has one or more dimensions of
-  size 1 removed.
+  `input`과 같은 자료형의 `Tensor`.
+  `input`과 같은 원소를 포함하지만, 하나 이상의 크기 1인 차원이 제거되어 있습니다.
 
 
 - - -
 
 ### `tf.expand_dims(input, dim, name=None)` {#expand_dims}
 
-Inserts a dimension of 1 into a tensor's shape.
+크기 1인 차원을 텐서의 구조(shape)에 삽입합니다.
 
-Given a tensor `input`, this operation inserts a dimension of 1 at the
-dimension index `dim` of `input`'s shape. The dimension index `dim` starts at
-zero; if you specify a negative number for `dim` it is counted backward from
-the end.
+`input` 텐서가 주어졌을 때, 이 함수는 크기가 1인 차원을 `input`의 구조에서 차원 인덱스 `dim`에 삽입합니다. 차원 인덱스 `dim`은 0부터 시작합니다. 만약 `dim`에 음수가 지정된다면, 끝에서부터 역으로 계산됩니다.
 
-This operation is useful if you want to add a batch dimension to a single
-element. For example, if you have a single image of shape `[height, width,
-channels]`, you can make it a batch of 1 image with `expand_dims(image, 0)`,
-which will make the shape `[1, height, width, channels]`.
+이 함수는 단일 원소에 배치 차원(batch dimension)을 추가할 때 유용합니다. 예로, 만약 구조 `[height, width, channels]`의 단일 이미지가 있는 경우, 이것에 `expand_dims(image, 0)`을 적용해 구조 `[1, height, width, channels]`인 하나의 이미지로 구성된 배치(batch)를 구성할 수 있습니다.
 
-Other examples:
+다른 예시들:
 
-```prettyprint
-# 't' is a tensor of shape [2]
+```python
+# 't'는 구조(shape) [2]의 텐서
 shape(expand_dims(t, 0)) ==> [1, 2]
 shape(expand_dims(t, 1)) ==> [2, 1]
 shape(expand_dims(t, -1)) ==> [2, 1]
 
-# 't2' is a tensor of shape [2, 3, 5]
+# 't2'는 구조(shape) [2, 3, 5]의 텐서
 shape(expand_dims(t2, 0)) ==> [1, 2, 3, 5]
 shape(expand_dims(t2, 2)) ==> [2, 3, 1, 5]
 shape(expand_dims(t2, 3)) ==> [2, 3, 5, 1]
 ```
 
-This operation requires that:
+이 함수는 다음의 조건이 만족되어야 합니다:
 
 `-1-input.dims() <= dim <= input.dims()`
 
-This operation is related to `squeeze()`, which removes dimensions of
-size 1.
+이 함수는 크기 1인 차원을 제거하는 함수인 `squeeze()`와 연관되어 있습니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`.
-*  <b>`dim`</b>: A `Tensor` of type `int32`.
-    0-D (scalar). Specifies the dimension index at which to
-    expand the shape of `input`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`.
+*  <b>`dim`</b>: `int32`형 `Tensor`. 0-D (스칼라). `input`의 구조에서 어떤 차원 인덱스에 삽입할 것인지 지정합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
-  Contains the same data as `input`, but its shape has an additional
-  dimension of size 1 added.
+  `input`과 같은 자료형의 `Tensor`.
+  `input`과 같은 원소를 포함하지만, 하나 이상의 크기 1인 차원이 추가되어 있습니다.
 
 
 
-## Slicing and Joining
+## 자르고 붙이기
 
-TensorFlow provides several operations to slice or extract parts of a tensor,
-or join multiple tensors together.
+TensorFlow는 텐서를 자르고 특정 부분을 추출해내거나, 여러 텐서를 붙일 수 있는 몇 가지 함수를 제공합니다.
 
 - - -
 
 ### `tf.slice(input_, begin, size, name=None)` {#slice}
 
-Extracts a slice from a tensor.
+텐서의 특정 부분을 추출합니다.
 
-This operation extracts a slice of size `size` from a tensor `input` starting
-at the location specified by `begin`. The slice `size` is represented as a
-tensor shape, where `size[i]` is the number of elements of the 'i'th dimension
-of `input` that you want to slice. The starting location (`begin`) for the
-slice is represented as an offset in each dimension of `input`. In other
-words, `begin[i]` is the offset into the 'i'th dimension of `input` that you
-want to slice from.
+이 함수는 텐서 `input`에서 `begin` 위치에서 시작해 크기 `size`인 부분을 추출합니다. 추출할 부분의 `size`는 텐서 구조(shape)로 표현되는데, `size[i]`가 `input`에서 추출할 `i`번째 차원의 원소의 수입니다. 추출 부분의 시작 위치 `begin`은 각 차원에서의 오프셋(offset)으로 표현됩니다. 즉, `begin[i]`는 `input`의 `i`번째 차원에서 시작 위치의 오프셋입니다.
 
-`begin` is zero-based; `size` is one-based. If `size[i]` is -1,
-all remaining elements in dimension i are included in the
-slice. In other words, this is equivalent to setting:
+`begin`은 0부터 시작하고, `size`는 1부터 시작합니다. 만약 `size[i]`가 -1이라면, 차원 `i`의 모든 남은 원소들이 추출 부분에 포함됩니다. 즉, 이는 아래와 같이 설정하는 것과 동일합니다.
 
 `size[i] = input.dim_size(i) - begin[i]`
 
-This operation requires that:
+이 함수는 다음의 조건이 만족되어야 합니다:
 
 `0 <= begin[i] <= begin[i] + size[i] <= Di  for i in [0, n]`
 
-For example:
+예시:
 
-```
-# 'input' is [[[1, 1, 1], [2, 2, 2]],
-#             [[3, 3, 3], [4, 4, 4]],
-#             [[5, 5, 5], [6, 6, 6]]]
+```python
+# 'input'은 [[[1, 1, 1], [2, 2, 2]],
+#            [[3, 3, 3], [4, 4, 4]],
+#            [[5, 5, 5], [6, 6, 6]]]
 tf.slice(input, [1, 0, 0], [1, 1, 3]) ==> [[[3, 3, 3]]]
 tf.slice(input, [1, 0, 0], [1, 2, 3]) ==> [[[3, 3, 3],
                                             [4, 4, 4]]]
@@ -502,102 +461,87 @@ tf.slice(input, [1, 0, 0], [2, 1, 3]) ==> [[[3, 3, 3]],
                                            [[5, 5, 5]]]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input_`</b>: A `Tensor`.
-*  <b>`begin`</b>: An `int32` or `int64` `Tensor`.
-*  <b>`size`</b>: An `int32` or `int64` `Tensor`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input_`</b>: `Tensor`.
+*  <b>`begin`</b>: `int32` 또는 `int64`형 `Tensor`.
+*  <b>`size`</b>: `int32` 또는 `int64`형 `Tensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor` the same type as `input`.
+  `input`과 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.split(split_dim, num_split, value, name='split')` {#split}
 
-Splits a tensor into `num_split` tensors along one dimension.
+한 차원을 따라서 입력된 텐서를 `num_split`개의 텐서로 분리합니다.
 
-Splits `value` along dimension `split_dim` into `num_split` smaller tensors.
-Requires that `num_split` evenly divide `value.shape[split_dim]`.
+`split_dim` 차원을 따라서 `value`를 `num_split` 개의 작은 텐서로 분리합니다. `num_split`이 `value.shape[split_dim]`을 나눌 수 있어야 합니다.
 
-For example:
+예시:
 
 ```python
-# 'value' is a tensor with shape [5, 30]
-# Split 'value' into 3 tensors along dimension 1
+# 'value'는 구조(shape) [5, 30]의 텐서
+# 'value'를 차원 1을 따라 3개의 텐서로 분리
 split0, split1, split2 = tf.split(1, 3, value)
 tf.shape(split0) ==> [5, 10]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`split_dim`</b>: A 0-D `int32` `Tensor`. The dimension along which to split.
-    Must be in the range `[0, rank(value))`.
-*  <b>`num_split`</b>: A Python integer. The number of ways to split.
-*  <b>`value`</b>: The `Tensor` to split.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`split_dim`</b>: 0-D `int32` `Tensor`. 텐서를 분리할 차원. `[0, rank(value))` 범위 내에 있어야 합니다.
+*  <b>`num_split`</b>: Python 정수. 텐서를 분리할 개수.
+*  <b>`value`</b>: 분리할 `Tensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  `num_split` `Tensor` objects resulting from splitting `value`.
+  `value`를 분리하여 얻어진 `num_split`개의 `Tensor`.
 
 
 - - -
 
 ### `tf.tile(input, multiples, name=None)` {#tile}
 
-Constructs a tensor by tiling a given tensor.
+주어진 텐서를 타일링(tiling)하여 새로운 텐서를 만듭니다.
 
-This operation creates a new tensor by replicating `input` `multiples` times.
-The output tensor's i'th dimension has `input.dims(i) * multiples[i]` elements,
-and the values of `input` are replicated `multiples[i]` times along the 'i'th
-dimension. For example, tiling `[a b c d]` by `[2]` produces
-`[a b c d a b c d]`.
+이 함수는 주어진 텐서 `input`을 `multiples`회 복사하여 새로운 텐서를 만듭니다. 출력 텐서의 `i`번째 차원은 `input.dims(i) * multiples[i]` 개의 원소를 가지고, 이는 `input`의 원소들이 `multiples[i]`번 복사된 것에 해당합니다. 예로, `[a b c d]`를 `[2]`로 타일링하면 `[a b c d a b c d]`를 얻습니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`. 1-D or higher.
-*  <b>`multiples`</b>: A `Tensor` of type `int32`.
-    1-D. Length must be the same as the number of dimensions in `input`
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: 1-D 혹은 그 이상의 `Tensor`.
+*  <b>`multiples`</b>: `int32`형 `Tensor`. 1-D. 길이는 `input`의 차원의 수와 같아야 합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
+  `input`과 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.pad(tensor, paddings, mode='CONSTANT', name=None)` {#pad}
 
-Pads a tensor.
+텐서에 패딩을 적용합니다.
 
-This operation pads a `tensor` according to the `paddings` you specify.
-`paddings` is an integer tensor with shape `[n, 2]`, where n is the rank of
-`tensor`. For each dimension D of `input`, `paddings[D, 0]` indicates how
-many values to add before the contents of `tensor` in that dimension, and
-`paddings[D, 1]` indicates how many values to add after the contents of
-`tensor` in that dimension. If `mode` is "REFLECT" then both `paddings[D, 0]`
-and `paddings[D, 1]` must be no greater than `tensor.dim_size(D) - 1`. If
-`mode` is "SYMMETRIC" then both `paddings[D, 0]` and `paddings[D, 1]` must be
-no greater than `tensor.dim_size(D)`.
+이 함수는 지정한 `paddings`에 따라 `tensor`에 패딩을 적용합니다. `padding`은 구조(shape)가 `[n, 2]`인 정수형 텐서이고, 여기서 `n`은 `tensor`의 랭크(rank)입니다. `input`의 각각의 차원 `D`에 대해, `paddings[D, 0]`은 `tensor`의 원소 앞에 몇 개의 값을 넣을 것인지, `paddings[D, 1]`은 `tensor`의 원소 뒤에 몇 개의 값을 넣을 것인지를 나타냅니다. 만약 `mode`가 "REFLECT"라면, `paddings[D, 0]`과 `paddings[D, 1]` 모두 `tensor.dim_size(D) - 1`보다 크지 않아야 합니다. `mode`가 "SYMMETRIC"이라면, `paddings[D, 0]`과 `paddings[D, 1]` 모두 `tensor.dim_size(D)`보다 크지 않아야 합니다.
 
-The padded size of each dimension D of the output is:
+패딩이 이루어진 뒤 출력에서 차원 D의 길이는 다음과 같습니다.
 
 `paddings[D, 0] + tensor.dim_size(D) + paddings[D, 1]`
 
-For example:
+예시:
 
 ```python
-# 't' is [[1, 2, 3], [4, 5, 6]].
-# 'paddings' is [[1, 1,], [2, 2]].
-# rank of 't' is 2.
+# 't'는 [[1, 2, 3], [4, 5, 6]].
+# 'paddings'는 [[1, 1,], [2, 2]].
+# 't'의 랭크(rank)는 2.
 pad(t, paddings, "CONSTANT") ==> [[0, 0, 0, 0, 0, 0, 0],
                                   [0, 0, 1, 2, 3, 0, 0],
                                   [0, 0, 4, 5, 6, 0, 0],
@@ -614,47 +558,43 @@ pad(t, paddings, "SYMMETRIC") ==> [[2, 1, 1, 2, 3, 3, 2],
                                    [5, 4, 4, 5, 6, 6, 5]]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`tensor`</b>: A `Tensor`.
-*  <b>`paddings`</b>: A `Tensor` of type `int32`.
-*  <b>`mode`</b>: One of "CONSTANT", "REFLECT", or "SYMMETRIC".
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`tensor`</b>: `Tensor`.
+*  <b>`paddings`</b>: `int32`형 `Tensor`.
+*  <b>`mode`</b>: "CONSTANT", "REFLECT", "SYMMETRIC" 중 하나.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `tensor`.
+  `tensor`와 같은 자료형의 `Tensor`.
 
-##### Raises:
+##### 예외:
 
 
-*  <b>`ValueError`</b>: When mode is not one of "CONSTANT", "REFLECT", or "SYMMETRIC".
+*  <b>`ValueError`</b>: 모드가 "CONSTANT", "REFLECT", or "SYMMETRIC" 중의 하나가 아닌 경우.
 
 
 - - -
 
 ### `tf.concat(concat_dim, values, name='concat')` {#concat}
 
-Concatenates tensors along one dimension.
+텐서들을 하나의 차원에서 이어붙입니다.
 
-Concatenates the list of tensors `values` along dimension `concat_dim`.  If
-`values[i].shape = [D0, D1, ... Dconcat_dim(i), ...Dn]`, the concatenated
-result has shape
+텐서들의 리스트 `values`를 차원 `concat_dim`에서 이어붙입니다. 만약 `values[i].shape = [D0, D1, ... Dconcat_dim(i), ...Dn]`이면, 이어붙인 결과의 구조(shape)는 아래와 같습니다.
 
     [D0, D1, ... Rconcat_dim, ...Dn]
 
-where
+여기서, 
 
     Rconcat_dim = sum(Dconcat_dim(i))
 
-That is, the data from the input tensors is joined along the `concat_dim`
-dimension.
+입니다. 즉, `concat_dim` 차원을 따라 입력된 텐서들의 데이터가 연결됩니다.
 
-The number of dimensions of the input tensors must match, and all dimensions
-except `concat_dim` must be equal.
+입력할 텐서들의 차원의 수는 모두 동일해야 하며, `concat_dim` 차원을 제외한 모든 차원의 길이가 동일해야 합니다.
 
-For example:
+예시:
 
 ```python
 t1 = [[1, 2, 3], [4, 5, 6]]
@@ -662,191 +602,172 @@ t2 = [[7, 8, 9], [10, 11, 12]]
 tf.concat(0, [t1, t2]) ==> [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]
 tf.concat(1, [t1, t2]) ==> [[1, 2, 3, 7, 8, 9], [4, 5, 6, 10, 11, 12]]
 
-# tensor t3 with shape [2, 3]
-# tensor t4 with shape [2, 3]
+# tensor t3의 구조(shape)는 [2, 3]
+# tensor t4의 구조(shape)는 [2, 3]
 tf.shape(tf.concat(0, [t3, t4])) ==> [4, 3]
 tf.shape(tf.concat(1, [t3, t4])) ==> [2, 6]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`concat_dim`</b>: 0-D `int32` `Tensor`.  Dimension along which to concatenate.
-*  <b>`values`</b>: A list of `Tensor` objects or a single `Tensor`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`concat_dim`</b>: 0-D `int32`형 `Tensor`. 텐서를 이어붙일 차원.
+*  <b>`values`</b>: `Tensor`들의 리스트 또는 `Tensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor` resulting from concatenation of the input tensors.
+  입력 텐서들을 이어붙여 만든 `Tensor`.
 
 
 - - -
 
 ### `tf.pack(values, name='pack')` {#pack}
 
-Packs a list of rank-`R` tensors into one rank-`(R+1)` tensor.
+랭크-`R` 텐서들을 묶어 하나의 랭크-`(R+1)` 텐서로 만듭니다.
 
-Packs tensors in `values` into a tensor with rank one higher than each tensor
-in `values` and shape `[len(values)] + values[0].shape`. The output satisfies
-`output[i, ...] = values[i][...]`.
+`values` 안의 텐서들을 묶어 랭크가 `values`에 있는 각 텐서보다 1 높고, `[len(values)] + values[0].shape`의 구조(shape)를 가지는 텐서를 만듭니다. 출력 값이 `output`이라 하면, `output[i, ...] = values[i][...]`을 만족합니다.
 
-This is the opposite of unpack.  The numpy equivalent is
+`unpack`과 반대 기능을 합니다. NumPy에서 `asarray`와 같은 기능을 합니다.
 
     tf.pack([x, y, z]) = np.asarray([x, y, z])
 
-##### Args:
+##### 인자:
 
 
-*  <b>`values`</b>: A list of `Tensor` objects with the same shape and type.
-*  <b>`name`</b>: A name for this operation (optional).
+*  <b>`values`</b>: 같은 구조(shape)와 자료형을 가지는 `Tensor`들의 리스트.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
 
-*  <b>`output`</b>: A packed `Tensor` with the same type as `values`.
+*  <b>`output`</b>: `values`와 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.unpack(value, num=None, name='unpack')` {#unpack}
 
-Unpacks the outer dimension of a rank-`R` tensor into rank-`(R-1)` tensors.
+랭크-`R` 텐서를 풀어 랭크-`(R-1)` 텐서들을 얻습니다.
 
-Unpacks `num` tensors from `value` along the first dimension.
-If `num` is not specified (the default), it is inferred from `value`'s shape.
-If `value.shape[0]` is not known, `ValueError` is raised.
+`value`의 첫 번째 차원을 따라 텐서를 풀어 `num`개의 텐서를 얻습니다. 만약 `num`을 지정하지 않았다면, `value`의 구조(shape)에서 자동으로 추정됩니다. 만약 `value.shape[0]`이 알려지지 않았다면, `ValueError` 예외가 발생합니다.
 
-The ith tensor in `output` is the slice `value[i, ...]`. Each tensor in
-`output` has shape `value.shape[1:]`.
+`output`의 `i`번째 텐서는 `value[i, ...]`가 됩니다. `output`의 각각의 텐서는 `value.shape[1:]`의 구조를 가지게 됩니다.
 
-This is the opposite of pack.  The numpy equivalent is
+`pack` 함수와 반대 기능을 합니다. NumPy에서는 `list()`로 쓸 수 있습니다.
 
     tf.unpack(x, n) = list(x)
 
-##### Args:
+##### 인자:
 
 
-*  <b>`value`</b>: A rank `R > 0` `Tensor` to be unpacked.
-*  <b>`num`</b>: An `int`. The first dimension of value. Automatically inferred if
-    `None` (the default).
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`value`</b>: 랭크 `R > 0`인 `Tensor`.
+*  <b>`num`</b>: `int`. `value`의 첫 번째 차원. 기본값은 `None`이며, 이 경우 자동으로 추정됩니다. (선택사항)
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  The list of `Tensor` objects unpacked from `value`.
+  `value`를 풀어 얻은 `Tensor`의 리스트.
 
-##### Raises:
+##### 예외:
 
 
-*  <b>`ValueError`</b>: If `num` is unspecified and cannot be inferred.
+*  <b>`ValueError`</b>: `num`이 지정되지 않았고 자동으로 추정할 수 없는 경우.
 
 
 - - -
 
 ### `tf.reverse_sequence(input, seq_lengths, seq_dim, batch_dim=None, name=None)` {#reverse_sequence}
 
-Reverses variable length slices.
+텐서를 특정한 부분을 반전시킵니다.
 
-This op first slices `input` along the dimension `batch_dim`, and for each
-slice `i`, reverses the first `seq_lengths[i]` elements along
-the dimension `seq_dim`.
+이 함수는 먼저 `input`을 `batch_dim` 차원을 따라 여러 개의 슬라이스로 나눕니다. 그리고 각각의 슬라이스 `i`에서 `seq_dim` 차원을 따라 처음 `seq_lengths[i]`개의 원소들이 반전됩니다.
 
-The elements of `seq_lengths` must obey `seq_lengths[i] < input.dims[seq_dim]`,
-and `seq_lengths` must be a vector of length `input.dims[batch_dim]`.
+`seq_lengths`의 원소들은 `seq_lengths[i] < input.dims[seq_dim]`을 만족해야 하고, `seq_lengths`는 길이 `input.dims[batch_dim]`의 벡터여야 합니다.
 
-The output slice `i` along dimension `batch_dim` is then given by input
-slice `i`, with the first `seq_lengths[i]` slices along dimension
-`seq_dim` reversed.
+반환될 텐서에서 `batch_dim` 차원의 `i`번째 슬라이스는, 입력 텐서의 `i`번째 슬라이스에서 `seq_dim` 차원을 따라 첫 `seq_lengths[i]` 개의 원소들이 반전된 것과 같습니다.
 
-For example:
+예시:
 
-```prettyprint
-# Given this:
+```python
+# 다음과 같이 설정합니다.
 batch_dim = 0
 seq_dim = 1
 input.dims = (4, 8, ...)
 seq_lengths = [7, 2, 3, 5]
 
-# then slices of input are reversed on seq_dim, but only up to seq_lengths:
+# 입력 텐서의 각각의 슬라이스는 seq_dim 차원에서 seq_lengths 까지 반전됩니다.
 output[0, 0:7, :, ...] = input[0, 7:0:-1, :, ...]
 output[1, 0:2, :, ...] = input[1, 2:0:-1, :, ...]
 output[2, 0:3, :, ...] = input[2, 3:0:-1, :, ...]
 output[3, 0:5, :, ...] = input[3, 5:0:-1, :, ...]
 
-# while entries past seq_lens are copied through:
+# seq_lengths 이후의 부분은 그대로 들어갑니다.
 output[0, 7:, :, ...] = input[0, 7:, :, ...]
 output[1, 2:, :, ...] = input[1, 2:, :, ...]
 output[2, 3:, :, ...] = input[2, 3:, :, ...]
 output[3, 2:, :, ...] = input[3, 2:, :, ...]
 ```
 
-In contrast, if:
+다른 예시:
 
-```prettyprint
-# Given this:
+```python
+# 다음과 같이 설정합니다.
 batch_dim = 2
 seq_dim = 0
 input.dims = (8, ?, 4, ...)
 seq_lengths = [7, 2, 3, 5]
 
-# then slices of input are reversed on seq_dim, but only up to seq_lengths:
+# 입력 텐서의 각각의 슬라이스는 seq_dim 차원에서 seq_lengths 까지 반전됩니다.
 output[0:7, :, 0, :, ...] = input[7:0:-1, :, 0, :, ...]
 output[0:2, :, 1, :, ...] = input[2:0:-1, :, 1, :, ...]
 output[0:3, :, 2, :, ...] = input[3:0:-1, :, 2, :, ...]
 output[0:5, :, 3, :, ...] = input[5:0:-1, :, 3, :, ...]
 
-# while entries past seq_lens are copied through:
+# seq_lengths 이후의 부분은 그대로 들어갑니다.
 output[7:, :, 0, :, ...] = input[7:, :, 0, :, ...]
 output[2:, :, 1, :, ...] = input[2:, :, 1, :, ...]
 output[3:, :, 2, :, ...] = input[3:, :, 2, :, ...]
 output[2:, :, 3, :, ...] = input[2:, :, 3, :, ...]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`. The input to reverse.
-*  <b>`seq_lengths`</b>: A `Tensor` of type `int64`.
-    1-D with length `input.dims(batch_dim)` and
-    `max(seq_lengths) < input.dims(seq_dim)`
-*  <b>`seq_dim`</b>: An `int`. The dimension which is partially reversed.
-*  <b>`batch_dim`</b>: An optional `int`. Defaults to `0`.
-    The dimension along which reversal is performed.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`. 반전시킬 텐서.
+*  <b>`seq_lengths`</b>: `int64`형 1-D `Tensor`. 길이는 `input.dims(batch_dim)` 이며, `max(seq_lengths) < input.dims(seq_dim)`을 만족합니다.
+*  <b>`seq_dim`</b>: `int`. (부분적으로) 반전되는 차원.
+*  <b>`batch_dim`</b>: `int`. 텐서의 반전이 이루어지는 차원, 기본값은 `0`. (선택사항) 
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
-  The partially reversed input. It has the same shape as `input`.
-
+  `input`과 같은 자료형과 구조(shape)의 `Tensor`. `input`의 일부분이 반전되어 있습니다.
 
 - - -
 
 ### `tf.reverse(tensor, dims, name=None)` {#reverse}
 
-Reverses specific dimensions of a tensor.
+텐서의 특정 차원을 반전시킵니다.
 
-Given a `tensor`, and a `bool` tensor `dims` representing the dimensions
-of `tensor`, this operation reverses each dimension i of `tensor` where
-`dims[i]` is `True`.
+`tensor`와 그 텐서의 각 차원에 해당하는 `bool`형 텐서 `dims`가 주어졌을 때, 이 함수는 `dims[i]`가 `True`인 경우 `tensor`의 차원 `i`를 반전시킵니다.
 
-`tensor` can have up to 8 dimensions. The number of dimensions
-of `tensor` must equal the number of elements in `dims`. In other words:
+`tensor`는 차원을 8개까지 가질 수 있습니다. `tensor`의 차원의 수는 `dims`의 원소의 수와 동일해야 합니다. 즉, 다음의 식이 성립해야 합니다.
 
 `rank(tensor) = size(dims)`
 
-For example:
+예시:
 
-```prettyprint
-# tensor 't' is [[[[ 0,  1,  2,  3],
-#                  [ 4,  5,  6,  7],
-#                  [ 8,  9, 10, 11]],
-#                 [[12, 13, 14, 15],
-#                  [16, 17, 18, 19],
-#                  [20, 21, 22, 23]]]]
-# tensor 't' shape is [1, 2, 3, 4]
+```python
+# tensor 't'는 [[[[ 0,  1,  2,  3],
+#                 [ 4,  5,  6,  7],
+#                 [ 8,  9, 10, 11]],
+#                [[12, 13, 14, 15],
+#                 [16, 17, 18, 19],
+#                 [20, 21, 22, 23]]]]
+# tensor 't'의 구조(shape)는 [1, 2, 3, 4]
 
-# 'dims' is [False, False, False, True]
+# 'dims'가 [False, False, False, True] 일 때
 reverse(t, dims) ==> [[[[ 3,  2,  1,  0],
                         [ 7,  6,  5,  4],
                         [ 11, 10, 9, 8]],
@@ -854,7 +775,7 @@ reverse(t, dims) ==> [[[[ 3,  2,  1,  0],
                         [19, 18, 17, 16],
                         [23, 22, 21, 20]]]]
 
-# 'dims' is [False, True, False, False]
+# 'dims'가 [False, True, False, False] 일 때
 reverse(t, dims) ==> [[[[12, 13, 14, 15],
                         [16, 17, 18, 19],
                         [20, 21, 22, 23]
@@ -862,7 +783,7 @@ reverse(t, dims) ==> [[[[12, 13, 14, 15],
                         [ 4,  5,  6,  7],
                         [ 8,  9, 10, 11]]]]
 
-# 'dims' is [False, False, True, False]
+# 'dims'가 [False, False, True, False] 일 때
 reverse(t, dims) ==> [[[[8, 9, 10, 11],
                         [4, 5, 6, 7],
                         [0, 1, 2, 3]]
@@ -871,50 +792,47 @@ reverse(t, dims) ==> [[[[8, 9, 10, 11],
                         [12, 13, 14, 15]]]]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`tensor`</b>: A `Tensor`. Must be one of the following types: `uint8`, `int8`, `int32`, `bool`, `half`, `float32`, `float64`.
+*  <b>`tensor`</b>: `Tensor`. 자료형이 `uint8`, `int8`, `int32`, `bool`, `half`, `float32`, `float64` 중 하나여야 합니다.
     Up to 8-D.
-*  <b>`dims`</b>: A `Tensor` of type `bool`. 1-D. The dimensions to reverse.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`dims`</b>: `bool`형 1-D `Tensor`. 반전시킬 차원을 나타냅니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `tensor`. The same shape as `tensor`.
+  `tensor`와 자료형과 구조(shape)가 같은 `Tensor`.
 
 
 - - -
 
 ### `tf.transpose(a, perm=None, name='transpose')` {#transpose}
 
-Transposes `a`. Permutes the dimensions according to `perm`.
+`a`를 전치합니다. `perm`에 따라 차원의 순서를 구성합니다.
 
-The returned tensor's dimension i will correspond to the input dimension
-`perm[i]`. If `perm` is not given, it is set to (n-1...0), where n is
-the rank of the input tensor. Hence by default, this operation performs a
-regular matrix transpose on 2-D input Tensors.
+반환되는 텐서의 차원 `i`는 입력되는 텐서의 차원 `perm[i]`에 해당합니다. 만약 `perm`이 주어지지 않을 경우, (n-1...0)으로 설정됩니다. 여기서 n은 입력 텐서의 랭크(rank)입니다. 따라서, 기본적으로 이 함수는 2-D 텐서가 입력될 경우 일반적인 행렬 전치를 수행합니다.
 
-For example:
+예시:
 
 ```python
-# 'x' is [[1 2 3]
-#         [4 5 6]]
+# 'x'는 [[1 2 3]
+#        [4 5 6]]
 tf.transpose(x) ==> [[1 4]
                      [2 5]
                      [3 6]]
 
-# Equivalently
+# perm의 기본값과 동일한 경우
 tf.transpose(x, perm=[1, 0]) ==> [[1 4]
                                   [2 5]
                                   [3 6]]
 
-# 'perm' is more useful for n-dimensional tensors, for n > 2
-# 'x' is   [[[1  2  3]
-#            [4  5  6]]
-#           [[7  8  9]
-#            [10 11 12]]]
-# Take the transpose of the matrices in dimension-0
+# 'perm'은 차원이 n > 2인 텐서일 경우 더 유용합니다.
+# 'x'는   [[[1  2  3]
+#           [4  5  6]]
+#          [[7  8  9]
+#           [10 11 12]]]
+# 차원-0의 행렬들에 대해서 전치를 수행합니다.
 tf.transpose(x, perm=[0, 2, 1]) ==> [[[1  4]
                                       [2  5]
                                       [3  6]]
@@ -924,314 +842,250 @@ tf.transpose(x, perm=[0, 2, 1]) ==> [[[1  4]
                                       [9 12]]]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`a`</b>: A `Tensor`.
-*  <b>`perm`</b>: A permutation of the dimensions of `a`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`a`</b>: `Tensor`.
+*  <b>`perm`</b>: `a`의 차원들의 순열.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A transposed `Tensor`.
+  전치된 `Tensor`.
 
 
 - - -
 
 ### `tf.extract_image_patches(images, padding, ksizes=None, strides=None, rates=None, name=None)` {#extract_image_patches}
 
-Extract `patches` from `images` and puth them in the "depth" output dimension.
+`images`에서 패치(patch)들을 추출하여 출력의 "depth" 차원에 넣습니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`images`</b>: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int32`, `int64`, `uint8`, `int16`, `int8`, `uint16`, `half`.
-    4-D Tensor with shape `[batch, in_rows, in_cols, depth]`.
-*  <b>`padding`</b>: A `string` from: `"SAME", "VALID"`.
-    The type of padding algorithm to use.
+*  <b>`images`</b>: `Tensor`. 자료형이 `float32`, `float64`, `int32`, `int64`, `uint8`, `int16`, `int8`, `uint16`, `half` 중 하나여야 합니다. 구조(shape)가 `[batch, in_rows, in_cols, depth]`인 4-D 텐서입니다.
+*  <b>`padding`</b>: `"SAME"` 또는 `"VALID"`. `string`. 사용할 패딩 알고리즘을 선택합니다.
 
-    We specify the size-related attributes as:
+    크기와 관련된 인자는 다음과 같이 정해집니다:
 
           ksizes = [1, ksize_rows, ksize_cols, 1]
           strides = [1, strides_rows, strides_cols, 1]
           rates = [1, rates_rows, rates_cols, 1]
 
-*  <b>`ksizes`</b>: An optional list of `ints`. Defaults to `[]`.
-    The size of the sliding window for each dimension of `images`.
-*  <b>`strides`</b>: An optional list of `ints`. Defaults to `[]`.
-    1-D of length 4. How far the centers of two consecutive patches are in
-    the images. Must be: `[1, stride_rows, stride_cols, 1]`.
-*  <b>`rates`</b>: An optional list of `ints`. Defaults to `[]`.
-    1-D of length 4. Must be: `[1, rate_rows, rate_cols, 1]`. This is the
-    input stride, specifying how far two consecutive patch samples are in the
-    input. Equivalent to extracting patches with
-    `patch_sizes_eff = patch_sizes + (patch_sizes - 1) * (rates - 1), followed by
-    subsampling them spatially by a factor of `rates`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`ksizes`</b>: `int`들의 리스트. 기본값은 `[]`. `images`의 각 차원에 대한 슬라이딩 윈도우의 크기를 지정합니다. (선택사항)
+*  <b>`strides`</b>: `int`들의 리스트. 기본값은 `[]`. 길이 4의 1-D 텐서. 이미지에서 추출할 두 `patch` 사이의 중심 거리를 지정합니다. `[1, stride_rows, stride_cols, 1]`와 같은 형태여야 합니다. (선택사항)
+*  <b>`rates`</b>: `int`들의 리스트. 기본값은 `[]`. 길이 4의 1-D 텐서. 입력의 스트라이드로, 입력에서 두 연속된 `patch` 샘플들이 얼마나 멀리 떨어져 있어야 할 지 지정합니다. `[1, rate_rows, rate_cols, 1]`와 같은 형태여야 합니다. (선택사항)
+	`patch`를 추출할 때 `patch_sizes_eff = patch_sizes + (patch_sizes - 1) * (rates - 1)`으로 놓고 공간적으로 `rates`의 인자로 부차추출(subsampling)하는 것과 동일합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `images`.
-  4-D Tensor with shape `[batch, out_rows, out_cols, ksize_rows *
-  ksize_cols * depth]` containing image patches with size
-  `ksize_rows x ksize_cols x depth` vectorized in the "depth" dimension.
+  `images`와 자료형이 같은 `Tensor`. 구조(shape)가 `[batch, out_rows, out_cols, ksize_rows *  ksize_cols * depth]`인 4-D 텐서입니다. 크기가   `ksize_rows x ksize_cols x depth`인 "depth" 차원에서 벡터화된 이미지 패치(patch)들을 포함합니다.
 
 
 - - -
 
 ### `tf.space_to_batch(input, paddings, block_size, name=None)` {#space_to_batch}
 
-SpaceToBatch for 4-D tensors of type T.
+타입 T의 4-D 텐서에 대한 SpaceToBatch 함수입니다.
 
-Zero-pads and then rearranges (permutes) blocks of spatial data into batch.
-More specifically, this op outputs a copy of the input tensor where values from
-the `height` and `width` dimensions are moved to the `batch` dimension. After
-the zero-padding, both `height` and `width` of the input must be divisible by the
-block size.
+텐서에 제로 패딩을 붙이고 공간적인 데이터의 블록을 batch로 재배열합니다. 구체적으로, 이 함수는 입력 텐서의 `height`와 `width` 차원이 `batch` 차원으로 옮겨진 복사본을 반환합니다. 제로 패딩이 행해진 뒤, 입력 텐서의 `height`와 `width` 값 모두 블록 크기로 나눌 수 있어야 합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`. 4-D with shape `[batch, height, width, depth]`.
-*  <b>`paddings`</b>: A `Tensor` of type `int32`.
-    2-D tensor of non-negative integers with shape `[2, 2]`. It specifies
-      the padding of the input with zeros across the spatial dimensions as follows:
+*  <b>`input`</b>: 구조(shape)가 `[batch, height, width, depth]`인 4-D `Tensor`.
+*  <b>`paddings`</b>: `int32`형 2-D `Tensor`. 구조(shape)가 `[2, 2]`이며, 음이 아닌 정수로 구성됩니다. 입력을 공간 차원에서 어떻게 패딩할 것인지에 대해 다음과 같은 형태로 지정합니다.
 
           paddings = [[pad_top, pad_bottom], [pad_left, pad_right]]
 
-      The effective spatial dimensions of the zero-padded input tensor will be:
+      입력 텐서에서 패딩이 이루어지면 다음과 같은 공간 차원들을 가지게 됩니다.
 
           height_pad = pad_top + height + pad_bottom
           width_pad = pad_left + width + pad_right
 
-    The attr `block_size` must be greater than one. It indicates the block size.
+    `block_size`는 1보다 커야 합니다. 이는 블록의 크기를 지정합니다.
 
-      * Non-overlapping blocks of size `block_size x block size` in the height and
-        width dimensions are rearranged into the batch dimension at each location.
-      * The batch of the output tensor is `batch * block_size * block_size`.
-      * Both height_pad and width_pad must be divisible by block_size.
+      * `height`와 `width` 차원에서 `block_size x block_size`의 크기를 가지는 블록들은 각 위치에서 `batch` 차원으로 재배열됩니다.
+      * 출력 텐서의 배치(batch)는 `batch * block_size * block_size`와 같습니다.
+      * `block_size`가 `height_pad`와 `width_pad`의 약수여야 합니다.
 
-    The shape of the output will be:
+    출력 텐서의 구조는 다음과 같습니다.
 
-        [batch*block_size*block_size, height_pad/block_size, width_pad/block_size,
-         depth]
+        `[batch*block_size*block_size, height_pad/block_size, width_pad/block_size, depth]`
 
-*  <b>`block_size`</b>: An `int`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`block_size`</b>: `int`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
+  `input`과 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.batch_to_space(input, crops, block_size, name=None)` {#batch_to_space}
 
-BatchToSpace for 4-D tensors of type T.
+타입 T의 4-D 텐서에 대한 BatchToSpace 함수입니다.
 
-Rearranges (permutes) data from batch into blocks of spatial data, followed by
-cropping. This is the reverse transformation of SpaceToBatch. More specifically,
-this op outputs a copy of the input tensor where values from the `batch`
-dimension are moved in spatial blocks to the `height` and `width` dimensions,
-followed by cropping along the `height` and `width` dimensions.
+배치(batch)의 데이터를 공간적인 데이터의 블록으로 재배열하고 자릅니다. `SpaceToBatch` 함수의 역과정에 해당합니다. 더 구체적으로, 이 함수는 `input` 텐서의 `batch` 차원의 값들이 `height`와 `width` 차원의 공간적인 블록으로 이동된 후, `height` 차원과 `width` 차원을 따라 잘린 텐서를 반환합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`. 4-D tensor with shape
-    `[batch*block_size*block_size, height_pad/block_size, width_pad/block_size,
-      depth]`. Note that the batch size of the input tensor must be divisible by
-    `block_size * block_size`.
-*  <b>`crops`</b>: A `Tensor` of type `int32`.
-    2-D tensor of non-negative integers with shape `[2, 2]`. It specifies
-    how many elements to crop from the intermediate result across the spatial
-    dimensions as follows:
+*  <b>`input`</b>: 4-D `Tensor`. `[batch*block_size*block_size, height_pad/block_size, width_pad/block_size, depth]`의 구조(shape)를 가집니다. 입력 텐서의 배치(batch) 크기는 `block_size * block_size`의 배수여야 합니다.
+*  <b>`crops`</b>: `int32`형 구조 `[2, 2]`의 2-D 텐서. 음이 아닌 정수로 구성됩니다. 중간 결과에서 공간 차원을 따라 몇 개의 원소를 잘라낼 것인지를 다음과 같이 결정합니다.
 
         crops = [[crop_top, crop_bottom], [crop_left, crop_right]]
 
-*  <b>`block_size`</b>: An `int`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`block_size`</b>: `int`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
-  4-D with shape `[batch, height, width, depth]`, where:
+  `input`과 같은 자료형의 구조 `[batch, height, width, depth]`인 4-D `Tensor`.
 
         height = height_pad - crop_top - crop_bottom
         width = width_pad - crop_left - crop_right
 
-  The attr `block_size` must be greater than one. It indicates the block size.
+ 을 만족합니다. `block_size`는 1보다 커야 합니다.
 
 
 - - -
 
 ### `tf.space_to_depth(input, block_size, name=None)` {#space_to_depth}
 
-SpaceToDepth for tensors of type T.
+타입 T의 4-D 텐서에 대한 SpaceToDepth 함수입니다.
 
-Rearranges blocks of spatial data, into depth. More specifically,
-this op outputs a copy of the input tensor where values from the `height`
-and `width` dimensions are moved to the `depth` dimension.
-The attr `block_size` indicates the input block size and how the data is moved.
+공간적인 데이터의 블록을 `depth`로 재배열합니다. 구체적으로, 입력 텐서의 `height`와 `width` 차원의 데이터를 `depth` 차원으로 옮깁니다. `block_size`는 입력 텐서의 블록 사이즈와 데이터가 어떻게 옮겨질지를 지정합니다.
 
-  * Non-overlapping blocks of size `block_size x block size` are rearranged
-    into depth at each location.
-  * The depth of the output tensor is `input_depth * block_size * block_size`.
-  * The input tensor's height and width must be divisible by block_size.
+  * 크기 `block_size x block size`의 블록이 각 위치의 `depth`로 재배열됩니다.
+  * 출력 텐서의 `depth` 차원의 크기는 `input_depth * block_size * block_size`입니다.
+  * 입력 텐서의 `height`와 `width`는 `block_size`의 배수여야 합니다.
 
-That is, assuming the input is in the shape:
-`[batch, height, width, depth]`,
-the shape of the output will be:
-`[batch, height/block_size, width/block_size, depth*block_size*block_size]`
+즉, 만약 입력의 구조(shape)가`[batch, height, width, depth]`이면, 출력 텐서의 구조는 `[batch, height/block_size, width/block_size, epth*block_size*block_size]`이 됩니다.
 
-This operation requires that the input tensor be of rank 4, and that
-`block_size` be >=1 and a divisor of both the input `height` and `width`.
+이 함수는 입력 텐서의 랭크(rank)가 4여야 하며, `block_size`가 1 이상이어야 하고 `height`와 `width`의 약수여야 합니다.
 
-This operation is useful for resizing the activations between convolutions
-(but keeping all data), e.g. instead of pooling. It is also useful for training
-purely convolutional models.
+이 함수는 합성곱 연산 사이의 활성화에서 데이터를 그대로 유지한 채로 크기를 변경시키는 때 유용합니다(예로, 풀링 대신 사용할 수 있습니다). 합성곱 연산만으로 이루어진 모델의 훈련에도 유용합니다.
 
-For example, given this input of shape `[1, 2, 2, 1]`, and block_size of 2:
+예로, 구조 `[1, 2, 2, 1]`의 입력과 `block_size = 2`가 주어진 경우,
 
-```prettyprint
+```python
 x = [[[[1], [2]],
       [[3], [4]]]]
 ```
 
-This operation will output a tensor of shape `[1, 1, 1, 4]`:
+이 함수는 다음과 같은 구조 `[1, 1, 1, 4]`의 텐서를 반환합니다.
 
-```prettyprint
+```python
 [[[[1, 2, 3, 4]]]]
 ```
 
-Here, the input has a batch of 1 and each batch element has shape `[2, 2, 1]`,
-the corresponding output will have a single element (i.e. width and height are
-both 1) and will have a depth of 4 channels (1 * block_size * block_size).
-The output element shape is `[1, 1, 4]`.
+여기서, 입력은 크기 1의 배치를 가지며, 각 배치는 구조 `[2, 2, 1]`로 배열된 원소를 가집니다. 출력에서 각각은 `width`와 `height`가 모두 1이고, 4 채널의 `depth`를 가지도록 배열되며, 따라서 각각은 구조 `[1, 1, 4]`를 가지게 됩니다.
 
-For an input tensor with larger depth, here of shape `[1, 2, 2, 3]`, e.g.
+더 큰 `depth`를 가지는 입력 텐서의 경우(여기서는 `[1, 2, 2, 3]`)를 봅시다.
 
-```prettyprint
+```python
 x = [[[[1, 2, 3], [4, 5, 6]],
       [[7, 8, 9], [10, 11, 12]]]]
 ```
 
-This operation, for block_size of 2, will return the following tensor of shape
-`[1, 1, 1, 12]`
+`block_size`에 2를 넣어 이 함수를 적용할 경우, 구조 `[1, 1, 1, 12]`인 텐서 
 
-```prettyprint
+```python
 [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]
 ```
 
-Similarly, for the following input of shape `[1 4 4 1]`, and a block size of 2:
+를 출력합니다. 비슷하게, `block_size`가 2이고 입력의 구조가 `[1 4 4 1]`인 경우,
 
-```prettyprint
+```python
 x = [[[[1],   [2],  [5],  [6]],
       [[3],   [4],  [7],  [8]],
       [[9],  [10], [13],  [14]],
       [[11], [12], [15],  [16]]]]
 ```
 
-the operator will return the following tensor of shape `[1 2 2 4]`:
+이 함수는 구조 `[1 2 2 4]`인 다음 텐서를 반환합니다.
 
-```prettyprint
+```python
 x = [[[[1, 2, 3, 4],
        [5, 6, 7, 8]],
       [[9, 10, 11, 12],
        [13, 14, 15, 16]]]]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`.
-*  <b>`block_size`</b>: An `int`. The size of the spatial block.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`.
+*  <b>`block_size`</b>: `int`. 공간 블록의 크기를 지정합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
+  `input`과 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.depth_to_space(input, block_size, name=None)` {#depth_to_space}
 
-DepthToSpace for tensors of type T.
+타입 T의 4-D 텐서에 대한 DepthToSpace 함수입니다.
 
-Rearranges data from depth into blocks of spatial data.
-This is the reverse transformation of SpaceToDepth. More specifically,
-this op outputs a copy of the input tensor where values from the `depth`
-dimension are moved in spatial blocks to the `height` and `width` dimensions.
-The attr `block_size` indicates the input block size and how the data is moved.
+`depth`의 데이터를 공간적인 데이터의 블록으로 재배열합니다. `SpaceToDepth` 함수의 역과정과 같습니다. 구체적으로, 이 함수는 `depth` 차원의 값들을 `height`와 `width` 차원들의 공간적인 블록으로 이동시킵니다. `block_size`는 입력의 블록 크기와 데이터가 어떻게 이동될지를 지정합니다.
 
-  * Chunks of data of size `block_size * block_size` from depth are rearranged
-    into non-overlapping blocks of size `block_size x block_size`
-  * The width the output tensor is `input_depth * block_size`, whereas the
-    height is `input_height * block_size`.
-  * The depth of the input tensor must be divisible by
-    `block_size * block_size`.
+  * `depth`에서 `block_size * block_size` 크기의 데이터가 `block_size x block_size`의 블록으로 재배열됩니다.
+  * 출력 텐서의 `width`의 크기는 `input_depth * block_size`이며, `height`의 크기는 `input_height * block_size` 입니다.
+  * 입력 텐서의 `depth`는 `block_size * block_size`의 배수여야 합니다.
 
-That is, assuming the input is in the shape:
-`[batch, height, width, depth]`,
-the shape of the output will be:
-`[batch, height*block_size, width*block_size, depth/(block_size*block_size)]`
+즉, 만약 입력의 구조(shape)가 `[batch, height, width, depth]`라면, 출력 텐서의 구조는`[batch, height*block_size, width*block_size, depth/(block_size*block_size)]`와 같습니다.
 
-This operation requires that the input tensor be of rank 4, and that
-`block_size` be >=1 and that `block_size * block_size` be a divisor of the
-input depth.
+이 함수는 입력 텐서의 랭크(rank)가 4여야 하며, `block_size`는 1 이상이고 `block_size * block_size`가 입력 텐서의 `depth`의 약수여야 합니다.
 
-This operation is useful for resizing the activations between convolutions
-(but keeping all data), e.g. instead of pooling. It is also useful for training
-purely convolutional models.
+이 함수는 합성곱 연산 사이의 활성화에서 데이터를 그대로 유지한 채로 크기를 변경시키는 때 유용합니다(예로, 풀링 대신 사용할 수 있습니다). 합성곱 연산만으로 이루어진 모델의 훈련에도 유용합니다.
 
-For example, given this input of shape `[1, 1, 1, 4]`, and a block size of 2:
+예로, 구조 `[1, 1, 1, 4]`의 입력과 `block_size = 2`가 주어진 경우,
 
-```prettyprint
+```python
 x = [[[[1, 2, 3, 4]]]]
 
 ```
 
-This operation will output a tensor of shape `[1, 2, 2, 1]`:
+이 함수는 다음과 같은 구조 `[1, 2, 2, 1]`의 텐서를 반환합니다.
 
-```prettyprint
+```python
    [[[[1], [2]],
      [[3], [4]]]]
 ```
 
-Here, the input has a batch of 1 and each batch element has shape `[1, 1, 4]`,
-the corresponding output will have 2x2 elements and will have a depth of
-1 channel (1 = `4 / (block_size * block_size)`).
-The output element shape is `[2, 2, 1]`.
+여기서, 입력은 크기 1의 배치를 가지며, 각 배치는 구조 `[1, 1, 4]`로 배열된 원소를 가집니다. 출력에서 각각은 2x2 원소에 1 채널의 (1 = `4 / (block_size * block_size)`) `depth`를 가지도록 배열되며, 따라서 각각은 구조 `[2, 2, 1]`을 가지게 됩니다.
 
-For an input tensor with larger depth, here of shape `[1, 1, 1, 12]`, e.g.
+더 큰 `depth`를 가지는 입력 텐서의 경우(여기서는 `[1, 1, 1, 12]`)를 봅시다.
 
-```prettyprint
+```python
 x = [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]
 ```
 
-This operation, for block size of 2, will return the following tensor of shape
-`[1, 2, 2, 3]`
+`block_size`에 2를 넣어 이 함수를 적용할 경우, 구조 `[1, 2, 2, 3]`인 텐서 
 
-```prettyprint
+```python
    [[[[1, 2, 3], [4, 5, 6]],
      [[7, 8, 9], [10, 11, 12]]]]
 
 ```
+를 출력합니다. 비슷하게, `block_size`가 2이고 입력의 구조가 `[1 2 2 4]`인 경우,
 
-Similarly, for the following input of shape `[1 2 2 4]`, and a block size of 2:
-
-```prettyprint
+```python
 x =  [[[[1, 2, 3, 4],
        [5, 6, 7, 8]],
       [[9, 10, 11, 12],
        [13, 14, 15, 16]]]]
 ```
 
-the operator will return the following tensor of shape `[1 4 4 1]`:
+이 함수는 구조 `[1 4 4 1]`인 다음 텐서를 반환합니다.
 
-```prettyprint
+```python
 x = [[ [1],   [2],  [5],  [6]],
      [ [3],   [4],  [7],  [8]],
      [ [9],  [10], [13],  [14]],
@@ -1239,27 +1093,25 @@ x = [[ [1],   [2],  [5],  [6]],
 
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A `Tensor`.
-*  <b>`block_size`</b>: An `int`.
-    The size of the spatial block, same as in Space2Depth.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: `Tensor`.
+*  <b>`block_size`</b>: `int`. 공간 블록의 크기를 지정합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `input`.
+  `input`과 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.gather(params, indices, validate_indices=None, name=None)` {#gather}
 
-Gather slices from `params` according to `indices`.
+`indices`에 따라 `params`에서 슬라이스를 모읍니다.
 
-`indices` must be an integer tensor of any dimension (usually 0-D or 1-D).
-Produces an output tensor with shape `indices.shape + params.shape[1:]` where:
+`indices`는 임의 차원의 정수 텐서여야 합니다(주로 0-D 또는 1-D). 구조(shape)가 `indices.shape + params.shape[1:]`인 출력 텐서를 생성합니다.
 
     # Scalar indices
     output[:, ..., :] = params[indices, :, ... :]
@@ -1270,87 +1122,77 @@ Produces an output tensor with shape `indices.shape + params.shape[1:]` where:
     # Higher rank indices
     output[i, ..., j, :, ... :] = params[indices[i, ..., j], :, ..., :]
 
-If `indices` is a permutation and `len(indices) == params.shape[0]` then
-this operation will permute `params` accordingly.
+만약 `indices`이 순열이고 `len(indices) == params.shape[0]`이라면, 이 함수는 그에 따라 `params`를 재배열합니다.
 
 <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/Gather.png" alt>
 </div>
 
-##### Args:
+##### 인자:
 
 
-*  <b>`params`</b>: A `Tensor`.
-*  <b>`indices`</b>: A `Tensor`. Must be one of the following types: `int32`, `int64`.
-*  <b>`validate_indices`</b>: An optional `bool`. Defaults to `True`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`params`</b>: `Tensor`.
+*  <b>`indices`</b>: `int32`형 또는 `int64`형 `Tensor`.
+*  <b>`validate_indices`</b>: `bool`. 기본값은 `True`. (선택사항)
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `params`.
+  `params`와 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.gather_nd(params, indices, name=None)` {#gather_nd}
 
-Gather values from `params` according to `indices`.
+`indices`에 따라 `params`에서 값들을 모읍니다.
 
-`indices` must be integer tensor, containing indices into `params`.
-It must be shape `[d_0, ..., d_N, R]` where `R` is the rank of `params`.
-The innermost dimension of `indices` (with length `R`) corresponds to the
-indices of `params`.
+`indices`는 `params`의 인덱스들을 포함하는 정수형 텐서입니다. 구조(shape)는 `[d_0, ..., d_N, R]`이어야 하고, 여기서 `R`은 `params`의 랭크(rank)입니다. `indices`의 가장 안쪽의 차원들(길이 `R`의)는 `params`의 인덱스들에 해당합니다.
 
-Produces an output tensor with shape `[d_0, ..., d_{n-1}]` where:
+출력 텐서의 구조(shape)는 `[d_0, ..., d_{n-1}]`이고, 다음을 만족합니다.
 
     output[i, j, k, ...] = params[indices[i, j, k, ..., :]]
 
-e.g. for `indices` a matrix:
+예로, `indices`에 대해서 다음과 같습니다.
 
     output[i] = params[indices[i, :]]
 
-##### Args:
+##### 인자:
 
 
-*  <b>`params`</b>: A `Tensor`. R-D.  The tensor from which to gather values.
-*  <b>`indices`</b>: A `Tensor`. Must be one of the following types: `int32`, `int64`.
-    (N+1)-D.  Index tensor having shape `[d_0, ..., d_N, R]`.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`params`</b>: `R`-D `Tensor`. 값들을 모을 `Tensor`입니다.
+*  <b>`indices`</b>: `int32`형 또는 `int64`형 `(N+1)`-D `Tensor`. 구조(shape)가 `[d_0, ..., d_N, R]`이어야 합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `params`.
-  N-D.  Values from `params` gathered from indices given by `indices`.
+  `params`와 같은 자료형의 `N`-D `Tensor`. `indices`에 따라 주어진 인덱스들로부터 `params`의 값들을 모은 텐서입니다.
 
 
 - - -
 
 ### `tf.dynamic_partition(data, partitions, num_partitions, name=None)` {#dynamic_partition}
 
-Partitions `data` into `num_partitions` tensors using indices from `partitions`.
+`partitions`의 인덱스들을 이용해서 `data`를 `num_partitions`개의 텐서로 나눕니다.
 
-For each index tuple `js` of size `partitions.ndim`, the slice `data[js, ...]`
-becomes part of `outputs[partitions[js]]`.  The slices with `partitions[js] = i`
-are placed in `outputs[i]` in lexicographic order of `js`, and the first
-dimension of `outputs[i]` is the number of entries in `partitions` equal to `i`.
-In detail,
+각각의 크기 `partitions.ndim`인 인덱스 튜플 `js`에 대해, 슬라이스 `data[js, ...]`는 `outputs[partitions[js]]`의 부분이 됩니다. `partitions[js] = i`인 슬라이스는 `outputs[i]`에 `js`의 사전 순서대로 배열되고, `outputs[i]`의 첫 번째 차원은 `partitions`의 엔트리 중 `i`와 같은 것의 수입니다. 구체적으로, 
 
     outputs[i].shape = [sum(partitions == i)] + data.shape[partitions.ndim:]
 
     outputs[i] = pack([data[js, ...] for js if partitions[js] == i])
 
-`data.shape` must start with `partitions.shape`.
+입니다. `data.shape`는 `partitions.shape`로 시작해야 합니다.
 
-For example:
+예시:
 
-    # Scalar partitions
+    # 스칼라 분할
     partitions = 1
     num_partitions = 2
     data = [10, 20]
     outputs[0] = []  # Empty with shape [0, 2]
     outputs[1] = [[10, 20]]
 
-    # Vector partitions
+    # 벡터 분할
     partitions = [0, 0, 1, 1, 0]
     num_partitions = 2
     data = [10, 20, 30, 40, 50]
@@ -1361,32 +1203,28 @@ For example:
 <img style="width:100%" src="../../images/DynamicPartition.png" alt>
 </div>
 
-##### Args:
+##### 인자:
 
 
-*  <b>`data`</b>: A `Tensor`.
-*  <b>`partitions`</b>: A `Tensor` of type `int32`.
-    Any shape.  Indices in the range `[0, num_partitions)`.
-*  <b>`num_partitions`</b>: An `int` that is `>= 1`.
-    The number of partitions to output.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`data`</b>: `Tensor`.
+*  <b>`partitions`</b>: `int32`형 `Tensor`. 임의의 구조(shape)가 가능합니다. 범위 `[0, num_partitions)` 내의 인덱스들을 포함합니다.
+*  <b>`num_partitions`</b>: `int`(`>= 1`). 분할의 수.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A list of `num_partitions` `Tensor` objects of the same type as data.
+  `num_partitions`개 `Tensor`의 리스트.
 
 
 - - -
 
 ### `tf.dynamic_stitch(indices, data, name=None)` {#dynamic_stitch}
 
-Interleave the values from the `data` tensors into a single tensor.
-
-Builds a merged tensor such that
+`data` 안의 텐서들 안의 값을 단일 텐서에 끼웁니다.
 
     merged[indices[m][i, ..., j], ...] = data[m][i, ..., j, ...]
 
-For example, if each `indices[m]` is scalar or vector, we have
+를 만족하는 `merged` 텐서를 구성합니다. 예로, 만약 각각의 `indices[m]`이 스칼라이거나 벡터라면, 다음이 성립합니다.
 
     # Scalar indices
     merged[indices[m], ...] = data[m][...]
@@ -1394,18 +1232,13 @@ For example, if each `indices[m]` is scalar or vector, we have
     # Vector indices
     merged[indices[m][i], ...] = data[m][i, ...]
 
-Each `data[i].shape` must start with the corresponding `indices[i].shape`,
-and the rest of `data[i].shape` must be constant w.r.t. `i`.  That is, we
-must have `data[i].shape = indices[i].shape + constant`.  In terms of this
-`constant`, the output shape is
+각각의  `data[i].shape`는 해당하는 `indices[i].shape`로 시작해야 하며, `data[i].shape`의 나머지는 `i`에 대해서 일정해야 합니다. 즉, `data[i].shape = indices[i].shape + constant`이어야 합니다. 이 `constant`에 대해, 출력 텐서의 구조(shape)는
 
     merged.shape = [max(indices)] + constant
 
-Values are merged in order, so if an index appears in both `indices[m][i]` and
-`indices[n][j]` for `(m,i) < (n,j)` the slice `data[n][j]` will appear in the
-merged result.
+입니다. 값들은 순서대로 합쳐집니다. 즉, 인덱스가 `indices[m][i]`와 `indices[n][j]` 모두에서 나타나고 `(m,i) < (n,j)`인 경우 슬라이스 `data[n][j]`가 합쳐진 결과에 나타납니다.
 
-For example:
+예시:
 
     indices[0] = 6
     indices[1] = [4, 1]
@@ -1420,58 +1253,55 @@ For example:
 <img style="width:100%" src="../../images/DynamicStitch.png" alt>
 </div>
 
-##### Args:
+##### 인자:
 
 
-*  <b>`indices`</b>: A list of at least 2 `Tensor` objects of type `int32`.
-*  <b>`data`</b>: A list with the same number of `Tensor` objects as `indices` of `Tensor` objects of the same type.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`indices`</b>: 2개 이상의 `int32`형 `Tensor`의 리스트.
+*  <b>`data`</b>: 같은 자료형의 `Tensor`들의 리스트. `indices`의 텐서 개수와 리스트의 `Tensor` 수가 같아야 합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A `Tensor`. Has the same type as `data`.
+  `data`와 같은 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.boolean_mask(tensor, mask, name='boolean_mask')` {#boolean_mask}
 
-Apply boolean mask to tensor.  Numpy equivalent is `tensor[mask]`.
+텐서에 불리언 마스크(boolean mask)를 적용합니다. NumPy의 `tensor[mask]`와 동일합니다.
 
 ```python
-# 1-D example
+# 1-D 예시
 tensor = [0, 1, 2, 3]
 mask = [True, False, True, False]
 boolean_mask(tensor, mask) ==> [0, 2]
 ```
 
-In general, `0 < dim(mask) = K <= dim(tensor)`, and `mask`'s shape must match
-the first K dimensions of `tensor`'s shape.  We then have:
-  `boolean_mask(tensor, mask)[i, j1,...,jd] = tensor[i1,...,iK,j1,...,jd]`
-where `(i1,...,iK)` is the ith `True` entry of `mask` (row-major order).
+일반적으로 `0 < dim(mask) = K <= dim(tensor)`이고, `mask`의 구조(shape)는 `tensor` 구조의 첫 `K` 차원이 일치해야 합니다. 그렇게 되면  `boolean_mask(tensor, mask)[i, j1,...,jd] = tensor[i1,...,iK,j1,...,jd]`
+을 만족하며, `(i1,...,iK)`는 `i`번째 `mask`의 `i`번째 `True`인 원소입니다(행 우선 순서).
 
-##### Args:
+##### 인자:
 
 
-*  <b>`tensor`</b>: N-D tensor.
-*  <b>`mask`</b>: K-D boolean tensor, K <= N and K must be known statically.
-*  <b>`name`</b>: A name for this operation (optional).
+*  <b>`tensor`</b>: N-D 텐서.
+*  <b>`mask`</b>: K-D 불리언 텐서, K <= N이고, K는 정적으로(statically) 알려져 있어야 합니다.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  Tensor populated by entries in `tensor` corresponding to `True` values in
-    `mask`.
+  `mask`에서 `True`인 값들에 대한 `tensor`의 원소들로 이루어진 텐서.
 
-##### Raises:
-
-
-*  <b>`ValueError`</b>: If shapes do not conform.
+##### 예외:
 
 
-*  <b>`Examples`</b>: 
+*  <b>`ValueError`</b>: 모양이 일치하지 않는 경우.
+
+
+##### 예시:
 
 ```python
-# 2-D example
+# 2-D 예시
 tensor = [[1, 2], [3, 4], [5, 6]]
 mask = [True, False, True]
 boolean_mask(tensor, mask) ==> [[1, 2], [5, 6]]
@@ -1482,54 +1312,44 @@ boolean_mask(tensor, mask) ==> [[1, 2], [5, 6]]
 
 ### `tf.one_hot(indices, depth, on_value=None, off_value=None, axis=None, dtype=None, name=None)` {#one_hot}
 
-Returns a one-hot tensor.
+One-hot 텐서를 반환합니다.
 
-The locations represented by indices in `indices` take value `on_value`,
-while all other locations take value `off_value`.
+`indices`의 인덱스에 있는 위치는 `on_value`, 아닌 위치는 `off_value`의 값을 가집니다.
 
-`on_value` and `off_value` must have matching data types. If `dtype` is also
-provided, they must be the same data type as specified by `dtype`.
+`on_value`와 `off_value`는 같은 자료형을 가져야 합니다. 만약 `dtype`이 주어진 경우, 그들은 `dtype`에 의해 정해진 자료형이어야 합니다.
 
-If `on_value` is not provided, it will default to the value `1` with type
-`dtype`
+만약 `on_value`가 주어지지 않으면, `dtype`형의 `1`이 기본값으로 정해집니다.
 
-If `off_value` is not provided, it will default to the value `0` with type
-`dtype`
+비슷하게 `off_value`가 주어지지 않은 경우 `dtype` 형의 `0`이 기본값입니다.
 
-If the input `indices` is rank `N`, the output will have rank `N+1`. The
-new axis is created at dimension `axis` (default: the new axis is appended
-at the end).
+입력 `indices`가 랭크 `N`인 경우, 출력은 랭크 `N+1`을 가집니다. 새로운 축이 차원 `axis`에 추가됩니다(기본적으로 새 축은 끝에 추가됩니다).
 
-If `indices` is a scalar the output shape will be a vector of length `depth`
+만약 `indices`가 스칼라라면 출력의 구조(shape)는 길이 `depth`의 벡터가 됩니다.
 
-If `indices` is a vector of length `features`, the output shape will be:
+만약 `indices`가 길이 `features`의 벡터라면, 출력의 구조는 다음과 같습니다.
 ```
   features x depth if axis == -1
   depth x features if axis == 0
 ```
 
-If `indices` is a matrix (batch) with shape `[batch, features]`, the output
-shape will be:
+만약 `indices`가 구조 `[batch, features]`의 행렬(또는 배치)이라면, 출력의 구조는 다음과 같습니다.
 ```
   batch x features x depth if axis == -1
   batch x depth x features if axis == 1
   depth x batch x features if axis == 0
 ```
 
-If `dtype` is not provided, it will attempt to assume the data type of
-`on_value` or `off_value`, if one or both are passed in. If none of
-`on_value`, `off_value`, or `dtype` are provided, `dtype` will default to the
-value `tf.float32`
+`dtype`가 주어지지 않은 경우, `on_value` 또는 `off_value`가 주어졌다면 그들로부터 자료형을 추측합니다. 만약 셋 모두 주어지지 않았다면 기본 자료형은 `tf.float32`형 입니다.
 
-Note: If a non-numeric data type output is desired (tf.string, tf.bool, etc.),
-both `on_value` and `off_value` _must_ be provided to `one_hot`
 
-Examples
-=========
+참고: 수가 아닌 출력 자료형이 요구되는 경우(`tf.string`, `tf.bool` 등), `on_value`와 `off_value` _모두_ 주어져야 합니다.
 
-Suppose that
 
-```
+##### 예시:
+
+다음이 주어진 경우
+
+```python
   indices = [0, 2, -1, 1]
   depth = 3
   on_value = 5.0
@@ -1537,9 +1357,9 @@ Suppose that
   axis = -1
 ```
 
-Then output is `[4 x 3]`:
+출력은 다음의 `[4 x 3]`입니다.
 
-```
+```python
   output =
   [5.0 0.0 0.0]  // one_hot(0)
   [0.0 0.0 5.0]  // one_hot(2)
@@ -1547,9 +1367,9 @@ Then output is `[4 x 3]`:
   [0.0 5.0 0.0]  // one_hot(1)
 ```
 
-Suppose that
+다음이 주어진 경우
 
-```
+```python
   indices = [[0, 2], [1, -1]]
   depth = 3
   on_value = 1.0
@@ -1557,9 +1377,9 @@ Suppose that
   axis = -1
 ```
 
-Then output is `[2 x 2 x 3]`:
+출력은 다음의 `[2 x 2 x 3]`입니다.
 
-```
+```python
   output =
   [
     [1.0, 0.0, 0.0]  // one_hot(0)
@@ -1570,131 +1390,124 @@ Then output is `[2 x 2 x 3]`:
   ]
 ```
 
-Using default values for `on_value` and `off_value`:
+다음과 강티 `on_value`와 `off_value`의 기본값을 이용하는 경우,
 
-```
+```python
   indices = [0, 1, 2]
   depth = 3
 ```
 
-The output will be
+출력은 다음과 같습니다.
 
-```
+```python
   output =
   [[1., 0., 0.],
    [0., 1., 0.],
    [0., 0., 1.]]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`indices`</b>: A `Tensor` of indices.
-*  <b>`depth`</b>: A scalar defining the depth of the one hot dimension.
-*  <b>`on_value`</b>: A scalar defining the value to fill in output when `indices[j]
-    = i`. (default: 1)
-*  <b>`off_value`</b>: A scalar defining the value to fill in output when `indices[j]
-    != i`. (default: 0)
-*  <b>`axis`</b>: The axis to fill (default: -1, a new inner-most axis).
-*  <b>`dtype`</b>: The data type of the output tensor.
+*  <b>`indices`</b>: 인덱스들의 `Tensor`.
+*  <b>`depth`</b>: One-hot 차원의 깊이(depth)를 결정하는 스칼라 값.
+*  <b>`on_value`</b>: `indices[j] = i`인 경우 채울 스칼라 값. (기본값: 1, 선택사항)
+*  <b>`off_value`</b>: `indices[j] != i`인 경우 채울 스칼라 값. (기본값: 0, 선택사항)
+*  <b>`axis`</b>: 채워질 축 (기본값: -1, 선택사항).
+*  <b>`dtype`</b>: 출력 텐서의 자료형.
 
-##### Returns:
+##### 반환값:
 
 
-*  <b>`output`</b>: The one-hot tensor.
+*  <b>`output`</b>: One-hot 텐서.
 
-##### Raises:
+##### 예외:
 
 
-*  <b>`TypeError`</b>: If dtype of either `on_value` or `off_value` don't match `dtype`
-*  <b>`TypeError`</b>: If dtype of `on_value` and `off_value` don't match one another
+*  <b>`TypeError`</b>: `on_value` 또는 `off_value`의 자료형이 `dtype`과 다른 경우
+*  <b>`TypeError`</b>: `on_value`와 `off_value`의 자료형이 서로 다른 경우
 
 
 
-## Other Functions and Classes
+## 기타 함수 및 클래스
 - - -
 
 ### `tf.bitcast(input, type, name=None)` {#bitcast}
 
-Bitcasts a tensor from one type to another without copying data.
+텐서를 다른 자료형으로 데이터 복사 없이 비트캐스트(bitcast)합니다.
 
-Given a tensor `input`, this operation returns a tensor that has the same buffer
-data as `input` with datatype `type`.
+`input` 텐서가 주어질 때, 이 함수는 `input`과 같은 버퍼 데이터를 가진 자료형 `type`의 텐서를 반환합니다.
 
-If the input datatype `T` is larger than the output datatype `type` then the
-shape changes from [...] to [..., sizeof(`T`)/sizeof(`type`)].
+만약 입력의 자료형 `T`가 출력의 자료형 `type`에 비해 더 큰 경우, 구조(shape)가 [...]에서 [..., sizeof(`T`)/sizeof(`type`)]으로 변형됩니다.
 
-If `T` is smaller than `type`, the operator requires that the rightmost
-dimension be equal to sizeof(`type`)/sizeof(`T`). The shape then goes from
-[..., sizeof(`type`)/sizeof(`T`)] to [...].
-
-##### Args:
+만약 `T`가 `type`에 비해 더 작은 경우, 가장 오른쪽의 차원이 sizeof(`type`)/sizeof(`T`)와 같아야 합니다. 구조는 [..., sizeof(`type`)/sizeof(`T`)] to [...]으로 변형됩니다.
 
 
-*  <b>`input`</b>: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int64`, `int32`, `uint8`, `uint16`, `int16`, `int8`, `complex64`, `complex128`, `qint8`, `quint8`, `qint32`, `half`.
-*  <b>`type`</b>: A `tf.DType` from: `tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.int16, tf.int8, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint32, tf.half`.
-*  <b>`name`</b>: A name for the operation (optional).
+##### 인자:
 
-##### Returns:
 
-  A `Tensor` of type `type`.
+*  <b>`input`</b>: `Tensor`. 다음의 자료형이 가능합니다: `float32`, `float64`, `int64`, `int32`, `uint8`, `uint16`, `int16`, `int8`, `complex64`, `complex128`, `qint8`, `quint8`, `qint32`, `half`.
+*  <b>`type`</b>: `tf.DType`. 다음 중 하나가 가능합니다: `tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.int16, tf.int8, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint32, tf.half`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
+
+##### 반환값:
+
+  `type` 자료형의 `Tensor`.
 
 
 - - -
 
 ### `tf.shape_n(input, name=None)` {#shape_n}
 
-Returns shape of tensors.
+텐서의 구조(shape)를 반환합니다.
 
-This operation returns N 1-D integer tensors representing shape of `input[i]s`.
+이 함수는 `input[i]`들의 구조를 나타내는 `N`개의 1-D 정수 텐서를 반환합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`input`</b>: A list of at least 1 `Tensor` objects of the same type.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`input`</b>: 같은 자료형의 1개 이상의 `Tensor`의 리스트.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A list with the same number of `Tensor` objects as `input` of `Tensor` objects of type `int32`.
+  `input`의 텐서와 같은 개수의 `int32`형 `Tensor`의 리스트.
 
 
 - - -
 
 ### `tf.unique_with_counts(x, name=None)` {#unique_with_counts}
 
-Finds unique elements in a 1-D tensor.
+1-D 텐서에서 서로 다른 원소를 찾습니다.
 
-This operation returns a tensor `y` containing all of the unique elements of `x`
-sorted in the same order that they occur in `x`. This operation also returns a
-tensor `idx` the same size as `x` that contains the index of each value of `x`
-in the unique output `y`. Finally, it returns a third tensor `count` that
-contains the count of each element of `y` in `x`. In other words:
+이 함수는 텐서 `x`의 모든 서로 다른 원소를 `x`에서 나타나는 순서대로 나열한 텐서 `y`를 반환합니다. 이 함수는 크기가 `x`와 같고, `x`의 각 원소에 대해 `y`에서의 인덱서를 원소를 가지는 텐서 `idx`도 반환합니다. `y`의 각 원소가 `x`에서 몇 번 나타나는지에 대한 텐서 `count`도 반환합니다. 즉, 
 
 `y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]`
 
-For example:
+입니다.
 
-```prettyprint
-# tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+예시:
+
+```python
+# tensor 'x'는 [1, 1, 2, 4, 4, 4, 7, 8, 8]
 y, idx, count = unique_with_counts(x)
 y ==> [1, 2, 4, 7, 8]
 idx ==> [0, 0, 1, 2, 2, 2, 3, 4, 4]
 count ==> [2, 1, 3, 1, 2]
 ```
 
-##### Args:
+##### 인자:
 
 
-*  <b>`x`</b>: A `Tensor`. 1-D.
-*  <b>`name`</b>: A name for the operation (optional).
+*  <b>`x`</b>: 1-D `Tensor`.
+*  <b>`name`</b>: 오퍼레이션의 명칭. (선택사항)
 
-##### Returns:
+##### 반환값:
 
-  A tuple of `Tensor` objects (y, idx, count).
+  `Tensor`의 튜플 (y, idx, count).
 
-*  <b>`y`</b>: A `Tensor`. Has the same type as `x`. 1-D.
-*  <b>`idx`</b>: A `Tensor` of type `int32`. 1-D.
-*  <b>`count`</b>: A `Tensor` of type `int32`. 1-D.
+*  <b>`y`</b>: `x`와 자료형이 같은 1-D `Tensor`.
+*  <b>`idx`</b>: `int32`형 1-D `Tensor`.
+*  <b>`count`</b>: `int32`형 1-D `Tensor`.
 
 
