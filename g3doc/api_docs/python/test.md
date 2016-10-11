@@ -1,12 +1,10 @@
 <!-- This file is machine generated: DO NOT EDIT! -->
 
-# Testing
-[TOC]
+# 테스팅
 
-## Unit tests
+## 유닛 테스트
 
-TensorFlow provides a convenience class inheriting from `unittest.TestCase`
-which adds methods relevant to TensorFlow tests.  Here is an example:
+TensorFlow는 `unittest.TestCase`를 상속하고 TensorFlow 테스트와 관련된 메서드를 추가한 편리한 클래스를 제공합니다. 아래에 예시가 하나 있습니다.
 
     import tensorflow as tf
 
@@ -23,148 +21,117 @@ which adds methods relevant to TensorFlow tests.  Here is an example:
       tf.test.main()
 
 
-`tf.test.TestCase` inherits from `unittest.TestCase` but adds a few additional
-methods.  We will document these methods soon.
+`tf.test.TestCase`는 `unittest.TestCase`를 상속하지만 추가적인 메서드가 더 있습니다. 우리는 곧 이 메서드들에 대해 문서화를 할 것입니다.
 
 - - -
 
 ### `tf.test.main()` {#main}
 
-Runs all unit tests.
+모든 유닛 테스트를 실행합니다.
 
 
-
-## Utilities
+## 유틸리티
 
 - - -
 
 ### `tf.test.assert_equal_graph_def(actual, expected)` {#assert_equal_graph_def}
 
-Asserts that two `GraphDef`s are (mostly) the same.
+두 개의 `GraphDef`가 (대부분) 같은지 확인합니다.
 
-Compares two `GraphDef` protos for equality, ignoring versions and ordering of
-nodes, attrs, and control inputs.  Node names are used to match up nodes
-between the graphs, so the naming of nodes must be consistent.
+두 `GraphDef`의 원형이 같은지를 비교하는데 버전과 노드의 순서, 속성 그리고 제어 입력은 무시합니다. 노드명은 두 그래프 사이의 노드를 매칭하는데 사용되기 때문에 노드의 네이밍은 일관되어야합니다.
 
-##### Args:
+##### 인자:
 
 
-*  <b>`actual`</b>: The `GraphDef` we have.
-*  <b>`expected`</b>: The `GraphDef` we expected.
+*  <b>`actual`</b>: 테스트를 위한 `GraphDef`.
+*  <b>`expected`</b>: 예상값 `GraphDef`.
 
-##### Raises:
+##### 예외:
 
 
-*  <b>`AssertionError`</b>: If the `GraphDef`s do not match.
-*  <b>`TypeError`</b>: If either argument is not a `GraphDef`.
+*  <b>`AssertionError`</b>: 두 `GraphDef`가 매칭이 안될 경우 발생합니다.
+*  <b>`TypeError`</b>: 둘 중 하나라도 `GraphDef`가 아닐 경우 발생합니다.
 
 
 - - -
 
 ### `tf.test.get_temp_dir()` {#get_temp_dir}
 
-Returns a temporary directory for use during tests.
+테스트중 사용할 임시 디렉토리를 반환합니다.
 
-There is no need to delete the directory after the test.
+테스트 후 디렉토리를 삭제할 필요가 없습니다.
 
-##### Returns:
+##### 반환값:
 
-  The temporary directory.
-
+  임시 디렉토리.
 
 - - -
 
 ### `tf.test.is_built_with_cuda()` {#is_built_with_cuda}
 
-Returns whether TensorFlow was built with CUDA (GPU) support.
+TensorFlow의 CUDA (GPU) 지원 여부를 반환합니다.
 
+## 그라디언트(Gradient) 확인
 
-
-## Gradient checking
-
-[`compute_gradient`](#compute_gradient) and
-[`compute_gradient_error`](#compute_gradient_error) perform numerical
-differentiation of graphs for comparison against registered analytic gradients.
+[`compute_gradient`](#compute_gradient)와 [`compute_gradient_error`](#compute_gradient_error)는 등록된 해석적 그라디언트와 그래프의 수치 미분의 비교를 수행합니다.
 
 - - -
 
 ### `tf.test.compute_gradient(x, x_shape, y, y_shape, x_init_value=None, delta=0.001, init_targets=None)` {#compute_gradient}
 
-Computes and returns the theoretical and numerical Jacobian.
+이론 및 수치적 코비안을 계산한 후 반환합니다.
 
-If `x` or `y` is complex, the Jacobian will still be real but the
-corresponding Jacobian dimension(s) will be twice as large.  This is required
-even if both input and output is complex since TensorFlow graphs are not
-necessarily holomorphic, and may have gradients not expressible as complex
-numbers.  For example, if `x` is complex with shape `[m]` and `y` is complex
-with shape `[n]`, each Jacobian `J` will have shape `[m * 2, n * 2]` with
+만약 `x`또는 `y`가 복소수이면, 코비안은 여전히 실수지만 대응되는 코비안 차원은 두 배가 될 것입니다. TensorFlow 그래프가  정칙(holomorphic)일 필요는 없기 때문에 비록 입력과 출력이 모두 복소수라고 해도 이는 필수적입니다. 그리고 이는 복소수로써 표현될 수 없는 그라디언트를 가질 것입니다. 예를 들면, `x`가 `[m]` shape을 갖는 복소수이고 `y`가 `[n]` shape을 갖는 복소수일 때, 각 코비안 `J`는 다음과 같은 `[m * 2, n * 2]` shape을 갖게될 것입니다.
 
     J[:m, :n] = d(Re y)/d(Re x)
     J[:m, n:] = d(Im y)/d(Re x)
     J[m:, :n] = d(Re y)/d(Im x)
     J[m:, n:] = d(Im y)/d(Im x)
 
-##### Args:
+##### 인자:
 
 
-*  <b>`x`</b>: a tensor or list of tensors
-*  <b>`x_shape`</b>: the dimensions of x as a tuple or an array of ints. If x is a list,
-  then this is the list of shapes.
+*  <b>`x`</b>: 텐서 또는 텐서들의 리스트.
+*  <b>`x_shape`</b>: 정수형 튜플 또는 배열 형태의 x의 차원입니다. x가 리스트라면 이는 shape들의 리스트입니다.
 
-*  <b>`y`</b>: a tensor
-*  <b>`y_shape`</b>: the dimensions of y as a tuple or an array of ints.
-*  <b>`x_init_value`</b>: (optional) a numpy array of the same shape as "x"
-    representing the initial value of x. If x is a list, this should be a list
-    of numpy arrays.  If this is none, the function will pick a random tensor
-    as the initial value.
-*  <b>`delta`</b>: (optional) the amount of perturbation.
-*  <b>`init_targets`</b>: list of targets to run to initialize model params.
-    TODO(mrry): remove this argument.
+*  <b>`y`</b>: 텐서.
+*  <b>`y_shape`</b>: 정수형 튜플 또는 배열 형태의 y의 차원입니다.
+*  <b>`x_init_value`</b>: (선택적인) "x"와 같은 shape을 가진 numpy 배열로 x의 초기값을 나타냅니다. 만약 x가 리스트라면, 이는 numpy 배열의 리스트여야합니다. 만약 값이 없다면, 함수는 초기값 텐서를 랜덤으로 선택할 것입니다.
+*  <b>`delta`</b>: (선택적인) 섭동의 크기.
+*  <b>`init_targets`</b>: 모델 파라미터 초기화를 실행하기 위한 타겟들의 리스트.
+    TODO(mrry): 이 인자를 없앱니다.
 
-##### Returns:
+##### 반환값:
 
-  Two 2-d numpy arrays representing the theoretical and numerical
-  Jacobian for dy/dx. Each has "x_size" rows and "y_size" columns
-  where "x_size" is the number of elements in x and "y_size" is the
-  number of elements in y. If x is a list, returns a list of two numpy arrays.
-
+  dy/dx에 대한 이론 및 수치적 코비안을 나타내는 두 개의 이차원 numpy 배열. 각 각은 x의 원소의 갯수인 "x_size"개의 행과 y의 원소의 갯수인 "y_size"개의 열을 가집니다. 만약 x가 리스트라면, 두 개의 numpy 배열의 리스트를 반환합니다.
 
 - - -
 
 ### `tf.test.compute_gradient_error(x, x_shape, y, y_shape, x_init_value=None, delta=0.001, init_targets=None)` {#compute_gradient_error}
 
-Computes the gradient error.
+그라디언트 오차를 계산합니다.
 
-Computes the maximum error for dy/dx between the computed Jacobian and the
-numerically estimated Jacobian.
+계산된 코비안과 수치적으로 추정된 코비안간의 dy/dx에 대한 최대 오차를 계산합니다.
 
-This function will modify the tensors passed in as it adds more operations
-and hence changing the consumers of the operations of the input tensors.
+이 함수는 연산들을 추가함으로써 전달된 텐서를 변경시키고 따라서 입력 텐서의 연산을 사용하는 컨슈머들을 바꿉니다.
 
-This function adds operations to the current session. To compute the error
-using a particular device, such as a GPU, use the standard methods for
-setting a device (e.g. using with sess.graph.device() or setting a device
-function in the session constructor).
+이 함수는 현재 세션에 연산들을 추가합니다. GPU 같은 특정한 디바이스를 사용하여 오차를 계산하기 위해선 디바이스 설정을 위한 표준 메서드를 사용합니다. (예를 들면 with sess.graph.device()를 사용하거나 세션 생성자에 디바이스 함수를 설정)
 
-##### Args:
+##### 인자:
 
 
-*  <b>`x`</b>: a tensor or list of tensors
-*  <b>`x_shape`</b>: the dimensions of x as a tuple or an array of ints. If x is a list,
-  then this is the list of shapes.
+*  <b>`x`</b>: 텐서 또는 텐서들의 리스트.
+*  <b>`x_shape`</b>: 정수형 튜플 또는 배열 형태의 x의 차원입니다. x가 리스트라면 이는 shape들의 리스트입니다.
 
-*  <b>`y`</b>: a tensor
-*  <b>`y_shape`</b>: the dimensions of y as a tuple or an array of ints.
-*  <b>`x_init_value`</b>: (optional) a numpy array of the same shape as "x"
-    representing the initial value of x. If x is a list, this should be a list
-    of numpy arrays.  If this is none, the function will pick a random tensor
-    as the initial value.
-*  <b>`delta`</b>: (optional) the amount of perturbation.
-*  <b>`init_targets`</b>: list of targets to run to initialize model params.
-    TODO(mrry): Remove this argument.
+*  <b>`y`</b>: 텐서.
+*  <b>`y_shape`</b>: 정수형 튜플 또는 배열 형태의 y의 차원입니다.
+*  <b>`x_init_value`</b>: (선택적인) "x"와 같은 shape을 가진 numpy 배열로 x의 초기값을 나타냅니다. 만약 x가 리스트라면, 이는 numpy 배열의 리스트여야합니다. 만약 값이 없다면, 함수는 초기값 텐서를 랜덤으로 선택할 것입니다.
+*  <b>`delta`</b>: (선택적인) 섭동의 크기.
+*  <b>`init_targets`</b>: 모델 파라미터 초기화를 실행하기 위한 타겟들의 리스트.
+    TODO(mrry): 이 인자를 없앱니다.
 
-##### Returns:
+##### 반환값:
 
-  The maximum error in between the two Jacobians.
+  두 코비안간의 최대 오차값.
 
 

@@ -1,7 +1,6 @@
-# TensorFlow Whitepaper
+# 텐서플로우 백서
 
-If you use TensorFlow in your research and would like to cite the TensorFlow
-system, we suggest you cite the [whitepaper](http://download.tensorflow.org/paper/whitepaper2015.pdf):
+당신의 연구에서 텐서플로우를 사용하면서 텐서플로우 시스템을 인용하려는 경우에는 이 [백서](http://download.tensorflow.org/paper/whitepaper2015.pdf)를 인용하시기 바랍니다.     
 
 ```
 @misc{tensorflow2015-whitepaper,
@@ -53,7 +52,7 @@ author={
 }
 ```
 
-In textual form:
+텍스트 형태:
 
 ```
 Martín Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo,

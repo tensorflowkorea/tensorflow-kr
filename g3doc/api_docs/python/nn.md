@@ -163,7 +163,7 @@ case where both types are quantized.
 
 
 *  <b>`value`</b>: A `Tensor` with type `float`, `double`, `int64`, `int32`, `uint8`,
-    `int16`, `int8`, `complex64` or `complex128`.
+    `int16`, `int8`, `complex64`, or `complex128`.
 *  <b>`bias`</b>: A 1-D `Tensor` with size matching the last dimension of `value`.
     Must be the same type as `value` unless `value` is a quantized type,
     in which case a different quantized type may be used.
@@ -186,7 +186,7 @@ Specifically, `y = 1 / (1 + exp(-x))`.
 ##### Args:
 
 
-*  <b>`x`</b>: A Tensor with type `float`, `double`, `int32`, `complex64`, `complex128`, `int64`,
+*  <b>`x`</b>: A Tensor with type `float`, `double`, `int32`, `complex64`, `int64`,
     or `qint32`.
 *  <b>`name`</b>: A name for the operation (optional).
 
@@ -205,7 +205,7 @@ Computes hyperbolic tangent of `x` element-wise.
 ##### Args:
 
 
-*  <b>`x`</b>: A Tensor with type `float`, `double`, `int32`, `complex64`, `complex128`, `int64`,
+*  <b>`x`</b>: A Tensor with type `float`, `double`, `int32`, `complex64`, `int64`,
     or `qint32`.
 *  <b>`name`</b>: A name for the operation (optional).
 
@@ -368,6 +368,7 @@ same horizontal and vertical strides, `strides = [1, stride, stride, 1]`.
 *  <b>`strides`</b>: 1-D of size 4.  The stride of the sliding window for each
     dimension of `input`.
 *  <b>`padding`</b>: A string, either `'VALID'` or `'SAME'`.  The padding algorithm.
+    See the [comment here](https://www.tensorflow.org/api_docs/python/nn.html#convolution)
 *  <b>`name`</b>: A name for this operation (optional).
 
 ##### Returns:
@@ -412,6 +413,7 @@ horizontal and vertical strides, `strides = [1, stride, stride, 1]`.
 *  <b>`strides`</b>: 1-D of size 4.  The strides for the depthwise convolution for
     each dimension of `input`.
 *  <b>`padding`</b>: A string, either `'VALID'` or `'SAME'`.  The padding algorithm.
+    See the [comment here](https://www.tensorflow.org/api_docs/python/nn.html#convolution)
 *  <b>`name`</b>: A name for this operation (optional).
 
 ##### Returns:
@@ -559,6 +561,7 @@ deconvolution.
 *  <b>`strides`</b>: A list of ints. The stride of the sliding window for each
     dimension of the input tensor.
 *  <b>`padding`</b>: A string, either `'VALID'` or `'SAME'`. The padding algorithm.
+    See the [comment here](https://www.tensorflow.org/api_docs/python/nn.html#convolution)
 *  <b>`name`</b>: Optional name for the returned tensor.
 
 ##### Returns:
@@ -640,6 +643,7 @@ window in `value`.
     The stride of the sliding window for each dimension of the
     input tensor.
 *  <b>`padding`</b>: A string, either `'VALID'` or `'SAME'`. The padding algorithm.
+    See the [comment here](https://www.tensorflow.org/api_docs/python/nn.html#convolution)
 *  <b>`data_format`</b>: A string. 'NHWC' and 'NCHW' are supported.
 *  <b>`name`</b>: Optional name for the operation.
 
@@ -664,6 +668,7 @@ Performs the max pooling on the input.
 *  <b>`strides`</b>: A list of ints that has length >= 4.  The stride of the sliding
     window for each dimension of the input tensor.
 *  <b>`padding`</b>: A string, either `'VALID'` or `'SAME'`. The padding algorithm.
+    See the [comment here](https://www.tensorflow.org/api_docs/python/nn.html#convolution)
 *  <b>`data_format`</b>: A string. 'NHWC' and 'NCHW' are supported.
 *  <b>`name`</b>: Optional name for the operation.
 
@@ -756,6 +761,141 @@ Performs 3D max pooling on the input.
 ##### Returns:
 
   A `Tensor`. Has the same type as `input`. The max pooled output tensor.
+
+
+
+## Morphological filtering
+
+Morphological operators are non-linear filters used in image processing.
+
+[Greyscale morphological dilation]
+(https://en.wikipedia.org/wiki/Dilation_(morphology)) is the max-sum counterpart
+of standard sum-product convolution:
+
+    output[b, y, x, c] =
+        max_{dy, dx} input[b,
+                           strides[1] * y + rates[1] * dy,
+                           strides[2] * x + rates[2] * dx,
+                           c] +
+                     filter[dy, dx, c]
+
+The `filter` is usually called structuring function. Max-pooling is a special
+case of greyscale morphological dilation when the filter assumes all-zero
+values (a.k.a. flat structuring function).
+
+[Greyscale morphological erosion]
+(https://en.wikipedia.org/wiki/Erosion_(morphology)) is the min-sum counterpart
+of standard sum-product convolution:
+
+    output[b, y, x, c] =
+        min_{dy, dx} input[b,
+                           strides[1] * y - rates[1] * dy,
+                           strides[2] * x - rates[2] * dx,
+                           c] -
+                     filter[dy, dx, c]
+
+Dilation and erosion are dual to each other. The dilation of the input signal
+`f` by the structuring signal `g` is equal to the negation of the erosion of
+`-f` by the reflected `g`, and vice versa.
+
+Striding and padding is carried out in exactly the same way as in standard
+convolution. Please refer to the `Convolution` section for details.
+
+- - -
+
+### `tf.nn.dilation2d(input, filter, strides, rates, padding, name=None)` {#dilation2d}
+
+Computes the grayscale dilation of 4-D `input` and 3-D `filter` tensors.
+
+The `input` tensor has shape `[batch, in_height, in_width, depth]` and the
+`filter` tensor has shape `[filter_height, filter_width, depth]`, i.e., each
+input channel is processed independently of the others with its own structuring
+function. The `output` tensor has shape
+`[batch, out_height, out_width, depth]`. The spatial dimensions of the output
+tensor depend on the `padding` algorithm. We currently only support the default
+"NHWC" `data_format`.
+
+In detail, the grayscale morphological 2-D dilation is the max-sum correlation
+(for consistency with `conv2d`, we use unmirrored filters):
+
+    output[b, y, x, c] =
+       max_{dy, dx} input[b,
+                          strides[1] * y + rates[1] * dy,
+                          strides[2] * x + rates[2] * dx,
+                          c] +
+                    filter[dy, dx, c]
+
+Max-pooling is a special case when the filter has size equal to the pooling
+kernel size and contains all zeros.
+
+##### Args:
+
+
+*  <b>`input`</b>: A `Tensor`. Must be one of the following types: `float32`, `float64`, `int32`, `int64`, `uint8`, `int16`, `int8`, `uint16`, `half`.
+*  <b>`filter`</b>: A `Tensor`. Must have the same type as `input`.
+*  <b>`strides`</b>: A list of `ints` that has length `>= 4`.
+*  <b>`rates`</b>: A list of `ints` that has length `>= 4`.
+*  <b>`padding`</b>: A `string` from: `"SAME", "VALID"`.
+*  <b>`name`</b>: A name for the operation (optional).
+
+##### Returns:
+
+  A `Tensor`. Has the same type as `input`.
+
+
+- - -
+
+### `tf.nn.erosion2d(value, kernel, strides, rates, padding, name=None)` {#erosion2d}
+
+Computes the grayscale erosion of 4-D `value` and 3-D `kernel` tensors.
+
+The `value` tensor has shape `[batch, in_height, in_width, depth]` and the
+`kernel` tensor has shape `[kernel_height, kernel_width, depth]`, i.e.,
+each input channel is processed independently of the others with its own
+structuring function. The `output` tensor has shape
+`[batch, out_height, out_width, depth]`. The spatial dimensions of the
+output tensor depend on the `padding` algorithm. We currently only support the
+default "NHWC" `data_format`.
+
+In detail, the grayscale morphological 2-D erosion is given by:
+
+    output[b, y, x, c] =
+       min_{dy, dx} value[b,
+                          strides[1] * y - rates[1] * dy,
+                          strides[2] * x - rates[2] * dx,
+                          c] -
+                    kernel[dy, dx, c]
+
+Duality: The erosion of `value` by the `kernel` is equal to the negation of
+the dilation of `-value` by the reflected `kernel`.
+
+##### Args:
+
+
+*  <b>`value`</b>: A `Tensor`. 4-D with shape `[batch, in_height, in_width, depth]`.
+*  <b>`kernel`</b>: A `Tensor`. Must have the same type as `value`.
+    3-D with shape `[kernel_height, kernel_width, depth]`.
+*  <b>`strides`</b>: A list of `ints` that has length `>= 4`.
+    1-D of length 4. The stride of the sliding window for each dimension of
+    the input tensor. Must be: `[1, stride_height, stride_width, 1]`.
+*  <b>`rates`</b>: A list of `ints` that has length `>= 4`.
+    1-D of length 4. The input stride for atrous morphological dilation.
+    Must be: `[1, rate_height, rate_width, 1]`.
+*  <b>`padding`</b>: A `string` from: `"SAME", "VALID"`.
+    The type of padding algorithm to use.
+*  <b>`name`</b>: A name for the operation (optional). If not specified "erosion2d"
+    is used.
+
+##### Returns:
+
+  A `Tensor`. Has the same type as `value`.
+  4-D with shape `[batch, out_height, out_width, depth]`.
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: If the `value` depth does not match `kernel`' shape, or if
+    padding is other than `'VALID'` or `'SAME'`.
 
 
 
@@ -1304,6 +1444,232 @@ is the sum of the size of params along dimension 0.
 *  <b>`TypeError`</b>: If sp_ids is not a SparseTensor, or if sp_weights is neither
     None nor SparseTensor.
 *  <b>`ValueError`</b>: If combiner is not one of {"mean", "sqrtn", "sum"}.
+
+
+
+## Recurrent Neural Networks
+
+TensorFlow provides a number of methods for constructing Recurrent
+Neural Networks.  Most accept an `RNNCell`-subclassed object
+(see the documentation for `tf.nn.rnn_cell`).
+
+- - -
+
+### `tf.nn.dynamic_rnn(cell, inputs, sequence_length=None, initial_state=None, dtype=None, parallel_iterations=None, swap_memory=False, time_major=False, scope=None)` {#dynamic_rnn}
+
+Creates a recurrent neural network specified by RNNCell `cell`.
+
+This function is functionally identical to the function `rnn` above, but
+performs fully dynamic unrolling of `inputs`.
+
+Unlike `rnn`, the input `inputs` is not a Python list of `Tensors`.  Instead,
+it is a single `Tensor` where the maximum time is either the first or second
+dimension (see the parameter `time_major`).  The corresponding output is
+a single `Tensor` having the same number of time steps and batch size.
+
+The parameter `sequence_length` is required and dynamic calculation is
+automatically performed.
+
+##### Args:
+
+
+*  <b>`cell`</b>: An instance of RNNCell.
+*  <b>`inputs`</b>: The RNN inputs.
+    If time_major == False (default), this must be a tensor of shape:
+      `[batch_size, max_time, input_size]`.
+    If time_major == True, this must be a tensor of shape:
+      `[max_time, batch_size, input_size]`.
+*  <b>`sequence_length`</b>: (optional) An int32/int64 vector sized `[batch_size]`.
+*  <b>`initial_state`</b>: (optional) An initial state for the RNN.
+    If `cell.state_size` is an integer, this must be
+    a tensor of appropriate type and shape `[batch_size x cell.state_size]`.
+    If `cell.state_size` is a tuple, this should be a tuple of
+    tensors having shapes `[batch_size, s] for s in cell.state_size`.
+*  <b>`dtype`</b>: (optional) The data type for the initial state.  Required if
+    initial_state is not provided.
+*  <b>`parallel_iterations`</b>: (Default: 32).  The number of iterations to run in
+    parallel.  Those operations which do not have any temporal dependency
+    and can be run in parallel, will be.  This parameter trades off
+    time for space.  Values >> 1 use more memory but take less time,
+    while smaller values use less memory but computations take longer.
+*  <b>`swap_memory`</b>: Transparently swap the tensors produced in forward inference
+    but needed for back prop from GPU to CPU.  This allows training RNNs
+    which would typically not fit on a single GPU, with very minimal (or no)
+    performance penalty.
+*  <b>`time_major`</b>: The shape format of the `inputs` and `outputs` Tensors.
+    If true, these `Tensors` must be shaped `[max_time, batch_size, depth]`.
+    If false, these `Tensors` must be shaped `[batch_size, max_time, depth]`.
+    Using `time_major = True` is a bit more efficient because it avoids
+    transposes at the beginning and end of the RNN calculation.  However,
+    most TensorFlow data is batch-major, so by default this function
+    accepts input and emits output in batch-major form.
+*  <b>`scope`</b>: VariableScope for the created subgraph; defaults to "RNN".
+
+##### Returns:
+
+  A pair (outputs, state) where:
+
+*  <b>`outputs`</b>: The RNN output `Tensor`.
+      If time_major == False (default), this will be a `Tensor` shaped:
+        `[batch_size, max_time, cell.output_size]`.
+      If time_major == True, this will be a `Tensor` shaped:
+        `[max_time, batch_size, cell.output_size]`.
+*  <b>`state`</b>: The final state.  If `cell.state_size` is a `Tensor`, this
+      will be shaped `[batch_size, cell.state_size]`.  If it is a tuple,
+      this be a tuple with shapes `[batch_size, s] for s in cell.state_size`.
+
+##### Raises:
+
+
+*  <b>`TypeError`</b>: If `cell` is not an instance of RNNCell.
+*  <b>`ValueError`</b>: If inputs is None or an empty list.
+
+
+- - -
+
+### `tf.nn.rnn(cell, inputs, initial_state=None, dtype=None, sequence_length=None, scope=None)` {#rnn}
+
+Creates a recurrent neural network specified by RNNCell `cell`.
+
+##### The simplest form of RNN network generated is:
+
+  state = cell.zero_state(...)
+  outputs = []
+  for input_ in inputs:
+    output, state = cell(input_, state)
+    outputs.append(output)
+  return (outputs, state)
+
+However, a few other options are available:
+
+An initial state can be provided.
+If the sequence_length vector is provided, dynamic calculation is performed.
+This method of calculation does not compute the RNN steps past the maximum
+sequence length of the minibatch (thus saving computational time),
+and properly propagates the state at an example's sequence length
+to the final state output.
+
+The dynamic calculation performed is, at time t for batch row b,
+  (output, state)(b, t) =
+    (t >= sequence_length(b))
+      ? (zeros(cell.output_size), states(b, sequence_length(b) - 1))
+      : cell(input(b, t), state(b, t - 1))
+
+##### Args:
+
+
+*  <b>`cell`</b>: An instance of RNNCell.
+*  <b>`inputs`</b>: A length T list of inputs, each a tensor of shape
+    [batch_size, input_size].
+*  <b>`initial_state`</b>: (optional) An initial state for the RNN.
+    If `cell.state_size` is an integer, this must be
+    a tensor of appropriate type and shape `[batch_size x cell.state_size]`.
+    If `cell.state_size` is a tuple, this should be a tuple of
+    tensors having shapes `[batch_size, s] for s in cell.state_size`.
+*  <b>`dtype`</b>: (optional) The data type for the initial state.  Required if
+    initial_state is not provided.
+*  <b>`sequence_length`</b>: Specifies the length of each sequence in inputs.
+    An int32 or int64 vector (tensor) size `[batch_size]`, values in `[0, T)`.
+*  <b>`scope`</b>: VariableScope for the created subgraph; defaults to "RNN".
+
+##### Returns:
+
+  A pair (outputs, state) where:
+    - outputs is a length T list of outputs (one for each input)
+    - state is the final state
+
+##### Raises:
+
+
+*  <b>`TypeError`</b>: If `cell` is not an instance of RNNCell.
+*  <b>`ValueError`</b>: If `inputs` is `None` or an empty list, or if the input depth
+    (column size) cannot be inferred from inputs via shape inference.
+
+
+- - -
+
+### `tf.nn.state_saving_rnn(cell, inputs, state_saver, state_name, sequence_length=None, scope=None)` {#state_saving_rnn}
+
+RNN that accepts a state saver for time-truncated RNN calculation.
+
+##### Args:
+
+
+*  <b>`cell`</b>: An instance of `RNNCell`.
+*  <b>`inputs`</b>: A length T list of inputs, each a tensor of shape
+    `[batch_size, input_size]`.
+*  <b>`state_saver`</b>: A state saver object with methods `state` and `save_state`.
+*  <b>`state_name`</b>: Python string or tuple of strings.  The name to use with the
+    state_saver. If the cell returns tuples of states (i.e.,
+    `cell.state_size` is a tuple) then `state_name` should be a tuple of
+    strings having the same length as `cell.state_size`.  Otherwise it should
+    be a single string.
+*  <b>`sequence_length`</b>: (optional) An int32/int64 vector size [batch_size].
+    See the documentation for rnn() for more details about sequence_length.
+*  <b>`scope`</b>: VariableScope for the created subgraph; defaults to "RNN".
+
+##### Returns:
+
+  A pair (outputs, state) where:
+    outputs is a length T list of outputs (one for each input)
+    states is the final state
+
+##### Raises:
+
+
+*  <b>`TypeError`</b>: If `cell` is not an instance of RNNCell.
+*  <b>`ValueError`</b>: If `inputs` is `None` or an empty list, or if the arity and
+   type of `state_name` does not match that of `cell.state_size`.
+
+
+- - -
+
+### `tf.nn.bidirectional_rnn(cell_fw, cell_bw, inputs, initial_state_fw=None, initial_state_bw=None, dtype=None, sequence_length=None, scope=None)` {#bidirectional_rnn}
+
+Creates a bidirectional recurrent neural network.
+
+Similar to the unidirectional case above (rnn) but takes input and builds
+independent forward and backward RNNs with the final forward and backward
+outputs depth-concatenated, such that the output will have the format
+[time][batch][cell_fw.output_size + cell_bw.output_size]. The input_size of
+forward and backward cell must match. The initial state for both directions
+is zero by default (but can be set optionally) and no intermediate states are
+ever returned -- the network is fully unrolled for the given (passed in)
+length(s) of the sequence(s) or completely unrolled if length(s) is not given.
+
+##### Args:
+
+
+*  <b>`cell_fw`</b>: An instance of RNNCell, to be used for forward direction.
+*  <b>`cell_bw`</b>: An instance of RNNCell, to be used for backward direction.
+*  <b>`inputs`</b>: A length T list of inputs, each a tensor of shape
+    [batch_size, input_size].
+*  <b>`initial_state_fw`</b>: (optional) An initial state for the forward RNN.
+    This must be a tensor of appropriate type and shape
+    `[batch_size x cell_fw.state_size]`.
+    If `cell_fw.state_size` is a tuple, this should be a tuple of
+    tensors having shapes `[batch_size, s] for s in cell_fw.state_size`.
+*  <b>`initial_state_bw`</b>: (optional) Same as for `initial_state_fw`, but using
+    the corresponding properties of `cell_bw`.
+*  <b>`dtype`</b>: (optional) The data type for the initial state.  Required if
+    either of the initial states are not provided.
+*  <b>`sequence_length`</b>: (optional) An int32/int64 vector, size `[batch_size]`,
+    containing the actual lengths for each of the sequences.
+*  <b>`scope`</b>: VariableScope for the created subgraph; defaults to "BiRNN"
+
+##### Returns:
+
+  A tuple (outputs, output_state_fw, output_state_bw) where:
+    outputs is a length `T` list of outputs (one for each input), which
+      are depth-concatenated forward and backward outputs.
+    output_state_fw is the final state of the forward rnn.
+    output_state_bw is the final state of the backward rnn.
+
+##### Raises:
+
+
+*  <b>`TypeError`</b>: If `cell_fw` or `cell_bw` is not an instance of `RNNCell`.
+*  <b>`ValueError`</b>: If inputs is None or an empty list.
 
 
 

@@ -1,17 +1,18 @@
-# Introduction
+# 소개
 
-Below are few simple examples of the API to get you started with TensorFlow Learn.
-For more examples, please see [examples](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow).
+TensorFlow Learn을 시작하기 위한 간단한 몇 가지 API를 소개합니다.
+더 많은 예제들을 보시려면, 이 링크를 참고해주세요. [examples](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow).
 
-## General tips
 
--  It's useful to re-scale dataset before passing to estimator to 0 mean and unit standard deviation. Stochastic Gradient Descent doesn't always do the right thing when variable are very different scale.
+## 일반적인 팁들
 
--  Categorical variables should be managed before passing input to the estimator.
+- estimator로 전달하기 전에 0 mean이나 단위 표준편차로 리스케일하는 것이 좋습니다. Stochastic Gradient Descent는 변수들의 스케일이 너무 다르면 제대로 작동하지 않습니다.
 
-## Linear Classifier
+- 카테고리 변수 역시 estimator에 넣기 전에 전처리가 필요합니다.
 
-Simple linear classification:
+## 선형 분류기(Linear Classifier)
+
+간단한 선형 분류기 예:
 
     from tensorflow.contrib import learn
     from sklearn import datasets, metrics
@@ -22,9 +23,9 @@ Simple linear classification:
     score = metrics.accuracy_score(iris.target, classifier.predict(iris.data))
     print("Accuracy: %f" % score)
 
-## Linear Regressor
+## 선형 회귀(Linear Regressor)
 
-Simple linear regression:
+간단한 선형 회귀 예:
 
     from tensorflow.contrib import learn
     from sklearn import datasets, metrics, preprocessing
@@ -36,9 +37,9 @@ Simple linear regression:
     score = metrics.mean_squared_error(regressor.predict(X), boston.target)
     print ("MSE: %f" % score)
 
-## Deep Neural Network
+## 깊은 인공 신경망(Deep Neural Network)
 
-Example of 3 layer network with 10, 20 and 10 hidden units respectively:
+각각 10, 20, 30개의 히든 유닛을 가진 3개의 레이어에 대한 예제:
 
     from tensorflow.contrib import learn
     from sklearn import datasets, metrics
@@ -49,9 +50,9 @@ Example of 3 layer network with 10, 20 and 10 hidden units respectively:
     score = metrics.accuracy_score(iris.target, classifier.predict(iris.data))
     print("Accuracy: %f" % score)
 
-## Custom model
+## 커스텀 모델(Custom model)
 
-Example of how to pass a custom model to the TensorFlowEstimator:
+TensorFlowEstimator에 커스텀 모델을 전달하는 예제:
 
     from tensorflow.contrib import learn
     from sklearn import datasets, metrics
@@ -68,11 +69,12 @@ Example of how to pass a custom model to the TensorFlowEstimator:
     score = metrics.accuracy_score(iris.target, classifier.predict(iris.data))
     print("Accuracy: %f" % score)
 
-## Saving / Restoring models
+## 모델 저장/불러오기(Saving / Restoring models)
 
-Each estimator has a ``save`` method which takes folder path where all model information will be saved. For restoring you can just call ``learn.TensorFlowEstimator.restore(path)`` and it will return object of your class.
+각 estimator는 모델 정보가 저장 될 폴더 경로를 인자로 가지는 ``save`` 메소드를 가지고 있습니다. 다시 불러오기 위해서 당신은 단지
+``learn.TensorFlowEstimator.restore(path)`` 명령을 사용하면 됩니다. 이는 당신 클래스의 객체를 리턴할 것입니다.
 
-Some example code:
+예제 코드:
 
     from tensorflow.contrib import learn
 
@@ -83,30 +85,31 @@ Some example code:
     new_classifier = TensorFlowEstimator.restore('/tmp/tf_examples/my_model_2')
     new_classifier.predict(...)
 
-## Summaries
+## 요약(Summaries)
 
-To get nice visualizations and summaries you can use ``logdir`` parameter on ``fit``. It will start writing summaries for ``loss`` and histograms for variables in your model. You can also add custom summaries in your custom model function by calling ``tf.summary`` and passing Tensors to report.
+괜찮은 시각화와 요약을 위해서 당신은 ``fit`` 메소드에 ``logdir`` 인자를 추가하면 됩니다. 이는 ``loss`` 와 당신 모델 변수들에 대한 히스토그램을 기록할 것입니다. 당신은 또한 ``tf.summary`` 를 사용하여 커스텀 모델에 대한 요약을 추가할 수도 있습니다. 
+
 
     classifier = learn.TensorFlowLinearRegression()
     classifier.fit(X, y, logdir='/tmp/tf_examples/my_model_1/')
 
-Then run next command in command line:
+위 명령 수행 후 아래 명령을 실행하고:
 
     tensorboard --logdir=/tmp/tf_examples/my_model_1
 
-and follow reported url.
+reported url로 가면 아래 내용 확인 가능.
 
 Graph visualization: Text classification RNN Graph image
 
 Loss visualization: Text classification RNN Loss image
 
 
-## More examples
+## 더 많은 예제들은
 
-See [examples folder](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow) for:
+이 링크를 참고해주세요. [examples folder](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/skflow) for:
 
--  Easy way to handle categorical variables - words are just an example of categorical variable.
--  Text Classification - see examples for RNN, CNN on word and characters.
--  Language modeling and text sequence to sequence.
--  Images (CNNs) - see example for digit recognition.
--  More & deeper - different examples showing DNNs and CNNs
+-  카테고리 변수를 처리하는 간단한 방법 - 단어들은 단지 하나의 카테고리 변수에 지나지 않는다.
+-  텍스트 분류 - 단어와 문자들에 대한 RNN, CNN 예제들
+-  언어 모델링과 텍스트 sequence to sequence.
+-  이미지들( CNNs) - 숫자 인식 예제를 보시오.
+-  심화 내용 - 다양한 DNNs 과 CNNs에 관한 예제들
