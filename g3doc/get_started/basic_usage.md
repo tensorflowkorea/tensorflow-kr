@@ -19,7 +19,7 @@ OP는 몇 가지의 연산을 하기 되고, 제로 또는 하나 이상의 `Ten
 TensorFlow의 graph는 컴퓨터 연산의 *description* 설명이다. 어떤것을 연산하든, graph는
 반드시 `Session` 안에서 실행되어야 한다. `Session`은 graph 작은 단위 연산들을 CPUs 또는 GPUs
 불리우는 `Devices`에 배치시키고, 작은 단위 연산(ops)들이 작동할수 있는 기능을 제공한다.
-이런 기능은 단위 연산(ops)에 의해서 tensors 들이 만들어진다. 파이션에서는 `ndarray` 오프젝트로
+이런 기능은 단위 연산(ops)에 의해서 tensors 들이 만들어진다. 파이썬에서는 `ndarray` 오프젝트로
 C 와 C++ 에서는 `TensorFlow::Tensor` 오프젝트를 만들어내게 된다.
 
 ## The computation graph
@@ -160,11 +160,11 @@ Session 과 클러스터 의 분산처리에 대한 더 많은 정보는 [Distri
 
 ## Interactive Usage
 
-이 문서에 있는 파이션 예제들은 [`Session`](../api_docs/python/client.md#Session) 과
+이 문서에 있는 파이썬 예제들은 [`Session`](../api_docs/python/client.md#Session) 과
 [`Session.run()`](../api_docs/python/client.md#Session.run) 함수를 사용해서 graph
 의 연산들을 동작 시킨다.
 
-인터렉티브 파이선 환경 [IPython](http://ipython.org) 에서는 [`InteractiveSession`](../api_docs/python/client.md#InteractiveSession) 클래스,
+인터렉티브 파이썬 환경 [IPython](http://ipython.org) 에서는 [`InteractiveSession`](../api_docs/python/client.md#InteractiveSession) 클래스,
 [`Tensor.eval()`](../api_docs/python/framework.md#Tensor.eval) 와 [`Operation.run()`](../api_docs/python/framework.md#Operation.run) 함수를 사용 할 수 있다.
 이것은 세션안에서 변수의 홀딩을 피할수 있기 한다.
 
