@@ -1,14 +1,8 @@
-# TensorFlow Linear Model Tutorial
+# TensorFlow 선형 모델 튜토리얼 
 
-In this tutorial, we will use the TF.Learn API in TensorFlow to solve a binary
-classification problem: Given census data about a person such as age, gender,
-education and occupation (the features), we will try to predict whether or not
-the person earns more than 50,000 dollars a year (the target label). We will
-train a **logistic regression** model, and given an individual's information our
-model will output a number between 0 and 1, which can be interpreted as the
-probability that the individual has an annual income of over 50,000 dollars.
+이번 강의에서 우리는 이진 분류 문제를 사람에 나이, 성별, 교육, 그리고 직업(특성들)에 관한 인구조사 데이터를 가지고 한 사람의 연봉이 50,000불이 넘는지를 TensorFlow에 TF.Learn API를 사용해서 풀어 볼 것이다(목표 레이블). 우리는 **로지스틱 회귀** 모델을 주어진 개인들에 정보를 가지고 교육 시킬 것이고 모델은 개인의 년봉이 50000달러 이상일 수 있는 가능성으로 해석 될 수 있는 0 과 1 사이의 숫자를 출력 한다.
 
-## Setup
+## 설치
 
 To try the code for this tutorial:
 
