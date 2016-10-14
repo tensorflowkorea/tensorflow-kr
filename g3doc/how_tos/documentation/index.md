@@ -1,17 +1,16 @@
 # Writing TensorFlow Documentation
 
-TensorFlow's documentation is maintained in
-[Markdown](https://daringfireball.net/projects/markdown/), and resides in the
-`g3doc/` directory. The *Introduction*, *Overview*, *Tutorials*, and *How-Tos*
-sections are manually edited.
+TensorFlow의 문서는 
+[Markdown](https://daringfireball.net/projects/markdown/)에서 유지되고 있습니다, 그리고 
+`g3doc/` 디렉토리에 존재합니다. *Introduction*, *Overview*, *Tutorials*, *How-Tos*
+부분은 수작업으로 수정됩니다.
 
-Anything in the `g3doc/api_docs` directory is generated from comments in the
-code, and should not be edited directly. The script `tools/docs/gen_docs.sh`
-generates the API documentation. If called without arguments, it rebuilds the
-Python API documentation only (i.e., documentation for Ops, whether defined in
-Python or C++). If `-a` is passed, it also rebuilds the documentation for the
-C++ API. It must be called from the `tools/docs` directory, and if called with
-`-a`, requires `doxygen` to be installed.
+`g3doc/api_docs` 디렉토리에 있는 어떤 것이든 코드에 있는 주석으로부터 생성되기 때문에
+직접 수정해선 안됩니다. `tools/docs/gen_docs.sh` 스크립트는
+API문서를 생성합니다. 스크립트를 인자 없이 호출하면,파이썬 API 문서만을 재작성합니다. 
+(i.e., documentation for Ops, whether defined in Python or C++). `-a` 를 인자로 전달하면 
+C++ 문서 또한 재작성합니다. 이것은 반드시 `tools/docs` 디렉토리에서 호출되어야 합니다. 
+그리고 `-a` 를 인자로 전달하려면 `doxygen` 의 설치가 요구됩니다.
 
 ## Python API Documentation
 
