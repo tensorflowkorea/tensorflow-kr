@@ -7,19 +7,18 @@ TensorFlow의 문서는
 
 `g3doc/api_docs` 디렉토리에 있는 어떤 것이든 코드에 있는 주석으로부터 생성되기 때문에
 직접 수정해선 안됩니다. `tools/docs/gen_docs.sh` 스크립트는
-API문서를 생성합니다. 스크립트를 인자 없이 호출하면,파이썬 API 문서만을 재작성합니다. 
+API문서를 생성합니다. 스크립트를 인자 없이 호출하면 파이썬 API 문서만을 재작성합니다. 
 (i.e., documentation for Ops, whether defined in Python or C++). `-a` 를 인자로 전달하면 
 C++ 문서 또한 재작성합니다. 이것은 반드시 `tools/docs` 디렉토리에서 호출되어야 합니다. 
 그리고 `-a` 를 인자로 전달하려면 `doxygen` 의 설치가 요구됩니다.
 
 ## Python API Documentation
 
-Ops, classes, and utility functions are defined in Python modules, such as
-`image_ops.py`. The module docstring is inserted at the beginning of the
-Markdown file generated for the Python file. Thus, `image_ops.md` starts with
-the module docstring in `image_ops.py`. `python/framework/gen_docs_combined.py`
-contains the list of all _libraries_ for which Markdown files are created. If
-you are adding a new library (generating a separate section in the API
+Ops, classes, utility 합수는 `image_ops.py` 와 같은 파이썬 모듈에 정의되어 있습니다. 
+그 모듈의 docstring은 해당 파이썬 파일에 대해 생성되는 마크다운 파일의 시작부분에 삽입됩니다. 
+그래서 `image_ops.md` 는 `image_ops.py` 모듈에 있는 docstring으로 시작합니다. 
+`python/framework/gen_docs_combined.py` contains the list of all _libraries_ for which Markdown files are created. 
+If you are adding a new library (generating a separate section in the API
 documentation), you have to add it to the list of libraries in
 `gen_docs_combined.py`. For the C++ api, only a single library file exists, its
 Markdown is a string in `gen_cc_md.py`, from which `api_docs/cc/index.md` is
