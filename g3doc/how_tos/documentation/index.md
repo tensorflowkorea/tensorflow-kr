@@ -1,7 +1,7 @@
 # Writing TensorFlow Documentation
 
 TensorFlow의 문서는 
-[Markdown](https://daringfireball.net/projects/markdown/)에서 유지되고 있습니다, 그리고 
+[Markdown](https://daringfireball.net/projects/markdown/)에서 유지되고 있고 
 `g3doc/` 디렉토리에 존재합니다. *Introduction*, *Overview*, *Tutorials*, *How-Tos*
 부분은 수작업으로 수정됩니다.
 
@@ -14,26 +14,26 @@ C++ 문서 또한 재작성합니다. 이것은 반드시 `tools/docs` 디렉토
 
 ## Python API Documentation
 
-Ops, classes, utility 합수는 `image_ops.py` 와 같은 Python 모듈에 정의되어 있습니다. 
+Ops, classes, utility 함수는 `image_ops.py` 와 같은 Python 모듈에 정의되어 있습니다. 
 그 모듈의 docstring은 해당 Python 파일에 대해 생성되는 마크다운 파일의 시작부분에 삽입됩니다. 
 그래서 `image_ops.md` 는 `image_ops.py` 모듈에 있는 docstring으로 시작합니다. 
 `python/framework/gen_docs_combined.py` 는 마크다운 파일이 생성되는 모든 _libraries_(_라이브러리_) 목록을 포함하고 있습니다. 
 만약에 새로운 라이브러리를 더한다면 (API 문서에 독립된 섹션을 생성하는 것), 
-반드시 have to add it to the list of libraries in `gen_docs_combined.py` 에 있는 라이브러리 목록에 추가해야 합니다. 
+반드시 `gen_docs_combined.py` 에 있는 라이브러리 목록에 추가해야 합니다. 
 C++ API는 하나의 라이브러리 파일만 존재합니다, 그것의 마크다운은 `api_docs/cc/index.md` 에서 생성된 `gen_cc_md.py` 의 문자열입니다. 
 나머지 C++문서들은 doxygen에 의해 만들어진 XML파일로부터 생성됩니다.
 
 라이브러리로 등록된 파일의 모듈 docstring에서, (빈 줄의 시작 부분에) `@@<python-name>` 문법으로 
 Ops, classes, functions를 호출해 그것들을 위해 생성된 문서를 삽입할 수 있습니다. 
-호출한 op, function 또는 class는 같은 파일에서 또 정의될 필요가 없습니다.
+호출한 op, function 또는 class는 같은 파일에서 정의될 필요가 없습니다.
 이것은 Ops, classes, functions가 기록되는 순서를 정할 수 있게 해줍니다.
 고수준의 문서를 적절히 배치해서 논리적인 순서로 나누세요. 
 
 모든 공개된 op, class, function 은 반드시 라이브러리의 서두에서 `@@` 로 호출되어야 합니다. 
-그렇게 하지 않을 경우 `doc_gen_test` 를 실패하게 됩니다.
+그렇게 하지 않을 경우 `doc_gen_test` 가 실패하게 됩니다.
 
 Ops를 위한 문서는 자동적으로 Python wrapper 또는 C++ Ops registrations로 부터 발췌합니다. 
-Python wrappers를 우선적으로 가져옵니다.
+둘 중 Python wrappers를 우선적으로 가져옵니다.
 
 * Python wrappers는 `python/ops/*.py` 에 있습니다.
 * C++ Ops registrations는 `core/ops/*.cc` 에 있습니다.
@@ -247,14 +247,14 @@ def foo(x, y, name="bar"):
 
   ...
 ```
-시
+
 ## Description of the Docstring Sections
 
-Here is more detail and examples for each of the elements of the docstrings.
+여기에 더 자세한 내용과 docstring의 각 속성에 대한 예시가 있습니다.
 
 ### Short sentence that describes what the op does.
 
-Examples:
+예시:
 
 ```markdown
 Concatenates tensors.
@@ -278,7 +278,7 @@ Extracts a slice from a tensor.
 
 ### Short description of what happens when you pass arguments to the op.
 
-Examples:
+예시:
 
 ```markdown
 Given a tensor input of numerical type, this operation returns a tensor of
@@ -294,12 +294,12 @@ all elements set to zero.
 
 ### Example showing how the op works.
 
-The `squeeze()` op has a nice pseudocode example:
+`squeeze()` op 에 좋은 수도코드 예시가 있습니다:
 
     shape(input) => `[1, 2, 1, 3, 1, 1]`
     shape(squeeze(input)) =>  `[2, 3]`
 
-The `tile()` op provides a good example in descriptive text:
+`tile()` op 는 좋은 설명문의 예시를 제공합니다:
 
     For example, tiling `[a, b, c, d]` by 2 produces
     `[[a, b, c, d], [a, b, c, d]]`.
@@ -325,7 +325,7 @@ Here's an example from the module docsting in `image_ops.py`:
 
 ### Requirements, caveats, important notes.
 
-Examples:
+예시:
 
 ```markdown
 This operation requires that: `-1-input.dims() <= dim <= input.dims()`
@@ -340,7 +340,7 @@ be fed using the `feed_dict` optional argument to `Session.run()`,
 ### Descriptions of arguments and output (returned) tensors.
 
 Keep the descriptions brief and to the point. You should not have to explain
-how the operation works in the argument sections.
+how the operation works in the argument sections.시
 
 Mention if the Op has strong constraints on the dimensions of the input or
 output tensors. Remember that for C++ Ops, the type of the tensor is
@@ -380,7 +380,7 @@ different in the C++ and Python generated docs.
 Phrase any additional attr description so that it flows well after the type
 and default value.
 
-Here's an example from `image_ops.py`:
+`image_ops.py` 에 있는 예시입니다:
 
 ```c++
 REGISTER_OP("PngDecode")
@@ -404,7 +404,7 @@ contents: 0-D. The PNG-encoded image.
 channels: Number of color channels for the decoded image.
 image: 3-D with shape `[height, width, channels]`.
 )doc");
-```다
+```
 
 이것은 아래와 같은 "Args" 부분을 만들어 냅니다:
 
