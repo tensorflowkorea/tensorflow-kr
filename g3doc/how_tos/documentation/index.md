@@ -42,7 +42,7 @@ Classes와 Utility Functions를 위한 문서는 docstring에서 발췌합니다
 
 ## Op Documentation Style Guide
 
-이상적으로 제시된 순서를 따라 아래와 같은 정보를 제공해야 합니다:
+이상적으로는, 제시된 순서를 따라 아래와 같은 정보를 제공해야 합니다:
 
 * op가 무엇을 하는지를 설명하는 짧은 문장.
 * op에 인자를 전달할 때 어떤 일이 생기는지에 대한 짧은 설명.
@@ -61,27 +61,26 @@ Classes와 Utility Functions를 위한 문서는 docstring에서 발췌합니다
 
 ### Writing About Code
 
-Put backticks around these things when they're used in text:
+문서에서 아래와 같은 것들을 적을 때 ` ` (backticks) 로 감싸야 합니다:
 
-- Argument names (e.g. `input`, `x`, `tensor`)
-- Returned tensor names (e.g. `output`, `idx`, `out`)
-- Data types (e.g. `int32`, `float`, `uint8`)
-- Other op names referenced in text (e.g. `list_diff()`, `shuffle()`)
-- Class names (e.g. `Tensor` when you actually mean a `Tensor` object; don't
-  capitalize or use backticks if you're just explaining what an op does to a
-  tensor, or a graph, or an operation in general)
-- File names (e.g. `image_ops.py`, or `/path-to-your-data/xml/example-name`)
+- 인자의 이름 (e.g. `input`, `x`, `tensor`)
+- 반환되는 Tensor의 이름 (e.g. `output`, `idx`, `out`)
+- 데이터 타입 (e.g. `int32`, `float`, `uint8`)
+- 문서에서 언급되는 다른 op의 이름 (e.g. `list_diff()`, `shuffle()`)
+- 클래스 이름 (e.g. 실제로 `Tensor` 객체를 의미할 때만 `Tensor` 를 사용하세요.
+  op가 tensor, 그래프, 실행에서 보통 어떻게 작동하는지 설명할 때는 대문자나 backticks를 사용하면 안됩니다.)
+- 파일 이름 (e.g. `image_ops.py`, `/path-to-your-data/xml/example-name`)
 
-Put three backticks around sample code and pseudocode examples. And use `==>`
-instead of a single equal sign when you want to show what an op returns. For
-example:
+예시 코드와 수도코드는 backticks를 세번 써서 감싸야 합니다.
+op가 무엇을 반환하는지 보여주고 싶을 때는 single equal sign( '=' 기호 )대신 `==>`를 사용해야 합니다.
+예시:
 
     ```
     # 'input' is a tensor of shape [2, 3, 5]
     (tf.expand_dims(input, 0)) ==> [1, 2, 3, 5]
     ```
 
-If you're providing a Python code sample, add the python style label to ensure proper syntax highlighting:
+Python 코드 예시를 제공하고자 한다면 문법 강조가 적절히 되도록 Python 스타일 라벨을 추가하세요:
 
 ```markdown
  ```python
@@ -89,7 +88,7 @@ If you're providing a Python code sample, add the python style label to ensure p
  ```
 ```
 
-Put single backticks around math expressions or conditions. For example:
+수식이나 조건은 하나의 backticks로 감싸세요. 예시:
 
 ```markdown
 This operation requires that `-1-input.dims() <= dim <= input.dims()`.
@@ -97,30 +96,28 @@ This operation requires that `-1-input.dims() <= dim <= input.dims()`.
 
 ### Tensor Dimensions
 
-When you're talking about a tensor in general, don't capitalize the word tensor.
-When you're talking about the specific object that's provided to an op as an
-argument or returned by an op, then you should capitalize the word Tensor and
-add backticks around it because you're talking about a `Tensor` object that gets
-passed.
+보통 tensor에 대해 말할 때는 tensor라는 단어의 첫 글자를 대문자로 쓰지 마세요.
+op에 인자로 전달하거나 op에서 반환하는 특정한 객체를 말할 때는 Tensor의 첫 글자를 대문자로 쓰고 
+backticks로 감싸세요 왜냐하면 전달되어지는 `Tensor` 객체에 대해 말하고 있기 때문입니다.
 
-Don't use the word `Tensors` to describe multiple Tensor objects unless you
-really are talking about a `Tensors` object. Better to say "a list of `Tensor`
-objects.", or, maybe, "`Tensor`s".
+진짜 `Tensors` 라는 객체에 대해 이야기하지 않는다면 `Tensors`를 여러개의 Tensor 객체를 서술할 때 사용하지 마세요.
+"a list of `Tensor`objects." (`Tensor` 객체 리스트) 또는  "`Tensor`s" (`Tensor`들)로 부르는게 낫습니다.
 
-When you're talking about the size of a tensor, use these guidelines:
+tensor의 크기에 대해 이야기 할 때는 아래의 가이드라인을 참고하세요:
 
-Use the term "dimension" to refer to the size of a tensor. If you need to be
-specific about the size, use these conventions:
+tensor의 크기를 말할 때는 "dimension"(차원) 이라는 단어를 사용하세요. 
+크기를 특정화할 필요가 있다면 아래의 규칙을 사용하세요:
 
-- Refer to a scalar as a "0-D tensor"
-- Refer to a vector as a "1-D tensor"
-- Refer to a matrix as a "2-D tensor"
-- Refer to tensors with 3 or more dimensions as 3-D tensors or n-D tensors. Use
-  the word "rank" only if it makes sense, but try to use "dimension" instead.
-  Never use the word "order" to describe the size of a tensor.
+- scalar(스칼라)는 "0-D tensor" 로 부른다
+- vector(벡터)는 "1-D tensor" 로 부른다
+- matrix(메트릭스)는 "2-D tensor" 로 부른다
+- 3차원 이상인 tensors는 "3-D tensors 또는 n-D tensors" 로 부른다. 
+  이해가 될 경우에는 "rank" 라는 단어를 사용한다. 하지만 "dimension"을 대신 쓰도록 노력하라. 
+  절대 tensor의 크기를 표현하기 위해 "order" 라는 단어를 사용하지 말라.
 
-Use the word "shape" to describe in detail the dimensions of a tensor, and show
-the shape in square brackets with backticks. For example:
+tensor의 dimensions를 자세히 설명 하려면 "shape" 라는 단어를 사용하세요. 
+그리고 backticks 와 꺽쇠 괄호를 사용해서 모양을 보여주세요.
+예시:
 
 ```markdown
 If `input` is a 3-D tensor with shape `[3, 4, 3]`, this operation will return
@@ -129,19 +126,17 @@ a 3-D tensor with shape `[6, 8, 6]`.
 
 ### Links
 
-To link to something else in the `g3docs` tree, use a relative path, like
-`[tf.parse_example](../api_docs/python/ops.md#parse_example)`
-Do not use absolute paths for internal links, as this will break the website
-generator.
+`g3docs` 트리에 있는 다른 것들에 링크를 걸려면 
+`[tf.parse_example](../api_docs/python/ops.md#parse_example)` 처럼 상대 경로를 사용하세요.
+내부 링크에 절대 경로를 사용하지 마세요. 왜냐하면 웹사이트 생성기를 손상시키기 때문입니다.
 
-To link to source code, use a link starting with:
-`https://www.tensorflow.org/code/`, followed by
-the file name starting at the github root. For instance, a link to this file
-should be written as
-`https://www.tensorflow.org/code/tensorflow/g3doc/how_tos/documentation/index.md`.
-This ensures that [tensorflow.org](https://www.tensorflow.org/) can forward the link to the
-branch of the code corresponding to the version of the documentation you're
-viewing. Do not include url parameters in the URL.
+소스코드에 링크를 걸려면 `https://www.tensorflow.org/code/` 로 시작하고 깃허브 루트에서 시작하는 
+파일 이름으로 이어지는 링크를 사용하세요. 
+예를 들면, 이 파일로 연결된 링크는 `https://www.tensorflow.org/code/tensorflow/g3doc/how_tos/documentation/index.md` 
+처럼 쓰여져야 합니다.
+이것은 [tensorflow.org](https://www.tensorflow.org/) 
+가 당신이 보고 있는 문서의 버전에 대응한 코드의 브랜치를 가리킬 수 있도록 보장해 줍니다.
+url 파라미터를 URL에 포함하지 마세요.
 
 
 ### Ops defined in C++
@@ -172,7 +167,7 @@ image:= A 3-D uint8 tensor of shape `[height, width, channels]`.
 )doc");
 ```
 
-Results in this piece of Markdown:
+이 부분의 마크다운의 결과:
 
 ```markdown
 ### tf.image.png_decode(contents, channels=None, name=None) {#png_decode}
