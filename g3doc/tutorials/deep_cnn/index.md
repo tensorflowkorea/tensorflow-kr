@@ -14,7 +14,7 @@ problem is to classify RGB 32x32 pixel images across 10 categories:
 ```airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck.```
 
 CIFAR-10 분류는 기계학습에서 흔히 사용되는 벤치마크 문제입니다.
-이 분류 문제는 RGB 32x32 픽셀 이미지를 10개의 카테고리로 분류하는 것이 목표입니다.
+이 분류 문제는 RGB 32x32 픽셀 이미지를 다음의 10개 카테고리로 분류하는 것이 목표입니다 :
 ```비행기, 자동차, 새, 고양이, 사슴, 개, 개구리, 말, 배, 트럭.```
 
 For more details refer to the [CIFAR-10 page](http://www.cs.toronto.edu/~kriz/cifar.html)
@@ -90,7 +90,7 @@ http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional
 of network activities during training, including input images,
 losses and distributions of activations and gradients.
 
-* 입력된 이미지와  [시각화](../../how_tos/summaries_and_tensorboard/index.md)
+* 활성화(Activations)와 gradients의 loss와 분포와 입력된 이미지를 포함하는 학습 중인 네트워크의 활동 [시각화](../../how_tos/summaries_and_tensorboard/index.md)
 
 * Routines for calculating the
 [moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
@@ -113,7 +113,11 @@ We hope that this tutorial provides a launch point for building larger CNNs for
 vision tasks on TensorFlow.
 
 ### Model Architecture
+모델 구조
 
+CIFAR-10 튜토리얼의 모델은 컨볼루션과 비선형이 교차되어있는 다중 레이어 구조로 구성되어 있습니다.
+이 레이어들 뒤로는 Softmax 분류기로 이어지는 Fully connected layer가 있습니다. 상위 몇몇 레이어를 제외하고,
+이 모델은 [Alex Krizhevsky](https://code.google.com/p/cuda-convnet/)가 만든 모델을 따르고 있습니다.
 The model in this CIFAR-10 tutorial is a multi-layer architecture consisting of
 alternating convolutions and nonlinearities. These layers are followed by fully
 connected layers leading into a softmax classifier.  The model follows the
@@ -121,15 +125,20 @@ architecture described by
 [Alex Krizhevsky](https://code.google.com/p/cuda-convnet/), with a few
 differences in the top few layers.
 
+이 모델은 GPU에서 몇시간의 학습을 거친 후 최대 86%의 정확도를 달성하였습니다. 좀더 자세한 사항은 [아래](#evaluating-a-model)와 코드를 참조하세요. 이 모델은 1,068,298개의 학습 가능한 매개변수로 구성되어 있으며,
+단일 이미지를 추론하는 데에 19.5M의 곱셉-덧셈 연산이 필요합니다.
 This model achieves a peak performance of about 86% accuracy within a few hours
 of training time on a GPU. Please see [below](#evaluating-a-model) and the code
 for details.  It consists of 1,068,298 learnable parameters and requires about
 19.5M multiply-add operations to compute inference on a single image.
 
 ## Code Organization
+코드 구성
 
 The code for this tutorial resides in
 [`tensorflow/models/image/cifar10/`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/).
+이 튜토리얼의 코드는
+[`tensorflow/models/image/cifar10/`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/) 에 있습니다.
 
 File | Purpose
 --- | ---
@@ -139,8 +148,17 @@ File | Purpose
 [`cifar10_multi_gpu_train.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py) | Trains a CIFAR-10 model on multiple GPUs.
 [`cifar10_eval.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_eval.py) | Evaluates the predictive performance of a CIFAR-10 model.
 
+파일 | 목적
+--- | ---
+[`cifar10_input.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_input.py) | CIFAR-10 바이너리 파일 포맷을 읽어들입니다.
+[`cifar10.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py) | CIFAR-10 모델을 만듭니다.
+[`cifar10_train.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_train.py) | CIFAR-10 모델을 CPU 혹은 GPU로 학습합니다.
+[`cifar10_multi_gpu_train.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py) | CIFAR-10 모델을 다중 GPU로 학습합니다.
+[`cifar10_eval.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_eval.py) | CIFAR-10 모델의 예측 성능을 평가합니다.
+
 
 ## CIFAR-10 Model
+## CIFAR-10 모델
 
 The CIFAR-10 network is largely contained in
 [`cifar10.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py).
