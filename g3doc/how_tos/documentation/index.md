@@ -7,63 +7,57 @@ TensorFlow의 문서는
 
 `g3doc/api_docs` 디렉토리에 있는 어떤 것이든 코드에 있는 주석으로부터 생성되기 때문에
 직접 수정해선 안됩니다. `tools/docs/gen_docs.sh` 스크립트는
-API문서를 생성합니다. 스크립트를 인자 없이 호출하면 파이썬 API 문서만을 재작성합니다. 
-(i.e., documentation for Ops, whether defined in Python or C++). `-a` 를 인자로 전달하면 
+API문서를 생성합니다. 스크립트를 인자 없이 호출하면 Python API 문서만을 재작성합니다. 
+(Ops에 관한 문서는 Python, C++ 상관없이 작성됩니다.). `-a` 를 인자로 전달하면 
 C++ 문서 또한 재작성합니다. 이것은 반드시 `tools/docs` 디렉토리에서 호출되어야 합니다. 
 그리고 `-a` 를 인자로 전달하려면 `doxygen` 의 설치가 요구됩니다.
 
 ## Python API Documentation
 
-Ops, classes, utility 합수는 `image_ops.py` 와 같은 파이썬 모듈에 정의되어 있습니다. 
-그 모듈의 docstring은 해당 파이썬 파일에 대해 생성되는 마크다운 파일의 시작부분에 삽입됩니다. 
+Ops, classes, utility 합수는 `image_ops.py` 와 같은 Python 모듈에 정의되어 있습니다. 
+그 모듈의 docstring은 해당 Python 파일에 대해 생성되는 마크다운 파일의 시작부분에 삽입됩니다. 
 그래서 `image_ops.md` 는 `image_ops.py` 모듈에 있는 docstring으로 시작합니다. 
-`python/framework/gen_docs_combined.py` contains the list of all _libraries_ for which Markdown files are created. 
-If you are adding a new library (generating a separate section in the API
-documentation), you have to add it to the list of libraries in
-`gen_docs_combined.py`. For the C++ api, only a single library file exists, its
-Markdown is a string in `gen_cc_md.py`, from which `api_docs/cc/index.md` is
-created. The rest of the C++ documentation is generated from XML files generated
-by doxygen.
+`python/framework/gen_docs_combined.py` 는 마크다운 파일이 생성되는 모든 _libraries_(_라이브러리_) 목록을 포함하고 있습니다. 
+만약에 새로운 라이브러리를 더한다면 (API 문서에 독립된 섹션을 생성하는 것), 
+반드시 have to add it to the list of libraries in `gen_docs_combined.py` 에 있는 라이브러리 목록에 추가해야 합니다. 
+C++ API는 하나의 라이브러리 파일만 존재합니다, 그것의 마크다운은 `api_docs/cc/index.md` 에서 생성된 `gen_cc_md.py` 의 문자열입니다. 
+나머지 C++문서들은 doxygen에 의해 만들어진 XML파일로부터 생성됩니다.
 
-In the module docstring of a file registered as a library, you can insert
-generated docs for Ops, classes, and functions by calling them out with the
-syntax `@@<python-name>` (at the beginning of an otherwise empty line). The
-called-out op, function, or class does not have to be defined in the same file.
+라이브러리로 등록된 파일의 모듈 docstring에서, (빈 줄의 시작 부분에) `@@<python-name>` 문법으로 
+Ops, classes, functions를 호출해 그것들을 위해 생성된 문서를 삽입할 수 있습니다. 
+호출한 op, function 또는 class는 같은 파일에서 또 정의될 필요가 없습니다.
+이것은 Ops, classes, functions가 기록되는 순서를 정할 수 있게 해줍니다.
+고수준의 문서를 적절히 배치해서 논리적인 순서로 나누세요. 
 
-This allows you to control the order in which the Ops, classes, and functions
-are documented. Group them in a logical order, with interspersed high level
-documentation.
+모든 공개된 op, class, function 은 반드시 라이브러리의 서두에서 `@@` 로 호출되어야 합니다. 
+그렇게 하지 않을 경우 `doc_gen_test` 를 실패하게 됩니다.
 
-Every public op, class or function must be called out with a `@@` entry in some
-library. If you don't, you will get `doc_gen_test` failures.
+Ops를 위한 문서는 자동적으로 Python wrapper 또는 C++ Ops registrations로 부터 발췌합니다. 
+Python wrappers를 우선적으로 가져옵니다.
 
-Docs for Ops are automatically extracted from Python wrappers or C++ Ops
-registrations, Python wrappers have priority.
+* Python wrappers는 `python/ops/*.py` 에 있습니다.
+* C++ Ops registrations는 `core/ops/*.cc` 에 있습니다.
 
-* Python wrappers are in `python/ops/*.py`.
-* C++ Ops registrations are in `core/ops/*.cc`.
-
-Docs for Classes and Utility Functions are extracted from their docstrings.
+Classes와 Utility Functions를 위한 문서는 docstring에서 발췌합니다.
 
 ## Op Documentation Style Guide
 
-Ideally, you should provide the following information, in order of presentation:
+이상적으로 제시된 순서를 따라 아래와 같은 정보를 제공해야 합니다:
 
-* A short sentence that describes what the op does.
-* A short description of what happens when you pass arguments to the op.
-* An example showing how the op works (pseudocode is best).
-* Requirements, caveats, important notes (if there are any).
-* Descriptions of inputs, outputs, and Attrs or other parameters of the op
-  constructor.
+* op가 무엇을 하는지를 설명하는 짧은 문장.
+* op에 인자를 전달할 때 어떤 일이 생기는지에 대한 짧은 설명.
+* op가 어떻게 작동하는지를 보여주는 예시(수도코드가 가장 좋음).
+* 요구사항, 경고, 중요한 내용 (하나라도 있다면).
+* 입력, 출력, 속성, op 생성자의 다른 변수에 대한 설명.
 
-Each of these is described in more detail
-[below](#description-of-the-docstring-sections).
+위 항목에 대해 설명된 자세한 정보는
+[이곳](#description-of-the-docstring-sections).
 
-Write your text in Markdown (.md) format. A basic syntax reference is
-[here](https://daringfireball.net/projects/markdown/). You are allowed to use
-[MathJax](https://www.mathjax.org) notation for equations. Those will be
-rendered properly on [tensorflow.org](https://www.tensorflow.org), but don't
-show up on [github](https://github.com/tensorflow/tensorflow).
+글을 마크다운 (.md) 포멧으로 적으세요. 기본적인 문법에 관한 레퍼런스는
+[여기](https://daringfireball.net/projects/markdown/)에 있습니다. 방정식 표기를 위해 
+[MathJax](https://www.mathjax.org)을 사용할 수 있습니다. 이것들은 
+[tensorflow.org](https://www.tensorflow.org)에서 적절히 표현됩니다. 하지만
+[github](https://github.com/tensorflow/tensorflow)에 나타나지는 않습니다.
 
 ### Writing About Code
 
@@ -157,7 +151,7 @@ declaration. The docstring in the C++ file is processed to automatically add
 some information for the input types, output types, and Attr types and default
 values.
 
-For example:
+예시:
 
 ```c++
 REGISTER_OP("PngDecode")
@@ -223,7 +217,7 @@ You should conform to the usual Python docstring conventions, except that you
 should use Markdown in the docstring. The doc generator does not auto-generate
 any text for ops that are defined in Python, so what you write is what you get.
 
-Here's a simple example:
+간단한 예시:
 
 ```python
 def foo(x, y, name="bar"):
@@ -253,7 +247,7 @@ def foo(x, y, name="bar"):
 
   ...
 ```
-
+시
 ## Description of the Docstring Sections
 
 Here is more detail and examples for each of the elements of the docstrings.
@@ -410,9 +404,9 @@ contents: 0-D. The PNG-encoded image.
 channels: Number of color channels for the decoded image.
 image: 3-D with shape `[height, width, channels]`.
 )doc");
-```
+```다
 
-This generates the following "Args" section:
+이것은 아래와 같은 "Args" 부분을 만들어 냅니다:
 
 ```markdown
   contents: A string Tensor. 0-D. The PNG-encoded image.
