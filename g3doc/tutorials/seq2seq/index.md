@@ -2,17 +2,26 @@
 
 Recurrent neural networks can learn to model language, as already discussed
 in the [RNN Tutorial](../../tutorials/recurrent/index.md)
+러커런트 뉴로 네트웍은  [RNN 자습서](../../tutorials/recurrent/index.md)에서 이미 이야기 했던것 처럼 언어를 모델화하는 것을 학습할 수 있다.
+
+
 (if you did not read it, please go through it before proceeding with this one).
 This raises an interesting question: could we condition the generated words on
 some input and generate a meaningful response? For example, could we train
 a neural network to translate from English to French? It turns out that
 the answer is *yes*.
 
+(그것을 읽지 않았다면, 이 자습서를 읽기전이 그것을 먼저 읽기를 권한다). 흥미로운 질문이 있다: 몇 입력에 대해 생성된 단어들 조건화 할수 있고  의미있는 응답을 생성할수 있을까? 예를 들어, 영어를 프랑스로 번역하기 위한 뉴럴 네트웍을 학습할수 있을까? 답은 *예* 라고 판명된다. 
+
 This tutorial will show you how to build and train such a system end-to-end.
 We are assuming you have already installed via the pip package, have cloned the
 tensorflow git repository, and are in the root of the git tree.
 
+이 자습서는 그런 앤드-투-앤드 시스템을 만들고 학습하는 방법 보여줄 것이다.  pip를 통해 tensorflow를 이미 설치했고 tensorflow git 저장소를 클론(clone)했고, git 트리루트에 있다고 가정한다.
+
 You can then start by running the translate program:
+
+그리고 나서, 번역 프로그램을 실행함으로 시작할수 있다:
 
 ```
 cd tensorflow/models/rnn/translate
@@ -25,7 +34,11 @@ prepare it for training and train. It takes about 20GB of disk space,
 and a while to download and prepare (see [later](#lets-run-it) for details),
 so you can start and leave it running while reading this tutorial.
 
+그 프로그램은 [WMT'15 웹사이트](http://www.statmt.org/wmt15/translation-task.html)에서 영어-프랑스어 번역 데이타를 다운받을 것이고 학습를 위해 그것을 준비하고 학습할 것이다. 그 데이타는 20기가 공간을 차지할 것이고, 다운로드하고 준비하는 동안, 이 자습서를 읽는 동안 프로그램을 구동시키고, 실행해 두자.???
+
 This tutorial references the following files from `models/rnn`.
+
+이 자습서는 `models/rnn`에서 아래 파일을 참고한다.
 
 File | What's in it?
 --- | ---
@@ -36,12 +49,16 @@ File | What's in it?
 
 
 ## Sequence-to-Sequence Basics
+## 시퀸스-투-시퀸스 기본
 
 A basic sequence-to-sequence model, as introduced in
 [Cho et al., 2014](http://arxiv.org/abs/1406.1078)
 ([pdf](http://arxiv.org/pdf/1406.1078.pdf)), consists of two recurrent neural
 networks (RNNs): an *encoder* that processes the input and a *decoder* that
 generates the output. This basic architecture is depicted below.
+
+[Cho et al., 2014](http://arxiv.org/abs/1406.1078)
+([pdf](http://arxiv.org/pdf/1406.1078.pdf))에서 소개된 기본적인 시퀸스투시퀸스 모델은 두개의 레커런트 뉴럴 네트웍(RNN)으로 구성된다: 입력을 처리하는 *인코더*와 결과를 생성하는 *디코더*. 이 기본 구조는 아래와 같이 묘사된다.
 
 <div style="width:80%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/basic_seq2seq.png" />
@@ -55,6 +72,10 @@ have been successfully used in sequence-to-sequence models too, e.g. for
 translation [Sutskever et al., 2014](http://arxiv.org/abs/1409.3215)
 ([pdf](http://arxiv.org/pdf/1409.3215.pdf)).
 
+위 그림의 각 박스는 가장 일반적으로 GRU 쎌이거나 LSTM 쎌인 RNN의 쎌을 나타낸다([RNN Tutorial](../../tutorials/recurrent/index.md를 참조하길 바란다). 인코더와 디코더는 가중치를 공유 할수 있거나, ??? 다른 파라미터 집합을 사용한다. 다중층 쎌들은 역시 시퀸스투시퀸스에서 성공적으로 사용되어져 왔다. 예로  [Sutskever et al., 2014](http://arxiv.org/abs/1409.3215)
+([pdf](http://arxiv.org/pdf/1409.3215.pdf))
+
+
 In the basic model depicted above, every input has to be encoded into
 a fixed-size state vector, as that is the only thing passed to the decoder.
 To allow the decoder more direct access to the input, an *attention* mechanism
@@ -65,17 +86,24 @@ suffice it to say that it allows the decoder to peek into the input at every
 decoding step. A multi-layer sequence-to-sequence network with LSTM cells and
 attention mechanism in the decoder looks like this.
 
+위에 묘사된 기본 모델에서, 디코더에 전달되는 유일한 것이기 때문에 모든 입력은 고정된 크기를 가진 상태 벡터로 인코딩 되어져야 한다. 디코더가 입력에 더 직접적인 접근을 가능케 하기 위해, *어텐션(attention) 메카니즘이 [Bahdanau et al., 2014](http://arxiv.org/abs/1409.0473)([pdf](http://arxiv.org/pdf/1409.0473.pdf))에서 소개된다. 어탠션 메카나즘에 대해서 상세히 보지 않을 것이다(논문을 참고), 그것은 디코더가 모든 디코딩 단계에서 입력을 엿보게 해주는 것이라고 언급하는 것만으로도 충분하다. LSTM쎌을 가진 여러층의 시퀸스-투-시퀸스 네트웍과 디코더안에 어탠션 메카니즘은 이처럼 보인다.
+
+
 <div style="width:80%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/attention_seq2seq.png" />
 </div>
 
+
 ## TensorFlow seq2seq Library
+## TensorFlow seq2seq 라이브러리
 
 As you can see above, there are many different sequence-to-sequence
 models. Each of these models can use different RNN cells, but all
 of them accept encoder inputs and decoder inputs. This motivates
 the interfaces in the TensorFlow seq2seq library (`models/rnn/seq2seq.py`).
 The basic RNN encoder-decoder sequence-to-sequence model works as follows.
+
+위에서 볼수 있듯이, 다른 많은 시퀸스-투-시퀸스 모델들이 있다. 각각 이러한 모델은 다른 RNN 쎌들을 사용할 수 있다, 그러나 모두 인코더 입력과 디코디 입력을 받아야 한다. 이것은 텐스플로우 seq2seq 라이브러리(`models/rnn/seq2seq.py`) 인터페이스의 동기가 된다.
 
 ```python
 outputs, states = basic_rnn_seq2seq(encoder_inputs, decoder_inputs, cell)
@@ -86,6 +114,9 @@ to the encoder, i.e., corresponding to the letters *A, B, C* in the first
 picture above. Similarly, `decoder_inputs` are tensors representing inputs
 to the decoder, *GO, W, X, Y, Z* on the first picture.
 
+위에 호출에서, `encoder_inputs`는 인코더에 입력을 나타내는 텐서(tensor) 리스트이다. 예로, 위에 첫번째 그림에서 문자 *A, B, C*에 해당된다. 유사하게, `decoder_inputs`들은 디코더에 입력을 나타내는 텐서들이다. 첫번째 그림에 *GO, W, X, Y, Z* 이다. 
+
+
 The `cell` argument is an instance of the `models.rnn.rnn_cell.RNNCell` class
 that determines which cell will be used inside the model. You can use
 an existing cell, such as `GRUCell` or `LSTMCell`, or you can write your own.
@@ -93,11 +124,15 @@ Moreover, `rnn_cell` provides wrappers to construct multi-layer cells,
 add dropout to cell inputs or outputs, or to do other transformations,
 see the [RNN Tutorial](../../tutorials/recurrent/index.md) for examples.
 
+`cell` 인수는 `models.rnn.rnn_cell.RNNCell`클래스의 인스탄스이다. 게다가, `rnn_cell`은 여러층 쎌을 만들고, 쎌 입력과 결과에 드랍아웃(dropout)를 추가하거나 다른 변환을 하기 위한 랩퍼(wrapper)들을 제공한다. 예제들을 보기위해서 [RNN Tutorial](../../tutorials/recurrent/index.md)를 참고 하기 바란다.
+
 The call to `basic_rnn_seq2seq` returns two arguments: `outputs` and `states`.
 Both of them are lists of tensors of the same length as `decoder_inputs`.
 Naturally, `outputs` correspond to the outputs of the decoder in each time-step,
 in the first picture above that would be *W, X, Y, Z, EOS*. The returned
 `states` represent the internal state of the decoder at every time-step.
+
+`basic_rnn_seq2seq` 호출은 두개의 인수를 리턴한다: `outputs` 와 `states`. 그것 둘다 `decoder_inputs`와 동일한 크기의 탠서 리스트이다. 자연스럽게, `outputs`는 각 시간 단계(time-step)에서 디코더 결과에 해당된다, 위 첫번째 그림에서 그것은 *W, X, Y, Z, EOS*가 된다. 리턴된 `states`는 모든 시간단계에서 디코더의 내부 상태를 나타낸다.
 
 In many applications of sequence-to-sequence models, the output of the decoder
 at time t is fed back and becomes the input of the decoder at time t+1. At test
@@ -106,6 +141,8 @@ During training, on the other hand, it is common to provide the correct input
 to the decoder at every time-step, even if the decoder made a mistake before.
 Functions in `seq2seq.py` support both modes using the `feed_previous` argument.
 For example, let's analyze the following use of an embedding RNN model.
+
+시퀸스-투-시퀸스 모델의 많은 어플리케이션에서, 시간 t에 디코더 결과는 다시 시간 t+1에 디코더의 입력으로 전달된다. 테스트 시간에, 하나의 시퀸스를 디코딩할때, 이것은 그 시퀸스가 만들어지는 방법이다. 다른면으로, 학습동안, 디코더가 전에 실수를 있었다고 할찌라도, 모든 시간 단계에 디코더에 올바른 입력을 제공하는 것이 일반적인이다. `seq2seq.py`에 함수들은 `feed_previous` 인수를 사용해서 두가지 모드를 지원한다. 예를 들어, 아래에 임베드 RNN모델 사용을 분석해 보자.
 
 ```python
 outputs, states = embedding_rnn_seq2seq(
@@ -122,6 +159,8 @@ on embeddings), but to construct these embeddings we need to specify
 the maximum number of discrete symbols that will appear: `num_encoder_symbols`
 on the encoder side, and `num_decoder_symbols` on the decoder side.
 
+` embedding_rnn_seq2seq`모드에서, 모든 입력들은(`encoder_inputs` 과 `decoder_inputs`) 이산 값(discrete value)을 나타내는 정수-텐서(integer-tensor)들이다. 그것들은 덴스 표현으로 임베드되어 질 것이다(임베딩에 대해 더 자세한 설명을 위해 [Vectors Representations Tutorial](../../tutorials/word2vec/index.md 를 보길 권한다), 그러나 이러한 임베딩을 만들기 위해서 나타나는 분산 심볼의 최대 수를 지정할 필요가 있다: 인코더 쪽에 `num_encoder_symbols`, 그리고 디코더 쪽에 `num_decoder_symbols`. 
+
 In the above invocation, we set `feed_previous` to False. This means that the
 decoder will use `decoder_inputs` tensors as provided. If we set `feed_previous`
 to True, the decoder would only use the first element of `decoder_inputs`.
@@ -131,6 +170,9 @@ in our translation model, but it can also be used during training, to make
 the model more robust to its own mistakes, similar
 to [Bengio et al., 2015](http://arxiv.org/abs/1506.03099)
 ([pdf](http://arxiv.org/pdf/1506.03099.pdf)).
+
+위 호출에서, `feed_previous`를 False로 설정했다. 이것은 디코더가 제공되어진 `decoder_inputs`를 사용할 것이다. `feed_previous`가 True로 설정되면, 디코더는 `decoder_inputs`의 단지 첫번째 원소만 사용할 것이다. 이 리스트에 모든 다른 텐서들은 무시 되어지고, 그대신 디코더의 이전 결과가 사용되어 질 것이다. 이것은 우리의 번역 모델에서 번역을 디코딩 하기 위해서 사용되어진다. [Bengio et al., 2015](http://arxiv.org/abs/1506.03099)
+([pdf](http://arxiv.org/pdf/1506.03099.pdf)와 유사하게 그 모델이 그 자신의 실수에 더 견고하기 하기 위해 또한 학습동안에도 사용되어 질수 있다. 
 
 One more important argument used above is `output_projection`. If not specified,
 the outputs of the embedding model will be tensors of shape batch-size by
@@ -143,10 +185,15 @@ This allows to use our seq2seq models with a sampled softmax loss, as described
 in [Jean et. al., 2014](http://arxiv.org/abs/1412.2007)
 ([pdf](http://arxiv.org/pdf/1412.2007.pdf)).
 
+위에서 사용되어진 더 중요한 한 인수는 `output_projection`이다. 그것이 명시되지 않는다면, 임베딩 모델의 결과는 그것이 각 생성된 심볼에 대해 logits를 나타내는 것 처럼 batch-size x `num_decoder_symbols`의 형태를 가진 텐서가 될 것이다. 아주 큰 사전을 가지고 모델을 학습할때, 예를 들어, `num_decoder_symbols`이 아주 클때, 아주 큰 이러한 탠서들을 저장하는것은 비실용적이다. 그대신, 좀더 작은 결과 탠서를 리턴하는 것이 좋다. 그 텐서는 나중에 `output_projection`를 사용해서 큰 결과 텐서에 프로젝트되어진다. 이것은 [Jean et. al., 2014](http://arxiv.org/abs/1412.2007)
+([pdf](http://arxiv.org/pdf/1412.2007.pdf))에서 설명하는 대로 샘플 소프트맥스 로스(sampled softmax loss)를 가진 seq2seq모델을 사용할수 있게 해준다. 
+
 In addition to `basic_rnn_seq2seq` and `embedding_rnn_seq2seq` there are a few
 more sequence-to-sequence models in `seq2seq.py`, take a look there. They all
 have similar interfaces, so we will not describe them in detail. We will use
 `embedding_attention_seq2seq` for our translation model below.
+
+`basic_run_seq2seq`와 `embedding_rnn_seq2seq`에 더해서, `seq2seq.py`에 좀더 많은 시퀸스-투-시퀸스 모델들이 있고, 그것을 볼 것이다. 그것들은 유사한 인터페이스를 가진다, 그래서 상세히 설명하지는 않을 것이다. 아래에 우리의 번역 모델을 위해 `embedding_attention_seq2seq`를 사용할 것이다.
 
 ## Neural Translation Model
 
