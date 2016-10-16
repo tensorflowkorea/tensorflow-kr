@@ -11,13 +11,13 @@ some input and generate a meaningful response? For example, could we train
 a neural network to translate from English to French? It turns out that
 the answer is *yes*.
 
-(그것을 읽지 않았다면, 이 자습서를 읽기전이 그것을 먼저 읽기를 권한다). 흥미로운 질문이 있다: 몇 입력에 대해 생성된 단어들 조건화 할수 있고  의미있는 응답을 생성할수 있을까? 예를 들어, 영어를 프랑스로 번역하기 위한 뉴럴 네트웍을 학습할수 있을까? 답은 *예* 라고 판명된다. 
+(그것을 읽지 않았다면, 이 자습서를 읽기전이 그것을 먼저 읽기를 권한다). 흥미로운 질문이 있다: 몇몇의 입력으로 생성된 단어들을 조건화 할수 있고  어떤 의미있는 응답을 생성할수 있을까? 예를 들어, 영어를 프랑스어로 번역하기 위한 뉴럴 네트웍을 학습할수 있을까? 답은 *예*가 된다.
 
 This tutorial will show you how to build and train such a system end-to-end.
 We are assuming you have already installed via the pip package, have cloned the
 tensorflow git repository, and are in the root of the git tree.
 
-이 자습서는 그런 앤드-투-앤드 시스템을 만들고 학습하는 방법 보여줄 것이다.  pip를 통해 tensorflow를 이미 설치했고 tensorflow git 저장소를 클론(clone)했고, git 트리루트에 있다고 가정한다.
+이 자습서는 그런 앤드-투-앤드 (end-to-end)시스템을 만들고 학습하는 방법 보여줄 것이다.  pip를 통해 tensorflow를 이미 설치했고 tensorflow git 저장소를 클론(clone)했고, git 트리루트에 있다고 가정한다.
 
 You can then start by running the translate program:
 
@@ -34,7 +34,7 @@ prepare it for training and train. It takes about 20GB of disk space,
 and a while to download and prepare (see [later](#lets-run-it) for details),
 so you can start and leave it running while reading this tutorial.
 
-그 프로그램은 [WMT'15 웹사이트](http://www.statmt.org/wmt15/translation-task.html)에서 영어-프랑스어 번역 데이타를 다운받을 것이고 학습를 위해 그것을 준비하고 학습할 것이다. 그 데이타는 20기가 공간을 차지할 것이고, 다운로드하고 준비하는 동안, 이 자습서를 읽는 동안 프로그램을 구동시키고, 실행해 두자.???
+그 프로그램은 [WMT'15 웹사이트](http://www.statmt.org/wmt15/translation-task.html)에서 영어-프랑스어 번역 데이타를 다운받을 것이고 학습를 위해 그것을 준비하고 학습할 것이다. 그 데이타는 20기가 공간을 차지할 것이고, 다운로드하고 준비하기 위해서 좀 시간이 걸린다. 그래서 이 자습서를 읽는 동안 프로그램을 구동시키고 실행해 두자.
 
 This tutorial references the following files from `models/rnn`.
 
@@ -49,7 +49,7 @@ File | What's in it?
 
 
 ## Sequence-to-Sequence Basics
-## 시퀸스-투-시퀸스 기본
+## 기본적인 시퀸스-투-시퀸스(Sequence-to-Sequence)
 
 A basic sequence-to-sequence model, as introduced in
 [Cho et al., 2014](http://arxiv.org/abs/1406.1078)
@@ -202,12 +202,17 @@ the functions in `models/rnn/seq2seq.py`, there are still a few tricks
 that are worth mentioning that are used in our translation model in
 `models/rnn/translate/seq2seq_model.py`.
 
+시퀸스-투-시퀸스(sequence-to-sequence) 의 핵심은 `models/rnn/seq2seq.py`에 있는 함수에 의해 구성되어지지만, `models/rnn/translate/seq2seq_model.py`에 있는 우리의 번역 모델에서 사용되어지는 것을 언급하는 것이 가치 있는 몇가지 트릭이 여전히 있다.??? 
+
 ### Sampled softmax and output projection
+### 샘플 소프트맥스와 결과 프로젝션(Sampled softmax and output projection)
 
 For one, as already mentioned above, we want to use sampled softmax to
 handle large output vocabulary. To decode from it, we need to keep track
 of the output projection. Both the sampled softmax loss and the output
 projections are constructed by the following code in `seq2seq_model.py`.
+
+하나는, 위에서 이미 언급한 대로, 우리는 아주 큰 사전을 다루기 위해서 샘플 소프트맥스를 사용하고 싶다. 그것으로 부터 디코딩하기 위해 결과 프로젝션를 기억할 필요가 있다. 샘플 소프트맥스 손실(loss)과 결과 프로젝트 둘다는 `seq2seq_model.py`에 있는 다음 코드에 의해 구성되어진다. 
 
 ```python
   if num_samples > 0 and num_samples < self.target_vocab_size:
@@ -226,6 +231,8 @@ First, note that we only construct a sampled softmax if the number of samples
 (512 by default) is smaller than the target vocabulary size. For vocabularies
 smaller than 512, it might be a better idea to just use a standard softmax loss.
 
+첫번째, 샘플 수(디폴트가 512)가 목적(target) 사전 크기보다 작다면, 단지 샘플 소프트맥스를 구성한다는 것을 기억하자. 512보다 작은 사전에 대해, 단지 표준 소프트맥스 손실(lost)를 사용하는 것이 더 나은 생각일지도 모른다.
+
 Then, as you can see, we construct an output projection. It is a pair,
 consisting of a weight matrix and a bias vector. If used, the rnn cell
 will return vectors of shape batch-size by `size`, rather than batch-size
@@ -237,6 +244,8 @@ if output_projection is not None:
   self.outputs[b] = [tf.matmul(output, output_projection[0]) +
                      output_projection[1] for ...]
 ```
+
+그리고 나서, 알다시피, 결과 프로젝트를 구성한다. 그것은 가중치 행렬과 바이어스 벡터로 구성된 순서쌍이 된다. 사용되어지면, rnn쎌은 `target_vocab_size`에 의한 배치 크기가 아니라 `size`에 의한 배치 크기의 벡터들이 리턴될 것이다. logit를 복구하기 위해, `seq2seq_model.py`에 124-126라인에서 했던 것처럼 가중치 행렬에 의해서 곱해지고, 바이어스가 더해질 필요가 있다. 
 
 ### Bucketing and padding
 
@@ -254,10 +263,13 @@ sentence with a special PAD symbol. Then we'd need only one seq2seq model,
 for the padded lengths. But on shorter sentence our model would be inefficient,
 encoding and decoding many PAD symbols that are useless.
 
+샘플 소프트맥스에 더해서, 우리의 번역 모델은 또한 *버컷링(bucketing)*를 사용한다, 그것은 다른 크기의 문장을 효과적으로 다루기 위한 방법이다. 우선 그 문제를 명확히 해 보자. 영어에서 프랑스어로 번역할때, 입력으로 L1 크기의 영어문장과 결과로 L2 크기의 프랑스 문장이 있을 것이다. 영어 문장이 `encoder_inputs`으로 전달되고 프랑스어 문장은 `decoder_inputs`(GO 심볼이 앞에 붙혀진다) 로 나오기 때문에, 기본적으로 (L1, L2+1)의 모든 순서쌍에 대해 seq2seq 모델을 만들어야 한다. 이것은 아주 거대한 그래프를 만들게 될 것이다. 다른한편으로 특별한 PAD 심볼을 가지고 모든 문장에 단지 삽입할수 있다. 그러면, 우리는 그 패딩된 크기에 대한 단지 하나의 seq2seq 모델만 만들 필요있게 된다.  
+
 As a compromise between constructing a graph for every pair of lengths and
 padding to a single length, we use a number of *buckets* and pad each sentence
 to the length of the bucket above it. In `translate.py` we use the following
 default buckets.
+모든 길이의 순서쌍에 대해 그래프를 생성하는 것과 하나의 길이로 패딩하는 것 사이에 절충으로써 몇개의 *버켓(bucket)를 사용하고 각 문장을 그 위에서 있는 버켓의 길이로 메워 넣는다.`translate.py`에서 다음과 같은 기본적인 버켓들을 사용한다.
 
 ```python
 buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
@@ -272,6 +284,8 @@ then they will not fit into the (10, 15) bucket, and so the (20, 25) bucket
 will be used, i.e. the English sentence will be padded to 20, and the French
 one to 25.
 
+이것은 3개의 토근을 가진 영어 문장이 입력이고 6개의 토근을 가진 프랑스어 문장이 그 입력에 대한 결과라고 한다면 그것들은 첫번째 버켓에 들어가게 되고 인코더 입력에 길이 5까지 메워넣고, 디코더 입력에 대해서는 길이 10까지 메워넣게 된다. 8개의 토근을 가진 영어문장이고 그에 상응하는 프랑스어 문장이 18개의 토근을 가진다면, 버켓 (10, 15)에 맞지 않고, 버켓 (20, 25)이 사용될 것이다. 예를 들어, 그 영어 문장은 길이 20까지 메워 질것이고, 프랑스어 문장은 길이 25까지 메워진다.
+
 Remember that when constructing decoder inputs we prepend the special `GO`
 symbol to the input data. This is done in the `get_batch()` function in
 `seq2seq_model.py`, which also reverses the input English sentence.
@@ -284,8 +298,12 @@ tokenized `["Je", "vais", "."]`. It will be put in the (5, 10) bucket,
 with encoder inputs representing `[PAD PAD "." "go" "I"]` and decoder
 inputs `[GO "Je" "vais" "." EOS PAD PAD PAD PAD PAD]`.
 
+디코더 입력을 만들때, 특별한 `GO`심볼을 입력 데이타 앞에 붙히는 것을 기억하자. 이것은  `seq2seq_model.py`에 `get_batch()`함수 안에서 이루어진다. 그것은 또한 영어 문장 입력을 반대로 변환한다. 입력을 반대로 변환하는 것은 [Sutskever et al., 2014](http://arxiv.org/abs/1409.3215)
+([pdf](http://arxiv.org/pdf/1409.3215.pdf))에서 뉴럴 번역 모델에 대한 결과를 향상시키는 것을 보여주었다. 이것 모든 것을 다 넣기 위해, "I go." 라는 문장이 있다고 가정하고, 입력으로 `["I", "go", "."]`로 토근화 되고 결과로  "Je vais"가 되고 `["Je", "vais", "."]`로 토근화 된다. 그것은 `[PAD PAD "." "go" "I"]`로 인코더 입력이고, `[GO "Je" "vais" "." EOS PAD PAD PAD PAD PAD]`는 디코더 입력으로  버켓 (5,10)에 들어가게 될것이다.
+
 
 ## Let's Run It
+## 그것을 실행해보자
 
 To train the model described above, we need to a large English-French corpus.
 We will use the *10^9-French-English corpus* from the
@@ -293,6 +311,8 @@ We will use the *10^9-French-English corpus* from the
 for training, and the 2013 news test from the same site as development set.
 Both data-sets will be downloaded to `data_dir` and training will start,
 saving checkpoints in `train_dir`, when this command is run.
+
+위에 설명되어진 대로 모델을 훈련하기 위해, 우리는 아주 큰 영어-프랑스어 코퍼서가 필요하다. [WMT'15 Website](http://www.statmt.org/wmt15/translation-task.html)에서 *10^9-French-English corpus*를 훈련을 위해 사용할 것이고, 개발 집합로 그 동일한 사이트에서 2013 news test를 사용할 것이다.
 
 ```
 python translate.py
@@ -308,10 +328,14 @@ the 40K most common ones will be converted to an `UNK` token representing
 unknown words. So if you change vocabulary size, the binary will re-map
 the corpus to token-ids again.
 
+약 18기가 디스크 공간을 차지 하고 훈련 코퍼스를 준비하기 위해 몇 시간이 걸린다. 그것이 풀려지면, 사전 파일들이 `data_dir`에 만들어 진다, 그리고 나서 그 코퍼스는 토근화 되어지고 정수 아이디로 변환될것이다. 사전 크기를 결정하는 매개변수들을 주시하자. 위 예에서, 가장 일반적인 단어 4만개에 있는 않는 모든 단어들은 모르는 단어를 나타내는 `UNK`토근으로 변환 될것이다. 사전 크기를 변경한다면 그 바이너리는 토근 아이를 그 코퍼스에 다시 연결 할것이다.
+
 After the data is prepared, training starts. Default parameters in `translate`
 are set to quite large values. Large models trained over a long time give good
 results, but it might take too long or use too much memory for your GPU.
 You can request to train a smaller model as in the following example.
+
+데이타가 준비된 뒤에, 훈련이 시작된다. `translate`에 있는 디폴트 매개변수는 꽤 큰 값으로 설정된다. 아주 긴 시간 동안 학습된 큰 모델은 좋은 결과를 준다, 그러나 너무 긴 시간과 GPU에 너무 많은 메모리를 사용할찌도 모른다. 다음 예처럼 더 작은 모델을 학습하는 것을 요청할 수 있다. 
 
 ```
 python translate.py
@@ -324,9 +348,13 @@ each layer with 256 units (default is 1024), and will save a checkpoint
 every 50 steps (the default is 200). You can play with these parameters
 to find out how large a model can be to fit into the memory of your GPU.
 
+위 명령은 256 유닛(디폴트는 1024)을 가진 각 2개층(디폴트는 3)을 가진 모델을 학습할 것이고, 50 단계(디폴트는 200) 마다 체크포인트를 저장할 것이다. 여러분의 GPU의 메모리에 얼마나 큰 모델이 맞게 할 수 있는지 알기 위해 이러한 매개변수를 통해 할수 있다.
+
 During training, every `steps_per_checkpoint` steps the binary will print
 out statistics from recent steps. With the default parameters (3 layers
 of size 1024), first messages look like this.
+
+학습 동안, 모든 `steps_per_checkpoint` 단계에서 바이너리는 최근 단계로 부터 통계를 프린터 할것이다. 디폴트 매개변수(크기 1024의 3개층)와 함께 첫번째 메시지는 이처럼 보인다.
 
 ```
 global step 200 learning rate 0.5000 step-time 1.39 perplexity 1720.62
@@ -350,6 +378,8 @@ the training data once) takes about 340K steps with batch-size of 64. At this
 point the model can be used for translating English sentences to French
 using the `--decode` option.
 
+각 단계는 단지 1.4초보다 빠르게 걸린다는 것과 훈련 셋에 퍼플렉시티(perplexity)와 개발 셋에 퍼플렉시티들을 볼수 있다. 대략 3만 단계 뒤에, 짧은 문장(버켓이 0과 1)에 대한 퍼플렉시티가 한 자릿수로 이동한다. 훈련 코퍼스는 22M 문장을 포함하기 땜누에, 각 에포(훈련 데이타 전체 한번 통과)은 64의 배치크기로 대략 34만 단계가 걸린다. 이 시점에, 그 모델은 `--decode` 옵션을 사용해서 영어 문장에서 프랑스 문장으로 변역하기 위해 사용될어 질 수 있다.
+
 ```
 python translate.py --decode
   --data_dir [your_data_directory] --train_dir [checkpoints_directory]
@@ -366,16 +396,22 @@ translator, end-to-end. Run it and see how the model performs for yourself.
 While it has reasonable quality, the default parameters will not give you
 the best translation model. Here are a few things you can improve.
 
+위 예는 앤드-투-앤드(end-to-end)로 영어-에서-프랑스어(English-to-French) 번역기를 만드는 방법을 보여준다. 스스로 그것을 실행하고 그 모델이 어떻게 수행하는지 봐라. 그것이 꽤 괜찮은 성능을 보이지만, 디플트 매개변수로 최고의 번역 모델이 주어지지 않는다. 여기 여러분이 그것을 향상 시킬수 있는 몇가지 방법이 있다.
+
 First of all, we use a very primitive tokenizer, the `basic_tokenizer` function
 in `data_utils`. A better tokenizer can be found on the
 [WMT'15 Website](http://www.statmt.org/wmt15/translation-task.html).
 Using that tokenizer, and a larger vocabulary, should improve your translations.
+
+무엇보다, `data_utils`안에 `basic_tokenizer`인 아주 기본적인 토큰생성자를 사용한다. 더 좋은 토큰 생성자는 [WMT'15 Website](http://www.statmt.org/wmt15/translation-task.html)에서 찾을수 있다. 저 토근 생성자와 더 큰 사전을 사용하는 것은 번역을 향샹 시킬 것이다.
 
 Also, the default parameters of the translation model are not tuned.
 You can try changing the learning rate, decay, or initializing the weights
 of your model in a different way. You can also change the default
 `GradientDescentOptimizer` in `seq2seq_model.py` to a more advanced one, such
 as `AdagradOptimizer`. Try these things and see how they improve your results!
+
+또한, 그 번역 모델의 디폴트 매개변수는 최적화 되지 않았다. 학습 비율이나 디케이를 변경하거나, 다른 방법으로 여러분의 모델의 가중치들을 초기하는 것을 시도 할수 있다. 또한 `seq2seq_model.py`에 있는 디폴트인 `GradientDescentOptimizer`를 더 혁신적인 `AdagradOptimizer`로 변경할 수 있다. 이러한 것들을 시도하고 결과가 어떻게 향샹 되는지 보자.
 
 Finally, the model presented above can be used for any sequence-to-sequence
 task, not only for translation. Even if you want to transform a sequence to
@@ -385,3 +421,7 @@ give state-of-the-art results, as demonstrated in
 ([pdf](http://arxiv.org/pdf/1412.7449.pdf)).
 So you can not only build your own translator, you can also build a parser,
 a chat-bot, or any program that comes to your mind. Experiment!
+
+마지막으로, 위에서 나타난 모델은 번역뿐만 아니라 어떤 시퀸스-투-시퀸스 작업에 대해서도 사용되어 질수 있다. 하나의 시퀸스을 트리로 변환하기 원한다고 할찌라도, 예를 들어 파싱 트리를 생성하기, 위처럼 동일한 모델은[Vinyals & Kaiser et al., 2014](http://arxiv.org/abs/1412.7449)
+([pdf](http://arxiv.org/pdf/1412.7449.pdf))에서 보여진대로 최고의 결과를 준다. 그래서 여러분 자신의 번역기를 만들수 있을 뿐만 아니라 또한 파서, 챗봇, 또는 당신 머리에 떠오르는 어떤 프로그램도 만들수 있다. 실험해보라!
+
