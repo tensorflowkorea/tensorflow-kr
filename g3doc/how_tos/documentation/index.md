@@ -1,4 +1,4 @@
-# Writing TensorFlow Documentation
+# TensorFlow 문서 작성
 
 TensorFlow의 문서는 
 [Markdown](https://daringfireball.net/projects/markdown/)에서 유지되고 있고 
@@ -12,7 +12,7 @@ API문서를 생성합니다. 스크립트를 인자 없이 호출하면 Python 
 C++ 문서 또한 재작성합니다. 이것은 반드시 `tools/docs` 디렉토리에서 호출되어야 합니다. 
 그리고 `-a` 를 인자로 전달하려면 `doxygen` 의 설치가 요구됩니다.
 
-## Python API Documentation
+## Python API 문서
 
 Ops, classes, utility 함수는 `image_ops.py` 와 같은 Python 모듈에 정의되어 있습니다. 
 그 모듈의 docstring은 해당 Python 파일에 대해 생성되는 마크다운 파일의 시작부분에 삽입됩니다. 
@@ -40,7 +40,7 @@ Ops를 위한 문서는 자동적으로 Python wrapper 또는 C++ Ops registrati
 
 Classes와 Utility Functions를 위한 문서는 docstring에서 발췌합니다.
 
-## Op Documentation Style Guide
+## Op 문서 스타일 가이드
 
 이상적으로는, 제시된 순서를 따라 아래와 같은 정보를 제공해야 합니다:
 
@@ -59,7 +59,7 @@ Classes와 Utility Functions를 위한 문서는 docstring에서 발췌합니다
 [tensorflow.org](https://www.tensorflow.org)에서 적절히 표현됩니다. 하지만
 [github](https://github.com/tensorflow/tensorflow)에 나타나지는 않습니다.
 
-### Writing About Code
+### 코드에 대해서 적을 때
 
 문서에서 아래와 같은 것들을 적을 때 ` ` (backticks) 로 감싸야 합니다:
 
@@ -94,11 +94,11 @@ Python 코드 예시를 제공하고자 한다면 문법 강조가 적절히 되
 This operation requires that `-1-input.dims() <= dim <= input.dims()`.
 ```
 
-### Tensor Dimensions
+### Tensor의 차원
 
 보통 tensor에 대해 말할 때는 tensor라는 단어의 첫 글자를 대문자로 쓰지 마세요.
 op에 인자로 전달하거나 op에서 반환하는 특정한 객체를 말할 때는 Tensor의 첫 글자를 대문자로 쓰고 
-backticks로 감싸세요 왜냐하면 전달되어지는 `Tensor` 객체에 대해 말하고 있기 때문입니다.
+backticks로 감싸세요. 왜냐 하면 전달되어지는 `Tensor` 객체에 대해 말하고 있기 때문입니다.
 
 진짜 `Tensors` 라는 객체에 대해 이야기하지 않는다면 `Tensors`를 여러개의 Tensor 객체를 서술할 때 사용하지 마세요.
 "a list of `Tensor`objects." (`Tensor` 객체 리스트) 또는  "`Tensor`s" (`Tensor`들)로 부르는게 낫습니다.
@@ -124,7 +124,7 @@ If `input` is a 3-D tensor with shape `[3, 4, 3]`, this operation will return
 a 3-D tensor with shape `[6, 8, 6]`.
 ```
 
-### Links
+### 링크
 
 `g3docs` 트리에 있는 다른 것들에 링크를 걸려면 
 `[tf.parse_example](../api_docs/python/ops.md#parse_example)` 처럼 상대 경로를 사용하세요.
@@ -139,12 +139,11 @@ a 3-D tensor with shape `[6, 8, 6]`.
 url 파라미터를 URL에 포함하지 마세요.
 
 
-### Ops defined in C++
+### C++에서 정의된 Ops
 
-All Ops defined in C++ must be documented as part of the `REGISTER_OP`
-declaration. The docstring in the C++ file is processed to automatically add
-some information for the input types, output types, and Attr types and default
-values.
+C++에 정의된 모든 Ops는 반드시 `REGISTER_OP` 선언 부분에 기록되어 있어야 합니다. 
+C++ 파일에 있는 docstring은 입력 타입, 출력 타입, Attr 타입, default 값 정보를 자동적으로 
+추가하기 위해 처리됩니다.
 
 예시:
 
@@ -190,27 +189,23 @@ Decodes the contents of a PNG file into a uint8 tensor.
   from the png contents.
 ```
 
-Much of the argument description is added automatically. In particular, the doc
-generator automatically adds the name and type of all inputs, attrs, and
-outputs. In the above example, `<b>contents</b>: A string Tensor.` was added
-automatically. You should write your additional text to flow naturally after
-that description.
+인자에 대한 설명은 대부분 자동적으로 추가됩니다. 특히 doc generator(문서 생성기)는 
+자동적으로 모든 입력, attrs, 출력의 이름과 타입을 추가합니다.
+위의 예시에서 `<b>contents</b>: A string Tensor.` 는 자동으로 추가되었습니다.
+글이 자연스럽게 흘러가도록 추가적인 문장을 해당 설명 뒤에 써야 합니다. 
 
-For inputs and output, you can prefix your additional text with an equal sign to
-prevent the automatically added name and type. In the above example, the
-description for the output named `image` starts with `=` to prevent the addition
-of `A uint8 Tensor.` before our text `A 3-D uint8 Tensor...`. You cannot prevent
-the addition of the name, type, and default value of attrs this way, so write
-your text carefully.
+입,출력에 대해서, equal sign( = 기호)을 추가적인 문장의 서두에 붙여서 이름과 타입을 자동으로 추가하는 것을 
+막을 수 있습니다. 위의 예시에서, 이름이 `image` 인 출력에 대한 설명은 우리가 입력한 글 `A 3-D uint8 Tensor...` 이전에 
+`A uint8 Tensor.` 가 추가되는 것을 방지하기 위해 `=` 로 시작합니다.
+이 방법으로는 attrs의 이름, 타입, default 값이 추가되는 것을 막을 수는 없기 때문에 글을 적을 때 신중해야 합니다.
 
-### Ops defined in Python
+### Python에서 정의된 Ops
 
-If your op is defined in a `python/ops/*.py` file, then you need to provide
-text for all of the arguments and output (returned) tensors.
+op가 `python/ops/*.py` 파일에 정의되어 있다면, 모든 인자와 출력값(반환값) tensor에 관한 글을 제공해야 합니다.
 
-You should conform to the usual Python docstring conventions, except that you
-should use Markdown in the docstring. The doc generator does not auto-generate
-any text for ops that are defined in Python, so what you write is what you get.
+Python docstring 규칙에 따라야 하고 docstring에서 마크다운을 사용해야 합니다. 
+doc generator(문서 생성기)는 Python에 정의된 ops에 관한 글은 어떤 것도 자동으로 생성하지 않기 때문에 
+당신이 적은 것을 사용합니다.
 
 간단한 예시:
 
@@ -243,11 +238,11 @@ def foo(x, y, name="bar"):
   ...
 ```
 
-## Description of the Docstring Sections
+## Docstring 부분에 관한 설명
 
 여기에 더 자세한 내용과 docstring의 각 속성에 대한 예시가 있습니다.
 
-### Short sentence that describes what the op does.
+### op가 무엇을 하는지 설명하는 짧은 문장
 
 예시:
 
@@ -271,7 +266,7 @@ Saves a list of tensors to a file.
 Extracts a slice from a tensor.
 ```
 
-### Short description of what happens when you pass arguments to the op.
+### op에 인자를 전달했을 때 무엇이 일어나는지에 대한 짧은 설명.
 
 예시:
 
@@ -287,7 +282,7 @@ This operation returns a tensor of type `dtype` and dimensions `shape`, with
 all elements set to zero.
 ```
 
-### Example showing how the op works.
+### op가 어떻게 작동하는지를 보여주는 예시.
 
 `squeeze()` op 에 좋은 수도코드 예시가 있습니다:
 
@@ -299,11 +294,11 @@ all elements set to zero.
     For example, tiling `[a, b, c, d]` by 2 produces
     `[[a, b, c, d], [a, b, c, d]]`.
 
-It is often helpful to show code samples in Python. Never put them in the C++
-Ops file, and avoid putting them in the Python Ops doc. Put them in the module
-or class docstring where the Ops constructors are called out.
+Python에서 코드 예시를 보여주는 것은 도움이 됩니다.
+절대 그것을 C++ Ops 파일에 넣지 마세요. 그리고 Python Ops 문서에 넣는 것도 피하세요. 
+Ops 생성자가 호출되는 모듈이나 클래스의 docstring에 삽입하세요. 
 
-Here's an example from the module docsting in `image_ops.py`:
+여기 `image_ops.py` 에 있는 모듈 docstring 예제가 있습니다:
 
     Tensorflow can convert between images in RGB or HSV. The conversion
     functions work only on `float` images, so you need to convert images in
@@ -318,7 +313,7 @@ Here's an example from the module docsting in `image_ops.py`:
     hsv_image = tf.image.rgb_to_hsv(rgb_image)
     ```
 
-### Requirements, caveats, important notes.
+### 필요조건, 경고, 중요한 사항들.
 
 예시:
 
@@ -332,21 +327,16 @@ be fed using the `feed_dict` optional argument to `Session.run()`,
 `Tensor.eval()`, or `Operation.run()`.
 ```
 
-### Descriptions of arguments and output (returned) tensors.
+### 인자와 출력(반환) tensors에 관한 설명.
 
-Keep the descriptions brief and to the point. You should not have to explain
-how the operation works in the argument sections.시
+설명은 요점만 간단히 하세요. 인자 부분에서는 어떻게 실행되는지를 설명할 필요가 없습니다. 
 
-Mention if the Op has strong constraints on the dimensions of the input or
-output tensors. Remember that for C++ Ops, the type of the tensor is
-automatically added as either as "A ..type.. Tensor" or "A Tensor with type
-in {...list of types...}". In such cases, if the Op has a constraint on the
-dimensions either add text such as "Must be 4-D" or start the description with
-`=` (to prevent the tensor type to be added) and write something like
-"A 4-D float tensor".
+op가 입력 혹은 출력 tensors의 dimension(차원)에 강한 제한이 있으면 언급해야 합니다. 
+C++ Ops는 tensor의 타입이 자동으로 "A ..type.. Tensor" 또는 "A Tensor with type in {...list of types...}" 
+형태로 더해집니다. 이런 경우에, Op가 차원에 제한이 있으면 "Must be 4-D" 라는 글을 더하거나 
+설명의 처음에 `=` 를 추가하고(tensor의 타입이 자동으로 추가되는 것을 막기 위해) "A 4-D float tensor" 와 같이 적으세요.
 
-For example, here are two ways to document an image argument of a C++ op (note
-the "=" sign):
+예를 들어, 여기에 C++ op의 이미지 인자를 문서화하는 두 가지 방법이 있습니다 ("=" 기호를 주목):
 
 ```markdown
 image: Must be 4-D. The image to resize.
@@ -356,7 +346,7 @@ image: Must be 4-D. The image to resize.
 image:= A 4-D `float` tensor. The image to resize.
 ```
 
-In the documentation, these will be rendered to markdown as
+문서에서 이와 같은 마크다운으로 렌더링됩니다
 
 ```markdown
 image: A `float` Tensor. Must be 4-D. The image to resize.
@@ -368,12 +358,10 @@ image: A 4-D `float` Tensor. The image to resize.
 
 ### Optional arguments descriptions ("attrs")
 
-The doc generator always describe attrs type and default value, if any.
-You cannot override that with an equal sign because the description is very
-different in the C++ and Python generated docs.
+doc generator(문서 생성기)는 항상 attrs의 타입과 default 값을 서술합니다. 
+C++와 Python doc generator에서 생성되는 설명이 매우 다르기 때문에 equal sign( = 기호)으로 override(오버라이드) 할 수 없습니다.
 
-Phrase any additional attr description so that it flows well after the type
-and default value.
+타입과 default 값 뒤에 흐름이 잘 이어지도록 추가적인 attr 설명을 표현하세요.
 
 `image_ops.py` 에 있는 예시입니다:
 
