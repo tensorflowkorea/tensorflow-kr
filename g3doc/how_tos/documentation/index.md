@@ -356,7 +356,7 @@ image: A `float` Tensor. Must be 4-D. The image to resize.
 image: A 4-D `float` Tensor. The image to resize.
 ```
 
-### Optional arguments descriptions ("attrs")
+### 선택적인 인자 설명 ("attrs")
 
 doc generator(문서 생성기)는 항상 attrs의 타입과 default 값을 서술합니다. 
 C++와 Python doc generator에서 생성되는 설명이 매우 다르기 때문에 equal sign( = 기호)으로 override(오버라이드) 할 수 없습니다.
