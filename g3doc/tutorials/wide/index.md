@@ -45,12 +45,7 @@
 ## 인구조사 데이터 읽어보기
 
 우리가 사용할 데이터 세트는 [소득 인구조사 데이터세트]
-(https://archive.ics.uci.edu/ml/datasets/Census+Income). 여기서 다운로드 할 수 있다
- 그리고
-
-수동으로 또는 코드를 다음과 같이 사용해라:
-
-[훈련 데이터]
+(https://archive.ics.uci.edu/ml/datasets/Census+Income). [훈련 데이터]
 (https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고 
 [테스트 데이터](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test) 를 수동 또는 코드를 이용해서 다운로드 할 수 있습니다.
 
