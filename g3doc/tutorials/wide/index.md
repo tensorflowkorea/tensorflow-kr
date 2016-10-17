@@ -1,19 +1,21 @@
-# TensorFlow 선형 모델 튜토리얼 
+# 텐서플로우 선형 모델 튜토리얼
 
 이번 강의에서 우리는 이진 분류 문제를 사람에 나이, 성별, 교육, 그리고 직업(특성들)에 관한 인구조사 데이터를 가지고 한 사람의 연봉이 50,000불이 넘는지를 TensorFlow에 TF.Learn API를 사용해서 풀어 볼 것이다(목표 레이블). 우리는 **로지스틱 회귀** 모델을 주어진 개인들에 정보를 가지고 교육 시킬 것이고 모델은 개인의 년봉이 50000달러 이상일 수 있는 가능성으로 해석 될 수 있는 0 과 1 사이의 숫자를 출력 한다.
 
 ## 설치
 
-To try the code for this tutorial:
+이번 튜토리얼 코드를 실행해보기 위해서:
 
-1.  [Install TensorFlow](../../get_started/os_setup.md) if you haven't
-already.
+1.  [텐서플로우 설치](../../get_started/os_setup.md) 만약 텐서플로우가 설치되지 않았을 경우
 
-2.  Download [the tutorial code](
+2.  다운로드 [튜토리얼 코드](
 https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py).
 
-3.  Install the pandas data analysis library. tf.learn doesn't require pandas, but it does support it, and this tutorial uses pandas. To install pandas:
-    1. Get `pip`:
+3.  pandas 데이터 분석 라이브러리 설치.
+
+ tf.learn에 pandas가 필수적인 요소는 아니지만 tf.learn이 판다를 지원하고 또한 이번 튜토리얼에서 판다를 하기 때문. pandas를 설치하기 위해서:
+
+    1.  `pip` 설치:
 
        ```shell
        # Ubuntu/Linux 64-bit
@@ -24,33 +26,31 @@ https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.p
        $ sudo easy_install --upgrade six
       ```
 
-    2. Use `pip` to install pandas:
+    2. `pip`로 pandas 설치하기:
 
        ```shell
        $ sudo pip install pandas
        ```
 
-    If you have trouble installing pandas, consult the [instructions]
-(http://pandas.pydata.org/pandas-docs/stable/install.html) on the pandas site.
+    만약에 판다 설치에 어려움을 느낀다면, 판다 사이트에서 [설명]
+(http://pandas.pydata.org/pandas-docs/stable/install.html) 을 참고하시오.
 
-4. Execute the tutorial code with the following command to train the linear
-model described in this tutorial:
+4. 이 튜토리얼에 설명된 선형모델을 훈련시키기 위해 튜토리얼 코드를 아래의 명령어로 실행하시오:
 
    ```shell
    $ python wide_n_deep_tutorial.py --model_type=wide
    ```
+코드가 어떻게 선형모델을 구축하는지 계속 읽어 보자.
 
-Read on to find out how this code builds its linear model.
+## 인구조사 데이터 읽어보기
 
-## Reading The Census Data
-
-The dataset we'll be using is the [Census Income Dataset]
-(https://archive.ics.uci.edu/ml/datasets/Census+Income). You can download the
-[training data]
-(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) and
-[test data]
+우리가 사용할 데이터 세트는 [소득 인구조사 데이터세트]
+(https://archive.ics.uci.edu/ml/datasets/Census+Income). 여기서 다운로드 할 수 있다
+[훈련 데이터]
+(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고
+[테스트 데이터]
 (https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test)
-manually or use code like this:
+수동으로 또는 코드를 다음과 같이 사용해라:
 
 ```python
 import tempfile
@@ -60,9 +60,7 @@ test_file = tempfile.NamedTemporaryFile()
 urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
 urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test", test_file.name)
 ```
-
-Once the CSV files are downloaded, let's read them into [Pandas]
-(http://pandas.pydata.org/) dataframes.
+CSV 파일들에 다운로드가 완료 됐다면, [Pandas] (http://pandas.pydata.org/) 데이터프레임에 입력 시켜 보자.
 
 ```python
 import pandas as pd
@@ -74,9 +72,9 @@ df_train = pd.read_csv(train_file, names=COLUMNS, skipinitialspace=True)
 df_test = pd.read_csv(test_file, names=COLUMNS, skipinitialspace=True, skiprows=1)
 ```
 
-Since the task is a binary classification problem, we'll construct a label
-column named "label" whose value is 1 if the income is over 50K, and 0
-otherwise.
+이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표을 구축할 거다.
+
+
 
 ```python
 LABEL_COLUMN = "label"
@@ -92,6 +90,7 @@ and continuous columns:
     categories in a finite set. For example, the native country of a person
     (U.S., India, Japan, etc.) or the education level (high school, college,
     etc.) are categorical columns.
+        
 *   A column is called **continuous** if its value can be any numerical value in
     a continuous range. For example, the capital gain of a person (e.g. $14,084)
     is a continuous column.
@@ -104,7 +103,7 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "h
 
 Here's a list of columns available in the Census Income dataset:
 
-| Column Name    | Type        | Description                       | {.sortable}
+|열 이름    | 타입        | 설명                       | {.sortable}
 | -------------- | ----------- | --------------------------------- |
 | age            | Continuous  | The age of the individual         |
 | workclass      | Categorical | The type of employer the          |
