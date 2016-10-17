@@ -6,10 +6,10 @@
 
 이번 튜토리얼 코드를 실행해보기 위해서:
 
-1.  [텐서플로우 설치](../../get_started/os_setup.md) 만약 텐서플로우가 설치되지 않았을 경우
+1.  텐서플로우를 설치 하지 않았다면 [텐서플로우 설치](../../get_started/os_setup.md) 
 
-2.  다운로드 [튜토리얼 코드](
-https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py).
+2.  [튜토리얼 코드](
+    https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py) 다운로드.
 
 3.  pandas 데이터 분석 라이브러리 설치.
 
@@ -46,11 +46,13 @@ https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.p
 
 우리가 사용할 데이터 세트는 [소득 인구조사 데이터세트]
 (https://archive.ics.uci.edu/ml/datasets/Census+Income). 여기서 다운로드 할 수 있다
-[훈련 데이터]
-(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고
-[테스트 데이터]
-(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test)
+ 그리고
+
 수동으로 또는 코드를 다음과 같이 사용해라:
+
+[훈련 데이터]
+(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고 
+[테스트 데이터](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test) 를 수동 또는 코드를 이용해서 다운로드 할 수 있습니다.
 
 ```python
 import tempfile
@@ -72,7 +74,7 @@ df_train = pd.read_csv(train_file, names=COLUMNS, skipinitialspace=True)
 df_test = pd.read_csv(test_file, names=COLUMNS, skipinitialspace=True, skiprows=1)
 ```
 
-이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표을 구축할 거다.
+이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표을 만들 것이다.
 
 
 
