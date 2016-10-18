@@ -71,26 +71,23 @@ df_test = pd.read_csv(test_file, names=COLUMNS, skipinitialspace=True, skiprows=
 
 이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표을 만들 것이다.
 
-
-
 ```python
 LABEL_COLUMN = "label"
 df_train[LABEL_COLUMN] = (df_train["income_bracket"].apply(lambda x: ">50K" in x)).astype(int)
 df_test[LABEL_COLUMN] = (df_test["income_bracket"].apply(lambda x: ">50K" in x)).astype(int)
 ```
 
-Next, let's take a look at the dataframe and see which columns we can use to
-predict the target label. The columns can be grouped into two types—categorical
-and continuous columns:
+다음으로, 데이터프레임에서 어떤 열들이 목표 label을 예측하는데 사용 될 수 있는지 살펴보자. 열들은 categorical 또는 continuous 두 타입으로 구분 되어질 수 있다.
 
-*   A column is called **categorical** if its value can only be one of the
-    categories in a finite set. For example, the native country of a person
-    (U.S., India, Japan, etc.) or the education level (high school, college,
-    etc.) are categorical columns.
+
+
+*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical**열 이라 불린다. 
+     예를 들어 사람에 국적(미국, 인도, 일본 등)이나 교육 수준(고등학교, 대학 등)이 categorical 열들이다.
         
-*   A column is called **continuous** if its value can be any numerical value in
-    a continuous range. For example, the capital gain of a person (e.g. $14,084)
-    is a continuous column.
+  
+    
+*  만약에 값이 어떤 수치로 나올 수 있다면 **continuous**열 이라 불린다. 예를 들어, 한 사람에 소득이 continuous열이다.
+
 
 ```python
 CATEGORICAL_COLUMNS = ["workclass", "education", "marital_status", "occupation",
@@ -98,50 +95,43 @@ CATEGORICAL_COLUMNS = ["workclass", "education", "marital_status", "occupation",
 CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "hours_per_week"]
 ```
 
-Here's a list of columns available in the Census Income dataset:
+수입 인구조사 데이터 셋에 나오는 열 리스트:
+숫자 형식의 최고 학력
 
 |열 이름    | 타입        | 설명                       | {.sortable}
 | -------------- | ----------- | --------------------------------- |
-| age            | Continuous  | The age of the individual         |
-| workclass      | Categorical | The type of employer the          |
-:                :             : individual has (government,       :
-:                :             : military, private, etc.).         :
+| age            | Continuous  | 나이                             |
+| workclass      | Categorical | 고용주 타입                      |
+:                :             : (정부, 군대, 기업 등)             :
 | fnlwgt         | Continuous  | The number of people the census   |
 :                :             : takers believe that observation   :
 :                :             : represents (sample weight). This  :
 :                :             : variable will not be used.        :
-| education      | Categorical | The highest level of education    |
-:                :             : achieved for that individual.     :
-| education_num  | Continuous  | The highest level of education in |
-:                :             : numerical form.                   :
-| marital_status | Categorical | Marital status of the individual. |
-| occupation     | Categorical | The occupation of the individual. |
+| education      | Categorical | 최고 학력                         |
+| education_num  | Continuous  | 숫자 형식의 최고 학력             |
+| marital_status | Categorical | 혼인 여부                         |
+| occupation     | Categorical | 직업                              |
 | relationship   | Categorical | Wife, Own-child, Husband,         |
 :                :             : Not-in-family, Other-relative,    :
 :                :             : Unmarried.                        :
-| race           | Categorical | White, Asian-Pac-Islander,        |
-:                :             : Amer-Indian-Eskimo, Other, Black. :
-| gender         | Categorical | Female, Male.                     |
-| capital_gain   | Continuous  | Capital gains recorded.           |
-| capital_loss   | Continuous  | Capital Losses recorded.          |
-| hours_per_week | Continuous  | Hours worked per week.            |
-| native_country | Categorical | Country of origin of the          |
-:                :             : individual.                       :
-| income         | Categorical | ">50K" or "<=50K", meaning        |
-:                :             : whether the person makes more     :
-:                :             : than \$50,000 annually.           :
+| race           | Categorical | 인종 ( 백인, Asian-Pac-Islander, |
+:                :             : Amer-Indian-Eskimo, Other, 흑인. :
+| gender         | Categorical | 성별 (남, 여)                     |
+| capital_gain   | Continuous  | 기록된 양도 소득.                 |
+| capital_loss   | Continuous  | 기록된 자본 손실.                 |
+| hours_per_week | Continuous  | 주당 근무시간.                    |
+| native_country | Categorical | 출생지                            |
+| income         | Categorical | ">50K" 또는 "<=50K", 개인의 일년  |
+:                :             : 수입이 5만불 이상인지 아닌지 뜻함 : 
 
-## Converting Data into Tensors
 
-When building a TF.Learn model, the input data is specified by means of an Input
-Builder function. This builder function will not be called until it is later
-passed to TF.Learn methods such as `fit` and `evaluate`. The purpose of this
-function is to construct the input data, which is represented in the form of
-[Tensors]
-(https://www.tensorflow.org/versions/r0.9/api_docs/python/framework.html#Tensor)
-or [SparseTensors]
-(https://www.tensorflow.org/versions/r0.9/api_docs/python/sparse_ops.html#SparseTensor).
-In more detail, the Input Builder function returns the following as a pair:
+##데이터를 텐서들로 바꾸기 
+
+TF.Learn 모델을 구축 할때, 입력 데이터는 Input Builder 함수에 의해서 명시된다.
+이 builder 함수는 TF.Learn에 `fit` 이나 `evaluate` 과 같은 메소드들에게 넘겨 질때 까지 호출 되지 않는다.
+이 함수의 목적은 입력 데이터를 [Tensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/framework.html#Tensor) 나 
+[SparseTensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/sparse_ops.html#SparseTensor) 형태로 구성하기 위함에 있다.
+더 구체적으로, Input Builder 함수는 다음과 같은 한 쌍을 반환 한다:
 
 1.  `feature_cols`: A dict from feature column names to `Tensors` or
     `SparseTensors`.
