@@ -96,11 +96,10 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "h
 ```
 
 수입 인구조사 데이터 셋에 나오는 열 리스트:
-숫자 형식의 최고 학력
 
 |열 이름    | 타입        | 설명                       | {.sortable}
 | -------------- | ----------- | --------------------------------- |
-| age            | Continuous  | 나이                             |
+| age               | Continuous    | 나이                                   |
 | workclass      | Categorical | 고용주 타입                      |
 :                :             : (정부, 군대, 기업 등)             :
 | fnlwgt         | Continuous  | The number of people the census   |
