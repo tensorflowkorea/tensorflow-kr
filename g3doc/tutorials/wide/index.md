@@ -1,12 +1,12 @@
 # 텐서플로우 선형 모델 튜토리얼
 
-이번 강의에서 우리는 이진 분류 문제를 사람에 나이, 성별, 교육, 그리고 직업(특성들)에 관한 인구조사 데이터를 가지고 한 사람의 연봉이 50,000불이 넘는지를 TensorFlow에 TF.Learn API를 사용해서 풀어 볼 것이다(목표 레이블). 우리는 **로지스틱 회귀** 모델을 주어진 개인들에 정보를 가지고 교육 시킬 것이고 모델은 개인의 년봉이 50000달러 이상일 수 있는 가능성으로 해석 될 수 있는 0 과 1 사이의 숫자를 출력 한다.
+이번 강의에서 우리는 이진 분류 문제를 사람에 나이, 성별, 교육, 그리고 직업(특성들)에 관한 인구조사 데이터를 가지고 한 사람의 연봉이 50,000불이 넘는지를 TensorFlow에 TF.Learn API를 사용해서 풀어 볼 것이다(목표 레이블). 우리는 **로지스틱 회귀** 모델을 주어진 개인들에 정보를 가지고 교육 할 것이고 모델은 개인의 연봉이 50,000달러 이상일 가능성으로 해석 될 수 있는 0과1 사이의 숫자를 출력한다.
 
 ## 설치
 
 이번 튜토리얼 코드를 실행해보기 위해서:
 
-1.  텐서플로우를 설치 하지 않았다면 [텐서플로우 설치](../../get_started/os_setup.md) 
+1.  텐서플로우를 설치하지 않았다면 [텐서플로 설치](../../get_started/os_setup.md) 
 
 2.  [튜토리얼 코드](
     https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py) 다운로드.
@@ -35,7 +35,7 @@
     만약에 판다 설치에 어려움을 느낀다면, 판다 사이트에서 [설명]
 (http://pandas.pydata.org/pandas-docs/stable/install.html) 을 참고하시오.
 
-4. 이 튜토리얼에 설명된 선형모델을 훈련시키기 위해 튜토리얼 코드를 아래의 명령어로 실행하시오:
+4. 이 튜토리얼에 설명된 선형모델을 훈련하기 위해 튜토리얼 코드를 아래의 명령어로 실행하시오:
 
    ```shell
    $ python wide_n_deep_tutorial.py --model_type=wide
@@ -47,7 +47,7 @@
 우리가 사용할 데이터 세트는 [소득 인구조사 데이터세트]
 (https://archive.ics.uci.edu/ml/datasets/Census+Income). [훈련 데이터]
 (https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고 
-[테스트 데이터](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test) 를 수동 또는 코드를 이용해서 다운로드 할 수 있습니다.
+[테스트 데이터](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test) 를 수동 또는 코드를 이용해서 내려받을 수 있습니다.
 
 ```python
 import tempfile
@@ -57,7 +57,7 @@ test_file = tempfile.NamedTemporaryFile()
 urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
 urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test", test_file.name)
 ```
-CSV 파일들에 다운로드가 완료 됐다면, [Pandas] (http://pandas.pydata.org/) 데이터프레임에 입력 시켜 보자.
+CSV 파일들에 다운로드가 완료됐다면, [Pandas] (http://pandas.pydata.org/) 데이터프레임에 입력시켜 보자.
 
 ```python
 import pandas as pd
@@ -69,7 +69,7 @@ df_train = pd.read_csv(train_file, names=COLUMNS, skipinitialspace=True)
 df_test = pd.read_csv(test_file, names=COLUMNS, skipinitialspace=True, skiprows=1)
 ```
 
-이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표을 만들 것이다.
+이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표를 만들 것이다.
 
 ```python
 LABEL_COLUMN = "label"
@@ -77,11 +77,11 @@ df_train[LABEL_COLUMN] = (df_train["income_bracket"].apply(lambda x: ">50K" in x
 df_test[LABEL_COLUMN] = (df_test["income_bracket"].apply(lambda x: ">50K" in x)).astype(int)
 ```
 
-다음으로, 데이터프레임에서 어떤 열들이 목표 label을 예측하는데 사용 될 수 있는지 살펴보자. 열들은 categorical 또는 continuous 두 타입으로 구분 되어질 수 있다.
+다음으로, 데이터프레임에서 어떤 열들이 목표 label을 예측하는 데 사용 될 수 있는지 살펴보자. 열들은 categorical 또는 continuous 두 타입으로 구분 될 수 있다.
 
 
 
-*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical**열 이라 불린다. 
+*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical**열이라 불린다. 
      예를 들어 사람에 국적(미국, 인도, 일본 등)이나 교육 수준(고등학교, 대학 등)이 categorical 열들이다.
         
   
@@ -95,7 +95,7 @@ CATEGORICAL_COLUMNS = ["workclass", "education", "marital_status", "occupation",
 CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "hours_per_week"]
 ```
 
-수입 인구조사 데이터 셋에 나오는 열 리스트:
+수입 인구조사 데이터 세트에 나오는 열 리스트:
 
 |열 이름    | 타입        | 설명                       | {.sortable}
 | -------------- | ----------- | --------------------------------- |
@@ -126,33 +126,29 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "h
 
 ##데이터를 텐서들로 바꾸기 
 
-TF.Learn 모델을 구축 할때, 입력 데이터는 Input Builder 함수에 의해서 명시된다.
-이 builder 함수는 TF.Learn에 `fit` 이나 `evaluate` 과 같은 메소드들에게 넘겨 질때 까지 호출 되지 않는다.
-이 함수의 목적은 입력 데이터를 [Tensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/framework.html#Tensor) 나 
+TF.Learn 모델을 구축 할 때, 입력 데이터는 Input Builder 함수에 의해서 명시된다.
+이 builder 함수는 TF.Learn에 `fit` 이나 `evaluate`와 같은 메소드들에게 넘겨 질때 까지 호출되지 않는다.
+이 함수의 목적은 입력 데이터를 [Tensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/framework.html#Tensor) 나
 [SparseTensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/sparse_ops.html#SparseTensor) 형태로 구성하기 위함에 있다.
-더 구체적으로, Input Builder 함수는 다음과 같은 한 쌍을 반환 한다:
+더 구체적으로, Input Builder 함수는 다음과 같은 한 쌍을 반환한다:
 
 1.  `feature_cols`: A dict from feature column names to `Tensors` or
     `SparseTensors`.
 2.  `label`: A `Tensor` containing the label column.
 
-The keys of the `feature_cols` will be used to when construct columns in the
-next section. Because we want to call the `fit` and `evaluate` methods with
-different data, we define two different input builder functions,
-`train_input_fn` and `test_input_fn` which are identical except that they pass
-different data to `input_fn`. Note that `input_fn` will be called while
-constructing the TensorFlow graph, not while running the graph. What it is
-returning is a representation of the input data as the fundamental unit of
-TensorFlow computations, a `Tensor` (or `SparseTensor`).
+`feature_cols`에 키들은 다음 부분에서 열을 구성하는 데 사용 될 것이다.
+ 
+우리는 `fit` 과 `evaluate` 메소드들을 서로 다른 데이터로 호출 하고 싶으므로,
+서로 같지만 단지 다른 데이터를 `input_fn`에 전달하는 input builder 함수인 `train_input_fn` 그리고 `test_input_fn`를 정의 했습니다.
 
-Our model represents the input data as *constant* tensors, meaning that the
-tensor represents a constant value, in this case the values of a particular
-column of `df_train` or `df_test`. This is the simplest way to pass data into
-TensorFlow. Another more advanced way to represent input data would be to
-construct an [Input Reader]
-(https://www.tensorflow.org/versions/r0.9/api_docs/python/io_ops.html#inputs-and-readers)
-that represents a file or other data source, and iterates through the file as
-TensorFlow runs the graph. Each continuous column in the train or test dataframe
+여기서 눈여겨볼 것은 `input_fn`가 그래프 실행 중이 아니라 텐서플로 그래프를 생성하는 도중에 호출된다는 것입니다.
+Input Builder가 반환하는 것은 입력 데이터를 대표하는 텐서플로 연산 기본단위인 `Tensor`(또는 `SparseTensor`)입니다.
+
+우리 모델은 입력 데이터의 정숫값을 대표하는 *constant* 텐서로 나타낸다, 이 경우에는 `df_train` 나 `df_test`에 열에 값을 대표한다.
+이 방법이 텐서플로에 데이터를 전달하는 가장 간단한 방법이다.
+다른 심화한 방법으로는 파일이나 다른 데이터 소스를 대표하는 Input Reader를 만들어서 파일을 텐서플로가 그래프를 실행하는 동안에 읽어 나가는 것이다.
+  
+  Each continuous column in the train or test dataframe
 will be converted into a `Tensor`, which in general is a good format to
 represent dense data. For cateogorical data, we must represent the data as a
 `SparseTensor`. This data format is good for representing sparse data.
