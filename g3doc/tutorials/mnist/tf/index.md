@@ -1,35 +1,34 @@
-# TensorFlow Mechanics 101
+# TensorFlow 메커니즘 기초
 
-Code: [tensorflow/examples/tutorials/mnist/](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/)
+코드: [tensorflow/examples/tutorials/mnist/](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/)
 
-The goal of this tutorial is to show how to use TensorFlow to train and
-evaluate a simple feed-forward neural network for handwritten digit
-classification using the (classic) MNIST data set.  The intended audience for
-this tutorial is experienced machine learning users interested in using
-TensorFlow.
+이 튜토리얼의 목표는 TensorFlow를 사용해 어떻게 트레이닝 하는지 그리고
+전형적인 MNIST 데이터 셋을 사용해 손으로 쓴 숫자를 구별하는 간단한 feed-forward neural network를 평가하는지 보여주는 것이다. 
+이 튜토리얼 대상 독자는 TensorFlow 사용에 관심이 있는 머신러닝 유경험자다. 
 
+이 튜토리얼은 일반적인 머신러닝 교육에 적합하지 않다.
 These tutorials are not intended for teaching Machine Learning in general.
 
-Please ensure you have followed the instructions to [install TensorFlow](../../../get_started/os_setup.md).
+반드시 [TensorFlow 설치](../../../get_started/os_setup.md) 지시를 따랐는지 확인하라.
 
-## Tutorial Files
+## 튜토리얼 파일
 
-This tutorial references the following files:
+이 튜토리얼은 아래와 같은 파일들을 참조한다:
 
-File | Purpose
+파일 | 목적
 --- | ---
-[`mnist.py`](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/mnist.py) | The code to build a fully-connected MNIST model.
-[`fully_connected_feed.py`](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/fully_connected_feed.py) | The main code to train the built MNIST model against the downloaded dataset using a feed dictionary.
+[`mnist.py`](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/mnist.py) | 이 코드는 완전히 연결된 MNIST 모델을 구축한다.
+[`fully_connected_feed.py`](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/fully_connected_feed.py) | 메인 코드는 feed dictionary를 사용해 다운로드 한 데이터 셋에 대해 구축된 MNIST모델을 트레이닝 한다. 
 
-Simply run the `fully_connected_feed.py` file directly to start training:
+트레이닝을 시작하기 위해 직접 `fully_connected_feed.py` 파일을 간단히 실행해 보라:
 
 ```bash
 python fully_connected_feed.py
 ```
 
-## Prepare the Data
+## 데이터 준비
 
-MNIST is a classic problem in machine learning. The problem is to look at
+MNIST는 머신 러닝에서 고전적인 문제다. The problem is to look at
 greyscale 28x28 pixel images of handwritten digits and determine which digit
 the image represents, for all the digits from zero to nine.
 
@@ -38,7 +37,7 @@ the image represents, for all the digits from zero to nine.
 For more information, refer to [Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/)
 or [Chris Olah's visualizations of MNIST](http://colah.github.io/posts/2014-10-Visualizing-MNIST/).
 
-### Download
+### 다운로드
 
 At the top of the `run_training()` method, the `input_data.read_data_sets()`
 function will ensure that the correct data has been downloaded to your local
