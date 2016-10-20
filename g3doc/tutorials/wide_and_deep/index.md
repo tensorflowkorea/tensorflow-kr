@@ -1,12 +1,20 @@
 # TensorFlow Wide & Deep Learning Tutorial
+# TensorFlow Wide & Deep Learning 튜토리얼
 
 In the previous [TensorFlow Linear Model Tutorial](../wide/),
+이전 튜토리얼[선형모델(Linear Model) 튜토리얼] 에서,
 we trained a logistic regression model to predict the probability that the
 individual has an annual income of over 50,000 dollars using the [Census Income
-Dataset](https://archive.ics.uci.edu/ml/datasets/Census+Income). TensorFlow is
-great for training deep neural networks too, and you might be thinking which one
+Dataset](https://archive.ics.uci.edu/ml/datasets/Census+Income).
+연소득이 $50,000 이상인 사람을 예측하기 위해 로지스틱 회귀분석 모델(logistic regression model) 을
+[Census Income Dataset](https://archive.ics.uci.edu/ml/datasets/Census+Income) 를 이용하여 학습시켰다.
+TensorFlow is great for training deep neural networks too,
+and you might be thinking which one
 you should choose—Well, why not both? Would it be possible to combine the
 strengths of both in one model?
+TensorFlow 는 deep neural networks 학습에 탁월하고,
+어느 것을 잘 선택해야 하는가에 대한 것을 생각할 것이다.
+이들을 동시에 사용하는 것은 안될까? 하나의 모델에 둘의 strength를 조합하는 것은 가능할까? 
 
 In this tutorial, we'll introduce how to use the TF.Learn API to jointly train a
 wide linear model and a deep feed-forward neural network. This approach combines
@@ -15,6 +23,7 @@ large-scale regression and classification problems with sparse input features
 (e.g., categorical features with a large number of possible feature values). If
 you're interested in learning more about how Wide & Deep Learning works, please
 check out our [research paper](http://arxiv.org/abs/1606.07792).
+이 튜토리얼에서, TF 를 사용하는 법에 대해 소개할 것이다. 
 
 ![Wide & Deep Spectrum of Models]
 (../../images/wide_n_deep.svg "Wide & Deep")
