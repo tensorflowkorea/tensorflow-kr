@@ -69,7 +69,7 @@ df_train = pd.read_csv(train_file, names=COLUMNS, skipinitialspace=True)
 df_test = pd.read_csv(test_file, names=COLUMNS, skipinitialspace=True, skiprows=1)
 ```
 
-이번 과제가 이진 분류 문제이기 때문에 수입이 50k가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표를 만들 것이다.
+이번 과제가 이진 분류 문제이기 때문에 수입이 50,000달러가 넘는다면 1을 그렇지 않다면 0에 값을 가지는 열의 이름이 "label"인 표를 만들 것이다.
 
 ```python
 LABEL_COLUMN = "label"
@@ -147,11 +147,11 @@ Input Builder가 반환하는 것은 입력 데이터를 대표하는 텐서플�
 우리 모델은 입력 데이터의 정숫값을 대표하는 *constant* 텐서로 나타낸다, 이 경우에는 `df_train` 나 `df_test`에 열에 값을 대표한다.
 이 방법이 텐서플로에 데이터를 전달하는 가장 간단한 방법이다.
 다른 심화한 방법으로는 파일이나 다른 데이터 소스를 대표하는 Input Reader를 만들어서 파일을 텐서플로가 그래프를 실행하는 동안에 읽어 나가는 것이다.
-  
-  Each continuous column in the train or test dataframe
-will be converted into a `Tensor`, which in general is a good format to
-represent dense data. For cateogorical data, we must represent the data as a
-`SparseTensor`. This data format is good for representing sparse data.
+
+훈련 또는 테스트 데이터 프레임에 있는 각각의 continuous 열들은 밀집 데이터를 대표하기 좋은 `Tensor`로 변환될 것입니다.
+
+우리는 categorical 데이터를 반드시 `SparseTensor`로 나타내야 합니다.
+Categorical 데이터 포맷은 희소 데이터를 대표하기 좋습니다.
 
 ```python
 import tensorflow as tf
@@ -184,11 +184,19 @@ def eval_input_fn():
 
 ## Selecting and Engineering Features for the Model
 
+
+
 Selecting and crafting the right set of feature columns is key to learning an
-effective model. A **feature column** can be either one of the raw columns in
+effective model.
+
+ 
+ 
+ A **feature column** can be either one of the raw columns in
 the original dataframe (let's call them **base feature columns**), or any new
 columns created based on some transformations defined over one or multiple base
-columns (let's call them **derived feature columns**). Basically, "feature
+columns (let's call them **derived feature columns**). 
+
+Basically, "feature
 column" is an abstract concept of any raw or derived variable that can be used
 to predict the target label.
 
