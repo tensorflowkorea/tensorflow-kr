@@ -13,7 +13,7 @@ found that a kind of model called a deep
 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)
 can achieve reasonable performance on hard visual recognition tasks --
 matching or exceeding human performance in some domains.
-지난 수 년간 기계학습 분야는 이미지 인식 문제에 대해 엄청난 진전을 이루어 냈다. 특히 딥 러닝 기법의 하나인 Convolutional Nerual Network를 통해 이미지 인식에 있어 혁신적 성과를 거두었는데 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
+지난 수 년간 기계학습 분야는 이미지 인식 문제에 대해 엄청난 진전을 이루어 냈다. 특히 딥 러닝 기법의 하나인 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)를 통해 이미지 인식에 있어 혁신적 성과를 거두었는데 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
 
 Researchers have demonstrated steady progress
 in computer vision by validating their work against
@@ -25,7 +25,14 @@ Researchers both internal and external to Google have published papers describin
 these models but the results are still hard to reproduce.
 We're now taking the next step by releasing code for running image recognition
 on our latest model, [Inception-v3].
-연구자들은 학계에서 시작된  컴퓨터 비전 브로젝트 ImageNet을 통해 자신들의 작업을 검증하면서 점진적인 발전을 보여주고 있다. 연구의 결과가 이어져서 QuocNet, AlexNet, Inception(GoogLeNet), Bn-Inception-v2와 같은 새로운 최신의 성과를 또 다시 만들어 내면서 지속적으로 향상되고 있는 것이다.
+
+[QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
+[AlexNet]: http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
+[Inception (GoogLeNet)]: http://arxiv.org/abs/1409.4842
+[BN-Inception-v2]: http://arxiv.org/abs/1502.03167
+[Inception-v3]: http://arxiv.org/abs/1512.00567
+
+연구자들은 학계에서 시작된  컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)을 통해 자신들의 작업을 검증하면서 점진적인 발전을 보여주고 있다. 연구의 결과가 이어져서 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 새로운 최신의 성과를 또 다시 만들어 내면서 지속적으로 향상되고 있는 것이다.
 구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료의 배포 수준은 여전히 제자리에 머물러 있는 수준이다. 그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개하는 것이다.
 
 [QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
@@ -39,7 +46,7 @@ using the data from 2012. This is a standard task in computer vision,
 where models try to classify entire
 images into [1000 classes], like "Zebra", "Dalmatian", and "Dishwasher".
 For example, here are the results from [AlexNet] classifying some images:
-Inception-v3는 ImageNet의 Large Visual Recognition Challenge에서 2012년 데이터를 사용하여 훈련된 모델이다. 모든 이미지를 얼룩말, 달마시안, 식기세척기와 같은 1000가지로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 다음의 예는 AlexNet이 몇 가지 사진을 분류한 결과이다.
+Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 데이터를 사용하여 훈련된 모델이다. 모든 이미지를 얼룩말, 달마시안, 식기세척기와 같은 1000가지[1000 classes]로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 다음의 예는 [AlexNet]이 몇 가지 사진을 분류한 결과이다.
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/AlexClassification.png">
