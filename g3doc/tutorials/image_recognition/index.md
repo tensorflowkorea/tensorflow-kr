@@ -5,7 +5,11 @@ Our brains make vision seem easy. It doesn't take any effort for humans to
 tell apart a lion and a jaguar, read a sign, or recognize a human's face.
 But these are actually hard problems to solve with a computer: they only
 seem easy because our brains are incredibly good at understanding images.
-우리의 뇌를 생각하면 시각적으로 인식하는 일이 쉬워 보인다. 보통 사람이라면 사자와 재규어를 구별할 줄 알고 표지판을 읽을 수 있으며 다른 사람의 얼굴 또한 어렵지 않게 인식할 수 있다. 그러나 이는 이미지를 인식하는 뇌의 능력이 놀라울 정도로 뛰어나기 때문에 가능한 것이지 이와 같은 일을 컴퓨터를 통해 해결하는 것은 매우 어려운 문제이다. 
+우리의 뇌를 생각하면 시각적으로 인식하는 일이 쉬워 보인다. 
+보통 사람이라면 사자와 재규어를 구별할 줄 알고 표지판을 읽을 수 있으며 
+다른 사람의 얼굴 또한 어렵지 않게 인식할 수 있다. 
+그러나 이는 이미지를 인식하는 뇌의 능력이 놀라울 정도로 뛰어나기 때문에 가능한 것이지 
+이와 같은 일을 컴퓨터를 통해 해결하는 것은 매우 어려운 문제이다. 
 
 In the last few years the field of machine learning has made tremendous
 progress on addressing these difficult problems. In particular, we've
@@ -13,7 +17,9 @@ found that a kind of model called a deep
 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)
 can achieve reasonable performance on hard visual recognition tasks --
 matching or exceeding human performance in some domains.
-지난 수 년간 기계학습 분야는 이미지 인식 문제에 대해 엄청난 진전을 이루어 냈다. 특히 딥 러닝 기법의 하나인 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)를 통해 이미지 인식에 있어 혁신적 성과를 거두었는데 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
+지난 수 년간 기계학습 분야는 이미지 인식 문제에 대해 엄청난 진전을 이루어 냈다. 
+특히 딥 러닝 기법의 하나인 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)를 통해 
+이미지 인식에 있어 혁신적 성과를 거두었는데 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
 
 Researchers have demonstrated steady progress
 in computer vision by validating their work against
@@ -32,8 +38,11 @@ on our latest model, [Inception-v3].
 [BN-Inception-v2]: http://arxiv.org/abs/1502.03167
 [Inception-v3]: http://arxiv.org/abs/1512.00567
 
-연구자들은 학계에서 시작된  컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)을 통해 자신들의 작업을 검증하면서 점진적인 발전을 보여주고 있다. 연구의 결과가 이어져서 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 새로운 최신의 성과를 또 다시 만들어 내면서 지속적으로 향상되고 있는 것이다.
-구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료의 배포 수준은 여전히 제자리에 머물러 있는 수준이다. 그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개하는 것이다.
+연구자들은 학계에서 시작된 컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)에서 자신들의 작업을 검증해왔고,
+그들의 연구는 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 최신식 모델을 만들어냈다.
+구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 
+자료가 널리 배포되는 것이 쉽지 않은 상황이다.
+그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개하는 것이다.
 
 [QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
 [AlexNet]: http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
