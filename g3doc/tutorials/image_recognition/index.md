@@ -31,18 +31,10 @@ Researchers both internal and external to Google have published papers describin
 these models but the results are still hard to reproduce.
 We're now taking the next step by releasing code for running image recognition
 on our latest model, [Inception-v3].
-
-[QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
-[AlexNet]: http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
-[Inception (GoogLeNet)]: http://arxiv.org/abs/1409.4842
-[BN-Inception-v2]: http://arxiv.org/abs/1502.03167
-[Inception-v3]: http://arxiv.org/abs/1512.00567
-
 연구자들은 학계에서 시작된 컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)에서 자신들의 작업을 검증해왔고,
 그들의 연구는 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 최신식 모델을 만들어냈다.
-구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 
-자료가 널리 배포되는 것이 쉽지 않은 상황이다.
-그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개하는 것이다.
+구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료가 널리 배포되는 것은 쉽지 않은 상황이다.
+그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개하기로 했다.
 
 [QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
 [AlexNet]: http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
@@ -55,7 +47,9 @@ using the data from 2012. This is a standard task in computer vision,
 where models try to classify entire
 images into [1000 classes], like "Zebra", "Dalmatian", and "Dishwasher".
 For example, here are the results from [AlexNet] classifying some images:
-Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 데이터를 사용하여 훈련된 모델이다. 모든 이미지를 얼룩말, 달마시안, 식기세척기와 같은 1000가지[1000 classes]로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 다음의 예는 [AlexNet]이 몇 가지 사진을 분류한 결과이다.
+Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 데이터를 사용하여 훈련된 모델이다. 
+모든 이미지를 얼룩말, 달마시안, 식기세척기와 같은 1000가지[1000 classes]로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 
+다음의 예는 [AlexNet]이 몇 가지 사진을 분류한 결과이다.
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/AlexClassification.png">
@@ -66,10 +60,15 @@ correct answer as one of their top 5 guesses -- termed "top-5 error rate".
 [AlexNet] achieved by setting a top-5 error rate of 15.3% on the 2012
 validation data set; [BN-Inception-v2] achieved 6.66%;
 [Inception-v3] reaches 3.46%.
+모델의 성능을 비교할 때는 "top-5 error rate"를 측정한다. 이는 모델이 가장 높은 확률로
+예측한 5가지가 정답이 아닌 빈도를 검토하는 것이다.
+2012년 검증 데이터 세트에서 나타난 각 모델의 top-5 error rate는 [AlexNet]이 15.3%, [BN-Inception-v2]이 6.66%였고
+[Inception-v3]는 3.46%를 달성했다.
 
 > How well do humans do on ImageNet Challenge? There's a [blog post] by
 Andrej Karpathy who attempted to measure his own performance. He reached
 5.1% top-5 error rate.
+> ImageNet 챌린지에서 사람의 성과는 어떠한가? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-error rate는 5.1%였다고 한다.
 
 [ImageNet]: http://image-net.org/
 [1000 classes]: http://image-net.org/challenges/LSVRC/2014/browse-synsets
@@ -79,29 +78,36 @@ This tutorial will teach you how to use [Inception-v3]. You'll learn how to
 classify images into [1000 classes] in Python or C++. We'll also discuss how to
 extract higher level features from this model which may be reused for other
 vision tasks.
+본 튜토리얼은 [Inception-v3]을 사용하는 방법을 알려줄 것이다. 먼저 Python이나 C++로 본 모델을 사용해서 이미지를 100가지[1000 classes]로 분류하는 방법을 배운다. 그리고 이 모델을 통해 다른 이미지 인식 문제에서 다시 활용될 수 있는 고수준의 특징을 추출하는 방법 또한 논의할 것이다. 
 
 We're excited to see what the community will do with this model.
-
+커뮤니티에서 이 모델을 어떤 모습으로 활용할지 기대되는 바이다.
 
 ##Usage with Python API
+##Python API로 사용하기
 
 `classify_image.py` downloads the trained model from `tensorflow.org`
 when the program is run for the first time. You'll need about 200M of free space
 available on your hard disk.
+프로그램이 처음 실행될 때 `classify_image.py`는 `tensorflow.org`로 부터 훈련된 모델을 다운로드 받는다.
+필요한 하드디스크의 여유 공간은 200메가바이트이다.
 
 The following instructions assume you installed TensorFlow from a PIP package
 and that your terminal resides in the TensorFlow root directory.
+다음 명령어는 PIP패키지에서 TensorFlow를 설치한 이후 터미널이 TensorFlow의 root 디렉토리로 설정되어 있는 상태를 전제로 한다.
 
     cd tensorflow/models/image/imagenet
     python classify_image.py
 
 The above command will classify a supplied image of a panda bear.
+위 명령어는 다운로드로 제공된 판다 곰의 사진을 분류할 것이다.
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/cropped_panda.jpg">
 </div>
 
 If the model runs correctly, the script will produce the following output:
+만약 모델이 올바르게 작동한다면, 다음과 같은 내용이 출력될 것이다.
 
     giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca (score = 0.88493)
     indri, indris, Indri indri, Indri brevicaudatus (score = 0.00878)
@@ -111,16 +117,22 @@ If the model runs correctly, the script will produce the following output:
 
 If you wish to supply other JPEG images, you may do so by editing
 the `--image_file` argument.
+다른 JPEG 이미지를 추가하려면 `--image_file` 인자를 수정하면 된다.
 
 > If you download the model data to a different directory, you
 will need to point `--model_dir`  to the directory used.
+> 모델 데이터를 다른 디렉토리에 다운로드 받았다면, `--model_dir`를 다운로드 받은 디렉토리로 지정해야 한다.
 
 ## Usage with the C++ API
+## C++ API로 사용하기
 
 You can run the same [Inception-v3] model in C++ for use in production
 environments. You can download the archive containing the GraphDef that defines
 the model like this (running from the root directory of the TensorFlow
 repository):
+C++의 production환경에서도 [Inception-v3] 모델을 사용할 수 있다.
+아래와 같은 방법으로 모델을 정의하는 GraphDef를 담고 있는 아카이브를 다운로드 받을 수 있다. 
+단, TensorFlow repository의 root 디렉토리에서 실행한다.
 
 ```bash
 wget https://storage.googleapis.com/download.tensorflow.org/models/inception_dec_2015.zip -O tensorflow/examples/label_image/data/inception_dec_2015.zip
@@ -133,12 +145,16 @@ If you've followed [the instructions to download the source installation of
 TensorFlow](../../get_started/os_setup.md#installing-from-sources)
 for your platform, you should be able to build the example by
 running this command from your shell terminal:
+다음으로 그래프를 불러오고 실행할 수 있는 코드를 담고 있는 C++ 바이너리를 컴파일 해야 한다.
+[the instructions to download the source installation of TensorFlow](../../get_started/os_setup.md#installing-from-sources)에 
+나와 있는 지시사항을 자신의 플랫폼에 맞게 이행했다면, shell terminal에서 다음과 같은 명령어를 실행하여 예제를 빌드할 수 있다.
 
 ```bash
 bazel build tensorflow/examples/label_image/...
 ```
 
 That should create a binary executable that you can then run like this:
+위 명령어가 입력되면 실행 가능한 바이너리 파일이 생성될 것이고 아래 명령어를 통해 실행할 수 있다.
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image
@@ -146,6 +162,7 @@ bazel-bin/tensorflow/examples/label_image/label_image
 
 This uses the default example image that ships with the framework, and should
 output something similar to this:
+이것은 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용을 출력할 것이다.
 
 ```
 I tensorflow/examples/label_image/main.cc:200] military uniform (866): 0.647296
@@ -158,6 +175,8 @@ In this case, we're using the default image of
 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper), and you can
 see the network correctly identifies she's wearing a military uniform, with a high
 score of 0.6.
+이러한 경우 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper)의 기본 이미지를 사용하고 있는 것이며,
+0.6점이라는 높은 점수로 네트워크가 군복을 입고 있는 여성을 식별하는 것을 확인할 수 있을 것이다.
 
 
 <div style="width:45%; margin:auto; margin-bottom:10px; margin-top:20px;">
@@ -165,6 +184,7 @@ score of 0.6.
 </div>
 
 Next, try it out on your own images by supplying the --image= argument, e.g.
+다음으로 --image= 인자를 추가하여 본인이 갖고 있는 이미지로 테스트해 본다.
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
@@ -174,6 +194,8 @@ If you look inside the [`tensorflow/examples/label_image/main.cc`](https://githu
 file, you can find out
 how it works. We hope this code will help you integrate TensorFlow into
 your own applications, so we will walk step by step through the main functions:
+`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)파일을 살펴보면 어떻게 작동하는지 알 수 있다. 
+이 코드를 통해 TensorFlow 라이브러리를 사용자의 애플리케이션에 사용하는 데 도움이 되길 바라며 주요 함수들을 차례차례 살펴볼 것이다.
 
 The command line flags control where the files are loaded from, and properties of the input images.
 The model expects to get square 299x299 RGB images, so those are the `input_width`
@@ -181,6 +203,10 @@ and `input_height` flags. We also need to scale the pixel values from integers t
 are between 0 and 255 to the floating point values that the graph operates on.
 We control the scaling with the `input_mean` and `input_std` flags: we first subtract
 `input_mean` from each pixel value, then divide it by `input_std`.
+커맨드 라인 플래그(command line flags)는 파일을 불러온 위치와 입력된 이미지의 속성을 조정한다.
+모델은 정사각형 299x299 사이즈의 RGB 이미지를 취급하기 때문에 이를 `input_width`와  `input_height` 플래그라고 한다.
+그리고 픽셀 값을 0과 255사이의 정수에서 그래프를 사용하기 위한 부동 소수점으로 크기 조정(scaling)해야 한다.
+크기 조정은 `input_mean`과 `input_std` 플래그로 조절한다. 각 픽셀 값에서 `input_mean`을 빼고 난 후 `input_std`로 나눈다.
 
 These values probably look somewhat magical, but they are just defined by the 
 original model author based on what he/she wanted to use as input images for 
