@@ -1,6 +1,6 @@
 # 이미지 인식
 
-우리의 뇌를 생각하면 시각적으로 인식하는 일이 쉬워 보인다. 
+우리의 뇌를 생각하면 시각적으로 인식하는 일은 쉬워 보인다. 
 보통 사람이라면 사자와 재규어를 구별할 줄 알고 표지판을 읽을 수 있으며 
 다른 사람의 얼굴 또한 어렵지 않게 인식할 수 있다. 
 그러나 이는 이미지를 인식하는 뇌의 능력이 놀라울 정도로 뛰어나기 때문에 가능한 것이지 
@@ -13,7 +13,7 @@
 연구자들은 학계에서 시작된 컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)에서 자신들의 작업을 검증해왔고,
 그들의 연구는 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 최신식 모델을 만들어냈다.
 구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료가 널리 배포되는 것은 쉽지 않은 상황이다.
-그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개하기로 했다.
+그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개한다.
 
 [QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
 [AlexNet]: http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf
@@ -22,7 +22,7 @@
 [Inception-v3]: http://arxiv.org/abs/1512.00567
 
 Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 데이터를 사용하여 훈련된 모델이다. 
-모든 이미지를 얼룩말, 달마시안, 식기세척기와 같은 1000가지[1000 classes]로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 
+모든 이미지를 "얼룩말", "달마시안", "식기세척기"와 같은 [1000 classes]로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 
 다음의 예는 [AlexNet]이 몇 가지 사진을 분류한 결과이다:
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
@@ -34,13 +34,13 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 2012년 검증 데이터 세트에서 나타난 각 모델의 top-5 error rate는 [AlexNet]이 15.3%, [BN-Inception-v2]이 6.66%였고
 [Inception-v3]는 3.46%를 달성했다.
 
-> ImageNet 챌린지에서 사람의 성과는 어떠한가? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-error rate는 5.1%였다고 한다.
+> ImageNet 챌린지에서 사람의 성과는 어떠한가? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-5 error rate는 5.1%였다고 한다.
 
 [ImageNet]: http://image-net.org/
 [1000 classes]: http://image-net.org/challenges/LSVRC/2014/browse-synsets
 [blog post]: http://karpathy.github.io/2014/09/02/what-i-learned-from-competing-against-a-convnet-on-imagenet/
 
-본 튜토리얼은 [Inception-v3]을 사용하는 방법을 알려줄 것이다. 먼저 Python이나 C++로 본 모델을 사용해서 이미지를 100가지[1000 classes]로 분류하는 방법을 배운다. 그리고 이 모델을 통해 다른 이미지 인식 문제에서 다시 활용될 수 있는 고수준의 특징을 추출하는 방법 또한 논의할 것이다. 
+본 튜토리얼은 [Inception-v3]을 사용하는 방법을 알려줄 것이다. 먼저 Python이나 C++로 본 모델을 사용해서 이미지를 [1000 classes]로 분류하는 방법을 배운다. 그리고 이 모델을 통해 다른 이미지 인식 문제에서 다시 활용될 수 있는 고수준의 특징을 추출하는 방법 또한 논의할 것이다. 
 
 커뮤니티에서 이 모델을 어떤 모습으로 활용할지 기대되는 바이다.
 
