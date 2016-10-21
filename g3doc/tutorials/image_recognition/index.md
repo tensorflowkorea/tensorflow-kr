@@ -1,36 +1,15 @@
-# Image Recognition
 # 이미지 인식
 
-Our brains make vision seem easy. It doesn't take any effort for humans to
-tell apart a lion and a jaguar, read a sign, or recognize a human's face.
-But these are actually hard problems to solve with a computer: they only
-seem easy because our brains are incredibly good at understanding images.
 우리의 뇌를 생각하면 시각적으로 인식하는 일이 쉬워 보인다. 
 보통 사람이라면 사자와 재규어를 구별할 줄 알고 표지판을 읽을 수 있으며 
 다른 사람의 얼굴 또한 어렵지 않게 인식할 수 있다. 
 그러나 이는 이미지를 인식하는 뇌의 능력이 놀라울 정도로 뛰어나기 때문에 가능한 것이지 
 이와 같은 일을 컴퓨터를 통해 해결하는 것은 매우 어려운 문제이다. 
 
-In the last few years the field of machine learning has made tremendous
-progress on addressing these difficult problems. In particular, we've
-found that a kind of model called a deep
-[convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)
-can achieve reasonable performance on hard visual recognition tasks --
-matching or exceeding human performance in some domains.
 지난 수 년간 기계학습 분야는 이미지 인식 문제에 대해 엄청난 진전을 이루어 냈다. 
 특히 딥 러닝 기법의 하나인 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)를 통해 
 이미지 인식에 있어 혁신적 성과를 거두었는데 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
 
-Researchers have demonstrated steady progress
-in computer vision by validating their work against
-[ImageNet](http://www.image-net.org) -- an academic benchmark for computer vision.
-Successive models continue to show improvements, each time achieving
-a new state-of-the-art result:
-[QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2].
-Researchers both internal and external to Google have published papers describing all
-these models but the results are still hard to reproduce.
-We're now taking the next step by releasing code for running image recognition
-on our latest model, [Inception-v3].
 연구자들은 학계에서 시작된 컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)에서 자신들의 작업을 검증해왔고,
 그들의 연구는 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 최신식 모델을 만들어냈다.
 구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료가 널리 배포되는 것은 쉽지 않은 상황이다.
@@ -42,72 +21,46 @@ on our latest model, [Inception-v3].
 [BN-Inception-v2]: http://arxiv.org/abs/1502.03167
 [Inception-v3]: http://arxiv.org/abs/1512.00567
 
-Inception-v3 is trained for the [ImageNet] Large Visual Recognition Challenge
-using the data from 2012. This is a standard task in computer vision,
-where models try to classify entire
-images into [1000 classes], like "Zebra", "Dalmatian", and "Dishwasher".
-For example, here are the results from [AlexNet] classifying some images:
 Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 데이터를 사용하여 훈련된 모델이다. 
 모든 이미지를 얼룩말, 달마시안, 식기세척기와 같은 1000가지[1000 classes]로 분류하는 것이 컴퓨터 비전의 표준 작업이다. 
-다음의 예는 [AlexNet]이 몇 가지 사진을 분류한 결과이다.
+다음의 예는 [AlexNet]이 몇 가지 사진을 분류한 결과이다:
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/AlexClassification.png">
 </div>
 
-To compare models, we examine how often the model fails to predict the
-correct answer as one of their top 5 guesses -- termed "top-5 error rate".
-[AlexNet] achieved by setting a top-5 error rate of 15.3% on the 2012
-validation data set; [BN-Inception-v2] achieved 6.66%;
-[Inception-v3] reaches 3.46%.
 모델의 성능을 비교할 때는 "top-5 error rate"를 측정한다. 이는 모델이 가장 높은 확률로
-예측한 5가지가 정답이 아닌 빈도를 검토하는 것이다.
+예측한 5가지 예측이 정답이 아닌 빈도를 검토하는 것이다.
 2012년 검증 데이터 세트에서 나타난 각 모델의 top-5 error rate는 [AlexNet]이 15.3%, [BN-Inception-v2]이 6.66%였고
 [Inception-v3]는 3.46%를 달성했다.
 
-> How well do humans do on ImageNet Challenge? There's a [blog post] by
-Andrej Karpathy who attempted to measure his own performance. He reached
-5.1% top-5 error rate.
 > ImageNet 챌린지에서 사람의 성과는 어떠한가? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-error rate는 5.1%였다고 한다.
 
 [ImageNet]: http://image-net.org/
 [1000 classes]: http://image-net.org/challenges/LSVRC/2014/browse-synsets
 [blog post]: http://karpathy.github.io/2014/09/02/what-i-learned-from-competing-against-a-convnet-on-imagenet/
 
-This tutorial will teach you how to use [Inception-v3]. You'll learn how to
-classify images into [1000 classes] in Python or C++. We'll also discuss how to
-extract higher level features from this model which may be reused for other
-vision tasks.
 본 튜토리얼은 [Inception-v3]을 사용하는 방법을 알려줄 것이다. 먼저 Python이나 C++로 본 모델을 사용해서 이미지를 100가지[1000 classes]로 분류하는 방법을 배운다. 그리고 이 모델을 통해 다른 이미지 인식 문제에서 다시 활용될 수 있는 고수준의 특징을 추출하는 방법 또한 논의할 것이다. 
 
-We're excited to see what the community will do with this model.
 커뮤니티에서 이 모델을 어떤 모습으로 활용할지 기대되는 바이다.
 
-##Usage with Python API
 ##Python API로 사용하기
 
-`classify_image.py` downloads the trained model from `tensorflow.org`
-when the program is run for the first time. You'll need about 200M of free space
-available on your hard disk.
 프로그램이 처음 실행될 때 `classify_image.py`는 `tensorflow.org`로 부터 훈련된 모델을 다운로드 받는다.
 필요한 하드디스크의 여유 공간은 200메가바이트이다.
 
-The following instructions assume you installed TensorFlow from a PIP package
-and that your terminal resides in the TensorFlow root directory.
 다음 명령어는 PIP패키지에서 TensorFlow를 설치한 이후 터미널이 TensorFlow의 root 디렉토리로 설정되어 있는 상태를 전제로 한다.
 
     cd tensorflow/models/image/imagenet
     python classify_image.py
 
-The above command will classify a supplied image of a panda bear.
 위 명령어는 다운로드로 제공된 판다 곰의 사진을 분류할 것이다.
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/cropped_panda.jpg">
 </div>
 
-If the model runs correctly, the script will produce the following output:
-만약 모델이 올바르게 작동한다면, 다음과 같은 내용이 출력될 것이다.
+만약 모델이 올바르게 작동한다면, 다음과 같은 내용이 출력될 것이다:
 
     giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca (score = 0.88493)
     indri, indris, Indri indri, Indri brevicaudatus (score = 0.00878)
@@ -115,24 +68,15 @@ If the model runs correctly, the script will produce the following output:
     custard apple (score = 0.00149)
     earthstar (score = 0.00127)
 
-If you wish to supply other JPEG images, you may do so by editing
-the `--image_file` argument.
 다른 JPEG 이미지를 추가하려면 `--image_file` 인자를 수정하면 된다.
 
-> If you download the model data to a different directory, you
-will need to point `--model_dir`  to the directory used.
 > 모델 데이터를 다른 디렉토리에 다운로드 받았다면, `--model_dir`를 다운로드 받은 디렉토리로 지정해야 한다.
 
-## Usage with the C++ API
 ## C++ API로 사용하기
 
-You can run the same [Inception-v3] model in C++ for use in production
-environments. You can download the archive containing the GraphDef that defines
-the model like this (running from the root directory of the TensorFlow
-repository):
 C++의 production환경에서도 [Inception-v3] 모델을 사용할 수 있다.
 아래와 같은 방법으로 모델을 정의하는 GraphDef를 담고 있는 아카이브를 다운로드 받을 수 있다. 
-단, TensorFlow repository의 root 디렉토리에서 실행한다.
+단, TensorFlow repository의 root 디렉토리에서 실행한다:
 
 ```bash
 wget https://storage.googleapis.com/download.tensorflow.org/models/inception_dec_2015.zip -O tensorflow/examples/label_image/data/inception_dec_2015.zip
@@ -140,29 +84,21 @@ wget https://storage.googleapis.com/download.tensorflow.org/models/inception_dec
 unzip tensorflow/examples/label_image/data/inception_dec_2015.zip -d tensorflow/examples/label_image/data/
 ```
 
-Next, we need to compile the C++ binary that includes the code to load and run the graph.
-If you've followed [the instructions to download the source installation of
-TensorFlow](../../get_started/os_setup.md#installing-from-sources)
-for your platform, you should be able to build the example by
-running this command from your shell terminal:
 다음으로 그래프를 불러오고 실행할 수 있는 코드를 담고 있는 C++ 바이너리를 컴파일 해야 한다.
 [the instructions to download the source installation of TensorFlow](../../get_started/os_setup.md#installing-from-sources)에 
-나와 있는 지시사항을 자신의 플랫폼에 맞게 이행했다면, shell terminal에서 다음과 같은 명령어를 실행하여 예제를 빌드할 수 있다.
+나와 있는 지시사항을 자신의 플랫폼에 맞게 이행했다면, shell terminal에서 다음과 같은 명령어를 실행하여 예제를 빌드할 수 있다:
 
 ```bash
 bazel build tensorflow/examples/label_image/...
 ```
 
-That should create a binary executable that you can then run like this:
-위 명령어가 입력되면 실행 가능한 바이너리 파일이 생성될 것이고 아래 명령어를 통해 실행할 수 있다.
+위 명령어가 입력되면 실행 가능한 바이너리 파일이 생성될 것이고 아래 명령어를 통해 실행할 수 있다:
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image
 ```
 
-This uses the default example image that ships with the framework, and should
-output something similar to this:
-이것은 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용을 출력할 것이다.
+이것은 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용을 출력할 것이다:
 
 ```
 I tensorflow/examples/label_image/main.cc:200] military uniform (866): 0.647296
