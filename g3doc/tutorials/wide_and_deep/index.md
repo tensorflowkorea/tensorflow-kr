@@ -23,7 +23,13 @@ large-scale regression and classification problems with sparse input features
 (e.g., categorical features with a large number of possible feature values). If
 you're interested in learning more about how Wide & Deep Learning works, please
 check out our [research paper](http://arxiv.org/abs/1606.07792).
-이 튜토리얼에서, TF 를 사용하는 법에 대해 소개할 것이다. 
+이 튜토리얼에서, TF 를 사용하는 법에 대해 소개할 것이다.
+wide 선형 모델과 deep feed-forward 신경망을 함께 학습하기 위한 API 를 배우자.
+이 접근법은 기억과 일반화의 강점을 조합한 것이다. 이 방법은 sparse 입력 특징
+(즉, 많은 수의 가능한 특징값을 가진 분류적 특징) 의 일반적인 큰 규모의 회귀법과
+분류법 문제에 유용하다.
+Wide & Deep 학습의 학습 동작에 대해 관심이 있다면, 우리 논문[research paper]
+(http://arxiv.org/abs/1606.07792) 를 참고하기 바란다.
 
 ![Wide & Deep Spectrum of Models]
 (../../images/wide_n_deep.svg "Wide & Deep")
@@ -33,6 +39,9 @@ sparse features and transformations), a deep model (feed-forward neural network
 with an embedding layer and several hidden layers), and a Wide & Deep model
 (joint training of both). At a high level, there are only 3 steps to configure a
 wide, deep, or Wide & Deep model using the TF.Learn API:
+위 그림은 wide 모델(sparse 특징과 변환의 로지스틱 회귀분석), deep 모델(embedding layer와
+여러 hidden layer들의 feed-forward 신경망) 을 비교하여 보여준다.
+가장 높은 층에서는 TF를 이용한 wide, deep, wide & deep 모델의 3 단계만 존재한다.API 를 배우자:
 
 1.  Select features for the wide part: Choose the sparse base columns and
     crossed columns you want to use.
@@ -40,21 +49,52 @@ wide, deep, or Wide & Deep model using the TF.Learn API:
     embedding dimension for each categorical column, and the hidden layer sizes.
 1.  Put them all together in a Wide & Deep model
     (`DNNLinearCombinedClassifier`).
+1. wide 부분에 대한 설정 선택 : 원하는 sparse base 열과 crossed 열들을 선택한다
+1. deep 부분에 대한 설정 선택 : 연속된 열, 각 분류 열의 embedding dimension,
+   그리고 hidden layer 크기를 선택한다
+1. 이들을 Wide & Deep 모델에 적용한다(`DNNLinearCombinedClassifier`)
 
 And that's it! Let's go through a simple example.
+다 됐다! 간단한 예제를 통해 알아보자.
 
 ## Setup
 
 To try the code for this tutorial:
+이 튜토리얼을 위한 코드를 실행하기 위해서,
 
 1.  [Install TensorFlow](../../get_started/os_setup.md) if you haven't
 already.
+1.  아직 설치되지 않았다면, TensorFlow를 설치한다 [Install TensorFlow](../../get_started/os_setup.md)
 
 2.  Download [the tutorial code](
 https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py).
+2.  튜토리얼 코드를 다운로드 한다 [the tutorial code](https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py)
 
-3.  Install the pandas data analysis library. tf.learn doesn't require pandas, but it does support it, and this tutorial uses pandas. To install pandas:
-    1. Get `pip`:
+3.  Install the pandas data analysis library. tf.learn doesn't require pandas, but it does support it, and this tutorial uses pandas. To install pandas	:
+3.  pandas 데이터 분석 라이브러리를 설치. tf.learn은 pandas 을 필요로 하지 않지만 지원한다. 그리고 이 튜토리얼은 pandas를 사용한다. pandad 를 설치하기 위해서 :
+
+		1. Get `pip`:
+		1. 'pip' 설치 :
+
+       ```shell
+       # Ubuntu/Linux 64-bit
+       $ sudo apt-get install python-pip python-dev
+
+       # Mac OS X
+       $ sudo easy_install pip
+       $ sudo easy_install --upgrade six
+      ```
+
+
+       ```shell
+       # Ubuntu/Linux 64-bit
+       $ sudo apt-get install python-pip python-dev
+
+       # Mac OS X
+       $ sudo easy_install pip
+       $ sudo easy_install --upgrade six
+      ```
+
 
        ```shell
        # Ubuntu/Linux 64-bit
@@ -66,6 +106,7 @@ https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.p
       ```
 
     2. Use `pip` to install pandas:
+		2. 'pip' 를 이용하여 pandas 설치 :
 
        ```shell
        $ sudo pip install pandas
@@ -73,22 +114,28 @@ https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.p
 
     If you have trouble installing pandas, consult the [instructions]
 (http://pandas.pydata.org/pandas-docs/stable/install.html) on the pandas site.
+		pandas 설치에 문제가 있다면, pandas 사이트의 [instructions](http://pandas.pydata.org/pandas-docs/stable/install.html) 를 참고하라.
 
 4. Execute the tutorial code with the following command to train the linear
 model described in this tutorial:
+4. 이 튜토리얼에 소개된 선형 모델을 학습시키기 위해 이어지는 명령어로 튜토리얼 코드를 실행하자
 
    ```shell
    $ python wide_n_deep_tutorial.py --model_type=wide_n_deep
    ```
 
 Read on to find out how this code builds its linear model.
+이 코드가 어떻게 이 선형 모델을 만들어가는 알아보기 위해 계속 읽어보자.
 
 
 ## Define Base Feature Columns
+## Base Feature Columns 정의
 
 First, let's define the base categorical and continuous feature columns that
 we'll use. These base columns will be the building blocks used by both the wide
 part and the deep part of the model.
+우선, 사용할 base categorical feature columns 과 continuous feature columns 을 정의하자.
+이들 base column 들은 모델의 wide 부분과 deep 부분에 사용될 building block 들로 된다.
 
 ```python
 import tensorflow as tf
@@ -114,9 +161,11 @@ hours_per_week = tf.contrib.layers.real_valued_column("hours_per_week")
 ```
 
 ## The Wide Model: Linear Model with Crossed Feature Columns
+## The Wide Model: Linear Model with Crossed Feature Columns
 
 The wide model is a linear model with a wide set of sparse and crossed feature
 columns:
+wide 모델은 다양한 sparse 와 crosseed feature 열들의 집합의 선형 모델이다:
 
 ```python
 wide_columns = [
@@ -131,7 +180,11 @@ between features effectively. That being said, one limitation of crossed feature
 columns is that they do not generalize to feature combinations that have not
 appeared in the training data. Let's add a deep model with embeddings to fix
 that.
+crossed feature columns 의 Wide model 은 효율적으로 feature들 간의 sparse 작용들을 기억할 수 있다.
+그럼에도, 한가지 crossed feature columns 의 한계는 이들은 학습 데이터에서 나타나지 않는
+feature 조합들을 만들어내지 못한다는 것이다.
 
+## The Deep Model: Neural Network with Embeddings
 ## The Deep Model: Neural Network with Embeddings
 
 The deep model is a feed-forward neural network, as shown in the previous
@@ -262,23 +315,3 @@ def eval_input_fn():
 ```
 
 After reading in the data, you can train and evaluate the model:
-
-```python
-m.fit(input_fn=train_input_fn, steps=200)
-results = m.evaluate(input_fn=eval_input_fn, steps=1)
-for key in sorted(results):
-    print "%s: %s" % (key, results[key])
-```
-
-The first line of the output should be something like `accuracy: 0.84429705`. We
-can see that the accuracy was improved from about 83.6% using a wide-only linear
-model to about 84.4% using a Wide & Deep model. If you'd like to see a working
-end-to-end example, you can download our [example code]
-(https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/learn/wide_n_deep_tutorial.py).
-
-Note that this tutorial is just a quick example on a small dataset to get you
-familiar with the API. Wide & Deep Learning will be even more powerful if you
-try it on a large dataset with many sparse feature columns that have a large
-number of possible feature values. Again, feel free to take a look at our
-[research paper](http://arxiv.org/abs/1606.07792) for more ideas about how to
-apply Wide & Deep Learning in real-world large-scale maching learning problems.
