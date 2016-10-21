@@ -1,9 +1,9 @@
-# Tensor Ranks, Shapes, and types
+# Tensor Ranks, Shapes, Type
 
 TensorFlow 프로그램은 모든 데이터를 tensor 데이터 구조를 사용해서 표현한다.
 TensorFlow의 tensor는 n-차원 배열 또는 리스트라고 생각해도 된다.
 하나의 tensor는 정적 타입과 동적 차원을 갖고 있다.
-컴퓨터이션 그래프의 노드들은 오직 tensor만을 전달 할 수 있다.
+컴퓨테이션 그래프의 노드들은 오직 tensor만을 전달 할 수 있다.
 
 ## Rank
 
