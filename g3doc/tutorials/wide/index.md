@@ -184,11 +184,14 @@ def eval_input_fn():
 
 ## Selecting and Engineering Features for the Model
 
+모델의 선택과 공학 특징  
 
 
 Selecting and crafting the right set of feature columns is key to learning an
 effective model.
 
+
+올바른 특성 열 세트를 선택하고 만드는 것이 효과적인 모델 학습에 핵심 입니다. 
  
  
  A **feature column** can be either one of the raw columns in
@@ -196,26 +199,54 @@ the original dataframe (let's call them **base feature columns**), or any new
 columns created based on some transformations defined over one or multiple base
 columns (let's call them **derived feature columns**). 
 
+
+
 Basically, "feature
 column" is an abstract concept of any raw or derived variable that can be used
 to predict the target label.
 
+
+근본적으로, "feature column"은 목표 레이블을 예상하는데 사용 가능한 추상적인 개념의 비가공 또는 파생 변수이다.  
+
 ### Base Categorical Feature Columns
 
 To define a feature column for a categorical feature, we can create a
-`SparseColumn` using the TF.Learn API. If you know the set of all possible
+`SparseColumn` using the TF.Learn API.
+
+categorical 특성을 위한 특성열을 정의 하기 위해서 우리는 TF.Learn API로 `SparseColumn` 생성할 수 있습니다.  
+ 
+ If you know the set of all possible
 feature values of a column and there are only a few of them, you can use
-`sparse_column_with_keys`. Each key in the list will get assigned an
-auto-incremental ID starting from 0. For example, for the `gender` column we can
+`sparse_column_with_keys`.
+ 만약에 모든 열에 특성 값 세트를 알고 있고 또한 몇게 안된다면, `sparse_column_with_keys`를 사용 할 수 있습니다.
+ 
+ 
+ 
+ Each key in the list will get assigned an
+auto-incremental ID starting from 0.
+ 
+리스트에 안에 각각의 키들은 0부터 시작해서 자동으로 증가하는 아이디가 할당된다.
+ 
+ 
+ For example, for the `gender` column we can
 assign the feature string "female" to an integer ID of 0 and "male" to 1 by
 doing:
+
+예를 들어 우리는 아래와 같이 성별 열에 특성 문자열 "female"에게 숫자 아이디 1을 그리고 "male"에게는 1을 할당 할수 있다
 
 ```python
 gender = tf.contrib.layers.sparse_column_with_keys(
   column_name="gender", keys=["female", "male"])
 ```
 
-What if we don't know the set of possible values in advance? Not a problem. We
+What if we don't know the set of possible values in advance?
+
+만약에 가능한 값의 세트를 미리 알 수 없다면 어떻게 해야하나 ?
+ 
+ Not a problem.
+ 문제 없다.
+우리는 `sparse_column_with_hash_bucket`를 대신 사용 할 수 있다. 
+ We
 can use `sparse_column_with_hash_bucket` instead:
 
 ```python
@@ -223,8 +254,14 @@ education = tf.contrib.layers.sparse_column_with_hash_bucket("education", hash_b
 ```
 
 What will happen is that each possible value in the feature column `education`
-will be hashed to an integer ID as we encounter them in training. See an example
+will be hashed to an integer ID as we encounter them in training. 
+어
+  `education`에 각 특성열에 가능한 값들은 훈련중에 정수 아이디로 헤시 뒤어질 것이다 
+
+
+See an example
 illustration below:
+아래의 실례를 봐라 
 
 ID  | Feature
 --- | -------------
@@ -245,6 +282,7 @@ managing the mapping and creating `tf.Variable` to store the model parameters
 learned through the model training process we'll go through later.
 
 We'll do the similar trick to define the other categorical features:
+우리는 다른 categorical 특성들을 정의하기 위해 비슷한 기술을 사용 할 것이다.
 
 ```python
 race = tf.contrib.layers.sparse_column_with_keys(column_name="race", keys=[
