@@ -34,13 +34,13 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 2012년 검증 데이터 세트에서 나타난 각 모델의 top-5 error rate는 [AlexNet]이 15.3%, [BN-Inception-v2]이 6.66%였고
 [Inception-v3]는 3.46%를 달성했다.
 
-> ImageNet 챌린지에서 사람의 성과는 어떠한가? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-5 error rate는 5.1%였다고 한다.
+> ImageNet 챌린지에서 사람이 도전한다면 성과가 어떠할까? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-5 error rate는 5.1%였다고 한다.
 
 [ImageNet]: http://image-net.org/
 [1000 classes]: http://image-net.org/challenges/LSVRC/2014/browse-synsets
 [blog post]: http://karpathy.github.io/2014/09/02/what-i-learned-from-competing-against-a-convnet-on-imagenet/
 
-본 튜토리얼은 [Inception-v3]을 사용하는 방법을 알려줄 것이다. 먼저 Python이나 C++로 본 모델을 사용해서 이미지를 [1000 classes]로 분류하는 방법을 배운다. 그리고 이 모델을 통해 다른 이미지 인식 문제에서 다시 활용될 수 있는 고수준의 특징을 추출하는 방법 또한 논의할 것이다. 
+본 튜토리얼은 [Inception-v3]를 사용하는 방법을 알려줄 것이다. 먼저 Python이나 C++로 본 모델을 사용해서 이미지를 [1000 classes]로 분류하는 방법을 배운다. 그리고 이 모델을 통해 다른 이미지 인식 문제에서 다시 활용될 수 있는 고수준의 특징을 추출하는 방법 또한 논의할 것이다. 
 
 커뮤니티에서 이 모델을 어떤 모습으로 활용할지 기대되는 바이다.
 
@@ -49,18 +49,18 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 프로그램이 처음 실행될 때 `classify_image.py`는 `tensorflow.org`로 부터 훈련된 모델을 다운로드 받는다.
 필요한 하드디스크의 여유 공간은 200메가바이트이다.
 
-다음 명령어는 PIP패키지에서 TensorFlow를 설치한 이후 터미널이 TensorFlow의 root 디렉토리로 설정되어 있는 상태를 전제로 한다.
+다음 명령어는 PIP패키지에서 TensorFlow를 설치한 이후, 터미널이 TensorFlow의 root 디렉토리로 설정되어 있는 상태를 전제로 한다.
 
     cd tensorflow/models/image/imagenet
     python classify_image.py
 
-위 명령어는 다운로드로 제공된 판다 곰의 사진을 분류할 것이다.
+위 명령어는 다운로드로 제공된 판다 곰의 사진을 분류한다.
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/cropped_panda.jpg">
 </div>
 
-만약 모델이 올바르게 작동한다면, 다음과 같은 내용이 출력될 것이다:
+만약 모델이 올바르게 작동한다면, 다음과 같은 내용이 출력된다:
 
     giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca (score = 0.88493)
     indri, indris, Indri indri, Indri brevicaudatus (score = 0.00878)
@@ -75,8 +75,8 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 ## C++ API로 사용하기
 
 C++의 production환경에서도 [Inception-v3] 모델을 사용할 수 있다.
-아래와 같은 방법으로 모델을 정의하는 GraphDef를 담고 있는 아카이브를 다운로드 받을 수 있다. 
-단, TensorFlow repository의 root 디렉토리에서 실행한다:
+모델을 정의하는 GraphDef를 담고 있는 아카이브를 다운로드 받는 방법은 아래와 같다:
+(단, TensorFlow repository의 root 디렉토리에서 실행한다)
 
 ```bash
 wget https://storage.googleapis.com/download.tensorflow.org/models/inception_dec_2015.zip -O tensorflow/examples/label_image/data/inception_dec_2015.zip
@@ -85,7 +85,7 @@ unzip tensorflow/examples/label_image/data/inception_dec_2015.zip -d tensorflow/
 ```
 
 다음으로 그래프를 불러오고 실행할 수 있는 코드를 담고 있는 C++ 바이너리를 컴파일 해야 한다.
-[the instructions to download the source installation of TensorFlow](../../get_started/os_setup.md#installing-from-sources)에 
+만약 [the instructions to download the source installation of TensorFlow](../../get_started/os_setup.md#installing-from-sources)에 
 나와 있는 지시사항을 자신의 플랫폼에 맞게 이행했다면, shell terminal에서 다음과 같은 명령어를 실행하여 예제를 빌드할 수 있다:
 
 ```bash
@@ -98,7 +98,7 @@ bazel build tensorflow/examples/label_image/...
 bazel-bin/tensorflow/examples/label_image/label_image
 ```
 
-이것은 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용을 출력할 것이다:
+이것은 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용이 출력된다:
 
 ```
 I tensorflow/examples/label_image/main.cc:200] military uniform (866): 0.647296
@@ -107,29 +107,21 @@ I tensorflow/examples/label_image/main.cc:200] academic gown (896): 0.0232411
 I tensorflow/examples/label_image/main.cc:200] bow tie (817): 0.0157356
 I tensorflow/examples/label_image/main.cc:200] bolo tie (940): 0.0145024
 ```
-In this case, we're using the default image of
-[Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper), and you can
-see the network correctly identifies she's wearing a military uniform, with a high
-score of 0.6.
-이러한 경우 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper)의 기본 이미지를 사용하고 있는 것이며,
-0.6점이라는 높은 점수로 네트워크가 군복을 입고 있는 여성을 식별하는 것을 확인할 수 있을 것이다.
+
+이러한 경우 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper)의 기본(default) 이미지를 사용하고 있는 것이며,
+0.6점이라는 높은 점수로 네트워크가 군복을 입고 있는 여성을 식별하고 있음을 확인할 수 있다.
 
 
 <div style="width:45%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/grace_hopper.jpg">
 </div>
 
-Next, try it out on your own images by supplying the --image= argument, e.g.
-다음으로 --image= 인자를 추가하여 본인이 갖고 있는 이미지로 테스트해 본다.
+다음으로 --image= 인자를 추가하여 본인이 갖고 있는 이미지로 테스트해 본다. 예를 들면 다음과 같다:
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
 ```
 
-If you look inside the [`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)
-file, you can find out
-how it works. We hope this code will help you integrate TensorFlow into
-your own applications, so we will walk step by step through the main functions:
 `tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)파일을 살펴보면 어떻게 작동하는지 알 수 있다. 
 이 코드를 통해 TensorFlow 라이브러리를 사용자의 애플리케이션에 사용하는 데 도움이 되길 바라며 주요 함수들을 차례차례 살펴볼 것이다.
 
@@ -139,7 +131,7 @@ and `input_height` flags. We also need to scale the pixel values from integers t
 are between 0 and 255 to the floating point values that the graph operates on.
 We control the scaling with the `input_mean` and `input_std` flags: we first subtract
 `input_mean` from each pixel value, then divide it by `input_std`.
-커맨드 라인 플래그(command line flags)는 파일을 불러온 위치와 입력된 이미지의 속성을 조정한다.
+커맨드 라인 플래그(command line flags)는 파일을 불러온 위치와 입력된 이미지의 속성을 조정하는 기능을 한다.
 모델은 정사각형 299x299 사이즈의 RGB 이미지를 취급하기 때문에 이를 `input_width`와  `input_height` 플래그라고 한다.
 그리고 픽셀 값을 0과 255사이의 정수에서 그래프를 사용하기 위한 부동 소수점으로 크기 조정(scaling)해야 한다.
 크기 조정은 `input_mean`과 `input_std` 플래그로 조절한다. 각 픽셀 값에서 `input_mean`을 빼고 난 후 `input_std`로 나눈다.
@@ -148,10 +140,15 @@ These values probably look somewhat magical, but they are just defined by the
 original model author based on what he/she wanted to use as input images for 
 training. If you have a graph that you've trained yourself, you'll just need
 to adjust the values to match whatever you used during your training process.
+이러한 값들이 신기해 보일 수 있는데, 이는 모델을 만든 원작자가 훈련용 입력 이미지로서 사용하고 싶은 것을 정의한 내용일 뿐이다.
+사용자가 스스로 훈련시킨 그래프가 있다면, 자신의 훈련 프로세스에 적합하도록 사용자가 원하는 값으로 조정하면 된다.
+
 
 You can see how they're applied to an image in the [`ReadTensorFromImageFile()`]
 (https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L88)
 function.
+이러한 값들이 [`ReadTensorFromImageFile()`]
+(https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L88)의 함수를 통해 이미지에 어떻게 적용되는지 확인할 수 있다.
 
 ```C++
 // Given an image file name, read in the data, try to decode it as an image,
@@ -164,6 +161,7 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
 ```
 We start by creating a `GraphDefBuilder`, which is an object we can use to
 specify a model to run or load.
+가장 먼저 실행하거나 불러올 모델을 설정하기 위해 `GraphDefBuilder`를 만든다.
 
 ```C++
   string input_name = "file_reader";
@@ -182,6 +180,11 @@ the model definition held in the `GraphDefBuilder`. We also name the `ReadFile`
 operator by making the `WithName()` call to `b.opts()`. This gives a name to the node,
 which isn't strictly necessary since an automatic name will be assigned if you don't
 do this, but it does make debugging a bit easier.
+그 다음에 실행할 소형 모델의 노드를 생성한다. 이는 픽셀 값을 불러오고, 변경하고, 크기 조정하는 데 사용되며 메인 모델의 입력값으로 쓰일 것이다.
+첫 번째로 만든 노드는 `Const` op(short for operations, meaning node in the graph)이며 이는 우리가 불러 올 이미지의 파일 이름이 담긴 텐서를 갖고 있다. 
+이것은 `ReadFile` op에게 첫 번째 입력값으로 전달된다. op를 생성하는 모든 함수의 마지막 인자로 `b.opts()`를 전달할 것임을 알 수 있을 것이다.
+인자는 해당 노드가 `GraphDefBuilder`가 담고 있는 모델 정의에 반드시 추가되도록 한다. 
+또한 `WithName()` 함수를 `b.opts()`에게 호출하여 `ReadFile` 연산자를 지정할 것이다. 이것은 노드의 이름을 지정하는 것인데, 사실 사용자가 따로 수행하지 않더라도 자동 이름이 생성되어 할당되므로 필수적인 과정은 아니다. 하지만 디버깅에 도움이 되는 과정이다.
 
 ```C++
   // Now try to figure out what kind of file it is and decode it.
@@ -221,6 +224,8 @@ do this, but it does make debugging a bit easier.
 We then keep adding more nodes, to decode the file data as an image, to cast the
 integers into floating point values, to resize it, and then finally to run the
 subtraction and division operations on the pixel values.
+그리고 나서 계속해서 노드를 추가한다. 이는 파일 데이터를 이미지로 디코드하고, 정수값을 부동소수점 값으로 바꾸고, 
+값을 다시 조절하고, 마지막으로 픽셀값을 빼고 나누는 연산 과정을 거치려고 하는 것이다.
 
 ```C++
   // This runs the GraphDef network definition that we've just constructed, and
@@ -231,6 +236,7 @@ subtraction and division operations on the pixel values.
 At the end of this we have
 a model definition stored in the b variable, which we turn into a full graph
 definition with the `ToGraphDef()` function.
+위와 같은 과정을 거치면 최종적으로 변수 b에 담긴 모델 정의를 갖게 된다. 변수 b는 `ToGraphDef()` 함수를 통해 완전한 그래프로 변환될 수 있다.
 
 ```C++
   std::unique_ptr<tensorflow::Session> session(
@@ -243,6 +249,8 @@ Then we create a [`Session`](http://www.tensorflow.org/versions/master/api_docs/
 object, which is the interface to actually running the graph, and run it, 
 specifying which node we want to get the output from, and where to put the
 output data.
+그 다음으로 [`Session`](http://www.tensorflow.org/versions/master/api_docs/cc/ClassSession.html#class-tensorflow-session) 오브젝트를 생성한다.
+이는 그래프를 표시하는 인터페이스 오브젝트이다. 이것을 실행하여 어떤 노드로부터 출력을 얻을 것인지, 출력된 데이터를 어디에 둘지 구체화한다.
 
 This gives us a vector of `Tensor` objects, which in this case we know will only be a
 single object long. You can think of a `Tensor` as a multi-dimensional array in this
