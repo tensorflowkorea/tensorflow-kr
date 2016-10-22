@@ -7,7 +7,6 @@
 이 튜토리얼 대상 독자는 TensorFlow 사용에 관심이 있는 머신러닝 유경험자다. 
 
 이 튜토리얼은 일반적인 머신러닝 교육에 적합하지 않다.
-These tutorials are not intended for teaching Machine Learning in general.
 
 반드시 [TensorFlow 설치](../../../get_started/os_setup.md) 지시를 따랐는지 확인하라.
 
@@ -28,43 +27,38 @@ python fully_connected_feed.py
 
 ## 데이터 준비
 
-MNIST는 머신 러닝에서 고전적인 문제다. The problem is to look at
-greyscale 28x28 pixel images of handwritten digits and determine which digit
-the image represents, for all the digits from zero to nine.
+MNIST는 머신 러닝에서 고전적인 문제다. 이 문제는 그레이 스케일(greyscale)인 손으로 쓴 숫자 28x28 픽셀 이미지를 보고 
+그 이미지가 표현하는 숫자가 0 부터 9 까지 숫자 중 어떤 것인지 판단하는 것이다.
 
 ![MNIST Digits](../../../images/mnist_digits.png "MNIST Digits")
 
-For more information, refer to [Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/)
-or [Chris Olah's visualizations of MNIST](http://colah.github.io/posts/2014-10-Visualizing-MNIST/).
+더 많은 정보는 [Yann LeCun's MNIST page](http://yann.lecun.com/exdb/mnist/) 또는
+[Chris Olah's visualizations of MNIST](http://colah.github.io/posts/2014-10-Visualizing-MNIST/) 참고하라.
 
 ### 다운로드
 
-At the top of the `run_training()` method, the `input_data.read_data_sets()`
-function will ensure that the correct data has been downloaded to your local
-training folder and then unpack that data to return a dictionary of `DataSet`
-instances.
+`run_training()` 메소드의 맨 위에는, `input_data.read_data_sets()`
+함수가 당신의 트레이닝 폴더에 올바른 데이터가 다운되었는지 확인하고, 
+`DataSet` 인스턴스의 딕셔너리에 반환하기 위해 그 데이터의 압축을 해제한다.
 
 ```python
 data_sets = input_data.read_data_sets(FLAGS.train_dir, FLAGS.fake_data)
 ```
 
-**NOTE**: The `fake_data` flag is used for unit-testing purposes and may be
-safely ignored by the reader.
+**주의**: `fake_data` flag 는 유닛 테스트의 목적으로 쓰이며 무시해도 이상이 없다.
 
-Dataset | Purpose
+데이터 셋 | 목적
 --- | ---
-`data_sets.train` | 55000 images and labels, for primary training.
-`data_sets.validation` | 5000 images and labels, for iterative validation of training accuracy.
-`data_sets.test` | 10000 images and labels, for final testing of trained accuracy.
+`data_sets.train` | 기본 트레이닝을 위한 55000개의 이미지와 레이블.
+`data_sets.validation` | 트레이닝 정확도를 반복해서 검증하기 위한 5000개의 이미지와 레이블.
+`data_sets.test` | 트레이닝된 정확도를 마지막으로 테스트하기 위한 10000개의 이미지와 레이블.
 
-For more information about the data, please read the [Download](../../../tutorials/mnist/download/index.md)
-tutorial.
+데이터에 대한 더 많은 정보는 [Download](../../../tutorials/mnist/download/index.md) tutorial을 읽어 보세요.
 
-### Inputs and Placeholders
+### 입력과 플레이스 홀더(Placeholders)
 
-The `placeholder_inputs()` function creates two [`tf.placeholder`](../../../api_docs/python/io_ops.md#placeholder)
-ops that define the shape of the inputs, including the `batch_size`, to the
-rest of the graph and into which the actual training examples will be fed.
+`placeholder_inputs()` 함수는 두개의 [`tf.placeholder`](../../../api_docs/python/io_ops.md#placeholder) ops를 생성한다.
+이 ops는 `batch_size` 를 포함해, 남은 그래프를 위한 입력 형태와 실제 트레이닝 example의 입력 형태를 정의한다.
 
 ```python
 images_placeholder = tf.placeholder(tf.float32, shape=(batch_size,
@@ -72,23 +66,19 @@ images_placeholder = tf.placeholder(tf.float32, shape=(batch_size,
 labels_placeholder = tf.placeholder(tf.int32, shape=(batch_size))
 ```
 
-Further down, in the training loop, the full image and label datasets are
-sliced to fit the `batch_size` for each step, matched with these placeholder
-ops, and then passed into the `sess.run()` function using the `feed_dict`
-parameter.
+트레이닝 반복 루프 더 아랫부분에서, 전체 이미지와 레이블 데이터셋이 각 순서에서 `batch_size` 에 맞게 
+나누어지고 이 플레이스 홀더 ops들과 맞게 매치된다. 그리고나서 `feed_dict` 변수를 사용해 `sess.run()` 함수에 전달된다.
 
 ## Build the Graph
 
-After creating placeholders for the data, the graph is built from the
-`mnist.py` file according to a 3-stage pattern: `inference()`, `loss()`, and
-`training()`.
+데이터를 위한 플레이스 홀더를 생성한 후에, 3-스테이지 패턴(3-stage pattern): 
+`inference()`, `loss()`, `training()` 을 따라서 `mnist.py` 파일로부터 그래프가 생성됩니다.
 
-1.  `inference()` - Builds the graph as far as is required for running
-the network forward to make predictions.
-1.  `loss()` - Adds to the inference graph the ops required to generate
-loss.
-1.  `training()` - Adds to the loss graph the ops required to compute
-and apply gradients.
+1.  `inference()` - 예측을 위해 network forward 실행에 필요한 수준의 그래프를 작성한다.
+
+2.  `loss()` - inference 그래프에 loss를 생성하기 위해 필요한 ops를 더한다.
+
+3.  `training()` - loss 그래프에 계산과 그라디언트(gradient)를 적용하기 위한 op를 더한다.
 
 <div style="width:95%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../../images/mnist_subgraph.png">
@@ -96,23 +86,21 @@ and apply gradients.
 
 ### Inference
 
-The `inference()` function builds the graph as far as needed to
-return the tensor that would contain the output predictions.
+`inference()` 함수는 그래프를 작성하는데, 이 그래프는 
+예측한 출력을 가지는 tensor를 반환하는데 필요한 정도까지 작성된다.
 
-It takes the images placeholder as input and builds on top
-of it a pair of fully connected layers with [ReLu](https://en.wikipedia.org/wiki/Rectifier_(neural_networks)) activation followed by a ten
-node linear layer specifying the output logits.
+이것은 이미지 플레이스 홀더를 입력으로 취하고 그 위에 출력 logits를 지정한 10 노드 선형 층(ten node linear layer)을 동반하는 
+[ReLu](https://en.wikipedia.org/wiki/Rectifier_(neural_networks)) activation을 가진 한 쌍의 완전 연결 층(fully connected layer)을 만든다.
 
-Each layer is created beneath a unique [`tf.name_scope`](../../../api_docs/python/framework.md#name_scope)
-that acts as a prefix to the items created within that scope.
+각 층은 고유한 [`tf.name_scope`](../../../api_docs/python/framework.md#name_scope) 아래에서 생성된다.
+이것은 해당 범위(scope) 안에서 생성된 것에게 접두어와 같은 기능을 한다.
 
 ```python
 with tf.name_scope('hidden1'):
 ```
 
-Within the defined scope, the weights and biases to be used by each of these
-layers are generated into [`tf.Variable`](../../../api_docs/python/state_ops.md#Variable)
-instances, with their desired shapes:
+정의된 범위 내, weights와 biases의 층을 필요한 형태로 [`tf.Variable`](../../../api_docs/python/state_ops.md#Variable) 
+인스턴스 안에서 생성해 사용한다:
 
 ```python
 weights = tf.Variable(
@@ -123,21 +111,20 @@ biases = tf.Variable(tf.zeros([hidden1_units]),
                      name='biases')
 ```
 
-When, for instance, these are created under the `hidden1` scope, the unique
-name given to the weights variable would be "`hidden1/weights`".
+예를 들어, 이것들이 `hidden1` 범위 내에서 생성될 때는 weights 변수에 부여된 고유한 이름은 
+"`hidden1/weights`"다.
 
-Each variable is given initializer ops as part of their construction.
+각 변수에게 initializer(초기화) ops가 생성자(construction)의 일부로서 주어져 있다.
 
-In this most common case, the weights are initialized with the
-[`tf.truncated_normal`](../../../api_docs/python/constant_op.md#truncated_normal)
-and given their shape of a 2-D tensor with
-the first dim representing the number of units in the layer from which the
+보통의 경우에, weights는 [`tf.truncated_normal`](../../../api_docs/python/constant_op.md#truncated_normal)로 초기화 되고
+2-D tensor의 형태가 된다. 첫 번째 dim(차원. dimension)은 weights가 연결해 나온 층의 유닛(units) 갯수이고 두 번째 dim은 
+weights가 연결한 층의 유닛 갯수이다. 
+(the first dim representing the number of units in the layer from which the
 weights connect and the second dim representing the number of
-units in the layer to which the weights connect.  For the first layer, named
-`hidden1`, the dimensions are `[IMAGE_PIXELS, hidden1_units]` because the
-weights are connecting the image inputs to the hidden1 layer.  The
-`tf.truncated_normal` initializer generates a random distribution with a given
-mean and standard deviation.
+units in the layer to which the weights connect.)
+`hidden1`이라고 이름붙여진 첫 번째 레이어의 차원은 `[IMAGE_PIXELS, hidden1_units]` 다. 
+왜냐하면 weights가 이미지 입력과 hidden1 layer를 연결하고 있기 때문이다.
+`tf.truncated_normal` initializer는 주어진 평균과 표준 편차를 가지고 임의의 분포를 생성한다.
 
 Then the biases are initialized with [`tf.zeros`](../../../api_docs/python/constant_op.md#zeros)
 to ensure they start with all zero values, and their shape is simply the number
@@ -229,8 +216,8 @@ The tensor containing the outputs of the training op is returned.
 
 ## Train the Model
 
-Once the graph is built, it can be iteratively trained and evaluated in a loop
-controlled by the user code in `fully_connected_feed.py`.
+일단 그래프가 작성되면, 반복해서 트레이닝 할 수 있고 반복 루프(loop)에서 실행할 수 있습니다. 
+반복 루프(loop)는 `fully_connected_feed.py` 에 있는 유저 코드에 의해 컨트롤됩니다.
 
 ### The Graph
 
