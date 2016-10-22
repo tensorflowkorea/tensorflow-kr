@@ -161,7 +161,7 @@ File | Purpose
 ## CIFAR-10 모델
 
 CIFAR-10 네트워크는 주로 ['cifar10.py'](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py)에 들어있습니다.
-전체 훈련 그래프는 약 765개의 연산을 포함합니다. 우리는 아래의 모듈들로 그래프를 구성하는 것이 가장 코드 재사용성이 높은 방법임을 알게되었습니다.
+전체 훈련 그래프는 약 765개의 연산을 포함합니다. 우리는 아래의 모듈들로 그래프를 구성하는 것이 가장 재사용성이 높은 코드를 만드는 방법임을 알게되었습니다.
 The CIFAR-10 network is largely contained in
 [`cifar10.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py).
 The complete training
@@ -169,12 +169,12 @@ graph contains roughly 765 operations. We find that we can make the code most
 reusable by constructing the graph with the following modules:
 
 1. [**모델 입력:**](#model-inputs) 'inputs()' 와 'distorted_inputs()'는 각각 평가와 훈련을 위한
-CIFAR 이미지를 읽고 전처리를 하는 연산들을 더합니다.
+CIFAR 이미지를 읽고 전처리를 하는 연산들을 추가합니다.
 
-1. [**모델 예측:**](#model-prediction) 'inference()'는 추론을 수행하는 연산들을 더합니다.
+1. [**모델 예측:**](#model-prediction) 'inference()'는 추론을 수행하는 연산들을 추가합니다.
 예) 제공된 이미지에 대한 분류
 
-1. [**모델 훈련:**](#model-training) 'loss()'와 'train()'은 오차와 기울기, 변수 업데이트와 시각화 요약을 계산하는 연산들을 더합니다.
+1. [**모델 훈련:**](#model-training) 'loss()'와 'train()'은 오차와 기울기, 변수 업데이트와 시각화 요약을 계산하는 연산들을 추가합니다.
 
 1. [**Model inputs:**](#model-inputs) `inputs()` and `distorted_inputs()` add
 operations that read and preprocess CIFAR images for evaluation and training,
@@ -200,19 +200,34 @@ These files contain fixed byte length records, so we use
 See [Reading Data](../../how_tos/reading_data/index.md#reading-from-files) to
 learn more about how the `Reader` class works.
 
+이미지들은 아래의 과정을 통하여 처리됩니다.
 The images are processed as follows:
+
+*  이미지는 24 x 24 픽셀로 잘라냅니다.
+훈련을 위하여 [무작위로](../../api_docs/python/constant_op.md#random_crop) 잘라내거나 혹은 평가를 위하여 중심만 잘라냅니다.
+*  동적 범위 내에 모델이 둔감해지도록 [대략적인 화이트닝](../../api_docs/python/image.md#per_image_whitening)을 합니다
 
 *  They are cropped to 24 x 24 pixels, centrally for evaluation or
    [randomly](../../api_docs/python/constant_op.md#random_crop) for training.
 *  They are [approximately whitened](../../api_docs/python/image.md#per_image_whitening)
    to make the model insensitive to dynamic range.
 
+훈련을 위하여 추가적으로 일련의 무작위 왜곡을 적용하여 인공적으로 데이터 셋의 크기를 키웁니다:
 For training, we additionally apply a series of random distortions to
 artificially increase the data set size:
+
+* 이미지를 좌에서 우로 [무작위로 뒤집기](../../api_docs/python/image.md#random_flip_left_right)
+* [이미지 밝기](../../api_docs/python/image.md#random_brightness)를 무작위로 왜곡하기
+* [이미지 대비](../../api_docs/python/image.md#random_contrast)를 무작위로 왜곡하기
 
 * [Randomly flip](../../api_docs/python/image.md#random_flip_left_right) the image from left to right.
 * Randomly distort the [image brightness](../../api_docs/python/image.md#random_brightness).
 * Randomly distort the [image contrast](../../api_docs/python/image.md#random_contrast).
+
+가능한 왜곡의 목록은 [Images](../../api_docs/python/image.md) 페이지를 참조하세요.
+또한 [`image_summary`](../../api_docs/python/train.md#image_summary)를 이미지에 붙여
+[TensorBoard](../../how_tos/summaries_and_tensorboard/index.md)에서 시각화 할 수 있도록 하였습니다.
+이는 입력이 제대로 만들어 졌는지 확인하기 위한 좋은 연습이 될 것 입니다.
 
 Please see the [Images](../../api_docs/python/image.md) page for the list of
 available distortions. We also attach an
@@ -224,13 +239,20 @@ This is a good practice to verify that inputs are built correctly.
   <img style="width:70%" src="../../images/cifar_image_summary.png">
 </div>
 
+디스크에서 이미지를 읽고 왜곡을 하는 것은 적지 않은 양의 처리 시간이 필요할 수 있습니다.
+이러한 작업이 훈련을 늦추는 것을 방지하기 위해, 우리는 이 작업을 16개의 독립된 스레드로
+나누어 실행시킵니다. 이 스레드는 TensorFlow [큐](../../api_docs/python/io_ops.md#shuffle_batch)를
+계속해서 채웁니다.
+
 Reading images from disk and distorting them can use a non-trivial amount of
 processing time. To prevent these operations from slowing down training, we run
 them inside 16 separate threads which continuously fill a TensorFlow
 [queue](../../api_docs/python/io_ops.md#shuffle_batch).
 
+### 모델 예측
 ### Model Prediction
 
+모델의 에측 부분은 'inference()' 함수로 구성되어 있습니다. 이 함수는 
 The prediction part of the model is constructed by the `inference()` function
 which adds operations to compute the *logits* of the predictions. That part of
 the model is organized as follows:
