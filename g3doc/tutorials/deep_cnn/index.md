@@ -160,11 +160,21 @@ File | Purpose
 ## CIFAR-10 Model
 ## CIFAR-10 모델
 
+CIFAR-10 네트워크는 주로 ['cifar10.py'](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py)에 들어있습니다.
+전체 훈련 그래프는 약 765개의 연산을 포함합니다. 우리는 아래의 모듈들로 그래프를 구성하는 것이 가장 코드 재사용성이 높은 방법임을 알게되었습니다.
 The CIFAR-10 network is largely contained in
 [`cifar10.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py).
 The complete training
 graph contains roughly 765 operations. We find that we can make the code most
 reusable by constructing the graph with the following modules:
+
+1. [**모델 입력:**](#model-inputs) 'inputs()' 와 'distorted_inputs()'는 각각 평가와 훈련을 위한
+CIFAR 이미지를 읽고 전처리를 하는 연산들을 더합니다.
+
+1. [**모델 예측:**](#model-prediction) 'inference()'는 추론을 수행하는 연산들을 더합니다.
+예) 제공된 이미지에 대한 분류
+
+1. [**모델 훈련:**](#model-training) 'loss()'와 'train()'은 오차와 기울기, 변수 업데이트와 시각화 요약을 계산하는 연산들을 더합니다.
 
 1. [**Model inputs:**](#model-inputs) `inputs()` and `distorted_inputs()` add
 operations that read and preprocess CIFAR images for evaluation and training,
@@ -176,6 +186,12 @@ add operations that compute the loss,
 gradients, variable updates and visualization summaries.
 
 ### Model Inputs
+### 모델 입력
+
+모델의 입력 부분은 CIFAR-10 바이너리 데이터 파일로부터 이미지를 읽는 'inputs()'와 'distorted_inputs()'
+로 구성되어 있습니다.
+이 데이터 파일들은 고정 바이트 길이 레코드를 담고있어, 우리는  [`tf.FixedLengthRecordReader`](../../api_docs/python/io_ops.md#FixedLengthRecordReader)를 사용합니다.
+'Reader' 클래스가 어떻게 작동하는지 더 알고 싶으시다면 [Reading Data](../../how_tos/reading_data/index.md#reading-from-files)를 참조하세요.
 
 The input part of the model is built by the functions `inputs()` and
 `distorted_inputs()` which read images from the CIFAR-10 binary data files.
