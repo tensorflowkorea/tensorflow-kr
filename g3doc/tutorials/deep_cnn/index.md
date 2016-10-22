@@ -60,7 +60,7 @@ designing larger and more sophisticated models in TensorFlow:
 
 ### 튜토리얼의 주안점
 CIFAR-10 튜토리얼은 텐서플로우로 더 크고 복잡한 모델을 디자인하기 위한
-몇몇의 주요 구성들을 시연합니다.
+몇몇의 주요 구성들을 설명합니다.
 
 * Core mathematical components including [convolution](
 ../../api_docs/python/nn.md#conv2d) ([wiki](
@@ -90,18 +90,26 @@ http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional
 of network activities during training, including input images,
 losses and distributions of activations and gradients.
 
-* 활성화(Activations)와 gradients의 loss와 분포와 입력된 이미지를 포함하는 학습 중인 네트워크의 활동 [시각화](../../how_tos/summaries_and_tensorboard/index.md)
+* 활성화(Activations)와 기울기(gradients)의 손실(loss) 및 분포와 입력된 이미지를 포함하는 학습 중인 네트워크의 활동 [시각화](../../how_tos/summaries_and_tensorboard/index.md)
 
 * Routines for calculating the
 [moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
 of learned parameters and using these averages
 during evaluation to boost predictive performance.
+
+* 학습된 변수의 [이동 평균(moving average)](../../api_docs/python/train.md#ExponentialMovingAverage)을 계산하는 방법과 평가를 할 때 예측 성능을 향상시키기 위하여 이 평균들을 이용하는 방법
+
 * Implementation of a
 [learning rate schedule](../../api_docs/python/train.md#exponential_decay)
 that systematically decrements over time.
+
+* 체계적으로 시간에 따라 감소하는 [학습 비율(learning rate) 스케쥴](../../api_docs/python/train.md#exponential_decay)의 구현
+
 * Prefetching [queues](../../api_docs/python/io_ops.md#shuffle_batch)
 for input
 data to isolate the model from disk latency and expensive image pre-processing.
+
+* 디스크 지연과 비싼 이미지 전처리를 모델로부터 분리하기 위한 입력 데이터 [큐](../../api_docs/python/io_ops.md#shuffle_batch)의 선인출(prefetching)
 
 We also provide a [multi-GPU version](#training-a-model-using-multiple-gpu-cards)
 of the model which demonstrates:
@@ -252,10 +260,23 @@ them inside 16 separate threads which continuously fill a TensorFlow
 ### 모델 예측
 ### Model Prediction
 
-모델의 에측 부분은 'inference()' 함수로 구성되어 있습니다. 이 함수는 
+모델의 에측 부분은 'inference()' 함수로 구성되어 있습니다. 이 함수는 예측의 *로짓(logit)*들을 계산하는
+연산을 추가합니다. 모델의 해당 부분은 다음과 같이 구성되어 있습니다:
 The prediction part of the model is constructed by the `inference()` function
 which adds operations to compute the *logits* of the predictions. That part of
 the model is organized as follows:
+
+레이어 명 | 설명
+--- | ---
+`conv1` | [컨볼루션(convolution)](../../api_docs/python/nn.md#conv2d) 과 [정류된 선형(rectified linear)](../../api_docs/python/nn.md#relu) 활성화 레이어.
+`pool1` | [최대 풀링(max pooling)](../../api_docs/python/nn.md#max_pool) 레이어.
+`norm1` | [지역 반응 정규화(local response normalization)](../../api_docs/python/nn.md#local_response_normalization) 레이어.
+`conv2` | [컨볼루션(convolution)](../../api_docs/python/nn.md#conv2d) 과 [정류된 선형(rectified linear)](../../api_docs/python/nn.md#relu) 활성화 레이어.
+`norm2` | [지역 반응 정규화(local response normalization)](../../api_docs/python/nn.md#local_response_normalization).
+`pool2` | [최대 풀링(max pooling)](../../api_docs/python/nn.md#max_pool) 레이어.
+`local3` | [정류된 선형 활성화가 포함된 완전 연결 레이어(fully connected layer with rectified linear activation)](../../api_docs/python/nn.md).
+`local4` | [정류된 선형 활성화가 포함된 완전 연결 레이어(fully connected layer with rectified linear activation)](../../api_docs/python/nn.md).
+`softmax_linear` | 로짓(logit)들을 생산하는 선형 변환(linear transformation)
 
 Layer Name | Description
 --- | ---
@@ -269,6 +290,7 @@ Layer Name | Description
 `local4` | [fully connected layer with rectified linear activation](../../api_docs/python/nn.md).
 `softmax_linear` | linear transformation to produce logits.
 
+아래의 그래프는 TensorBoard를 통해 생성된 추론(inference) 연산을 설명
 Here is a graph generated from TensorBoard describing the inference operation:
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
