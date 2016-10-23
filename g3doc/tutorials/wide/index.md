@@ -6,7 +6,7 @@
 
 이번 튜토리얼 코드를 실행해보기 위해서:
 
-1.  텐서플로우를 설치하지 않았다면 [텐서플로 설치](../../get_started/os_setup.md) 
+1.  텐서플로우를 설치하지 않았다면 [텐서플로 설치](../../get_started/os_setup.md)
 
 2.  [튜토리얼 코드](
     https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py) 다운로드.
@@ -46,7 +46,7 @@
 
 우리가 사용할 데이터 세트는 [소득 인구조사 데이터세트]
 (https://archive.ics.uci.edu/ml/datasets/Census+Income). [훈련 데이터]
-(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고 
+(https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data) 그리고
 [테스트 데이터](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test) 를 수동 또는 코드를 이용해서 내려받을 수 있습니다.
 
 ```python
@@ -81,11 +81,11 @@ df_test[LABEL_COLUMN] = (df_test["income_bracket"].apply(lambda x: ">50K" in x))
 
 
 
-*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical**열이라 불린다. 
+*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical**열이라 불린다.
      예를 들어 사람에 국적(미국, 인도, 일본 등)이나 교육 수준(고등학교, 대학 등)이 categorical 열들이다.
-        
-  
-    
+
+
+
 *  만약에 값이 어떤 수치로 나올 수 있다면 **continuous**열 이라 불린다. 예를 들어, 한 사람에 소득이 continuous열이다.
 
 
@@ -121,10 +121,10 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "h
 | hours_per_week | Continuous  | 주당 근무시간.                    |
 | native_country | Categorical | 출생지                            |
 | income         | Categorical | ">50K" 또는 "<=50K", 개인의 일년  |
-:                :             : 수입이 5만불 이상인지 아닌지 뜻함 : 
+:                :             : 수입이 5만불 이상인지 아닌지 뜻함 :
 
 
-##데이터를 텐서들로 바꾸기 
+##데이터를 텐서들로 바꾸기
 
 TF.Learn 모델을 구축 할 때, 입력 데이터는 Input Builder 함수에 의해서 명시된다.
 이 builder 함수는 TF.Learn에 `fit` 이나 `evaluate`와 같은 메소드들에게 넘겨 질때 까지 호출되지 않는다.
@@ -137,7 +137,7 @@ TF.Learn 모델을 구축 할 때, 입력 데이터는 Input Builder 함수에 �
 2.  `label`: A `Tensor` containing the label column.
 
 `feature_cols`에 키들은 다음 부분에서 열을 구성하는 데 사용 될 것이다.
- 
+
 우리는 `fit` 과 `evaluate` 메소드들을 서로 다른 데이터로 호출 하고 싶으므로,
 서로 같지만 단지 다른 데이터를 `input_fn`에 전달하는 input builder 함수인 `train_input_fn` 그리고 `test_input_fn`를 정의 했습니다.
 
@@ -191,13 +191,13 @@ Selecting and crafting the right set of feature columns is key to learning an
 effective model.
 
 
-올바른 특성 열 세트를 선택하고 만드는 것이 효과적인 모델 학습에 핵심 입니다. 
- 
- 
+올바른 특성 열 세트를 선택하고 만드는 것이 효과적인 모델 학습에 핵심 입니다.
+
+
  A **feature column** can be either one of the raw columns in
 the original dataframe (let's call them **base feature columns**), or any new
 columns created based on some transformations defined over one or multiple base
-columns (let's call them **derived feature columns**). 
+columns (let's call them **derived feature columns**).
 
 
 
@@ -214,20 +214,20 @@ To define a feature column for a categorical feature, we can create a
 `SparseColumn` using the TF.Learn API.
 
 categorical 특성을 위한 특성열을 정의 하기 위해서 우리는 TF.Learn API로 `SparseColumn` 생성할 수 있습니다.  
- 
+
  If you know the set of all possible
 feature values of a column and there are only a few of them, you can use
 `sparse_column_with_keys`.
  만약에 모든 열에 특성 값 세트를 알고 있고 또한 몇게 안된다면, `sparse_column_with_keys`를 사용 할 수 있습니다.
- 
- 
- 
+
+
+
  Each key in the list will get assigned an
 auto-incremental ID starting from 0.
- 
+
 리스트에 안에 각각의 키들은 0부터 시작해서 자동으로 증가하는 아이디가 할당된다.
- 
- 
+
+
  For example, for the `gender` column we can
 assign the feature string "female" to an integer ID of 0 and "male" to 1 by
 doing:
@@ -242,10 +242,10 @@ gender = tf.contrib.layers.sparse_column_with_keys(
 What if we don't know the set of possible values in advance?
 
 만약에 가능한 값의 세트를 미리 알 수 없다면 어떻게 해야하나 ?
- 
+
  Not a problem.
  문제 없다.
-우리는 `sparse_column_with_hash_bucket`를 대신 사용 할 수 있다. 
+우리는 `sparse_column_with_hash_bucket`를 대신 사용 할 수 있다.
  We
 can use `sparse_column_with_hash_bucket` instead:
 
@@ -254,14 +254,14 @@ education = tf.contrib.layers.sparse_column_with_hash_bucket("education", hash_b
 ```
 
 What will happen is that each possible value in the feature column `education`
-will be hashed to an integer ID as we encounter them in training. 
+will be hashed to an integer ID as we encounter them in training.
 어
-  `education`에 각 특성열에 가능한 값들은 훈련중에 정수 아이디로 헤시 뒤어질 것이다 
+  `education`에 각 특성열에 가능한 값들은 훈련중에 정수 아이디로 헤시 되어질 것이다
 
 
 See an example
 illustration below:
-아래의 실례를 봐라 
+아래의 실례를 봐라
 
 ID  | Feature
 --- | -------------
@@ -275,11 +275,24 @@ ID  | Feature
 
 No matter which way we choose to define a `SparseColumn`, each feature string
 will be mapped into an integer ID by looking up a fixed mapping or by hashing.
+
+어떤 방법으로 `SparseColumn`를 정의 하던지 특성 문자열들은 정해진 멥핑 또는 헤쉬를
+정수 ID를를
+
 Note that hashing collisions are possible, but may not significantly impact the
-model quality. Under the hood, the `LinearModel` class is responsible for
+model quality.
+
+여기서 헤쉬 충돌이 일어 날 수 있지만, 모델의 질에 큰 영향을 끼치지는 않을 것이다.
+
+ Under the hood, the `LinearModel` class is responsible for
 managing the mapping and creating `tf.Variable` to store the model parameters
-(also known as model weights) for each feature ID. The model parameters will be
+(also known as model weights) for each feature ID.
+
+
+The model parameters will be
 learned through the model training process we'll go through later.
+
+모델의 매개변수들은 우리가 나중에 배우게 될 모델 훈련 과정에서 알게 될 것 입니다.
 
 We'll do the similar trick to define the other categorical features:
 우리는 다른 categorical 특성들을 정의하기 위해 비슷한 기술을 사용 할 것이다.
@@ -295,9 +308,14 @@ native_country = tf.contrib.layers.sparse_column_with_hash_bucket("native_countr
 ```
 
 ### Base Continuous Feature Columns
+기초 Continuous 특성 열
 
 Similarly, we can define a `RealValuedColumn` for each continuous feature column
 that we want to use in the model:
+
+비슷하게, 모델에서 사용하고 싶은 각 continuous 특성열들에게 `RealValuedColumn`를 정의 할 수 있습니다.
+
+
 
 ```python
 age = tf.contrib.layers.real_valued_column("age")
@@ -308,53 +326,115 @@ hours_per_week = tf.contrib.layers.real_valued_column("hours_per_week")
 ```
 
 ### Making Continuous Features Categorical through Bucketization
+버케티제이션을 통해 Continuous 특성들을 범주??
+
 
 Sometimes the relationship between a continuous feature and the label is not
-linear. As an hypothetical example, a person's income may grow with age in the
+linear.
+
+때때로 continuous 특성과 라벨의 관계는 비선형이다.
+
+ As an hypothetical example, a person's income may grow with age in the
 early stage of one's career, then the growth may slow at some point, and finally
-the income decreases after retirement. In this scenario, using the raw `age` as
+the income decreases after retirement.
+
+가상의 한 예와 같이, 한 사람의 수입이 사회생활 초기에는 나이와 함께 증가할 것이고, 어느 때가 되면 수입의 증가는 더뎌지고, 그리고 마침내 은퇴후에는 수입이 줄어 들것이다.
+
+
+ In this scenario, using the raw `age` as
 a real-valued feature column might not be a good choice because the model can
 only learn one of the three cases:
 
+이 시나리오, 비가공 `age`를 좋은 선택이 아니다 왜냐하면 모델은 오직 3가지 경우중 하나만 배울 수 있기 때문이다.
+
+모델이 아래의 3가지 경우중 하나만 습득 할 수 있기 때문에 이 시나리오에서 비가공 `age`를 실수특성열로 사용하는 것은 좋은 선택이 아닐 것 이다.
+
 1.  Income always increases at some rate as age grows (positive correlation),
-1.  Income always decreases at some rate as age grows (negative correlation), or
-1.  Income stays the same no matter at what age (no correlation)
+수입이 나이의 증가에 따라 항상 같은 비율로 증가 (양의 상관관계)
+2.  Income always decreases at some rate as age grows (negative correlation), or
+수입이 나이의 증가에 따라 항상 같은 비율로 감소 (음의 상관관계), 또는
+3.  Income stays the same no matter at what age (관계없음)
+수입이 나이에 상관 없이 항상 같음
+
+
 
 If we want to learn the fine-grained correlation between income and each age
-group seperately, we can leverage **bucketization**. Bucketization is a process
+group seperately, we can leverage **bucketization**.
+
+만약 우리가 수입과 각각의 나이 그룹 과의 세밀한 상관관계를 학습하고 싶다면  **bucketization** 를 활 용 할수 있다.
+
+ Bucketization is a process
 of dividing the entire range of a continuous feature into a set of consecutive
 bins/buckets, and then converting the original numerical feature into a bucket
 ID (as a categorical feature) depending on which bucket that value falls into.
+
+Bucketization은 과정이 continuous 특성 전체를 연속적인 빈/버켓들의 세트로 나누는 것이다
+
+,그리고 나서 변환한다 원래의 수적 특성을 버켓 아이디( categorical 특성으)로 어떤 ? 버켓의 값에 따라
+
+
+Bucketization은 continuous 특성 전체를 연속적인 빈/버켓들의 세트로 나누고, 이후에 버켓의 값에 따라 원래의 수적 특성을 버켓 아이디로 변환 하는 과정이다.
+
+
 So, we can define a `bucketized_column` over `age` as:
+
+그래서 우리는 `age`에 대해 `bucketized_column`를 정의 할 수 있다.
 
 ```python
 age_buckets = tf.contrib.layers.bucketized_column(age, boundaries=[18, 25, 30, 35, 40, 45, 50, 55, 60, 65])
 ```
 
-where the `boundaries` is a list of bucket boundaries. In this case, there are
+where the `boundaries` is a list of bucket boundaries.
+`boundaries`는 버켓 경계의 목록이다.
+
+ In this case, there are
 10 boundaries, resulting in 11 age group buckets (from age 17 and below, 18-24,
 25-29, ..., to 65 and over).
 
+
+이 경우에 10개의 경계가 있고, 결과적으로 11개의 버켓 그룹이 생성된다 ( 0세 부터 17 까지, 18-24, 25-29,..., 65세 이상).
+
 ### Intersecting Multiple Columns with CrossedColumn
 
+다수의 열을 CrossedColumn으로 교차하기
+
 Using each base feature column separately may not be enough to explain the data.
+
+각 기본 특성 열을 나눠 사용하는 것만으로는 데이터를 설명 하는데 충분하지 않을 것이다.
+
 For example, the correlation between education and the label (earning > 50,000
-dollars) may be different for different occupations. Therefore, if we only learn
+dollars) may be different for different occupations.
+
+예를들어 교육과 레이블(수입 > 50,000)에 상관관계는 아마 직업들에 따라 다를 것이다.
+
+
+Therefore, if we only learn
 a single model weight for `education="Bachelors"` and `education="Masters"`, we
 won't be able to capture every single education-occupation combination (e.g.
 distinguishing between `education="Bachelors" AND occupation="Exec-managerial"`
-and `education="Bachelors" AND occupation="Craft-repair"`). To learn the
+and `education="Bachelors" AND occupation="Craft-repair"`).
+
+그렇기에 우리가 오직 한가지 모델 `education="학사"` and `education="석사"`의 무게를 학습 한다면, 우리는 모든 경우의 교육-직업 조합 `education="학사" AND occupation="경영자"`
+and `education="학사" AND occupation="수리공"`)의 차이를 알아 낼수 없다.
+
+To learn the
 differences between different feature combinations, we can add **crossed feature
 columns** to the model.
+
+다른 특성 조합들의 차이를 알기 위해서 우리는 **crossed feature columns** 을 모델에 부여할 수 있습니다.
 
 ```python
 education_x_occupation = tf.contrib.layers.crossed_column([education, occupation], hash_bucket_size=int(1e4))
 ```
 
-We can also create a `CrossedColumn` over more than two columns. Each
-constituent column can be either a base feature column that is categorical
+We can also create a `CrossedColumn` over more than two columns.
+우리는 또한 `CrossedColumn`을 두가지 이상의 열에 생성 할 수 있습니다.
+
+ Each constituent column can be either a base feature column that is categorical
 (`SparseColumn`), a bucketized real-valued feature column (`BucketizedColumn`),
 or even another `CrossColumn`. Here's an example:
+
+각 constituent 열은 기본 특성열 categorical(`SparseColumn`)이나 버켓화 된 실수 특성열(`BucketizedColumn`), 심지어 다른 `CrossColumn`이 될 수 있습니다.
 
 ```python
 age_buckets_x_race_x_occupation = tf.contrib.layers.crossed_column(
@@ -363,10 +443,20 @@ age_buckets_x_race_x_occupation = tf.contrib.layers.crossed_column(
 
 ## Defining The Logistic Regression Model
 
+로지스틱 회귀 모델 정의하기
+
 After processing the input data and defining all the feature columns, we're now
-ready to put them all together and build a Logistic Regression model. In the
+ready to put them all together and build a Logistic Regression model.
+
+입력 데이터를 가공 하고 모든 특성열들을 정의 한 다음, 이제 모든 것을 한자리에 모아 로지스틱 회귀 모델을 구축할 준비가 되었다 .
+
+
+
+ In the
 previous section we've seen several types of base and derived feature columns,
 including:
+
+이전 부분에서 우리는 아래의 특성열들을 포함한 몇 가지의 기본 그리고 파생 특성열을 보았다
 
 *   `SparseColumn`
 *   `RealValuedColumn`
@@ -375,6 +465,8 @@ including:
 
 All of these are subclasses of the abstract `FeatureColumn` class, and can be
 added to the `feature_columns` field of a model:
+
+위의 모든 특성열들은 추상 클래스 `FeatureColumn`에 하위 클래스 들이며, 모델의 `feature_columns` 필드에 추가 될 수 있다
 
 ```python
 model_dir = tempfile.mkdtemp()
@@ -389,10 +481,20 @@ one would make without observing any features (see the section "How Logistic
 Regression Works" for more explanations). The learned model files will be stored
 in `model_dir`.
 
+
+
 ## Training and Evaluating Our Model
 
+모델을 훈련, 평가 하기
+
 After adding all the features to the model, now let's look at how to actually
-train the model. Training a model is just a one-liner using the TF.Learn API:
+train the model.
+
+모델에 모든 특성들을 추가한 다음 어떻게 실제로 모델을 훈련 시키는지 알아보자
+
+Training a model is just a one-liner using the TF.Learn API:
+
+모델을 훈련하는 것은 TF.Learn API를 사용하면 한 줄이면 된다.
 
 ```python
 m.fit(input_fn=train_input_fn, steps=200)
@@ -401,6 +503,10 @@ m.fit(input_fn=train_input_fn, steps=200)
 After the model is trained, we can evaluate how good our model is at predicting
 the labels of the holdout data:
 
+모델을 훈련 시킨뒤 모델이 얼마나 홀드아웃 데이터의 라벨을 잘 예측하는지 평가해 볼 수 있다
+
+
+
 ```python
 results = m.evaluate(input_fn=eval_input_fn, steps=1)
 for key in sorted(results):
@@ -408,23 +514,50 @@ for key in sorted(results):
 ```
 
 The first line of the output should be something like `accuracy: 0.83557522`,
-which means the accuracy is 83.6%. Feel free to try more features and
+which means the accuracy is 83.6%.
+
+첫 번째 줄의 결과는 정확도 83.6%를 뜻하는 `accuracy: 0.83557522`와 같이 나올 것이다.
+
+Feel free to try more features and
 transformations and see if you can do even better!
+
+당신이 더 좋은 결과를 낼 수 있는지 자유롭게 더 많은 기능들을 시도해보고 변경 해봐라
 
 If you'd like to see a working end-to-end example, you can download our [example
 code]
 (https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py)
 and set the `model_type` flag to `wide`.
 
+
+만약에 처음 부터 끝까지 작동하는 예제를 보고 싶다면 우리의 예제코드를 다운 받고, `model_type` 플레그를 `wide`로 설정 하세요.
+
 ## Adding Regularization to Prevent Overfitting
 
-Regularization is a technique used to avoid **overfitting**. Overfitting happens
-when your model does well on the data it is trained on, but worse on test data
-that the model has not seen before, such as live traffic. Overfitting generally
-occurs when a model is excessively complex, such as having too many parameters
-relative to the number of observed training data. Regularization allows for you
+과적화를 피하기 위해서 정규화 추가하기
+
+
+Regularization is a technique used to avoid **overfitting**.
+
+정규화는 과적화를 피하기위해 사용되는 기술이다.
+
+Overfitting happens when your model does well on the data it is trained on, but worse on test data
+that the model has not seen before, such as live traffic.
+
+과적화는 모델이 접해보지 못한 데이터에 대해서는 못하고, 훈련에 사용된 데이터에는 반응을 잘 할 때 일어난다. 예를 들어 실시간 교통
+
+과적화는 모델이 훈련에 사용했던 데이터로는 잘되지만, 처음 보는 데이터에 대해서는 않 좋은 결과를 보일때 일어난다.
+
+
+ Overfitting generally occurs when a model is excessively complex, such as having too many parameters
+relative to the number of observed training data.
+
+과적화는 모델이 너무 과도하게 복잡할 때 일어 난다. 예를 들어 관찰한 데이터에 비해 매개변수가 너무 많을 경우이다.
+
+ Regularization allows for you
 to control your model's complexity and makes the model more generalizable to
 unseen data.
+
+
 
 In the Linear Model library, you can add L1 and L2 regularizations to the model
 as:
