@@ -111,6 +111,15 @@ data to isolate the model from disk latency and expensive image pre-processing.
 
 * 디스크 지연과 비싼 이미지 전처리를 모델로부터 분리하기 위한 입력 데이터 [큐](../../api_docs/python/io_ops.md#shuffle_batch)의 선인출(prefetching)
 
+
+또한 저희는 모델의 [다중-GPU 버전](#training-a-model-using-multiple-gpu-cards)을 제공합니다.
+이 모델은 다음과 같은 사항들을 설명합니다:
+
+* 다수의 GPU 카드에서 병렬로 훈련할 모델을 구성하기
+* 다수의 GPU 간에 변수들을 공유하고 업데이트하기
+
+우리는 이 튜토리얼이 TensorFlow로 영상(vision) 작업에 필요한 큰 CNN을 구축하기 위한 시발점이 되었으면 합니다.
+
 We also provide a [multi-GPU version](#training-a-model-using-multiple-gpu-cards)
 of the model which demonstrates:
 
