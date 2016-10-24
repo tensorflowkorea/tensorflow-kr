@@ -109,7 +109,7 @@ I tensorflow/examples/label_image/main.cc:200] bolo tie (940): 0.0145024
 ```
 
 이러한 경우 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper)의 기본(default) 이미지를 사용하고 있는 것이며,
-0.6점이라는 높은 점수로 네트워크가 군복을 입고 있는 여성을 식별하고 있음을 확인할 수 있다.
+0.6점이라는 높은 점수로 알고리즘 네트워크가 군복을 입고 있는 여성을 식별하고 있음을 확인할 수 있다.
 
 
 <div style="width:45%; margin:auto; margin-bottom:10px; margin-top:20px;">
@@ -122,31 +122,17 @@ I tensorflow/examples/label_image/main.cc:200] bolo tie (940): 0.0145024
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
 ```
 
-`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)파일을 살펴보면 어떻게 작동하는지 알 수 있다. 
+[`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)파일을 살펴보면 어떻게 작동하는지 알 수 있다. 
 이 코드를 통해 TensorFlow 라이브러리를 사용자의 애플리케이션에 사용하는 데 도움이 되길 바라며 주요 함수들을 차례차례 살펴볼 것이다.
 
-The command line flags control where the files are loaded from, and properties of the input images.
-The model expects to get square 299x299 RGB images, so those are the `input_width`
-and `input_height` flags. We also need to scale the pixel values from integers that
-are between 0 and 255 to the floating point values that the graph operates on.
-We control the scaling with the `input_mean` and `input_std` flags: we first subtract
-`input_mean` from each pixel value, then divide it by `input_std`.
 커맨드 라인 플래그(command line flags)는 파일을 불러온 위치와 입력된 이미지의 속성을 조정하는 기능을 한다.
 모델은 정사각형 299x299 사이즈의 RGB 이미지를 취급하기 때문에 이를 `input_width`와  `input_height` 플래그라고 한다.
 그리고 픽셀 값을 0과 255사이의 정수에서 그래프를 사용하기 위한 부동 소수점으로 크기 조정(scaling)해야 한다.
 크기 조정은 `input_mean`과 `input_std` 플래그로 조절한다. 각 픽셀 값에서 `input_mean`을 빼고 난 후 `input_std`로 나눈다.
 
-These values probably look somewhat magical, but they are just defined by the 
-original model author based on what he/she wanted to use as input images for 
-training. If you have a graph that you've trained yourself, you'll just need
-to adjust the values to match whatever you used during your training process.
-이러한 값들이 신기해 보일 수 있는데, 이는 모델을 만든 원작자가 훈련용 입력 이미지로서 사용하고 싶은 것을 정의한 내용일 뿐이다.
+이러한 값들이 마술처럼 신기해 보일 수 있는데, 이는 모델을 만든 원작자가 훈련용 입력 이미지로서 사용하고 싶은 것을 정의한 내용일 뿐이다.
 사용자가 스스로 훈련시킨 그래프가 있다면, 자신의 훈련 프로세스에 적합하도록 사용자가 원하는 값으로 조정하면 된다.
 
-
-You can see how they're applied to an image in the [`ReadTensorFromImageFile()`]
-(https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L88)
-function.
 이러한 값들이 [`ReadTensorFromImageFile()`]
 (https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L88)의 함수를 통해 이미지에 어떻게 적용되는지 확인할 수 있다.
 
@@ -159,8 +145,6 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
                                std::vector<Tensor>* out_tensors) {
   tensorflow::GraphDefBuilder b;
 ```
-We start by creating a `GraphDefBuilder`, which is an object we can use to
-specify a model to run or load.
 가장 먼저 실행하거나 불러올 모델을 설정하기 위해 `GraphDefBuilder`를 만든다.
 
 ```C++
@@ -170,17 +154,7 @@ specify a model to run or load.
       tensorflow::ops::ReadFile(tensorflow::ops::Const(file_name, b.opts()),
                                 b.opts().WithName(input_name));
 ```
-We then start creating nodes for the small model we want to run
-to load, resize, and scale the pixel values to get the result the main model
-expects as its input. The first node we create is just a `Const` op that holds a
-tensor with the file name of the image we want to load. That's then passed as the
-first input to the `ReadFile` op. You might notice we're passing `b.opts()` as the last
-argument to all the op creation functions. The argument ensures that the node is added to
-the model definition held in the `GraphDefBuilder`. We also name the `ReadFile`
-operator by making the `WithName()` call to `b.opts()`. This gives a name to the node,
-which isn't strictly necessary since an automatic name will be assigned if you don't
-do this, but it does make debugging a bit easier.
-그 다음에 실행할 소형 모델의 노드를 생성한다. 이는 픽셀 값을 불러오고, 변경하고, 크기 조정하는 데 사용되며 메인 모델의 입력값으로 쓰일 것이다.
+그 다음에 실행할 소형 모델(small model)의 노드를 생성한다. 이는 픽셀 값을 불러오고, 변경하고, 크기 조정하는 데 사용되며 메인 모델(main model)의 입력값으로 쓰일 것이다.
 첫 번째로 만든 노드는 `Const` op(short for operations, meaning node in the graph)이며 이는 우리가 불러 올 이미지의 파일 이름이 담긴 텐서를 갖고 있다. 
 이것은 `ReadFile` op에게 첫 번째 입력값으로 전달된다. op를 생성하는 모든 함수의 마지막 인자로 `b.opts()`를 전달할 것임을 알 수 있을 것이다.
 인자는 해당 노드가 `GraphDefBuilder`가 담고 있는 모델 정의에 반드시 추가되도록 한다. 
@@ -221,9 +195,6 @@ do this, but it does make debugging a bit easier.
       tensorflow::ops::Const({input_std}, b.opts()),
       b.opts().WithName(output_name));
 ```
-We then keep adding more nodes, to decode the file data as an image, to cast the
-integers into floating point values, to resize it, and then finally to run the
-subtraction and division operations on the pixel values.
 그리고 나서 계속해서 노드를 추가한다. 이는 파일 데이터를 이미지로 디코드하고, 정수값을 부동소수점 값으로 바꾸고, 
 값을 다시 조절하고, 마지막으로 픽셀값을 빼고 나누는 연산 과정을 거치려고 하는 것이다.
 
@@ -233,9 +204,6 @@ subtraction and division operations on the pixel values.
   tensorflow::GraphDef graph;
   TF_RETURN_IF_ERROR(b.ToGraphDef(&graph));
 ```
-At the end of this we have
-a model definition stored in the b variable, which we turn into a full graph
-definition with the `ToGraphDef()` function.
 위와 같은 과정을 거치면 최종적으로 변수 b에 담긴 모델 정의를 갖게 된다. 변수 b는 `ToGraphDef()` 함수를 통해 완전한 그래프로 변환될 수 있다.
 
 ```C++
@@ -245,23 +213,17 @@ definition with the `ToGraphDef()` function.
   TF_RETURN_IF_ERROR(session->Run({}, {output_name}, {}, out_tensors));
   return Status::OK();
 ```
-Then we create a [`Session`](http://www.tensorflow.org/versions/master/api_docs/cc/ClassSession.html#class-tensorflow-session) 
-object, which is the interface to actually running the graph, and run it, 
-specifying which node we want to get the output from, and where to put the
-output data.
 그 다음으로 [`Session`](http://www.tensorflow.org/versions/master/api_docs/cc/ClassSession.html#class-tensorflow-session) 오브젝트를 생성한다.
 이는 그래프를 표시하는 인터페이스 오브젝트이다. 이것을 실행하여 어떤 노드로부터 출력을 얻을 것인지, 출력된 데이터를 어디에 둘지 구체화한다.
 
-This gives us a vector of `Tensor` objects, which in this case we know will only be a
-single object long. You can think of a `Tensor` as a multi-dimensional array in this
-context, and it holds a 299 pixel high, 299 pixel width, 3 channel image as float
-values. If you have your own image-processing framework in your product already, you
-should be able to use that instead, as long as you apply the same transformations
-before you feed images into the main graph.
+이러한 작업은 `Tensor` 오브젝트의 벡터 값을 주는데 아마 단 한 개의 오브젝트일 것이다. 여기서 `Tensor`의 의미는 다차원 배열로 생각하면 된다.
+`Tensor`는 높이 299픽셀, 너비 299 픽셀 그리고 부동소수점 값이 있는 3가지 채널 이미지를 속성으로 가진다.
+만약 당신이 만든 프로젝트에 스스로 제작한 이미지 프로세싱 프레임워크가 있다면 그것을 대신 사용해도 된다.
+메인 그래프에 이미지를 넣기 전에 똑같은 변환을 적용할수만 있다면 말이다.
 
-This is a simple example of creating a small TensorFlow graph dynamically in C++,
-but for the pre-trained Inception model we want to load a much larger definition from
-a file. You can see how we do that in the `LoadGraph()` function.
+이것은 C++에서 작은 TensorFlow 그래프를 그리는 간단한 예제이다.
+그러나 미리 훈련된 Inception 모델에서는 파일에서 훨씬 더 큰 정의를 불러와야 한다.
+이때 `LoadGraph()` 함수를 이용하면 된다.
 
 ```C++
 // Reads a model graph definition from disk, and creates a session object you
@@ -276,9 +238,9 @@ Status LoadGraph(string graph_file_name,
                                         graph_file_name, "'");
   }
 ```
-If you've looked through the image loading code, a lot of the terms should seem familiar. Rather than
-using a `GraphDefBuilder` to produce a `GraphDef` object, we load a protobuf file that
-directly contains the `GraphDef`.
+
+이미지를 불러오는 코드를 검토해봤다면 코드의 많은 부분이 익숙할 것이다. `GraphDef` 오브젝트를 생성하기 위해 `GraphDefBuilder`를 사용하기 보다는
+직접 `GraphDef`를 담고 있는 protobuf 파일을 불러올 것이다.
 
 ```C++
   session->reset(tensorflow::NewSession(tensorflow::SessionOptions()));
@@ -289,15 +251,9 @@ directly contains the `GraphDef`.
   return Status::OK();
 }
 ```
-Then we create a Session object from that `GraphDef` and
-pass it back to the caller so that they can run it at a later time.
+그리고 나서 `GraphDef`로부터 Session 오브젝트를 만들고 호출 함수(caller)에 전달하여 나중에 실행할 수 있도록 한다.
 
-The `GetTopLabels()` function is a lot like the image loading, except that in this case
-we want to take the results of running the main graph, and turn it into a sorted list
-of the highest-scoring labels. Just like the image loader, it creates a
-`GraphDefBuilder`, adds a couple of nodes to it, and then runs the short graph to get a
-pair of output tensors. In this case they represent the sorted scores and index
-positions of the highest results.
+`GetTopLabels()` 함수는 이미지 불러오기와 매우 유사하나 여기서는 메인 그래프를 그리고 그것을 가장 높은 점수의 레이블들로 분류한 리스트로 바꾼다는 점이 다르다. 이미지 불러오는 다른 함수처럼 `GetTopLabels()` 함수 또한 `GraphDefBuilder`를 만들고, `GraphDefBuilder`에 노드 여러 개를 더한 다음 한 쌍의 아웃풋 tensors를 얻기 위해 짧은 그래프를 그린다. 한 쌍의 아웃풋 tensors는 가장 높은 결과의 정렬된 점수와 인덱스 포지션을 나타낸다. 
 
 ```C++
 // Analyzes the output of the Inception graph to retrieve the highest scores and
@@ -324,12 +280,11 @@ Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
   *indices = out_tensors[1];
   return Status::OK();
 ```
-The `PrintTopLabels()` function takes those sorted results, and prints them out in a
-friendly way. The `CheckTopLabel()` function is very similar, but just makes sure that
-the top label is the one we expect, for debugging purposes.
 
-At the end, [`main()`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L252)
-ties together all of these calls.
+`PrintTopLabels()` 함수는 이러한 정렬된 결과값을 입력 받아서 그 값들을 좀 더 친절한 방법으로 출력한다.
+`CheckTopLabel()` 함수도 이와 매우 비슷하지만 상단 레이블(top label)이 디버깅 목적임을 확실히 한다.
+
+마지막으로 [`main()`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L252) 함수는 이러한 모든 함수의 호출을 하나로 묶는다.
 
 ```C++
 int main(int argc, char* argv[]) {
@@ -350,7 +305,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 ```
-We load the main graph.
+메인 그래프를 불러온다.
 
 ```C++
   // Get the image from disk as a float array of numbers, resized and normalized
@@ -366,7 +321,7 @@ We load the main graph.
   }
   const Tensor& resized_tensor = resized_tensors[0];
 ```
-Load, resize, and process the input image.
+입력된 이미지를 불러오고, 사이즈를 조정하고 처리한다.
 
 ```C++
   // Actually run the image through the model.
@@ -378,7 +333,8 @@ Load, resize, and process the input image.
     return -1;
   }
 ```
-Here we run the loaded graph with the image as an input.
+
+여기서 입력값인 이미지를 사용하여 로딩된 그래프로 그린다.
 
 ```C++
   // This is for automated testing to make sure we get the expected result with
@@ -397,13 +353,13 @@ Here we run the loaded graph with the image as an input.
     }
   }
 ```
-For testing purposes we can check to make sure we get the output we expect here.
+테스트 목적으로 우리가 예상하는 결과를 얻도록 체크할 수 있다.
 
 ```C++
   // Do something interesting with the results we've generated.
   Status print_status = PrintTopLabels(outputs, FLAGS_labels);
 ```
-Finally we print the labels we found.
+마지막으로 우리가 찾은 레이블을 출력한다.
 
 ```C++
   if (!print_status.ok()) {
@@ -412,16 +368,11 @@ Finally we print the labels we found.
   }
 ```
 
-The error handling here is using TensorFlow's `Status`
-object, which is very convenient because it lets you know whether any error has
-occurred with the `ok()` checker, and then can be printed out to give a readable error
-message.
+여기서 오류 처리는 TensorFlow의 `Status` 오브젝트를 사용한다. 이 오브젝트는 매우 간편하다.
+`ok()` 함수를 사용해서 오류가 발생했는지 사용자에게 알려주고 오류 메시지를 출력해주기 때문이다.
 
-In this case we are demonstrating object recognition, but you should be able to
-use very similar code on other models you've found or trained yourself, across
-all
-sorts of domains. We hope this small example gives you some ideas on how to use
-TensorFlow within your own products.
+지금까지 대상을 인식하는 것에 대해 설명했지만, 다른 모든 영역에서도 사용자가 발견하거나 스스로 훈련시킨 다른 모델을 사용하여 이와 유사한 코드를 활용할 수 있다. 이 예제로 인해서 사용자들이 TensorFlow를 자신의 프로젝트에 사용하는 데 도움이 되길 바란다.
+
 
 > **EXERCISE**: Transfer learning is the idea that, if you know how to solve a task well, you
 should be able to transfer some of that understanding to solving related
@@ -431,7 +382,7 @@ the [next-to-last layer of the CNN](http://arxiv.org/abs/1310.1531), in this cas
 There's a guide to doing this [in the how-to section](../../how_tos/image_retraining/index.html).
 
 
-## Resources for Learning More
+## 더 많은 학습을 위한 자료
 
 To learn about neural networks in general, Michael Nielsen's
 [free online book](http://neuralnetworksanddeeplearning.com/chap1.html)
