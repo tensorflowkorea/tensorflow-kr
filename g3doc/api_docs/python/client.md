@@ -64,7 +64,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
 
 *  <b>`target`</b>: (선택) 접속을 위한 실행 엔진. 기본값으로 프로세스 내부 엔진을 사용합니다. 지금은, 빈 문자열 이외의 값은 지원되지 않습니다.
 *  <b>`graph`</b>: (선택) 시작되는 `Graph` (위에서 설명됨).
-*  <b>`config`</b>: (선택) 세션을 위한 설정 옵션을 가진 [`ConfigProto`](https://www.tensorflow.org/code/tensorflow/core/protobuf/config.proto) 프로토콜 퍼버.
+*  <b>`config`</b>: (선택) 세션을 위한 설정 옵션을 가진 [`ConfigProto`](https://www.tensorflow.org/code/tensorflow/core/protobuf/config.proto) 프로토콜 버퍼.
 
 
 - - -
@@ -84,7 +84,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
 
 선택적인 `feed_dict` 인자는 그래프의 텐서의 값들을 덮어씌울 수 있도록 해줍니다. `feed_dict`의 각 키들은 다음 타입중 하나가 될 수 있습니다.
 
-* 키가 [`Tensor`](../../api_docs/python/framework.md#Tensor)]라면, 값은 텐서와 같은 `dtype`으로 변환될 수 있는 Python 스칼라, 문자열, 리스트 또는 numpy ndarray가 될 것입니다. 추가적으로, 키가 [placeholder](../../api_docs/python/io_ops.md#placeholder)라면, 값의 구조(shape)가 플레이스홀더(placeholder)와 호환되는지 확인될 것입니다.
+* 키가 [`Tensor`](../../api_docs/python/framework.md#Tensor)라면, 값은 텐서와 같은 `dtype`으로 변환될 수 있는 Python 스칼라, 문자열, 리스트 또는 numpy ndarray가 될 것입니다. 추가적으로, 키가 [placeholder](../../api_docs/python/io_ops.md#placeholder)라면, 값의 구조(shape)가 플레이스홀더(placeholder)와 호환되는지 확인될 것입니다.
 * 키가 [`SparseTensor`](../../api_docs/python/sparse_ops.md#SparseTensor)라면, 값은 [`SparseTensorValue`](../../api_docs/python/sparse_ops.md#SparseTensorValue)이어야합니다.
 
 `feed_dict`의 각 값들은 해당하는 키의 dtype의 numpy 배열로 변환이 가능해야합니다.
@@ -221,7 +221,7 @@ with tf.Session():
 
 *  <b>`target`</b>: (선택) 접속을 위한 실행 엔진. 기본값으로 프로세스 내부 엔진을 사용합니다. 지금은, 빈 문자열 이외의 값은 지원되지 않습니다.
 *  <b>`graph`</b>: (선택) 시작되는 `Graph`. (위에서 설명됨.)
-*  <b>`config`</b>: (선택) 세션을 위한 설정 옵션을 가진 [`ConfigProto`](https://www.tensorflow.org/code/tensorflow/core/protobuf/config.proto) 프로토콜 퍼버.
+*  <b>`config`</b>: (선택) 세션을 위한 설정 옵션을 가진 [`ConfigProto`](https://www.tensorflow.org/code/tensorflow/core/protobuf/config.proto) 프로토콜 버퍼.
 
 
 - - -
