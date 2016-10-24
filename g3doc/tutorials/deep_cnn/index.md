@@ -299,20 +299,24 @@ Layer Name | Description
 `local4` | [fully connected layer with rectified linear activation](../../api_docs/python/nn.md).
 `softmax_linear` | linear transformation to produce logits.
 
-아래의 그래프는 TensorBoard를 통해 생성된 추론(inference) 연산을 설명
+아래의 그래프는 TensorBoard를 통해 생성된 추론(inference) 연산을 설명합니다.
 Here is a graph generated from TensorBoard describing the inference operation:
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/cifar_graph.png">
 </div>
 
+> **연습**: '추론(inference)'의 아웃풋은 정규화되지 않은 로짓(logit)입니다.  [`tf.nn.softmax()`](../../api_docs/python/nn.md#softmax)을 사용하여 정규화된 예측값을 리턴하도록 네트워크 구조를 수정해보세요.
 > **EXERCISE**: The output of `inference` are un-normalized logits. Try editing
 the network architecture to return normalized predictions using [`tf.nn.softmax()`]
 (../../api_docs/python/nn.md#softmax).
 
+'inputs()'와 'inference()' 함수는 모델을 평가하는데 필요한 모든 컴포넌트들을 제공합니다. 이제 우리는 모델을 훈련하는 작업을 구축하는 것으로 초점을 옮겨봅시다.
 The `inputs()` and `inference()` functions provide all the components
 necessary to perform evaluation on a model. We now shift our focus towards
 building operations for training a model.
+
+> **연습:** 'inference()'의 모델 구조는 [cuda-convnet](https://code.google.com/p/cuda-convnet/) 에서 명시하는 CIFAR-10 모델과 조금 다릅니다. 특히, Alex의 원본 모델의 최상위 레이어는 완전 연결(fully connected)이 아니라 국소 연결(locally connected) 되어있습니다. 최상위 레이어에서 국소 연결(locally connected) 구조를 정확하게 재현하도록 구조를 수정해보세요.
 
 > **EXERCISE:** The model architecture in `inference()` differs slightly from
 the CIFAR-10 model specified in
@@ -321,6 +325,7 @@ layers of Alex's original model are locally connected and not fully connected.
 Try editing the architecture to exactly reproduce the locally connected
 architecture in the top layer.
 
+### 모델 훈련
 ### Model Training
 
 The usual method for training a network to perform N-way classification is
