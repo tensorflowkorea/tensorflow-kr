@@ -375,13 +375,15 @@ We have built the model, let's now launch it and run the training operation with
 the script `cifar10_train.py`.
 
 ```shell
-python cifar10_train.py
+python cifar10_train.py  
 ```
 
+> **참고:** 여러분이 CIFAR-10 튜토리얼에서 처음 어떤 타겟을 실행하면, CIFAR-10 데이터셋이 자동으로 다운로드 됩니다. 데이터셋은 160MB 이하 입니다. 아마 그동안 당신은 커피 한 잔이 떠오를 지도 모릅니다.
 > **NOTE:** The first time you run any target in the CIFAR-10 tutorial,
 the CIFAR-10 dataset is automatically downloaded. The data set is ~160MB
 so you may want to grab a quick cup of coffee for your first run.
 
+아웃풋을 보아야 합니다:
 You should see the output:
 
 ```shell
@@ -394,6 +396,11 @@ Filling queue with 20000 CIFAR images before starting to train. This will take a
 2015-11-04 11:46:00.437717: step 50, loss = 4.59 (406.4 examples/sec; 0.315 sec/batch)
 ...
 ```
+스크립트는 매 10단계마다 총 손실(total loss) 뿐만 아니라 데이터의 마지막 배치가 처리될 때의 처리속도도 보고합니다. 몇 가지 조언:
+
+* 데이터의 첫 배치는 전처리 스레드가 20,000장의 처리된 CIFAR 이미지를 셔플링(shuffling) 큐에 채워넣는 만큼 지나치게 느릴 수 있습니다 (예를 들어, 수 분).
+
+*
 
 The script reports the total loss every 10 steps as well the speed at which
 the last batch of data was processed. A few comments:
