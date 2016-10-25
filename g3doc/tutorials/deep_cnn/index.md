@@ -317,7 +317,7 @@ necessary to perform evaluation on a model. We now shift our focus towards
 building operations for training a model.
 
 > **연습:** 'inference()'의 모델 구조는 [cuda-convnet](https://code.google.com/p/cuda-convnet/) 에서 명시하는 CIFAR-10 모델과 조금 다릅니다. 특히, Alex의 원본 모델의 최상위 레이어는 완전 연결(fully connected)이 아니라 국소 연결(locally connected) 되어있습니다. 최상위 레이어에서 국소 연결(locally connected) 구조를 정확하게 재현하도록 구조를 수정해보세요.
-
+ㅣ
 > **EXERCISE:** The model architecture in `inference()` differs slightly from
 the CIFAR-10 model specified in
 [cuda-convnet](https://code.google.com/p/cuda-convnet/).  In particular, the top
@@ -327,6 +327,9 @@ architecture in the top layer.
 
 ### 모델 훈련
 ### Model Training
+
+N-way 분류를 수행하는 네트워크를 훈련시키는 일반적인 방법은 *소프트맥스 회귀(Softmax regression)*로 알려진 [다항 로지스틱 회귀(multinomial logistic regression)](https://en.wikipedia.org/wiki/Multinomial_logistic_regression)입니다. 소프트맥스 회귀(Softmax regression)는 네트워크의 아웃풋에 [softmax](../../api_docs/python/nn.md#softmax) 비선형성을 적용하고, 정규화된 예측값과 [1-핫 인코딩(1-hot encoding)](../../api_docs/python/sparse_ops.md#sparse_to_dense)된 라벨 사시의 [크로스 엔트로피(cross-entropy)](../../api_docs/python/nn.md#softmax_cross_entropy_with_logits)를 계산합니다.
+균일화(regularization)를 위하여, 우리는 모든 학습된 변수에 대하여 일반적인 [가중치 쇠퇴(weight decay)](../../api_docs/python/nn.md#l2_loss) 손실을 적용합니다. 모델의 목적함수는 크로스 엔트로피 손실의 합과 'loss()' 함수에 의해 리턴되는, 모든 가중치 쇠퇴(weight decay) 텀의 합입니다.
 
 The usual method for training a network to perform N-way classification is
 [multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression),
@@ -338,9 +341,10 @@ between the normalized predictions and a
 [1-hot encoding](../../api_docs/python/sparse_ops.md#sparse_to_dense) of the label.
 For regularization, we also apply the usual
 [weight decay](../../api_docs/python/nn.md#l2_loss) losses to all learned
-variables.  The objective function for the model is the sum of the cross entropy
+variables. The objective function for the model is the sum of the cross entropy
 loss and all these weight decay terms, as returned by the `loss()` function.
 
+우리는 TensorBoard로 [`scalar_summary`](../../api_docs/python/train.md#scalar_summary) 방법으로 시각화 하였습니다.
 We visualize it in TensorBoard with a [`scalar_summary`](../../api_docs/python/train.md#scalar_summary):
 
 ![CIFAR-10 Loss](../../images/cifar_loss.png "CIFAR-10 Total Loss")
