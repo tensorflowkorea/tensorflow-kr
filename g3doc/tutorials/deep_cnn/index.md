@@ -90,7 +90,7 @@ http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional
 of network activities during training, including input images,
 losses and distributions of activations and gradients.
 
-* 활성화(Activations)와 기울기(gradients)의 손실(loss) 및 분포와 입력된 이미지를 포함하는 학습 중인 네트워크의 활동 [시각화](../../how_tos/summaries_and_tensorboard/index.md)
+* 활성화(Activations)와 경사(gradients)의 손실(loss) 및 분포와 입력된 이미지를 포함하는 학습 중인 네트워크의 활동 [시각화](../../how_tos/summaries_and_tensorboard/index.md)
 
 * Routines for calculating the
 [moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
@@ -191,7 +191,7 @@ CIFAR 이미지를 읽고 전처리를 하는 연산들을 추가합니다.
 1. [**모델 예측:**](#model-prediction) 'inference()'는 추론을 수행하는 연산들을 추가합니다.
 예) 제공된 이미지에 대한 분류
 
-1. [**모델 훈련:**](#model-training) 'loss()'와 'train()'은 오차와 기울기, 변수 업데이트와 시각화 요약을 계산하는 연산들을 추가합니다.
+1. [**모델 훈련:**](#model-training) 'loss()'와 'train()'은 손실(loss)과 경사(gradients), 변수 업데이트와 시각화 요약을 계산하는 연산들을 추가합니다.
 
 1. [**Model inputs:**](#model-inputs) `inputs()` and `distorted_inputs()` add
 operations that read and preprocess CIFAR images for evaluation and training,
@@ -344,11 +344,12 @@ For regularization, we also apply the usual
 variables. The objective function for the model is the sum of the cross entropy
 loss and all these weight decay terms, as returned by the `loss()` function.
 
-우리는 TensorBoard로 [`scalar_summary`](../../api_docs/python/train.md#scalar_summary) 방법으로 시각화 하였습니다.
+우리는 TensorBoard의 [`scalar_summary`](../../api_docs/python/train.md#scalar_summary)를 사용하여 이를 시각화 하였습니다.
 We visualize it in TensorBoard with a [`scalar_summary`](../../api_docs/python/train.md#scalar_summary):
 
-![CIFAR-10 Loss](../../images/cifar_loss.png "CIFAR-10 Total Loss")
+![CIFAR-10 손실(loss)](../../images/cifar_loss.png "CIFAR-10 Total Loss")
 
+우리는 표준적인 [경사 강하(gradient descent)](https://en.wikipedia.org/wiki/Gradient_descent) 알고리즘 (다른 방법을 보려면 [Training](../../api_docs/python/train.md)을 참조)을 사용하여 모델을 훈련합니다. 시간에 따라 [지수적으로 감소(exponentially decays)](../../api_docs/python/train.md#exponential_decay)하는 학습 비율(learning rate)을 사용하였습니다.
 We train the model using standard
 [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent)
 algorithm (see [Training](../../api_docs/python/train.md) for other methods)
@@ -358,14 +359,18 @@ over time.
 
 ![CIFAR-10 Learning Rate Decay](../../images/cifar_lr_decay.png "CIFAR-10 Learning Rate Decay")
 
+'train()' 함수는 경사(gradient)를 계산하고 학습된 변수를 업데이트함으로써 목표를 최소화 하는데에 필요한 기능을 추가합니다 ( 자세한 사항은 [`GradientDescentOptimizer`](../../api_docs/python/train.md#GradientDescentOptimizer) 참조). 이 함수는 하나의 이미지 배치(batch)에 대하여 모델을 훈련하고 업데이트 하는데 필요한 모든 연산을 실행하는 기능을 리턴해줍니다.  
 The `train()` function adds the operations needed to minimize the objective by
 calculating the gradient and updating the learned variables (see
 [`GradientDescentOptimizer`](../../api_docs/python/train.md#GradientDescentOptimizer)
 for details).  It returns an operation that executes all the calculations
 needed to train and update the model for one batch of images.
 
+
+## 모델 실행 및 훈련
 ## Launching and Training the Model
 
+모델을 만들었으니, 이제 이 모델을 실행해보고 `cifar10_train.py` 스크립트를 사용하여 훈련 작업을 실행해봅시다.
 We have built the model, let's now launch it and run the training operation with
 the script `cifar10_train.py`.
 
