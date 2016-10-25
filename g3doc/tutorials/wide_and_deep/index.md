@@ -72,9 +72,8 @@ https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.p
 
 3.  Install the pandas data analysis library. tf.learn doesn't require pandas, but it does support it, and this tutorial uses pandas. To install pandas	:
 3.  pandas 데이터 분석 라이브러리를 설치. tf.learn은 pandas 을 필요로 하지 않지만 지원한다. 그리고 이 튜토리얼은 pandas를 사용한다. pandad 를 설치하기 위해서 :
-
-		1. Get `pip`:
-		1. 'pip' 설치 :
+	1. Get `pip`:
+	1. 'pip' 설치 :
 
        ```shell
        # Ubuntu/Linux 64-bit
@@ -198,9 +197,16 @@ training loss. If you're interested in learning more about embeddings, check out
 the TensorFlow tutorial on [Vector Representations of Words]
 (https://www.tensorflow.org/versions/r0.9/tutorials/word2vec/index.html), or
 [Word Embedding](https://en.wikipedia.org/wiki/Word_embedding) on Wikipedia.
+이전 그림에서 보이는 것과 같이 deep 모델은 feed-forward 신경망이다.
+각각의 sparse high-dimensional categorical feature 들은 종종 embedding 벡터라 불리는
+low-dimensional 벡터와 dense real-valued 벡터로 변환된다. 이 low-dimensional dense
+embedding 벡터들은 continuouse feature 들과 연계되고, 다음 신경망의 hidden layers 로 연결된다.
+embedding value 들은 무작위로 초기화되고, 학습 손실을 최소화하는 다른 모든 모델 요소들로 학습된다.
+embeddings 에 대한 학습에 흥미가 있다면 TensorFlow 튜토리얼 [Vector Representations of Words](https://www.tensorflow.org/versions/r0.9/tutorials/word2vec/index.html) 이나 위키피디아 [Word Embedding](https://en.wikipedia.org/wiki/Word_embedding) 를 확인해보자.
 
 We'll configure the embeddings for the categorical columns using
 `embedding_column`, and concatenate them with the continuous columns:
+`embedding_column` 을 이용하여 categorical columns 을 위한 embeddings 를 설정할 것이다. 그리고 이들을 continuous columns 과 연관지을 것이다.
 
 ```python
 deep_columns = [
@@ -222,6 +228,8 @@ informed decision for the number of dimensions is to start with a value on the
 order of $$k\log_2(n)$$ or $$k\sqrt[4]n$$, where $$n$$ is the number of unique
 features in a feature column and $$k$$ is a small constant (usually smaller than
 10).
+embedding 의 더 높은 `dimension` 은 더 높은 자유도로 features 의 대체 표현들을 학습할 수 있는 자유도이다.
+간단하게, 여기의 모든 feature columns 의 dimension(차원)을 8 로 정했다. 경험적으로, informed decision 의 차원의 수는 $$k\log_2(n)$$ 나 $$k\sqrt[4]n$$ 의 차수값에서 시작한다는 것이다. 이때 $$n$$ 은 feature column 에서 유니크한 feature 수 이고 $$k$$ 는 작은 상수값(일반적으로 10보다 작은 값)이다.
 
 Through dense embeddings, deep models can generalize better and make predictions
 on feature pairs that were previously unseen in the training data. However, it
@@ -232,17 +240,21 @@ should be zero except a few, but dense embeddings will lead to nonzero
 predictions for all feature pairs, and thus can over-generalize. On the other
 hand, linear models with crossed features can memorize these “exception rules”
 effectively with fewer model parameters.
+deep 모델은 dense embeddings 를 통해 학습하는 데이터에서 이전에 보여지지 못한 feature 쌍들에 대한 생성을 더 잘 할 수 있고 예측할 수 있다. 그러나 두 feature column 간의 기본 interaction matrix(상호작용 메트릭스)가 sparse 하고 high-rank 일 때, feature column 들에 대한 low-dimensional representation 들의 효율적인 학습이 어렵다. 이러한 겨우, 대부분의 feature 쌍들간 interaction(상호작용)은 몇몇을 제외하는 0(zero) 가 되어야 한다. 하지만 dense embeddings 는 모든 feature 쌍들에 대해 none-zero(0 이 아닌) 예측을 이끌어 내고, 지나치게 일반화할 수 있다. 반면, crossed features 선형모델은 이러한 "exception rules"(예외들)을 더 적은 모델 파라미터들로 효율적으로 기억할 수 있다.
 
 Now, let's see how to jointly train wide and deep models and allow them to
 complement each other’s strengths and weaknesses.
+이제 어떻게 wide 모델과 deep모델을 함께 학습시키고 그들 각각의 강점과 약점을 보완해 가는지 살펴보자.
 
 ## Combining Wide and Deep Models into One
+## Wide and Deep 모델을 하나로 조합하기
 
 The wide models and deep models are combined by summing up their final output
 log odds as the prediction, then feeding the prediction to a logistic loss
 function. All the graph definition and variable allocations have already been
 handled for you under the hood, so you simply need to create a
 `DNNLinearCombinedClassifier`:
+wide 모델과 deep 모델 들은 예측으로써 그들의 마지막 결과 로그 나머지(final output log odd) 의 합에 의해 조합된다. 그리고 로지스틱 loss 함수의 예측에 전달된다. 모든 그래프 정의와 변수 할당량들은 이미 내부에서 다뤄졌고, `DNNLinearCombinedClassifier` 를 생성할 필요가 있다.
 
 ```python
 import tempfile
@@ -255,10 +267,12 @@ m = tf.contrib.learn.DNNLinearCombinedClassifier(
 ```
 
 ## Training and Evaluating The Model
+## 모델 학습하기와 평가하기
 
 Before we train the model, let's read in the Census dataset as we did in the
 [TensorFlow Linear Model tutorial](../wide/). The code for
 input data processing is provided here again for your convenience:
+모델을 학습하기 전에, 우리가 [TensorFlow Linear Model tutorial](../wide/) 에서 했던 인구조사 데이터 세트를 입력하자. 입력 데이터 처리를 위한 코드는 편의를 위해 여기 다시 제시되었다:
 
 ```python
 import pandas as pd
@@ -315,3 +329,4 @@ def eval_input_fn():
 ```
 
 After reading in the data, you can train and evaluate the model:
+데이터를 읽고 난 후, 모델을 학습하고 평가할 수 있다:
