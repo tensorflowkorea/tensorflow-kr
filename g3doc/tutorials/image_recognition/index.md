@@ -239,7 +239,8 @@ Status LoadGraph(string graph_file_name,
   }
 ```
 
-이미지를 불러오는 코드를 검토해봤다면 코드의 많은 부분이 익숙할 것이다. `GraphDef` 오브젝트를 생성하기 위해 `GraphDefBuilder`를 사용하기 보다는
+이미지를 불러오는 코드를 검토해봤다면 코드의 많은 부분이 익숙할 것이다. 
+`GraphDef` 오브젝트를 생성하기 위해 `GraphDefBuilder`를 사용하기 보다는
 직접 `GraphDef`를 담고 있는 protobuf 파일을 불러올 것이다.
 
 ```C++
@@ -253,7 +254,10 @@ Status LoadGraph(string graph_file_name,
 ```
 그리고 나서 `GraphDef`로부터 Session 오브젝트를 만들고 호출 함수(caller)에 전달하여 나중에 실행할 수 있도록 한다.
 
-`GetTopLabels()` 함수는 이미지 불러오기와 매우 유사하나 여기서는 메인 그래프를 그리고 그것을 가장 높은 점수의 레이블들로 분류한 리스트로 바꾼다는 점이 다르다. 이미지 불러오는 다른 함수처럼 `GetTopLabels()` 함수 또한 `GraphDefBuilder`를 만들고, `GraphDefBuilder`에 노드 여러 개를 더한 다음 한 쌍의 아웃풋 tensors를 얻기 위해 짧은 그래프를 그린다. 한 쌍의 아웃풋 tensors는 가장 높은 결과의 정렬된 점수와 인덱스 포지션을 나타낸다. 
+`GetTopLabels()` 함수는 이미지 불러오기와 매우 유사하나 여기서는 메인 그래프를 그리고 그것을 가장 높은 점수의 레이블들로 분류한 리스트로 바꾼다는 점이 다르다. 
+이미지 불러오는 다른 함수처럼 `GetTopLabels()` 함수 또한 `GraphDefBuilder`를 만들고, 
+`GraphDefBuilder`에 노드 여러 개를 더한 다음 한 쌍의 아웃풋 tensors를 얻기 위해 짧은 그래프를 그린다. 
+한 쌍의 아웃풋 tensors는 가장 높은 결과의 정렬된 점수와 인덱스 포지션을 나타낸다. 
 
 ```C++
 // Analyzes the output of the Inception graph to retrieve the highest scores and
@@ -334,7 +338,7 @@ int main(int argc, char* argv[]) {
   }
 ```
 
-여기서 입력값인 이미지를 사용하여 로딩된 그래프로 그린다.
+여기서 입력값인 이미지를 사용하여 로딩된 그래프를 그린다.
 
 ```C++
   // This is for automated testing to make sure we get the expected result with
@@ -371,34 +375,19 @@ int main(int argc, char* argv[]) {
 여기서 오류 처리는 TensorFlow의 `Status` 오브젝트를 사용한다. 이 오브젝트는 매우 간편하다.
 `ok()` 함수를 사용해서 오류가 발생했는지 사용자에게 알려주고 오류 메시지를 출력해주기 때문이다.
 
-지금까지 대상을 인식하는 것에 대해 설명했지만, 다른 모든 영역에서도 사용자가 발견하거나 스스로 훈련시킨 다른 모델을 사용하여 이와 유사한 코드를 활용할 수 있다. 이 예제로 인해서 사용자들이 TensorFlow를 자신의 프로젝트에 사용하는 데 도움이 되길 바란다.
+지금까지 대상을 인식하는 것에 대해 설명했지만, 다른 모든 영역에서도 사용자가 발견하거나 스스로 훈련시킨 다른 모델을 사용하여 이와 유사한 코드를 활용할 수 있다.
+이 예제로 인해서 사용자들이 TensorFlow를 자신의 프로젝트에 사용하는 데 도움이 되길 바란다.
 
 
-> **EXERCISE**: Transfer learning is the idea that, if you know how to solve a task well, you
-should be able to transfer some of that understanding to solving related
-problems.  One way to perform transfer learning is to remove the final
-classification layer of the network and extract 
-the [next-to-last layer of the CNN](http://arxiv.org/abs/1310.1531), in this case a 2048 dimensional vector.
-There's a guide to doing this [in the how-to section](../../how_tos/image_retraining/index.html).
-
+> **연습문제**: 하나의 문제를 잘 풀 수 있다면, 그것을 활용해서 그 밖의 관련된 다른 문제를 풀 때 활용할 수 있다. 이를 전이학습(transfer learning)이라고 한다. 
+여기서 전이학습을 하는 한 가지 방법은 네트워크의 최종 분류 레이어를 제거하고 2048 차원의 벡터 값인 [next-to-last layer of the CNN](http://arxiv.org/abs/1310.1531)을 추출하는 것이다. 
+이에 대한 안내 문서는 [in the how-to section](../../how_tos/image_retraining/index.html)을 참조하면 된다.
 
 ## 더 많은 학습을 위한 자료
 
-To learn about neural networks in general, Michael Nielsen's
-[free online book](http://neuralnetworksanddeeplearning.com/chap1.html)
-is an excellent resource. For convolutional neural networks in particular,
-Chris Olah has some
-[nice blog posts](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/),
-and Michael Nielsen's book has a
-[great chapter](http://neuralnetworksanddeeplearning.com/chap6.html)
-covering them.
+신경망(neural network)에 대해 전반적으로 알고 싶다면, Michael Nielsen의 [free online book](http://neuralnetworksanddeeplearning.com/chap1.html)이 훌륭한 자료가 될 것이다.
+convolutional neural network에 한해서는 Chris Olah의 [nice blog posts](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)와 Michael Nielsen의 [great chapter](http://neuralnetworksanddeeplearning.com/chap6.html)을 참조하면 된다.
 
-To find out more about implementing convolutional neural networks, you can jump to
-the TensorFlow [deep convolutional networks tutorial](http://www.tensorflow.org/tutorials/deep_cnn/index.html),
-or start a bit more gently with our
-[ML beginner](http://www.tensorflow.org/tutorials/mnist/beginners/index.html)
-or [ML expert](http://www.tensorflow.org/tutorials/mnist/pros/index.html)
-MNIST starter tutorials. Finally, if you want to get up to speed on research
-in this area, you can
-read the recent work of all the papers referenced in this tutorial.
-
+convolutional neural network을 사용하는 방법을 더 알고 싶다면 TensorFlow의 [deep convolutional networks tutorial](http://www.tensorflow.org/tutorials/deep_cnn/index.html)로 건너뛰거나 
+상대적으로 더 평이한 [ML beginner](http://www.tensorflow.org/tutorials/mnist/beginners/index.html) 혹은 [ML expert](http://www.tensorflow.org/tutorials/mnist/pros/index.html) MNIST 입문자 튜토리얼로 시작해도 된다.
+마지막으로 이 영역에 대한 연구에 박차를 가하고 싶다면 이 튜토리얼이 참조한 모든 문서들의 최근 연구를 읽어보면 된다.
