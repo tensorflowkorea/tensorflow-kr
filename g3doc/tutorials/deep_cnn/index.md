@@ -329,7 +329,7 @@ architecture in the top layer.
 ### Model Training
 
 N-way 분류를 수행하는 네트워크를 훈련시키는 일반적인 방법은 *소프트맥스 회귀(Softmax regression)*로 알려진 [다항 로지스틱 회귀(multinomial logistic regression)](https://en.wikipedia.org/wiki/Multinomial_logistic_regression)입니다. 소프트맥스 회귀(Softmax regression)는 네트워크의 아웃풋에 [softmax](../../api_docs/python/nn.md#softmax) 비선형성을 적용하고, 정규화된 예측값과 [1-핫 인코딩(1-hot encoding)](../../api_docs/python/sparse_ops.md#sparse_to_dense)된 라벨 사시의 [크로스 엔트로피(cross-entropy)](../../api_docs/python/nn.md#softmax_cross_entropy_with_logits)를 계산합니다.
-균일화(regularization)를 위하여, 우리는 모든 학습된 변수에 대하여 일반적인 [가중치 쇠퇴(weight decay)](../../api_docs/python/nn.md#l2_loss) 손실을 적용합니다. 모델의 목적함수는 크로스 엔트로피 손실의 합과 'loss()' 함수에 의해 리턴되는, 모든 가중치 쇠퇴(weight decay) 텀의 합입니다.
+균일화(regularization)를 위하여, 우리는 모든 학습된 변수에 대하여 일반적인 [가중치 감소(weight decay)](../../api_docs/python/nn.md#l2_loss) 손실을 적용합니다. 모델의 목적함수는 크로스 엔트로피 손실의 합과 'loss()' 함수에 의해 리턴되는, 모든 가중치 감소(weight decay) 텀의 합입니다.
 
 The usual method for training a network to perform N-way classification is
 [multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression),
@@ -400,7 +400,9 @@ Filling queue with 20000 CIFAR images before starting to train. This will take a
 
 * 데이터의 첫 배치는 전처리 스레드가 20,000장의 처리된 CIFAR 이미지를 셔플링(shuffling) 큐에 채워넣는 만큼 지나치게 느릴 수 있습니다 (예를 들어, 수 분).
 
-*
+* 보고된 손실은 가장 최근 배치의 평균 손실입니다. 이 손실은 크로스 엔트로피의 합과 모든 가중치 감소(weight decay) 텀의 합임을 기억하세요.
+
+* 배치 하나의 처리속도에 주목하세요. 위의 수치는 Tesla K40c로 얻은 값입니다. CPU에서 실행한다면, 좀더 느린 성능을 보일 것 입니다.
 
 The script reports the total loss every 10 steps as well the speed at which
 the last batch of data was processed. A few comments:
