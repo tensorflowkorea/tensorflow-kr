@@ -4,15 +4,15 @@
 보통 사람이라면 사자와 재규어를 구별할 줄 알고 표지판을 읽을 수 있으며 
 다른 사람의 얼굴 또한 어렵지 않게 인식할 수 있다. 
 그러나 이는 이미지를 인식하는 뇌의 능력이 놀라울 정도로 뛰어나기 때문에 가능한 것이지 
-이와 같은 일을 컴퓨터를 통해 해결하는 것은 매우 어려운 문제이다. 
+이와 같은 일을 컴퓨터를 통해 해결하는 것은 매우 어려운 문제다. 
 
-지난 수 년간 기계학습 분야는 이미지 인식 문제에 대해 엄청난 진전을 이루어 냈다. 
+지난 수 년간 기계학습 분야는 이미지 인식에 대해 엄청난 진전을 이루어 냈다. 
 특히 딥 러닝 기법의 하나인 [convolutional neural network](http://colah.github.io/posts/2014-07-Conv-Nets-Modular/)를 통해 
-이미지 인식에 있어 혁신적 성과를 거두었는데 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
+혁신적인 성과를 거두었는데, 일부 분야에서는 사람의 인식 능력에 버금가거나 더 나은 결과를 보여주기도 했다.
 
-연구자들은 학계에서 시작된 컴퓨터 비전 프로젝트 [ImageNet](http://www.image-net.org)에서 자신들의 작업을 검증해왔고,
+연구자들은 학계에서 시작된 컴퓨터 비전 프로젝트인 [ImageNet](http://www.image-net.org)에서 자신들의 작업을 검증해왔고,
 그들의 연구는 [QuocNet], [AlexNet], [Inception (GoogLeNet)], [BN-Inception-v2]와 같은 최신식 모델을 만들어냈다.
-구글 내외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료가 널리 배포되는 것은 쉽지 않은 상황이다.
+구글 내부 연구자와 외부 연구자 모두 이러한 모델을 설명하는 자료를 발표해 왔지만 자료가 널리 배포되고 있지는 않다.
 그래서 TensorFlow는 구글이 개발한 이미지 인식의 가장 최신 모델인 Inception-v3를 활용하는 코드를 공개한다.
 
 [QuocNet]: http://static.googleusercontent.com/media/research.google.com/en//archive/unsupervised_icml2012.pdf
@@ -34,7 +34,7 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 2012년 검증 데이터 세트에서 나타난 각 모델의 top-5 error rate는 [AlexNet]이 15.3%, [BN-Inception-v2]이 6.66%였고
 [Inception-v3]는 3.46%를 달성했다.
 
-> ImageNet 챌린지에서 사람이 도전한다면 성과가 어떠할까? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-5 error rate는 5.1%였다고 한다.
+> ImageNet 챌린지에서 사람의 성과는 어떨까? Andrej Karpathy가 [blog post]에서 밝힌 바에 의하면 그의 top-5 error rate는 5.1%였다고 한다.
 
 [ImageNet]: http://image-net.org/
 [1000 classes]: http://image-net.org/challenges/LSVRC/2014/browse-synsets
@@ -47,14 +47,14 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 ##Python API로 사용하기
 
 프로그램이 처음 실행될 때 `classify_image.py`는 `tensorflow.org`로 부터 훈련된 모델을 다운로드 받는다.
-필요한 하드디스크의 여유 공간은 200메가바이트이다.
+필요한 하드디스크의 여유 공간은 200MB이다.
 
-다음 명령어는 PIP패키지에서 TensorFlow를 설치한 이후, 터미널이 TensorFlow의 root 디렉토리로 설정되어 있는 상태를 전제로 한다.
+PIP 패키지에서 TensorFlow를 설치하고 터미널을 TensorFlow의 root 디렉토리로 설정한 후에 다음 명령어를 실행한다.
 
     cd tensorflow/models/image/imagenet
     python classify_image.py
 
-위 명령어는 다운로드로 제공된 판다 곰의 사진을 분류한다.
+위 명령어는 다운로드 받았던 판다 곰의 사진을 분류한다.
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/cropped_panda.jpg">
@@ -74,7 +74,7 @@ Inception-v3는 [ImageNet]의 Large Visual Recognition Challenge에서 2012년 �
 
 ## C++ API로 사용하기
 
-C++의 production환경에서도 [Inception-v3] 모델을 사용할 수 있다.
+C++의 프로덕션 환경에서도 [Inception-v3] 모델을 사용할 수 있다.
 모델을 정의하는 GraphDef를 담고 있는 아카이브를 다운로드 받는 방법은 아래와 같다:
 (단, TensorFlow repository의 root 디렉토리에서 실행한다)
 
@@ -86,19 +86,19 @@ unzip tensorflow/examples/label_image/data/inception_dec_2015.zip -d tensorflow/
 
 다음으로 그래프를 불러오고 실행할 수 있는 코드를 담고 있는 C++ 바이너리를 컴파일 해야 한다.
 만약 [the instructions to download the source installation of TensorFlow](../../get_started/os_setup.md#installing-from-sources)에 
-나와 있는 지시사항을 자신의 플랫폼에 맞게 이행했다면, shell terminal에서 다음과 같은 명령어를 실행하여 예제를 빌드할 수 있다:
+나와 있는 지시사항을 자신의 플랫폼에 맞게 이행했다면, 터미널에서 다음과 같은 명령어를 실행하여 예제를 빌드할 수 있다:
 
 ```bash
 bazel build tensorflow/examples/label_image/...
 ```
 
-위 명령어가 입력되면 실행 가능한 바이너리 파일이 생성될 것이고 아래 명령어를 통해 실행할 수 있다:
+위 명령어가 입력되면 실행 가능한 바이너리 파일이 생성될 것이다. 파일을 실행하는 명령어는 다음과 같다:
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image
 ```
 
-이것은 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용이 출력된다:
+위 명령어는 프레임워크가 함께 전달되는 기본(default) 예제 이미지를 사용하며 아래와 유사한 내용이 출력된다:
 
 ```
 I tensorflow/examples/label_image/main.cc:200] military uniform (866): 0.647296
@@ -108,33 +108,33 @@ I tensorflow/examples/label_image/main.cc:200] bow tie (817): 0.0157356
 I tensorflow/examples/label_image/main.cc:200] bolo tie (940): 0.0145024
 ```
 
-이러한 경우 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper)의 기본(default) 이미지를 사용하고 있는 것이며,
-0.6점이라는 높은 점수로 알고리즘 네트워크가 군복을 입고 있는 여성을 식별하고 있음을 확인할 수 있다.
+기본 제공 이미지인 [Admiral Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper) 사진을 사용한 결과이다.
+0.6이라는 높은 점수로 모델의 네트워크가 군복을 입고 있는 여성을 올바르게 인식하고 있음을 확인할 수 있다.
 
 
 <div style="width:45%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/grace_hopper.jpg">
 </div>
 
-다음으로 --image= 인자를 추가하여 본인이 갖고 있는 이미지로 테스트해 본다. 예를 들면 다음과 같다:
+다음으로 --image= 인자를 추가하여 본인이 갖고 있는 이미지로 테스트해 볼 수 있다. 예를 들면 다음과 같다:
 
 ```bash
 bazel-bin/tensorflow/examples/label_image/label_image --image=my_image.png
 ```
 
-[`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)파일을 살펴보면 어떻게 작동하는지 알 수 있다. 
-이 코드를 통해 TensorFlow 라이브러리를 사용자의 애플리케이션에 사용하는 데 도움이 되길 바라며 주요 함수들을 차례차례 살펴볼 것이다.
+[`tensorflow/examples/label_image/main.cc`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc)파일을 살펴보면 명령어가 어떻게 작동하는지 알 수 있다. 
+이 코드를 통해 사용자가 TensorFlow 라이브러리를 자신의 애플리케이션에 사용하는 데 도움이 되길 바라며 주요 함수들을 차례차례 살펴보자.
 
 커맨드 라인 플래그(command line flags)는 파일을 불러온 위치와 입력된 이미지의 속성을 조정하는 기능을 한다.
 모델은 정사각형 299x299 사이즈의 RGB 이미지를 취급하기 때문에 이를 `input_width`와  `input_height` 플래그라고 한다.
-그리고 픽셀 값을 0과 255사이의 정수에서 그래프를 사용하기 위한 부동 소수점으로 크기 조정(scaling)해야 한다.
-크기 조정은 `input_mean`과 `input_std` 플래그로 조절한다. 각 픽셀 값에서 `input_mean`을 빼고 난 후 `input_std`로 나눈다.
+그리고 픽셀(pixel) 값을 0과 255사이의 정수 값(integer)에서 그래프를 사용하기 위한 실수 값(float)으로 스케일링(scaling)해야 한다.
+스케일링은 `input_mean`과 `input_std` 플래그로 조절한다. 각 픽셀 값에서 `input_mean`을 빼고 난 후 `input_std`로 나눈다.
 
-이러한 값들이 마술처럼 신기해 보일 수 있는데, 이는 모델을 만든 원작자가 훈련용 입력 이미지로서 사용하고 싶은 것을 정의한 내용일 뿐이다.
-사용자가 스스로 훈련시킨 그래프가 있다면, 자신의 훈련 프로세스에 적합하도록 사용자가 원하는 값으로 조정하면 된다.
+이러한 값들이 마술처럼 신기해 보일 수 있는데, 이는 모델을 만든 원작자가 훈련용 입력 이미지로서 사용하고 싶은 것으로서 정의했던 내용일 뿐이다.
+만일 사용자가 스스로 훈련시킨 그래프가 있다면, 자신의 훈련 프로세스에 적합하도록 사용자가 원하는 값으로 조정하면 된다.
 
 이러한 값들이 [`ReadTensorFromImageFile()`]
-(https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L88)의 함수를 통해 이미지에 어떻게 적용되는지 확인할 수 있다.
+(https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L88)의 함수를 통해 이미지에 어떻게 적용되는지 확인해 보자.
 
 ```C++
 // Given an image file name, read in the data, try to decode it as an image,
@@ -154,10 +154,10 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
       tensorflow::ops::ReadFile(tensorflow::ops::Const(file_name, b.opts()),
                                 b.opts().WithName(input_name));
 ```
-그 다음에 실행할 소형 모델(small model)의 노드를 생성한다. 이는 픽셀 값을 불러오고, 변경하고, 크기 조정하는 데 사용되며 메인 모델(main model)의 입력값으로 쓰일 것이다.
-첫 번째로 만든 노드는 `Const` op(short for operations, meaning node in the graph)이며 이는 우리가 불러 올 이미지의 파일 이름이 담긴 텐서를 갖고 있다. 
+그 다음에 실행할 소형 모델(small model)의 노드를 생성한다. 이는 픽셀 값을 불러오고, 변경하고, 스케일링하는 데 사용되며 메인 모델(main model)의 입력값으로 쓰일 것이다.
+첫 번째로 만든 노드는 `Const` op(그래프 위의 노드를 의미하는 operation의 줄임말)이며 이는 우리가 불러 올 이미지의 파일 이름이 담긴 Tensor를 갖고 있다. 
 이것은 `ReadFile` op에게 첫 번째 입력값으로 전달된다. op를 생성하는 모든 함수의 마지막 인자로 `b.opts()`를 전달할 것임을 알 수 있을 것이다.
-인자는 해당 노드가 `GraphDefBuilder`가 담고 있는 모델 정의에 반드시 추가되도록 한다. 
+이 인자는 해당 노드가 `GraphDefBuilder`가 담고 있는 모델 정의에 반드시 추가되도록 한다. 
 또한 `WithName()` 함수를 `b.opts()`에게 호출하여 `ReadFile` 연산자를 지정할 것이다. 이것은 노드의 이름을 지정하는 것인데, 사실 사용자가 따로 수행하지 않더라도 자동 이름이 생성되어 할당되므로 필수적인 과정은 아니다. 하지만 디버깅에 도움이 되는 과정이다.
 
 ```C++
@@ -195,8 +195,7 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
       tensorflow::ops::Const({input_std}, b.opts()),
       b.opts().WithName(output_name));
 ```
-그리고 나서 계속해서 노드를 추가한다. 이는 파일 데이터를 이미지로 디코드하고, 정수값을 부동소수점 값으로 바꾸고, 
-값을 다시 조절하고, 마지막으로 픽셀값을 빼고 나누는 연산 과정을 거치려고 하는 것이다.
+그리고 나서 계속해서 노드를 추가하여, 파일 데이터를 이미지로 해독하고, 정수 값을 실수 값으로 바꾸고(scaling), 값의 크기를 변경하고(resizing), 마지막으로 픽셀값을 빼고 나누는 연산 과정을 거친다.
 
 ```C++
   // This runs the GraphDef network definition that we've just constructed, and
@@ -204,7 +203,7 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
   tensorflow::GraphDef graph;
   TF_RETURN_IF_ERROR(b.ToGraphDef(&graph));
 ```
-위와 같은 과정을 거치면 최종적으로 변수 b에 담긴 모델 정의를 갖게 된다. 변수 b는 `ToGraphDef()` 함수를 통해 완전한 그래프로 변환될 수 있다.
+코드 마지막 줄에 변수 b에 담긴 모델 정의를 갖게 된다. `ToGraphDef()` 함수를 사용해서 변수 b를 완전한 그래프 정의로 변환한다.
 
 ```C++
   std::unique_ptr<tensorflow::Session> session(
@@ -214,16 +213,15 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
   return Status::OK();
 ```
 그 다음으로 [`Session`](http://www.tensorflow.org/versions/master/api_docs/cc/ClassSession.html#class-tensorflow-session) 오브젝트를 생성한다.
-이는 그래프를 표시하는 인터페이스 오브젝트이다. 이것을 실행하여 어떤 노드로부터 출력을 얻을 것인지, 출력된 데이터를 어디에 둘지 구체화한다.
+이는 그래프를 구현하는 인터페이스 오브젝트다. Session 오브젝트를 실행하여 어떤 노드로부터 출력을 얻을 것인지, 출력된 데이터를 어디에 둘지 설정한다.
 
-이러한 작업은 `Tensor` 오브젝트의 벡터 값을 주는데 아마 단 한 개의 오브젝트일 것이다. 여기서 `Tensor`의 의미는 다차원 배열로 생각하면 된다.
-`Tensor`는 높이 299픽셀, 너비 299 픽셀 그리고 부동소수점 값이 있는 3가지 채널 이미지를 속성으로 가진다.
-만약 당신이 만든 프로젝트에 스스로 제작한 이미지 프로세싱 프레임워크가 있다면 그것을 대신 사용해도 된다.
+이러한 작업은 `Tensor` 오브젝트에 대한 벡터 값을 준다 (벡터 값은 단 한 개의 오브젝트일 것이다). 여기서 `Tensor`의 의미는 다차원 배열로 생각하면 된다.
+`Tensor`는 높이 299pixel, 너비 299pixel 그리고 실수 값이 있는 3가지 채널 이미지를 속성으로 가진다.
+만약 사용자가 만든 프로젝트에 스스로 제작한 이미지 프로세싱 프레임워크가 있다면 그것을 대신 사용해도 된다.
 메인 그래프에 이미지를 넣기 전에 똑같은 변환을 적용할수만 있다면 말이다.
 
-이것은 C++에서 작은 TensorFlow 그래프를 그리는 간단한 예제이다.
-그러나 미리 훈련된 Inception 모델에서는 파일에서 훨씬 더 큰 정의를 불러와야 한다.
-이때 `LoadGraph()` 함수를 이용하면 된다.
+지금까지 설명한 것은 C++에서 작은 TensorFlow 그래프를 그리는 간단한 예제이다.
+그러나 미리 훈련된 Inception 모델에서는 파일에서 훨씬 더 큰 정의를 불러와야 하는데, 이때는 `LoadGraph()` 함수를 이용한다.
 
 ```C++
 // Reads a model graph definition from disk, and creates a session object you
@@ -241,7 +239,7 @@ Status LoadGraph(string graph_file_name,
 
 이미지를 불러오는 코드를 검토해봤다면 코드의 많은 부분이 익숙할 것이다. 
 `GraphDef` 오브젝트를 생성하기 위해 `GraphDefBuilder`를 사용하기 보다는
-직접 `GraphDef`를 담고 있는 protobuf 파일을 불러올 것이다.
+직접 `GraphDef`를 담고 있는 protobuf 파일을 불러온다.
 
 ```C++
   session->reset(tensorflow::NewSession(tensorflow::SessionOptions()));
@@ -254,7 +252,7 @@ Status LoadGraph(string graph_file_name,
 ```
 그리고 나서 `GraphDef`로부터 Session 오브젝트를 만들고 호출 함수(caller)에 전달하여 나중에 실행할 수 있도록 한다.
 
-`GetTopLabels()` 함수는 이미지 불러오기와 매우 유사하나 여기서는 메인 그래프를 그리고 그것을 가장 높은 점수의 레이블들로 분류한 리스트로 바꾼다는 점이 다르다. 
+`GetTopLabels()` 함수는 이미지를 불러오는 다른 함수와 매우 유사하나 여기서는 메인 그래프를 그리고 그것을 가장 높은 점수의 레이블들로 분류한 리스트로 바꾼다는 점이 다르다. 
 이미지 불러오는 다른 함수처럼 `GetTopLabels()` 함수 또한 `GraphDefBuilder`를 만들고, 
 `GraphDefBuilder`에 노드 여러 개를 더한 다음 한 쌍의 아웃풋 tensors를 얻기 위해 짧은 그래프를 그린다. 
 한 쌍의 아웃풋 tensors는 가장 높은 결과의 정렬된 점수와 인덱스 포지션을 나타낸다. 
@@ -286,9 +284,9 @@ Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
 ```
 
 `PrintTopLabels()` 함수는 이러한 정렬된 결과값을 입력 받아서 그 값들을 좀 더 친절한 방법으로 출력한다.
-`CheckTopLabel()` 함수도 이와 매우 비슷하지만 상단 레이블(top label)이 디버깅 목적임을 확실히 한다.
+`CheckTopLabel()` 함수도 이와 매우 비슷한데, 디버깅 목적이 포함되어 있다. 상단 레이블(top label)이 우리가 예상하는 값임을 점검한다.
 
-마지막으로 [`main()`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L252) 함수는 이러한 모든 함수의 호출을 하나로 묶는다.
+마지막으로 [`main()`](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/label_image/main.cc#L252) 함수는 이러한 모든 함수의 호출을 하나로 묶는 함수이다.
 
 ```C++
 int main(int argc, char* argv[]) {
@@ -325,7 +323,7 @@ int main(int argc, char* argv[]) {
   }
   const Tensor& resized_tensor = resized_tensors[0];
 ```
-입력된 이미지를 불러오고, 사이즈를 조정하고 처리한다.
+입력된 이미지를 불러오고, 사이즈를 조정(resize)하고 처리한다.
 
 ```C++
   // Actually run the image through the model.
@@ -338,7 +336,7 @@ int main(int argc, char* argv[]) {
   }
 ```
 
-여기서 입력값인 이미지를 사용하여 로딩된 그래프를 그린다.
+입력된 이미지를 사용하여, 불러온 그래프를 구현한다(Here we run the loaded graph with the image as an input).
 
 ```C++
   // This is for automated testing to make sure we get the expected result with
@@ -357,7 +355,7 @@ int main(int argc, char* argv[]) {
     }
   }
 ```
-테스트 목적으로 우리가 예상하는 결과를 얻도록 체크할 수 있다.
+테스트 목적으로 우리가 예상하는 결과를 얻도록 점검할 수 있다.
 
 ```C++
   // Do something interesting with the results we've generated.
@@ -372,8 +370,7 @@ int main(int argc, char* argv[]) {
   }
 ```
 
-여기서 오류 처리는 TensorFlow의 `Status` 오브젝트를 사용한다. 이 오브젝트는 매우 간편하다.
-`ok()` 함수를 사용해서 오류가 발생했는지 사용자에게 알려주고 오류 메시지를 출력해주기 때문이다.
+여기서 오류 처리는 TensorFlow의 `Status` 오브젝트를 사용한다. 이 오브젝트는 매우 간편한데, `ok()` 함수를 사용해서 오류가 발생했는지 사용자에게 알려주고 오류 메시지를 출력해준다.
 
 지금까지 대상을 인식하는 것에 대해 설명했지만, 다른 모든 영역에서도 사용자가 발견하거나 스스로 훈련시킨 다른 모델을 사용하여 이와 유사한 코드를 활용할 수 있다.
 이 예제로 인해서 사용자들이 TensorFlow를 자신의 프로젝트에 사용하는 데 도움이 되길 바란다.
@@ -390,4 +387,4 @@ convolutional neural network에 한해서는 Chris Olah의 [nice blog posts](htt
 
 convolutional neural network을 사용하는 방법을 더 알고 싶다면 TensorFlow의 [deep convolutional networks tutorial](http://www.tensorflow.org/tutorials/deep_cnn/index.html)로 건너뛰거나 
 상대적으로 더 평이한 [ML beginner](http://www.tensorflow.org/tutorials/mnist/beginners/index.html) 혹은 [ML expert](http://www.tensorflow.org/tutorials/mnist/pros/index.html) MNIST 입문자 튜토리얼로 시작해도 된다.
-마지막으로 이 영역에 대한 연구에 박차를 가하고 싶다면 이 튜토리얼이 참조한 모든 문서들의 최근 연구를 읽어보면 된다.
+마지막으로 이 영역에 대한 연구에 박차를 가하고 싶다면, 이 튜토리얼이 참조한 모든 문서들의 최근 연구를 읽어보면 된다.
