@@ -417,11 +417,14 @@ this loss is the sum of the cross entropy and all weight decay terms.
 * Keep an eye on the processing speed of a batch. The numbers shown above were
 obtained on a Tesla K40c. If you are running on a CPU, expect slower performance.
 
+> **연습:** 실험할 때, 훈련의 첫 스텝이 오랜 시간이 소요되는 것이 때때로 짜증날 수 있습니다. 초기에 큐를 채우는 이미지의 수를 줄여보세요. `cifar10.py`에서 `NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN`을 검색해보세요.
 
 > **EXERCISE:** When experimenting, it is sometimes annoying that the first
 training step can take so long. Try decreasing the number of images that
 initially fill up the queue.  Search for `NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN`
 in `cifar10.py`.
+
+`cifar10_train.py`는 주기적으로 모든 모델 파라미터를 [체크포인트 파일(checkpoint files)](../../how_tos/variables/index.md#saving-and-restoring)에 [저장](../../api_docs/python/state_ops.md#Saver)합니다. 하지만 모델 자체를 평가하지는 *않습니다*.  체크포인트 파일은 `cifar10_eval.py`에서 예측 성능을 측정하는데에 사용됩니다.(아래에 있는 [모델을 평가하기](#evaluating-a-model)를 보세요).
 
 `cifar10_train.py` periodically [saves](../../api_docs/python/state_ops.md#Saver)
 all model parameters in
@@ -430,9 +433,17 @@ but it does *not* evaluate the model. The checkpoint file
 will be used by `cifar10_eval.py` to measure the predictive
 performance (see [Evaluating a Model](#evaluating-a-model) below).
 
+이전 단계들을 모두 따라왔다면, 당신은 CIFAR-10 모델의 훈련을 시작한 것입니다! [축하합니다!](https://www.youtube.com/watch?v=9bZkp7q19f0)
 
 If you followed the previous steps, then you have now started training
 a CIFAR-10 model. [Congratulations!](https://www.youtube.com/watch?v=9bZkp7q19f0)
+
+`cifar10_train.py`에서 리턴되는 terminal 텍스트는 모델을 어떻게 훈련할 것인지에 대한 최소한의 통찰(insight)을 제공합니다. 우리는 훈련하는 동안 모델에 대한 더욱 많은 통찰(insight)을 원합니다:
+
+* 손실(loss)이 *정말* 감소하는지 혹은 단지 노이즈였는지?
+* 모델이 적절한 이미지를 제공받는지?
+* 강하(gradients), 활성화(activations), 그리고 가중치(weights)는 합당한지?
+* 현재의 학습 비울(learning rate)는 무엇인지?
 
 The terminal text returned from `cifar10_train.py` provides minimal insight into
 how the model is training. We want more insight into the model during training:
@@ -442,10 +453,14 @@ how the model is training. We want more insight into the model during training:
 * Are the gradients, activations and weights reasonable?
 * What is the learning rate currently at?
 
+[TensorBoard](../../how_tos/summaries_and_tensorboard/index.md) 는 기능적으로, `cifar10_train.py`의 [`SummaryWriter`](../../api_docs/python/train.md#SummaryWriter)를 통해 주기적으로 데이터를 추출하여 표시합니다.
+
 [TensorBoard](../../how_tos/summaries_and_tensorboard/index.md) provides this
 functionality, displaying data exported periodically from `cifar10_train.py` via
 a
 [`SummaryWriter`](../../api_docs/python/train.md#SummaryWriter).
+
+예를 들어, 우리는 활성화(activation)의 분포가 어떠한지, 훈련하는 동안 `local3` feature가 진화(evolve)하는 동안 sparsity의 degree가 어떠한지 볼 수 있습니다.
 
 For instance, we can watch how the distribution of activations and degree of
 sparsity in `local3` features evolve during training:
