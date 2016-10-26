@@ -349,7 +349,7 @@ We visualize it in TensorBoard with a [`scalar_summary`](../../api_docs/python/t
 
 ![CIFAR-10 손실(loss)](../../images/cifar_loss.png "CIFAR-10 Total Loss")
 
-우리는 표준적인 [경사 강하(gradient descent)](https://en.wikipedia.org/wiki/Gradient_descent) 알고리즘 (다른 방법을 보려면 [Training](../../api_docs/python/train.md)을 참조)을 사용하여 모델을 훈련합니다. 시간에 따라 [지수적으로 감소(exponentially decays)](../../api_docs/python/train.md#exponential_decay)하는 학습 비율(learning rate)을 사용하였습니다.
+우리는 표준적인 [경사 강하(gradient descent)](https://en.wikipedia.org/wiki/Gradient_descent) 알고리즘 (다른 방법을 보려면 [Training](../../api_docs/python/train.md)을 참조)을 사용하여 모델을 훈련합니다. 시간에 따라 [급격하게 감소(exponentially decays)](../../api_docs/python/train.md#exponential_decay)하는 학습 비율(learning rate)을 사용하였습니다.
 We train the model using standard
 [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent)
 algorithm (see [Training](../../api_docs/python/train.md) for other methods)
@@ -460,7 +460,7 @@ functionality, displaying data exported periodically from `cifar10_train.py` via
 a
 [`SummaryWriter`](../../api_docs/python/train.md#SummaryWriter).
 
-예를 들어, 우리는 활성화(activation)의 분포가 어떠한지, 훈련하는 동안 `local3` feature가 진화(evolve)하는 동안 sparsity의 degree가 어떠한지 볼 수 있습니다.
+예를 들어, 우리는 훈련하는 동안 활성화(activation)의 분포와, `local3` feature들의 희박함(sparsity)의 분포가 어떻게 진화(evolve) 하는지 볼 수 있습니다.
 
 For instance, we can watch how the distribution of activations and degree of
 sparsity in `local3` features evolve during training:
