@@ -529,7 +529,7 @@ code]
 and set the `model_type` flag to `wide`.
 
 
-만약에 처음 부터 끝까지 작동하는 예제를 보고 싶다면 우리의 예제코드를 다운 받고, `model_type` 플레그를 `wide`로 설정 하세요.
+만약에 처음 부터 끝까지 작동하는 예제를 보고 싶다면 우리의 예제코드를 다운 받고, `model_type` 플래그를 `wide`로 설정 하세요.
 
 ## Adding Regularization to Prevent Overfitting
 
@@ -543,7 +543,7 @@ Regularization is a technique used to avoid **overfitting**.
 Overfitting happens when your model does well on the data it is trained on, but worse on test data
 that the model has not seen before, such as live traffic.
 
-과적화는 모델이 접해보지 못한 데이터에 대해서는 못하고, 훈련에 사용된 데이터에는 반응을 잘 할 때 일어난다. 예를 들어 실시간 교통
+과적화는 모델이 접해보지 못한 데이터에 대해서는 못하고, 훈련에 사용된 데이터에는 반응을 잘 할 때 일어난다. 예를 들어 실시간 교통 데이터
 
 과적화는 모델이 훈련에 사용했던 데이터로는 잘되지만, 처음 보는 데이터에 대해서는 않 좋은 결과를 보일때 일어난다.
 
@@ -553,14 +553,17 @@ relative to the number of observed training data.
 
 과적화는 모델이 너무 과도하게 복잡할 때 일어 난다. 예를 들어 관찰한 데이터에 비해 매개변수가 너무 많을 경우이다.
 
- Regularization allows for you
-to control your model's complexity and makes the model more generalizable to
+Regularization allows for you to control your model's complexity and makes the model more generalizable to
 unseen data.
 
+정규화는 모델을 처음 보는 데이터에 일반화 할수 있게 해준다
+정규화는 모델의 복잡성을 컨트롤 할수 있게 해주고, 처음 접하는 데이터에 대해 좀더 일반화가 가능하게 해준다.
 
 
 In the Linear Model library, you can add L1 and L2 regularizations to the model
 as:
+
+선형모델 라이브러리에 당신은 L1 과 L2 정규화들을 모델에 추가 할 수 있습니다.
 
 ```
 m = tf.contrib.learn.LinearClassifier(feature_columns=[
@@ -576,32 +579,72 @@ m = tf.contrib.learn.LinearClassifier(feature_columns=[
 One important difference between L1 and L2 regularization is that L1
 regularization tends to make model weights stay at zero, creating sparser
 models, whereas L2 regularization also tries to make the model weights closer to
-zero but not necessarily zero. Therefore, if you increase the strength of L1
+zero but not necessarily zero.
+
+L1 과 L2 정규화의 한가지 중요한 차이점은 L1 정규화는 모델의 무게를 0에 머무르게 하고 sparser 모델을 만들지만 L2 정규화는 모델에 무게를 0에 가깝게 만들려고
+
+
+ Therefore, if you increase the strength of L1
 regularization, you will have a smaller model size because many of the model
-weights will be zero. This is often desirable when the feature space is very
+weights will be zero.
+
+그렇기에 당신이 만약 L1 정규화를 강화 시킨다면 많은 모델들에 무게들이 0것이라 작은 모델을 가지게 될 것 입니다.
+
+ This is often desirable when the feature space is very
 large but sparse, and when there are resource constraints that prevent you from
 serving a model that is too large.
+
+정규화는 feature 크기가 크지만 흩어져 있는 경우와 자원이 제한적이라 아주 큰 모델을 실행 하기 힘든 경우에 종종 바람직한 방법이다.
 
 In practice, you should try various combinations of L1, L2 regularization
 strengths and find the best parameters that best control overfitting and give
 you a desirable model size.
 
+실 상황에서는 과적화와 모델의 크기를 컨트롤 하기에 최고의 매개변수를 찾기 위해 L1과 L2의 강도를 다양하게 시도해봐야 합니다.
+
+
 ## How Logistic Regression Works
+로지스틱 회귀가 어떻게 작동하나
 
 Finally, let's take a minute to talk about what the Logistic Regression model
-actually looks like in case you're not already familiar with it. We'll denote
-the label as $$Y$$, and the set of observed features as a feature vector
-$$\mathbf{x}=[x_1, x_2, ..., x_d]$$. We define $$Y=1$$ if an individual earned >
-50,000 dollars and $$Y=0$$ otherwise. In Logistic Regression, the probability of
+actually looks like in case you're not already familiar with it.
+
+만약 로지스틱 회귀 모델에 익숙하지 않다면 여기서 잠시 멈춰 로지스틱 회귀모델이 실제로 어떻게 생겼는지 보도록 하자자
+
+ We'll denote the label as $$Y$$, and the set of observed features as a feature vector
+$$\mathbf{x}=[x_1, x_2, ..., x_d]$$.
+?????????
+우리는 라벨을 $$Y$$로 나타낼 거다, 그리고 feature를  
+
+
+ We define $$Y=1$$ if an individual earned >
+50,000 dollars and $$Y=0$$ otherwise.
+
+우리는 수입이 50,000 달러가 넘는다면 $$Y=1$$ 그렇지 않다면 $$Y=1$$ 정의 할 것이다.
+
+ In Logistic Regression, the probability of
 the label being positive ($$Y=1$$) given the features $$\mathbf{x}$$ is given
 as:
+
+라벨이 정수가 될경우를 나타내는 features들은 로지스틱 회귀에서는
 
 $$ P(Y=1|\mathbf{x}) = \frac{1}{1+\exp(-(\mathbf{w}^T\mathbf{x}+b))}$$
 
 where $$\mathbf{w}=[w_1, w_2, ..., w_d]$$ are the model weights for the features
-$$\mathbf{x}=[x_1, x_2, ..., x_d]$$. $$b$$ is a constant that is often called
-the **bias** of the model. The equation consists of two parts—A linear model and
+$$\mathbf{x}=[x_1, x_2, ..., x_d]$$.
+
+$$\mathbf{w}=[w_1, w_2, ..., w_d]$$는 features들 $$\mathbf{x}=[x_1, x_2, ..., x_d]$$에 무게이다.
+
+ $$b$$ is a constant that is often called
+the **bias** of the model.
+
+$$b$$는 constant이며 종종 모델의 **편견??** 이라고 불린다.
+
+The equation consists of two parts—A linear model and
 a logistic function:
+
+
+
 
 *   **Linear Model**: First, we can see that $$\mathbf{w}^T\mathbf{x}+b = b +
     w_1x_1 + ... +w_dx_d$$ is a linear model where the output is a linear
