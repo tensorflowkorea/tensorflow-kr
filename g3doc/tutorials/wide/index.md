@@ -305,12 +305,9 @@ hours_per_week = tf.contrib.layers.real_valued_column("hours_per_week")
 
 때때로 continuous 특성과 라벨의 관계는 비선형이다. 가상의 한 예와 같이, 한 사람의 수입이 사회생활 초기에는 나이와 함께 증가할 것이고, 어느 때가 되면 수입의 증가는 더뎌지고, 그리고 마침내 은퇴 후에는 수입이 줄어 들것이다. 모델이 아래의 3가지 경우 중 하나만 습득할 수 있으므로 이 시나리오에서 비가공 `age`를 실수특성 열로 사용하는 것은 좋은 선택이 아닐 것이다.
 
-1.  Income always increases at some rate as age grows (positive correlation),
-수입이 나이의 증가에 따라 항상 같은 비율로 증가 (양의 상관관계)
-2.  Income always decreases at some rate as age grows (negative correlation), or
-수입이 나이의 증가에 따라 항상 같은 비율로 감소 (음의 상관관계), 또는
-3.  Income stays the same no matter at what age (관계없음)
-수입이 나이에 상관 없이 항상 같음
+1.  수입이 나이의 증가에 따라 항상 같은 비율로 증가 (양의 상관관계)
+2.  수입이 나이의 증가에 따라 항상 같은 비율로 감소 (음의 상관관계), 또는
+3.  수입이 나이에 상관 없이 항상 같음(관계없음)
 
 만약 우리가 수입과 각 나이 그룹과의 세밀한 상관관계를 학습하고 싶다면  **버킷화** 를 활용할 수 있다. 버킷화는 continuous 특성 전체를 연속적인 빈/버킷들의 세트로 나누고, 이후에 버킷의 값에 따라 원래의 수적 특성을 버킷 아이디(categorical feature)로 변환하는 과정이다. 그래서 우리는 `age`에 대해 `bucketized_column`을 정의 할 수 있다:
 
