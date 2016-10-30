@@ -81,12 +81,12 @@ df_test[LABEL_COLUMN] = (df_test["income_bracket"].apply(lambda x: ">50K" in x))
 
 
 
-*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical**열이라 불린다.
+*   만약에 값이 오직 유한집합 범주 안에 있을 때 **categorical** 열이라 불린다.
      예를 들어 사람에 국적(미국, 인도, 일본 등)이나 교육 수준(고등학교, 대학 등)이 categorical 열들이다.
 
 
 
-*  만약에 값이 어떤 수치로 나올 수 있다면 **continuous**열 이라 불린다. 예를 들어, 한 사람에 소득이 continuous열이다.
+*  만약에 값이 어떤 수치로 나올 수 있다면 **continuous** 열 이라 불린다. 예를 들어, 한 사람에 소득이 continuous열이다.
 
 
 ```python
@@ -97,37 +97,37 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "h
 
 수입 인구조사 데이터 세트에 나오는 열 리스트:
 
-|열 이름    | 타입        | 설명                       | {.sortable}
+|열 이름    | 타입        | 설명                       | {.sortable}   |
 | -------------- | ----------- | --------------------------------- |
-| age               | Continuous    | 나이                                   |
-| workclass      | Categorical | 고용주 타입                      |
-:                :             : (정부, 군대, 기업 등)             :
+| age            | Continuous  | 나이                               |
+| workclass      | Categorical | 고용주 타입                          |
+:                :             : (정부, 군대, 기업 등)                 :
 | fnlwgt         | Continuous  | The number of people the census   |
 :                :             : takers believe that observation   :
 :                :             : represents (sample weight). This  :
 :                :             : variable will not be used.        :
-| education      | Categorical | 최고 학력                         |
-| education_num  | Continuous  | 숫자 형식의 최고 학력             |
-| marital_status | Categorical | 혼인 여부                         |
-| occupation     | Categorical | 직업                              |
+| education      | Categorical | 최고 학력                           |
+| education_num  | Continuous  | 숫자 형식의 최고 학력                  |
+| marital_status | Categorical | 혼인 여부                           |
+| occupation     | Categorical | 직업                               |
 | relationship   | Categorical | Wife, Own-child, Husband,         |
 :                :             : Not-in-family, Other-relative,    :
 :                :             : Unmarried.                        :
-| race           | Categorical | 인종 ( 백인, Asian-Pac-Islander, |
-:                :             : Amer-Indian-Eskimo, Other, 흑인. :
-| gender         | Categorical | 성별 (남, 여)                     |
-| capital_gain   | Continuous  | 기록된 양도 소득.                 |
-| capital_loss   | Continuous  | 기록된 자본 손실.                 |
-| hours_per_week | Continuous  | 주당 근무시간.                    |
-| native_country | Categorical | 출생지                            |
-| income         | Categorical | ">50K" 또는 "<=50K", 개인의 일년  |
-:                :             : 수입이 5만불 이상인지 아닌지 뜻함 :
+| race           | Categorical | 인종 ( 백인, Asian-Pac-Islander,    |
+:                :             : Amer-Indian-Eskimo, Other, 흑인.   :
+| gender         | Categorical | 성별 (남, 여)                       |
+| capital_gain   | Continuous  | 기록된 양도 소득.                     |
+| capital_loss   | Continuous  | 기록된 자본 손실.                     |
+| hours_per_week | Continuous  | 주당 근무시간.                       |
+| native_country | Categorical | 출생지                              |
+| income         | Categorical | ">50K" 또는 "<=50K", 개인의 일년      |
+:                :             : 수입이 5만불 이상인지 아닌지 뜻함         :
 
 
 ##데이터를 텐서들로 바꾸기
 
 TF.Learn 모델을 구축 할 때, 입력 데이터는 Input Builder 함수에 의해서 명시된다.
-이 builder 함수는 TF.Learn에 `fit` 이나 `evaluate`와 같은 메소드들에게 넘겨 질때 까지 호출되지 않는다.
+이 builder 함수는 TF.Learn에 `fit` 이나 `evaluate` 와 같은 메소드들에게 넘겨 질때 까지 호출되지 않는다.
 이 함수의 목적은 입력 데이터를 [Tensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/framework.html#Tensor) 나
 [SparseTensors](https://www.tensorflow.org/versions/r0.9/api_docs/python/sparse_ops.html#SparseTensor) 형태로 구성하기 위함에 있다.
 더 구체적으로, Input Builder 함수는 다음과 같은 한 쌍을 반환한다:
@@ -255,47 +255,38 @@ education = tf.contrib.layers.sparse_column_with_hash_bucket("education", hash_b
 
 What will happen is that each possible value in the feature column `education`
 will be hashed to an integer ID as we encounter them in training.
-어
-  `education`에 각 특성열에 가능한 값들은 훈련중에 정수 아이디로 헤시 되어질 것이다
 
+`education`에 각 특성열에 가능한 값들은 훈련중에 정수 아이디로 헤시 되어질 것이다
 
-See an example
-illustration below:
-아래의 실례를 봐라
+아래의 실례를 보자:
 
 ID  | Feature
 --- | -------------
 ... |
-9   | `"Bachelors"`
+9   | `"학사"`
 ... |
-103 | `"Doctorate"`
+103 | `"박사"`
 ... |
-375 | `"Masters"`
+375 | `"석사"`
 ... |
-
-No matter which way we choose to define a `SparseColumn`, each feature string
-will be mapped into an integer ID by looking up a fixed mapping or by hashing.
 
 어떤 방법으로 `SparseColumn`를 정의 하던지 특성 문자열들은 정해진 멥핑 또는 헤쉬를
-정수 ID를를
+정수 ID를 찾을 것이다.
 
-Note that hashing collisions are possible, but may not significantly impact the
-model quality.
-
-여기서 헤쉬 충돌이 일어 날 수 있지만, 모델의 질에 큰 영향을 끼치지는 않을 것이다.
+여기서 헤쉬 충돌이 일어날 수 있지만, 모델의 질에 큰 영향을 끼치지는 않을 것이다.
 
  Under the hood, the `LinearModel` class is responsible for
 managing the mapping and creating `tf.Variable` to store the model parameters
 (also known as model weights) for each feature ID.
+Under the hood, `LinearModel` 클래스는 `tf.Variable`에 측정과 생성을 책임지고 있다. 뭐하려고 ? 모델의 매개변수를 저장하기위해 각 특성 ID를 위해
+
+``
+
+(모델 무게로 알려진)
 
 
-The model parameters will be
-learned through the model training process we'll go through later.
-
-모델의 매개변수들은 우리가 나중에 배우게 될 모델 훈련 과정에서 알게 될 것 입니다.
-
-We'll do the similar trick to define the other categorical features:
-우리는 다른 categorical 특성들을 정의하기 위해 비슷한 기술을 사용 할 것이다.
+모델의 매개변수들은 우리가 나중에 배우게 될 모델 훈련 과정에서 알게 될 것입니다.
+우리는 다른 categorical 특성들을 정의하기 위해 비슷한 기술을 사용할 것이다.
 
 ```python
 race = tf.contrib.layers.sparse_column_with_keys(column_name="race", keys=[
@@ -307,15 +298,9 @@ occupation = tf.contrib.layers.sparse_column_with_hash_bucket("occupation", hash
 native_country = tf.contrib.layers.sparse_column_with_hash_bucket("native_country", hash_bucket_size=1000)
 ```
 
-### Base Continuous Feature Columns
-기초 Continuous 특성 열
+### 기초 Continuous 특성 열
 
-Similarly, we can define a `RealValuedColumn` for each continuous feature column
-that we want to use in the model:
-
-비슷하게, 모델에서 사용하고 싶은 각 continuous 특성열들에게 `RealValuedColumn`를 정의 할 수 있습니다.
-
-
+비슷하게, 모델에서 사용하고 싶은 각 continuous 특성열들에게 `RealValuedColumn`을 정의 할 수 있습니다.
 
 ```python
 age = tf.contrib.layers.real_valued_column("age")
@@ -325,29 +310,13 @@ capital_loss = tf.contrib.layers.real_valued_column("capital_loss")
 hours_per_week = tf.contrib.layers.real_valued_column("hours_per_week")
 ```
 
-### Making Continuous Features Categorical through Bucketization
-버케티제이션을 통해 Continuous 특성들을 범주??
-
-
-Sometimes the relationship between a continuous feature and the label is not
-linear.
+### 버킷화를 통해 Continuous 특성들을 범주화 하기
 
 때때로 continuous 특성과 라벨의 관계는 비선형이다.
 
- As an hypothetical example, a person's income may grow with age in the
-early stage of one's career, then the growth may slow at some point, and finally
-the income decreases after retirement.
+가상의 한 예와 같이, 한 사람의 수입이 사회생활 초기에는 나이와 함께 증가할 것이고, 어느 때가 되면 수입의 증가는 더뎌지고, 그리고 마침내 은퇴 후에는 수입이 줄어 들것이다.
 
-가상의 한 예와 같이, 한 사람의 수입이 사회생활 초기에는 나이와 함께 증가할 것이고, 어느 때가 되면 수입의 증가는 더뎌지고, 그리고 마침내 은퇴후에는 수입이 줄어 들것이다.
-
-
- In this scenario, using the raw `age` as
-a real-valued feature column might not be a good choice because the model can
-only learn one of the three cases:
-
-이 시나리오, 비가공 `age`를 좋은 선택이 아니다 왜냐하면 모델은 오직 3가지 경우중 하나만 배울 수 있기 때문이다.
-
-모델이 아래의 3가지 경우중 하나만 습득 할 수 있기 때문에 이 시나리오에서 비가공 `age`를 실수특성열로 사용하는 것은 좋은 선택이 아닐 것 이다.
+모델이 아래의 3가지 경우 중 하나만 습득할 수 있으므로 이 시나리오에서 비가공 `age`를 실수특성 열로 사용하는 것은 좋은 선택이 아닐 것이다.
 
 1.  Income always increases at some rate as age grows (positive correlation),
 수입이 나이의 증가에 따라 항상 같은 비율로 증가 (양의 상관관계)
@@ -356,70 +325,27 @@ only learn one of the three cases:
 3.  Income stays the same no matter at what age (관계없음)
 수입이 나이에 상관 없이 항상 같음
 
+만약 우리가 수입과 각 나이 그룹과의 세밀한 상관관계를 학습하고 싶다면  **bucketization** 를 활용할 수 있다.
 
+Bucketization은 continuous 특성 전체를 연속적인 빈/버킷들의 세트로 나누고, 이후에 버킷의 값에 따라 원래의 수적 특성을 버킷 아이디(categorical feature)로 변환하는 과정이다.
 
-If we want to learn the fine-grained correlation between income and each age
-group seperately, we can leverage **bucketization**.
-
-만약 우리가 수입과 각각의 나이 그룹 과의 세밀한 상관관계를 학습하고 싶다면  **bucketization** 를 활 용 할수 있다.
-
- Bucketization is a process
-of dividing the entire range of a continuous feature into a set of consecutive
-bins/buckets, and then converting the original numerical feature into a bucket
-ID (as a categorical feature) depending on which bucket that value falls into.
-
-Bucketization은 과정이 continuous 특성 전체를 연속적인 빈/버켓들의 세트로 나누는 것이다
-
-,그리고 나서 변환한다 원래의 수적 특성을 버켓 아이디( categorical 특성으)로 어떤 ? 버켓의 값에 따라
-
-
-Bucketization은 continuous 특성 전체를 연속적인 빈/버켓들의 세트로 나누고, 이후에 버켓의 값에 따라 원래의 수적 특성을 버켓 아이디로 변환 하는 과정이다.
-
-
-So, we can define a `bucketized_column` over `age` as:
-
-그래서 우리는 `age`에 대해 `bucketized_column`를 정의 할 수 있다.
+그래서 우리는 `age`에 대해 `bucketized_column`을 정의 할 수 있다:
 
 ```python
 age_buckets = tf.contrib.layers.bucketized_column(age, boundaries=[18, 25, 30, 35, 40, 45, 50, 55, 60, 65])
 ```
+`boundaries`는 버킷 경계의 목록이다.
 
-where the `boundaries` is a list of bucket boundaries.
-`boundaries`는 버켓 경계의 목록이다.
+이 경우에 10개의 경계가 있고, 결과적으로 11개의 버킷 그룹이 생성된다 ( 0세부터 17까지, 18-24, 25-29…. 65세 이상).
 
- In this case, there are
-10 boundaries, resulting in 11 age group buckets (from age 17 and below, 18-24,
-25-29, ..., to 65 and over).
+### 다수의 열을 CrossedColumn으로 교차하기
 
+각 기본 feature 열을 나눠 사용하는 것만으로는 데이터를 설명하는데 충분하지 않을 것이다.
 
-이 경우에 10개의 경계가 있고, 결과적으로 11개의 버켓 그룹이 생성된다 ( 0세 부터 17 까지, 18-24, 25-29,..., 65세 이상).
+예를 들어 교육과 레이블(수입 > 50,000)에 상관관계는 아마 직업에 따라 다를 것이다.
 
-### Intersecting Multiple Columns with CrossedColumn
-
-다수의 열을 CrossedColumn으로 교차하기
-
-Using each base feature column separately may not be enough to explain the data.
-
-각 기본 특성 열을 나눠 사용하는 것만으로는 데이터를 설명 하는데 충분하지 않을 것이다.
-
-For example, the correlation between education and the label (earning > 50,000
-dollars) may be different for different occupations.
-
-예를들어 교육과 레이블(수입 > 50,000)에 상관관계는 아마 직업들에 따라 다를 것이다.
-
-
-Therefore, if we only learn
-a single model weight for `education="Bachelors"` and `education="Masters"`, we
-won't be able to capture every single education-occupation combination (e.g.
-distinguishing between `education="Bachelors" AND occupation="Exec-managerial"`
-and `education="Bachelors" AND occupation="Craft-repair"`).
-
-그렇기에 우리가 오직 한가지 모델 `education="학사"` and `education="석사"`의 무게를 학습 한다면, 우리는 모든 경우의 교육-직업 조합 `education="학사" AND occupation="경영자"`
-and `education="학사" AND occupation="수리공"`)의 차이를 알아 낼수 없다.
-
-To learn the
-differences between different feature combinations, we can add **crossed feature
-columns** to the model.
+그렇기에 우리가 오직 한가지 모델 `education="학사"` and `education="석사"`의 무게를 학습한다면, 우리는 모든 경우의 교육-직업 조합 `education="학사" AND occupation="경영자"`
+and `education="학사" AND occupation="수리공"`)의 차이를 알아 낼 수 없다.
 
 다른 특성 조합들의 차이를 알기 위해서 우리는 **crossed feature columns** 을 모델에 부여할 수 있습니다.
 
@@ -427,46 +353,26 @@ columns** to the model.
 education_x_occupation = tf.contrib.layers.crossed_column([education, occupation], hash_bucket_size=int(1e4))
 ```
 
-We can also create a `CrossedColumn` over more than two columns.
-우리는 또한 `CrossedColumn`을 두가지 이상의 열에 생성 할 수 있습니다.
+우리는 또한 `CrossedColumn`을 두 가지 이상의 열에 생성할 수 있습니다.
 
- Each constituent column can be either a base feature column that is categorical
-(`SparseColumn`), a bucketized real-valued feature column (`BucketizedColumn`),
-or even another `CrossColumn`. Here's an example:
-
-각 constituent 열은 기본 특성열 categorical(`SparseColumn`)이나 버켓화 된 실수 특성열(`BucketizedColumn`), 심지어 다른 `CrossColumn`이 될 수 있습니다.
+각 constituent 열은 기본 특성 열 categorical(`SparseColumn`)이나 버킷 화 된 실수 특성 열(`BucketizedColumn`), 심지어 다른 `CrossColumn`이 될 수 있습니다. 하나의 예:
 
 ```python
 age_buckets_x_race_x_occupation = tf.contrib.layers.crossed_column(
   [age_buckets, race, occupation], hash_bucket_size=int(1e6))
 ```
 
-## Defining The Logistic Regression Model
+## 로지스틱 회귀 모델 정의하기
 
-로지스틱 회귀 모델 정의하기
-
-After processing the input data and defining all the feature columns, we're now
-ready to put them all together and build a Logistic Regression model.
-
-입력 데이터를 가공 하고 모든 특성열들을 정의 한 다음, 이제 모든 것을 한자리에 모아 로지스틱 회귀 모델을 구축할 준비가 되었다 .
-
-
-
- In the
-previous section we've seen several types of base and derived feature columns,
-including:
-
-이전 부분에서 우리는 아래의 특성열들을 포함한 몇 가지의 기본 그리고 파생 특성열을 보았다
+입력 데이터를 가공 하고 모든 특성열들을 정의 한 다음, 이제 모든 것을 한자리에 모아 로지스틱 회귀 모델을 구축할 준비가 되었다.
+이전 부분에서 우리는 아래의 특성열들을 포함한 여러 가지의 기본 그리고 파생 특성 열을 보았다.
 
 *   `SparseColumn`
 *   `RealValuedColumn`
 *   `BucketizedColumn`
 *   `CrossedColumn`
 
-All of these are subclasses of the abstract `FeatureColumn` class, and can be
-added to the `feature_columns` field of a model:
-
-위의 모든 특성열들은 추상 클래스 `FeatureColumn`에 하위 클래스 들이며, 모델의 `feature_columns` 필드에 추가 될 수 있다
+위의 모든 특성열들은 추상 클래스 `FeatureColumn`에 하위 클래스 들이며, 모델의 `feature_columns` 필드에 추가될 수 있습니다.
 
 ```python
 model_dir = tempfile.mkdtemp()
@@ -476,36 +382,20 @@ m = tf.contrib.learn.LinearClassifier(feature_columns=[
   model_dir=model_dir)
 ```
 
-The model also automatically learns a bias term, which controls the prediction
-one would make without observing any features (see the section "How Logistic
-Regression Works" for more explanations). The learned model files will be stored
-in `model_dir`.
+모델은 자동으로 feature들을 보지 않고도 예측을 제어 할 수 있는 편향 용어를 자동으로 학습할 것입니다. (더 많은 설명을 위해서는 "로지스틱 회귀가 어떻게 작동하나" 보시오)
+
+학습된 모델 파일은 `model_dir`에 저장될 것입니다.
 
 
+## 모델을 훈련, 평가하기
 
-## Training and Evaluating Our Model
-
-모델을 훈련, 평가 하기
-
-After adding all the features to the model, now let's look at how to actually
-train the model.
-
-모델에 모든 특성들을 추가한 다음 어떻게 실제로 모델을 훈련 시키는지 알아보자
-
-Training a model is just a one-liner using the TF.Learn API:
-
+모델에 모든 특성을 추가한 다음 어떻게 실제로 모델을 훈련 시키는지 알아보자.
 모델을 훈련하는 것은 TF.Learn API를 사용하면 한 줄이면 된다.
 
 ```python
 m.fit(input_fn=train_input_fn, steps=200)
 ```
-
-After the model is trained, we can evaluate how good our model is at predicting
-the labels of the holdout data:
-
-모델을 훈련 시킨뒤 모델이 얼마나 홀드아웃 데이터의 라벨을 잘 예측하는지 평가해 볼 수 있다
-
-
+모델을 훈련 시킨 뒤 모델이 얼마나 홀드 아웃 데이터의 라벨을 잘 예측하는지 평가해 볼 수 있다
 
 ```python
 results = m.evaluate(input_fn=eval_input_fn, steps=1)
@@ -513,57 +403,21 @@ for key in sorted(results):
     print "%s: %s" % (key, results[key])
 ```
 
-The first line of the output should be something like `accuracy: 0.83557522`,
-which means the accuracy is 83.6%.
-
 첫 번째 줄의 결과는 정확도 83.6%를 뜻하는 `accuracy: 0.83557522`와 같이 나올 것이다.
 
-Feel free to try more features and
-transformations and see if you can do even better!
+당신이 더 좋은 결과를 낼 수 있는지 자유롭게 더 많은 기능을 시도해보고 변경해봐라
 
-당신이 더 좋은 결과를 낼 수 있는지 자유롭게 더 많은 기능들을 시도해보고 변경 해봐라
+만약에 처음부터 끝까지 작동하는 예제를 보고 싶다면 우리의 [예제코드를](https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py) 내려받고, `model_type` 플래그를 `wide`로 설정하세요.
 
-If you'd like to see a working end-to-end example, you can download our [example
-code]
-(https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py)
-and set the `model_type` flag to `wide`.
+## 과적화를 피하기위해 정규화 추가하기
 
+정규화는 **과적화**를 피하려고 사용되는 기술이다.
 
-만약에 처음 부터 끝까지 작동하는 예제를 보고 싶다면 우리의 예제코드를 다운 받고, `model_type` 플래그를 `wide`로 설정 하세요.
+과적화는 모델이 훈련에 사용했던 데이터로는 잘 작동하지만, 처음 보는 데이터에 대해서는 안 좋은 결과를 보일 때 일어난다.
+과적화는 모델이 너무 과도하게 복잡할 때 일어난다. 예를 들어 관찰한 자료에 비해 매개변수가 너무 많을 경우이다.
+정규화는 모델의 복잡성을 제어 할 수 있게 해주고, 처음 접하는 데이터에 대해 좀 더 일반화가 가능하게 해준다.
 
-## Adding Regularization to Prevent Overfitting
-
-과적화를 피하기 위해서 정규화 추가하기
-
-
-Regularization is a technique used to avoid **overfitting**.
-
-정규화는 과적화를 피하기위해 사용되는 기술이다.
-
-Overfitting happens when your model does well on the data it is trained on, but worse on test data
-that the model has not seen before, such as live traffic.
-
-과적화는 모델이 접해보지 못한 데이터에 대해서는 못하고, 훈련에 사용된 데이터에는 반응을 잘 할 때 일어난다. 예를 들어 실시간 교통 데이터
-
-과적화는 모델이 훈련에 사용했던 데이터로는 잘되지만, 처음 보는 데이터에 대해서는 않 좋은 결과를 보일때 일어난다.
-
-
- Overfitting generally occurs when a model is excessively complex, such as having too many parameters
-relative to the number of observed training data.
-
-과적화는 모델이 너무 과도하게 복잡할 때 일어 난다. 예를 들어 관찰한 데이터에 비해 매개변수가 너무 많을 경우이다.
-
-Regularization allows for you to control your model's complexity and makes the model more generalizable to
-unseen data.
-
-정규화는 모델을 처음 보는 데이터에 일반화 할수 있게 해준다
-정규화는 모델의 복잡성을 컨트롤 할수 있게 해주고, 처음 접하는 데이터에 대해 좀더 일반화가 가능하게 해준다.
-
-
-In the Linear Model library, you can add L1 and L2 regularizations to the model
-as:
-
-선형모델 라이브러리에 당신은 L1 과 L2 정규화들을 모델에 추가 할 수 있습니다.
+선형모델 라이브러리에 당신은 L1과 L2 정규화 들을 다음과 같이 모델에 추가할 수 있습니다:
 
 ```
 m = tf.contrib.learn.LinearClassifier(feature_columns=[
@@ -576,104 +430,42 @@ m = tf.contrib.learn.LinearClassifier(feature_columns=[
   model_dir=model_dir)
 ```
 
-One important difference between L1 and L2 regularization is that L1
-regularization tends to make model weights stay at zero, creating sparser
-models, whereas L2 regularization also tries to make the model weights closer to
-zero but not necessarily zero.
+L1과 L2 정규화의 한 가지 중요한 차이점은 L1 정규화는 모델의 무게를 0에 있게 하려고 하고 sparser 모델을 만들지만, L2 정규화는 모델에 무게를 0에 가깝게 만들려고 노력한다 하지만 꼭 0일 필요는 없습니다.
+그렇기에 당신이 만약 L1 정규화를 강화한다면 많은 모델에 무게가 0일 것이라 작은 모델을 가지게 될 것입니다.
+정규화는 feature 크기가 크지만 흩어져 있는 경우와 자원이 제한적이라 아주 큰 모델을 실행하기 힘든 경우에 종종 바람직한 방법 입니다. 실 상황에서는 과적화와 모델의 크기를 조절 하기에 최고의 매개변수를 찾기 위해 L1과 L2의 강도를 다양하게 시도해봐야 합니다.
 
-L1 과 L2 정규화의 한가지 중요한 차이점은 L1 정규화는 모델의 무게를 0에 머무르게 하고 sparser 모델을 만들지만 L2 정규화는 모델에 무게를 0에 가깝게 만들려고
-
-
- Therefore, if you increase the strength of L1
-regularization, you will have a smaller model size because many of the model
-weights will be zero.
-
-그렇기에 당신이 만약 L1 정규화를 강화 시킨다면 많은 모델들에 무게들이 0것이라 작은 모델을 가지게 될 것 입니다.
-
- This is often desirable when the feature space is very
-large but sparse, and when there are resource constraints that prevent you from
-serving a model that is too large.
-
-정규화는 feature 크기가 크지만 흩어져 있는 경우와 자원이 제한적이라 아주 큰 모델을 실행 하기 힘든 경우에 종종 바람직한 방법이다.
-
-In practice, you should try various combinations of L1, L2 regularization
-strengths and find the best parameters that best control overfitting and give
-you a desirable model size.
-
-실 상황에서는 과적화와 모델의 크기를 컨트롤 하기에 최고의 매개변수를 찾기 위해 L1과 L2의 강도를 다양하게 시도해봐야 합니다.
-
-
-## How Logistic Regression Works
-로지스틱 회귀가 어떻게 작동하나
-
-Finally, let's take a minute to talk about what the Logistic Regression model
-actually looks like in case you're not already familiar with it.
+## 로지스틱 회귀가 어떻게 작동하는가
 
 만약 로지스틱 회귀 모델에 익숙하지 않다면 여기서 잠시 멈춰 로지스틱 회귀모델이 실제로 어떻게 생겼는지 보도록 하자자
 
- We'll denote the label as $$Y$$, and the set of observed features as a feature vector
-$$\mathbf{x}=[x_1, x_2, ..., x_d]$$.
-?????????
-우리는 라벨을 $$Y$$로 나타낼 거다, 그리고 feature를  
+우리는 라벨을 $$Y$$로, 관찰된 feature들의 세트를 feature 벡터 $$\mathbf{x}=[x_1, x_2, ..., x_d]$$로 표현할 것이다.
 
+우리는 수입이 50,000달러가 넘는다면 $$Y=1$$ 그렇지 않다면 $$Y=1$$ 정의 할 것 입니다.
 
- We define $$Y=1$$ if an individual earned >
-50,000 dollars and $$Y=0$$ otherwise.
-
-우리는 수입이 50,000 달러가 넘는다면 $$Y=1$$ 그렇지 않다면 $$Y=1$$ 정의 할 것이다.
-
- In Logistic Regression, the probability of
-the label being positive ($$Y=1$$) given the features $$\mathbf{x}$$ is given
-as:
-
-라벨이 정수가 될경우를 나타내는 features들은 로지스틱 회귀에서는
+로지스틱 회귀에서 주어진 features $$\mathbf{x}$$에 대해 라벨이 양수($$Y=1$$)가 될 가능성을 나타내는 것은:
 
 $$ P(Y=1|\mathbf{x}) = \frac{1}{1+\exp(-(\mathbf{w}^T\mathbf{x}+b))}$$
 
 where $$\mathbf{w}=[w_1, w_2, ..., w_d]$$ are the model weights for the features
 $$\mathbf{x}=[x_1, x_2, ..., x_d]$$.
 
-$$\mathbf{w}=[w_1, w_2, ..., w_d]$$는 features들 $$\mathbf{x}=[x_1, x_2, ..., x_d]$$에 무게이다.
+$$\mathbf{w}=[w_1, w_2, ..., w_d]$$는 features $$\mathbf{x}=[x_1, x_2, ..., x_d]$$의 모델 무게이다.
 
- $$b$$ is a constant that is often called
-the **bias** of the model.
+$$b$$는 정수이며 종종 모델의 **편향** 이라고 불린다.
 
-$$b$$는 constant이며 종종 모델의 **편견??** 이라고 불린다.
+공식은 두 parts-A 선형모델과 로지스틱 함수로 구성 되어 있다.
 
-The equation consists of two parts—A linear model and
-a logistic function:
+*   **선형 모델**: 먼저, 우리는 결과가 입력 features $$\mathbf{x}$$ 함수인 선형 모델 $$\mathbf{w}^T\mathbf{x}+b = b +w_1x_1 + ... +w_dx_d$$로 볼 수 있다.
+    편향 $$b$$는 아무런 feature들을 관찰 하지 않고 한 예측이다.
+    모델의 무게 $$w_i$$는 feature와 어떻게 양의 label과 상관관계를 가지는지 나타낸다.
+    만약에 $$x_i$$가 양수 label과 양의 상관관계를 가지면 무게 $$w_i$$는 증가할 것이고 $$P(Y=1|\mathbf{x})$$는 1에 가까울 것이다. 반면에, $$x_i$$이 양수 label과 음의 상관관계를 가지면 무게 $$w_i$$는 감소 할 것이고 $$P(Y=1|\mathbf{x})$$는 0에 가까울 것이다.
 
+*   **로지스틱 함수**: 두 번째로, 우리는 로지스틱 함수(시그모이드 함수로 알려진) $$S(t) = 1/(1+\exp(-t))$$가 선형 모델에 적용되는 것을 볼 수 있다. 확률로 해석되어질 수 있는 어떠한 0 과 1 사이의 실수로에서 나온 선형모델 $$\mathbf{w}^T\mathbf{x}+b$$의 출력 값을 변환 하는데 사용된다.
 
+모델 훈련은 최적화에 대한 문제이다. 다시말해, 데이터를 학습하는 동안 정의된 **손실 함수**를 최소화 할수 있는 모델 weights 세트(즉, 모델 매개변수)를 찾는 것이다.
 
+손실 함수는 라벨의 실측 라벨과 모델의 예측 차이점을 측정한다. 만약에 예측이 실수 라벨과 아주 가깝다면 손실 값은 낮을 것이고 반대로 예측값이 라벨과 많은 차이가 날 때 손실 값은 높을 것이다.
 
-*   **Linear Model**: First, we can see that $$\mathbf{w}^T\mathbf{x}+b = b +
-    w_1x_1 + ... +w_dx_d$$ is a linear model where the output is a linear
-    function of the input features $$\mathbf{x}$$. The bias $$b$$ is the
-    prediction one would make without observing any features. The model weight
-    $$w_i$$ reflects how the feature $$x_i$$ is correlated with the positive
-    label. If $$x_i$$ is positively correlated with the positive label, the
-    weight $$w_i$$ increases, and the probability $$P(Y=1|\mathbf{x})$$ will be
-    closer to 1. On the other hand, if $$x_i$$ is negatively correlated with the
-    positive label, then the weight $$w_i$$ decreases and the probability
-    $$P(Y=1|\mathbf{x})$$ will be closer to 0.
+## 심화학습
 
-*   **Logistic Function**: Second, we can see that there's a logistic function
-    (also known as the sigmoid function) $$S(t) = 1/(1+\exp(-t))$$ being applied
-    to the linear model. The logistic function is used to convert the output of
-    the linear model $$\mathbf{w}^T\mathbf{x}+b$$ from any real number into the
-    range of $$[0, 1]$$, which can be interpreted as a probability.
-
-Model training is an optimization problem: The goal is to find a set of model
-weights (i.e. model parameters) to minimize a **loss function** defined over the
-training data, such as logistic loss for Logistic Regression models. The loss
-function measures the discrepancy between the ground-truth label and the model's
-prediction. If the prediction is very close to the ground-truth label, the loss
-value will be low; if the prediction is very far from the label, then the loss
-value would be high.
-
-## Learn Deeper
-
-If you're interested in learning more, check out our [Wide & Deep Learning
-Tutorial](../wide_and_deep/) where we'll show you how to combine
-the strengths of linear models and deep neural networks by jointly training them
-using the TF.Learn API.
+만약 더 많은 것을 배우고 싶다면 어떻게 선형 모델과 심층 신경망에 강점을 TF.Learn API을 이용하여 훈련 시키는지 알아 볼 수 있는 [Wide & Deep Learning Tutorial](../wide_and_deep/)을 확인해 보시오.
