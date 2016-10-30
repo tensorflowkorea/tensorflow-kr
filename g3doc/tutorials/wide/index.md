@@ -149,7 +149,7 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss", "h
 
 수입 인구조사 데이터 세트에 나오는 열 리스트:
 
-|열 이름    | 타입        | 설명                       | {.sortable}   |
+|열 이름           | 타입         |  설명                              | {.sortable} 
 | -------------- | ----------- | --------------------------------- |
 | age            | Continuous  | 나이                               |
 | workclass      | Categorical | 고용주 타입                          |
