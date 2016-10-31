@@ -460,7 +460,7 @@ functionality, displaying data exported periodically from `cifar10_train.py` via
 a
 [`SummaryWriter`](../../api_docs/python/train.md#SummaryWriter).
 
-예를 들어, 우리는 훈련하는 동안 활성화(activation)의 분포와, `local3` feature들의 희박함(sparsity)의 분포가 어떻게 진화(evolve) 하는지 볼 수 있습니다.
+예를 들어, 우리는 훈련하는 동안 활성화(activation)의 분포와, `local3` feature들의 희박함(sparsity)의 분포가 어떻게 진화(evolve) 하는지 볼 수 있습니다:
 
 For instance, we can watch how the distribution of activations and degree of
 sparsity in `local3` features evolve during training:
@@ -469,6 +469,8 @@ sparsity in `local3` features evolve during training:
   <img style="flex-grow:1; flex-shrink:1;" src="../../images/cifar_sparsity.png">
   <img style="flex-grow:1; flex-shrink:1;" src="../../images/cifar_activations.png">
 </div>
+
+총 손실(total loss)뿐만 아니라, 개별적인 손실 함수(loss function) 들은 특히 시간 경과에 따라 흥미롭습니다. 그러나, 손실(loss)은 훈련에 사용되는 작은 배치 사이즈에 따라 상당히 많은 양의 노이즈를 나타냅니다. 이 연습에서 우리는 원본 값에 더하여 그들의 이동 평균을 시각화하는데 매우 유용함을 발견하였습니다. 이러한 목적을 위하여 어떻게 스크립트가 [`ExponentialMovingAverage`](../../api_docs/python/train.md#ExponentialMovingAverage)를 사용하는지 보세요.
 
 Individual loss functions, as well as the total loss, are particularly
 interesting to track over time. However, the loss exhibits a considerable amount
