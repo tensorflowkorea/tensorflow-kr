@@ -1,78 +1,36 @@
-# Convolutional Neural Networks
 # 컨볼루셔널 뉴럴 네트워크
 
-> **NOTE:** This tutorial is intended for *advanced* users of TensorFlow
-and assumes expertise and experience in machine learning.
 > **NOTE:** 이 튜토리얼은 텐서플로우에 *능숙한* 사용자를 대상으로 하며,
 기계학습에 대한 전문 지식과 경험을 갖고 있다는 전제로 쓰였습니다.
 
-## Overview
-## 개요
 
-CIFAR-10 classification is a common benchmark problem in machine learning.  The
-problem is to classify RGB 32x32 pixel images across 10 categories:
-```airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck.```
+## 개요
 
 CIFAR-10 분류는 기계학습에서 흔히 사용되는 벤치마크 문제입니다.
 이 분류 문제는 RGB 32x32 픽셀 이미지를 다음의 10개 카테고리로 분류하는 것이 목표입니다 :
 ```비행기, 자동차, 새, 고양이, 사슴, 개, 개구리, 말, 배, 트럭.```
 
-For more details refer to the [CIFAR-10 page](http://www.cs.toronto.edu/~kriz/cifar.html)
-and a [Tech Report](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)
-by Alex Krizhevsky.
-
-더 자세한 설명을 원하신다면 [CIFAR-10 페이지](http://www.cs.toronto.edu/~kriz/cifar.html)와
-Alex Krizhevsky의 [기술 보고서](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)를
+더 자세한 설명을 원하신다면 [CIFAR-10 페이지](http://www.cs.toronto.edu/~kriz/cifar.html)와 Alex Krizhevsky의 [기술 보고서](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)를
 참조하세요.
 
 
-### Goals
-
 ### 목표
-
-The goal of this tutorial is to build a relatively small [convolutional neural
-network](https://en.wikipedia.org/wiki/Convolutional_neural_network) (CNN) for
-recognizing images. In the process, this tutorial:
 
 이 튜토리얼의 목표는 이미지를 인식하는 상대적으로 작은 [컨볼루셔널 뉴럴 네트워크]를 만드는 것입니다.
 이 과정에서, 튜토리얼에서는
 
-1. Highlights a canonical organization for network architecture,
-training and evaluation.
-2. Provides a template for constructing larger and more sophisticated models.
-
 1. 네트워크 구조와 학습 및 평가의 표준적인 구성에 주목하고,
 2. 더 크고 복잡한 모델에 대한 예제를 제공합니다.
-
-The reason CIFAR-10 was selected was that it is complex enough to exercise
-much of TensorFlow's ability to scale to large models. At the same time,
-the model is small enough to train fast, which is ideal for trying out
-new ideas and experimenting with new techniques.
 
 CIFAR-10 분류가 선택된 이유는 더 큰 모델을 다루는 데에 필요한 텐서플로우의 많은 기능들을
 연습하기에 충분히 복잡하기 때문입니다. 그와 동시에, 충분히 작은 모델이기 때문에 학습이 빨라
 새로운 아이디어를 적용해보거나 새로운 테크닉을 실험해보기에 적합하기 때문입니다.
 
 
-### Highlights of the Tutorial
-The CIFAR-10 tutorial demonstrates several important constructs for
-designing larger and more sophisticated models in TensorFlow:
-
 ### 튜토리얼의 주안점
 CIFAR-10 튜토리얼은 텐서플로우로 더 크고 복잡한 모델을 디자인하기 위한
 몇몇의 주요 구성들을 설명합니다.
 
-* Core mathematical components including [convolution](
-../../api_docs/python/nn.md#conv2d) ([wiki](
-https://en.wikipedia.org/wiki/Convolution)), [rectified linear activations](
-../../api_docs/python/nn.md#relu) ([wiki](
-https://en.wikipedia.org/wiki/Rectifier_(neural_networks))), [max pooling](
-../../api_docs/python/nn.md#max_pool) ([wiki](
-https://en.wikipedia.org/wiki/Convolutional_neural_network#Pooling_layer))
-and [local response normalization](
-../../api_docs/python/nn.md#local_response_normalization)
-(Chapter 3.3 in [AlexNet paper](
-http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)).
 
 * 주요 수학적 요소 : [Convolution](
 ../../api_docs/python/nn.md#conv2d) ([wiki](
@@ -86,28 +44,11 @@ and [local response normalization](
 (Chapter 3.3 in [AlexNet paper](
 http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)).
 
-* [Visualization](../../how_tos/summaries_and_tensorboard/index.md)
-of network activities during training, including input images,
-losses and distributions of activations and gradients.
-
 * 활성화(Activations)와 경사(gradients)의 손실(loss) 및 분포와 입력된 이미지를 포함하는 학습 중인 네트워크의 활동 [시각화](../../how_tos/summaries_and_tensorboard/index.md)
-
-* Routines for calculating the
-[moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
-of learned parameters and using these averages
-during evaluation to boost predictive performance.
 
 * 학습된 변수의 [이동 평균(moving average)](../../api_docs/python/train.md#ExponentialMovingAverage)을 계산하는 방법과 평가를 할 때 예측 성능을 향상시키기 위하여 이 평균들을 이용하는 방법
 
-* Implementation of a
-[learning rate schedule](../../api_docs/python/train.md#exponential_decay)
-that systematically decrements over time.
-
 * 체계적으로 시간에 따라 감소하는 [학습 비율(learning rate) 스케쥴](../../api_docs/python/train.md#exponential_decay)의 구현
-
-* Prefetching [queues](../../api_docs/python/io_ops.md#shuffle_batch)
-for input
-data to isolate the model from disk latency and expensive image pre-processing.
 
 * 디스크 지연과 비싼 이미지 전처리를 모델로부터 분리하기 위한 입력 데이터 [큐](../../api_docs/python/io_ops.md#shuffle_batch)의 선인출(prefetching)
 
@@ -120,50 +61,21 @@ data to isolate the model from disk latency and expensive image pre-processing.
 
 우리는 이 튜토리얼이 TensorFlow로 영상(vision) 작업에 필요한 큰 CNN을 구축하기 위한 시발점이 되었으면 합니다.
 
-We also provide a [multi-GPU version](#training-a-model-using-multiple-gpu-cards)
-of the model which demonstrates:
 
-* Configuring a model to train across multiple GPU cards in parallel.
-* Sharing and updating variables among multiple GPUs.
-
-We hope that this tutorial provides a launch point for building larger CNNs for
-vision tasks on TensorFlow.
-
-### Model Architecture
-모델 구조
+### 모델 구조
 
 CIFAR-10 튜토리얼의 모델은 컨볼루션과 비선형이 교차되어있는 다중 레이어 구조로 구성되어 있습니다.
 이 레이어들 뒤로는 Softmax 분류기로 이어지는 Fully connected layer가 있습니다. 상위 몇몇 레이어를 제외하고,
 이 모델은 [Alex Krizhevsky](https://code.google.com/p/cuda-convnet/)가 만든 모델을 따르고 있습니다.
-The model in this CIFAR-10 tutorial is a multi-layer architecture consisting of
-alternating convolutions and nonlinearities. These layers are followed by fully
-connected layers leading into a softmax classifier.  The model follows the
-architecture described by
-[Alex Krizhevsky](https://code.google.com/p/cuda-convnet/), with a few
-differences in the top few layers.
 
 이 모델은 GPU에서 몇시간의 학습을 거친 후 최대 86%의 정확도를 달성하였습니다. 좀더 자세한 사항은 [아래](#evaluating-a-model)와 코드를 참조하세요. 이 모델은 1,068,298개의 학습 가능한 매개변수로 구성되어 있으며,
 단일 이미지를 추론하는 데에 19.5M의 곱셉-덧셈 연산이 필요합니다.
-This model achieves a peak performance of about 86% accuracy within a few hours
-of training time on a GPU. Please see [below](#evaluating-a-model) and the code
-for details.  It consists of 1,068,298 learnable parameters and requires about
-19.5M multiply-add operations to compute inference on a single image.
 
-## Code Organization
-코드 구성
 
-The code for this tutorial resides in
-[`tensorflow/models/image/cifar10/`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/).
+## 코드 구성
+
 이 튜토리얼의 코드는
 [`tensorflow/models/image/cifar10/`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/) 에 있습니다.
-
-File | Purpose
---- | ---
-[`cifar10_input.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_input.py) | Reads the native CIFAR-10 binary file format.
-[`cifar10.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py) | Builds the CIFAR-10 model.
-[`cifar10_train.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_train.py) | Trains a CIFAR-10 model on a CPU or GPU.
-[`cifar10_multi_gpu_train.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py) | Trains a CIFAR-10 model on multiple GPUs.
-[`cifar10_eval.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_eval.py) | Evaluates the predictive performance of a CIFAR-10 model.
 
 파일 | 목적
 --- | ---
@@ -174,16 +86,10 @@ File | Purpose
 [`cifar10_eval.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_eval.py) | CIFAR-10 모델의 예측 성능을 평가합니다.
 
 
-## CIFAR-10 Model
 ## CIFAR-10 모델
 
 CIFAR-10 네트워크는 주로 ['cifar10.py'](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py)에 들어있습니다.
-전체 훈련 그래프는 약 765개의 연산을 포함합니다. 우리는 아래의 모듈들로 그래프를 구성하는 것이 가장 재사용성이 높은 코드를 만드는 방법임을 알게되었습니다.
-The CIFAR-10 network is largely contained in
-[`cifar10.py`](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10.py).
-The complete training
-graph contains roughly 765 operations. We find that we can make the code most
-reusable by constructing the graph with the following modules:
+전체 훈련 그래프는 약 765개의 연산을 포함합니다. 우리는 아래의 모듈들로 그래프를 구성하는 것이 가장 재사용성이 높은 코드를 만드는 방법임을 알게 되었습니다:
 
 1. [**모델 입력:**](#model-inputs) 'inputs()' 와 'distorted_inputs()'는 각각 평가와 훈련을 위한
 CIFAR 이미지를 읽고 전처리를 하는 연산들을 추가합니다.
@@ -193,16 +99,7 @@ CIFAR 이미지를 읽고 전처리를 하는 연산들을 추가합니다.
 
 1. [**모델 훈련:**](#model-training) 'loss()'와 'train()'은 손실(loss)과 경사(gradients), 변수 업데이트와 시각화 요약을 계산하는 연산들을 추가합니다.
 
-1. [**Model inputs:**](#model-inputs) `inputs()` and `distorted_inputs()` add
-operations that read and preprocess CIFAR images for evaluation and training,
-respectively.
-1. [**Model prediction:**](#model-prediction) `inference()`
-adds operations that perform inference, i.e. classification, on supplied images.
-1. [**Model training:**](#model-training) `loss()` and `train()`
-add operations that compute the loss,
-gradients, variable updates and visualization summaries.
 
-### Model Inputs
 ### 모델 입력
 
 모델의 입력 부분은 CIFAR-10 바이너리 데이터 파일로부터 이미지를 읽는 'inputs()'와 'distorted_inputs()'
@@ -210,47 +107,22 @@ gradients, variable updates and visualization summaries.
 이 데이터 파일들은 고정 바이트 길이 레코드를 담고있어, 우리는  [`tf.FixedLengthRecordReader`](../../api_docs/python/io_ops.md#FixedLengthRecordReader)를 사용합니다.
 'Reader' 클래스가 어떻게 작동하는지 더 알고 싶으시다면 [Reading Data](../../how_tos/reading_data/index.md#reading-from-files)를 참조하세요.
 
-The input part of the model is built by the functions `inputs()` and
-`distorted_inputs()` which read images from the CIFAR-10 binary data files.
-These files contain fixed byte length records, so we use
-[`tf.FixedLengthRecordReader`](../../api_docs/python/io_ops.md#FixedLengthRecordReader).
-See [Reading Data](../../how_tos/reading_data/index.md#reading-from-files) to
-learn more about how the `Reader` class works.
-
 이미지들은 아래의 과정을 통하여 처리됩니다.
-The images are processed as follows:
 
 *  이미지는 24 x 24 픽셀로 잘라냅니다.
 훈련을 위하여 [무작위로](../../api_docs/python/constant_op.md#random_crop) 잘라내거나 혹은 평가를 위하여 중심만 잘라냅니다.
 *  동적 범위 내에 모델이 둔감해지도록 [대략적인 화이트닝](../../api_docs/python/image.md#per_image_whitening)을 합니다
 
-*  They are cropped to 24 x 24 pixels, centrally for evaluation or
-   [randomly](../../api_docs/python/constant_op.md#random_crop) for training.
-*  They are [approximately whitened](../../api_docs/python/image.md#per_image_whitening)
-   to make the model insensitive to dynamic range.
-
 훈련을 위하여 추가적으로 일련의 무작위 왜곡을 적용하여 인공적으로 데이터 셋의 크기를 키웁니다:
-For training, we additionally apply a series of random distortions to
-artificially increase the data set size:
 
 * 이미지를 좌에서 우로 [무작위로 뒤집기](../../api_docs/python/image.md#random_flip_left_right)
 * [이미지 밝기](../../api_docs/python/image.md#random_brightness)를 무작위로 왜곡하기
 * [이미지 대비](../../api_docs/python/image.md#random_contrast)를 무작위로 왜곡하기
 
-* [Randomly flip](../../api_docs/python/image.md#random_flip_left_right) the image from left to right.
-* Randomly distort the [image brightness](../../api_docs/python/image.md#random_brightness).
-* Randomly distort the [image contrast](../../api_docs/python/image.md#random_contrast).
-
 가능한 왜곡의 목록은 [Images](../../api_docs/python/image.md) 페이지를 참조하세요.
 또한 [`image_summary`](../../api_docs/python/train.md#image_summary)를 이미지에 붙여
 [TensorBoard](../../how_tos/summaries_and_tensorboard/index.md)에서 시각화 할 수 있도록 하였습니다.
 이는 입력이 제대로 만들어 졌는지 확인하기 위한 좋은 연습이 될 것 입니다.
-
-Please see the [Images](../../api_docs/python/image.md) page for the list of
-available distortions. We also attach an
-[`image_summary`](../../api_docs/python/train.md#image_summary) to the images
-so that we may visualize them in [TensorBoard](../../how_tos/summaries_and_tensorboard/index.md).
-This is a good practice to verify that inputs are built correctly.
 
 <div style="width:50%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:70%" src="../../images/cifar_image_summary.png">
@@ -261,19 +133,11 @@ This is a good practice to verify that inputs are built correctly.
 나누어 실행시킵니다. 이 스레드는 TensorFlow [큐](../../api_docs/python/io_ops.md#shuffle_batch)를
 계속해서 채웁니다.
 
-Reading images from disk and distorting them can use a non-trivial amount of
-processing time. To prevent these operations from slowing down training, we run
-them inside 16 separate threads which continuously fill a TensorFlow
-[queue](../../api_docs/python/io_ops.md#shuffle_batch).
 
 ### 모델 예측
-### Model Prediction
 
 모델의 에측 부분은 'inference()' 함수로 구성되어 있습니다. 이 함수는 예측의 *로짓(logit)*들을 계산하는
 연산을 추가합니다. 모델의 해당 부분은 다음과 같이 구성되어 있습니다:
-The prediction part of the model is constructed by the `inference()` function
-which adds operations to compute the *logits* of the predictions. That part of
-the model is organized as follows:
 
 레이어 명 | 설명
 --- | ---
@@ -287,104 +151,46 @@ the model is organized as follows:
 `local4` | [정류된 선형 활성화가 포함된 완전 연결 레이어(fully connected layer with rectified linear activation)](../../api_docs/python/nn.md).
 `softmax_linear` | 로짓(logit)들을 생산하는 선형 변환(linear transformation)
 
-Layer Name | Description
---- | ---
-`conv1` | [convolution](../../api_docs/python/nn.md#conv2d) and [rectified linear](../../api_docs/python/nn.md#relu) activation.
-`pool1` | [max pooling](../../api_docs/python/nn.md#max_pool).
-`norm1` | [local response normalization](../../api_docs/python/nn.md#local_response_normalization).
-`conv2` | [convolution](../../api_docs/python/nn.md#conv2d) and [rectified linear](../../api_docs/python/nn.md#relu) activation.
-`norm2` | [local response normalization](../../api_docs/python/nn.md#local_response_normalization).
-`pool2` | [max pooling](../../api_docs/python/nn.md#max_pool).
-`local3` | [fully connected layer with rectified linear activation](../../api_docs/python/nn.md).
-`local4` | [fully connected layer with rectified linear activation](../../api_docs/python/nn.md).
-`softmax_linear` | linear transformation to produce logits.
-
 아래의 그래프는 TensorBoard를 통해 생성된 추론(inference) 연산을 설명합니다.
-Here is a graph generated from TensorBoard describing the inference operation:
 
 <div style="width:15%; margin:auto; margin-bottom:10px; margin-top:20px;">
   <img style="width:100%" src="../../images/cifar_graph.png">
 </div>
 
 > **연습**: '추론(inference)'의 아웃풋은 정규화되지 않은 로짓(logit)입니다.  [`tf.nn.softmax()`](../../api_docs/python/nn.md#softmax)을 사용하여 정규화된 예측값을 리턴하도록 네트워크 구조를 수정해보세요.
-> **EXERCISE**: The output of `inference` are un-normalized logits. Try editing
-the network architecture to return normalized predictions using [`tf.nn.softmax()`]
-(../../api_docs/python/nn.md#softmax).
 
 'inputs()'와 'inference()' 함수는 모델을 평가하는데 필요한 모든 컴포넌트들을 제공합니다. 이제 우리는 모델을 훈련하는 작업을 구축하는 것으로 초점을 옮겨봅시다.
-The `inputs()` and `inference()` functions provide all the components
-necessary to perform evaluation on a model. We now shift our focus towards
-building operations for training a model.
 
 > **연습:** 'inference()'의 모델 구조는 [cuda-convnet](https://code.google.com/p/cuda-convnet/) 에서 명시하는 CIFAR-10 모델과 조금 다릅니다. 특히, Alex의 원본 모델의 최상위 레이어는 완전 연결(fully connected)이 아니라 국소 연결(locally connected) 되어있습니다. 최상위 레이어에서 국소 연결(locally connected) 구조를 정확하게 재현하도록 구조를 수정해보세요.
-ㅣ
-> **EXERCISE:** The model architecture in `inference()` differs slightly from
-the CIFAR-10 model specified in
-[cuda-convnet](https://code.google.com/p/cuda-convnet/).  In particular, the top
-layers of Alex's original model are locally connected and not fully connected.
-Try editing the architecture to exactly reproduce the locally connected
-architecture in the top layer.
 
-### 모델 훈련
+
 ### Model Training
 
 N-way 분류를 수행하는 네트워크를 훈련시키는 일반적인 방법은 *소프트맥스 회귀(Softmax regression)*로 알려진 [다항 로지스틱 회귀(multinomial logistic regression)](https://en.wikipedia.org/wiki/Multinomial_logistic_regression)입니다. 소프트맥스 회귀(Softmax regression)는 네트워크의 아웃풋에 [softmax](../../api_docs/python/nn.md#softmax) 비선형성을 적용하고, 정규화된 예측값과 [1-핫 인코딩(1-hot encoding)](../../api_docs/python/sparse_ops.md#sparse_to_dense)된 라벨 사시의 [크로스 엔트로피(cross-entropy)](../../api_docs/python/nn.md#softmax_cross_entropy_with_logits)를 계산합니다.
 균일화(regularization)를 위하여, 우리는 모든 학습된 변수에 대하여 일반적인 [가중치 감소(weight decay)](../../api_docs/python/nn.md#l2_loss) 손실을 적용합니다. 모델의 목적함수는 크로스 엔트로피 손실의 합과 'loss()' 함수에 의해 리턴되는, 모든 가중치 감소(weight decay) 텀의 합입니다.
 
-The usual method for training a network to perform N-way classification is
-[multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression),
-aka. *softmax regression*. Softmax regression applies a
-[softmax](../../api_docs/python/nn.md#softmax) nonlinearity to the
-output of the network and calculates the
-[cross-entropy](../../api_docs/python/nn.md#softmax_cross_entropy_with_logits)
-between the normalized predictions and a
-[1-hot encoding](../../api_docs/python/sparse_ops.md#sparse_to_dense) of the label.
-For regularization, we also apply the usual
-[weight decay](../../api_docs/python/nn.md#l2_loss) losses to all learned
-variables. The objective function for the model is the sum of the cross entropy
-loss and all these weight decay terms, as returned by the `loss()` function.
-
 우리는 TensorBoard의 [`scalar_summary`](../../api_docs/python/train.md#scalar_summary)를 사용하여 이를 시각화 하였습니다.
-We visualize it in TensorBoard with a [`scalar_summary`](../../api_docs/python/train.md#scalar_summary):
 
 ![CIFAR-10 손실(loss)](../../images/cifar_loss.png "CIFAR-10 Total Loss")
 
 우리는 표준적인 [경사 강하(gradient descent)](https://en.wikipedia.org/wiki/Gradient_descent) 알고리즘 (다른 방법을 보려면 [Training](../../api_docs/python/train.md)을 참조)을 사용하여 모델을 훈련합니다. 시간에 따라 [급격하게 감소(exponentially decays)](../../api_docs/python/train.md#exponential_decay)하는 학습 비율(learning rate)을 사용하였습니다.
-We train the model using standard
-[gradient descent](https://en.wikipedia.org/wiki/Gradient_descent)
-algorithm (see [Training](../../api_docs/python/train.md) for other methods)
-with a learning rate that
-[exponentially decays](../../api_docs/python/train.md#exponential_decay)
-over time.
 
 ![CIFAR-10 Learning Rate Decay](../../images/cifar_lr_decay.png "CIFAR-10 Learning Rate Decay")
 
 'train()' 함수는 경사(gradient)를 계산하고 학습된 변수를 업데이트함으로써 목표를 최소화 하는데에 필요한 기능을 추가합니다 ( 자세한 사항은 [`GradientDescentOptimizer`](../../api_docs/python/train.md#GradientDescentOptimizer) 참조). 이 함수는 하나의 이미지 배치(batch)에 대하여 모델을 훈련하고 업데이트 하는데 필요한 모든 연산을 실행하는 기능을 리턴해줍니다.  
-The `train()` function adds the operations needed to minimize the objective by
-calculating the gradient and updating the learned variables (see
-[`GradientDescentOptimizer`](../../api_docs/python/train.md#GradientDescentOptimizer)
-for details).  It returns an operation that executes all the calculations
-needed to train and update the model for one batch of images.
 
 
 ## 모델 실행 및 훈련
-## Launching and Training the Model
 
 모델을 만들었으니, 이제 이 모델을 실행해보고 `cifar10_train.py` 스크립트를 사용하여 훈련 작업을 실행해봅시다.
-We have built the model, let's now launch it and run the training operation with
-the script `cifar10_train.py`.
 
 ```shell
 python cifar10_train.py  
 ```
 
 > **참고:** 여러분이 CIFAR-10 튜토리얼에서 처음 어떤 타겟을 실행하면, CIFAR-10 데이터셋이 자동으로 다운로드 됩니다. 데이터셋은 160MB 이하 입니다. 아마 그동안 당신은 커피 한 잔이 떠오를 지도 모릅니다.
-> **NOTE:** The first time you run any target in the CIFAR-10 tutorial,
-the CIFAR-10 dataset is automatically downloaded. The data set is ~160MB
-so you may want to grab a quick cup of coffee for your first run.
 
 아웃풋을 보아야 합니다:
-You should see the output:
 
 ```shell
 Filling queue with 20000 CIFAR images before starting to train. This will take a few minutes.
@@ -404,39 +210,11 @@ Filling queue with 20000 CIFAR images before starting to train. This will take a
 
 * 배치 하나의 처리속도에 주목하세요. 위의 수치는 Tesla K40c로 얻은 값입니다. CPU에서 실행한다면, 좀더 느린 성능을 보일 것 입니다.
 
-The script reports the total loss every 10 steps as well the speed at which
-the last batch of data was processed. A few comments:
-
-* The first batch of data can be inordinately slow (e.g. several minutes) as the
-preprocessing threads fill up the shuffling queue with 20,000 processed CIFAR
-images.
-
-* The reported loss is the average loss of the most recent batch. Remember that
-this loss is the sum of the cross entropy and all weight decay terms.
-
-* Keep an eye on the processing speed of a batch. The numbers shown above were
-obtained on a Tesla K40c. If you are running on a CPU, expect slower performance.
-
 > **연습:** 실험할 때, 훈련의 첫 스텝이 오랜 시간이 소요되는 것이 때때로 짜증날 수 있습니다. 초기에 큐를 채우는 이미지의 수를 줄여보세요. `cifar10.py`에서 `NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN`을 검색해보세요.
-
-> **EXERCISE:** When experimenting, it is sometimes annoying that the first
-training step can take so long. Try decreasing the number of images that
-initially fill up the queue.  Search for `NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN`
-in `cifar10.py`.
 
 `cifar10_train.py`는 주기적으로 모든 모델 파라미터를 [체크포인트 파일(checkpoint files)](../../how_tos/variables/index.md#saving-and-restoring)에 [저장](../../api_docs/python/state_ops.md#Saver)합니다. 하지만 모델 자체를 평가하지는 *않습니다*.  체크포인트 파일은 `cifar10_eval.py`에서 예측 성능을 측정하는데에 사용됩니다.(아래에 있는 [모델을 평가하기](#evaluating-a-model)를 보세요).
 
-`cifar10_train.py` periodically [saves](../../api_docs/python/state_ops.md#Saver)
-all model parameters in
-[checkpoint files](../../how_tos/variables/index.md#saving-and-restoring)
-but it does *not* evaluate the model. The checkpoint file
-will be used by `cifar10_eval.py` to measure the predictive
-performance (see [Evaluating a Model](#evaluating-a-model) below).
-
 이전 단계들을 모두 따라왔다면, 당신은 CIFAR-10 모델의 훈련을 시작한 것입니다! [축하합니다!](https://www.youtube.com/watch?v=9bZkp7q19f0)
-
-If you followed the previous steps, then you have now started training
-a CIFAR-10 model. [Congratulations!](https://www.youtube.com/watch?v=9bZkp7q19f0)
 
 `cifar10_train.py`에서 리턴되는 terminal 텍스트는 모델을 어떻게 훈련할 것인지에 대한 최소한의 통찰(insight)을 제공합니다. 우리는 훈련하는 동안 모델에 대한 더욱 많은 통찰(insight)을 원합니다:
 
@@ -445,25 +223,9 @@ a CIFAR-10 model. [Congratulations!](https://www.youtube.com/watch?v=9bZkp7q19f0
 * 강하(gradients), 활성화(activations), 그리고 가중치(weights)는 합당한지?
 * 현재의 학습 비울(learning rate)는 무엇인지?
 
-The terminal text returned from `cifar10_train.py` provides minimal insight into
-how the model is training. We want more insight into the model during training:
-
-* Is the loss *really* decreasing or is that just noise?
-* Is the model being provided appropriate images?
-* Are the gradients, activations and weights reasonable?
-* What is the learning rate currently at?
-
 [TensorBoard](../../how_tos/summaries_and_tensorboard/index.md) 는 기능적으로, `cifar10_train.py`의 [`SummaryWriter`](../../api_docs/python/train.md#SummaryWriter)를 통해 주기적으로 데이터를 추출하여 표시합니다.
 
-[TensorBoard](../../how_tos/summaries_and_tensorboard/index.md) provides this
-functionality, displaying data exported periodically from `cifar10_train.py` via
-a
-[`SummaryWriter`](../../api_docs/python/train.md#SummaryWriter).
-
 예를 들어, 우리는 훈련하는 동안 활성화(activation)의 분포와, `local3` feature들의 희박함(sparsity)의 분포가 어떻게 진화(evolve) 하는지 볼 수 있습니다:
-
-For instance, we can watch how the distribution of activations and degree of
-sparsity in `local3` features evolve during training:
 
 <div style="width:100%; margin:auto; margin-bottom:10px; margin-top:20px; display: flex; flex-direction: row">
   <img style="flex-grow:1; flex-shrink:1;" src="../../images/cifar_sparsity.png">
@@ -472,13 +234,6 @@ sparsity in `local3` features evolve during training:
 
 총 손실(total loss)뿐만 아니라, 개별적인 손실 함수(loss function) 들은 특히 시간 경과에 따라 흥미롭습니다. 그러나, 손실(loss)은 훈련에 사용되는 작은 배치 사이즈에 따라 상당히 많은 양의 노이즈를 나타냅니다. 이 연습에서 우리는 원본 값에 더하여 그들의 이동 평균을 시각화하는데 매우 유용함을 발견하였습니다. 이러한 목적을 위하여 어떻게 스크립트가 [`ExponentialMovingAverage`](../../api_docs/python/train.md#ExponentialMovingAverage)를 사용하는지 보세요.
 
-Individual loss functions, as well as the total loss, are particularly
-interesting to track over time. However, the loss exhibits a considerable amount
-of noise due to the small batch size employed by training.  In practice we find
-it extremely useful to visualize their moving averages in addition to their raw
-values.  See how the scripts use
-[`ExponentialMovingAverage`](../../api_docs/python/train.md#ExponentialMovingAverage)
-for this purpose.
 
 ## Evaluating a Model
 
