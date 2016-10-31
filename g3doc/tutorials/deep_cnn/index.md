@@ -164,7 +164,7 @@ CIFAR 이미지를 읽고 전처리를 하는 연산들을 추가합니다.
 > **연습:** 'inference()'의 모델 구조는 [cuda-convnet](https://code.google.com/p/cuda-convnet/) 에서 명시하는 CIFAR-10 모델과 조금 다릅니다. 특히, Alex의 원본 모델의 최상위 레이어는 완전 연결(fully connected)이 아니라 국소 연결(locally connected) 되어있습니다. 최상위 레이어에서 국소 연결(locally connected) 구조를 정확하게 재현하도록 구조를 수정해보세요.
 
 
-### Model Training
+### 모델 훈련
 
 N-way 분류를 수행하는 네트워크를 훈련시키는 일반적인 방법은 *소프트맥스 회귀(Softmax regression)*로 알려진 [다항 로지스틱 회귀(multinomial logistic regression)](https://en.wikipedia.org/wiki/Multinomial_logistic_regression)입니다. 소프트맥스 회귀(Softmax regression)는 네트워크의 아웃풋에 [softmax](../../api_docs/python/nn.md#softmax) 비선형성을 적용하고, 정규화된 예측값과 [1-핫 인코딩(1-hot encoding)](../../api_docs/python/sparse_ops.md#sparse_to_dense)된 라벨 사시의 [크로스 엔트로피(cross-entropy)](../../api_docs/python/nn.md#softmax_cross_entropy_with_logits)를 계산합니다.
 균일화(regularization)를 위하여, 우리는 모든 학습된 변수에 대하여 일반적인 [가중치 감소(weight decay)](../../api_docs/python/nn.md#l2_loss) 손실을 적용합니다. 모델의 목적함수는 크로스 엔트로피 손실의 합과 'loss()' 함수에 의해 리턴되는, 모든 가중치 감소(weight decay) 텀의 합입니다.
@@ -180,7 +180,7 @@ N-way 분류를 수행하는 네트워크를 훈련시키는 일반적인 방법
 'train()' 함수는 경사(gradient)를 계산하고 학습된 변수를 업데이트함으로써 목표를 최소화 하는데에 필요한 기능을 추가합니다 ( 자세한 사항은 [`GradientDescentOptimizer`](../../api_docs/python/train.md#GradientDescentOptimizer) 참조). 이 함수는 하나의 이미지 배치(batch)에 대하여 모델을 훈련하고 업데이트 하는데 필요한 모든 연산을 실행하는 기능을 리턴해줍니다.  
 
 
-## 모델 실행 및 훈련
+## 모델 실행 및 훈련 해보기
 
 모델을 만들었으니, 이제 이 모델을 실행해보고 `cifar10_train.py` 스크립트를 사용하여 훈련 작업을 실행해봅시다.
 
