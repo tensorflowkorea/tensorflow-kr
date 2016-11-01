@@ -1,6 +1,6 @@
 # TensorBoard: 그래프 시각화
 
-TensorFlow computation 그래프는 강력하지만 복잡하다. 그래프 시각화가 이해와 디버그를 도와줄 수 있다. 여기에 시각화 작동 예시가 있습니다.
+TensorFlow computation 그래프는 강력하지만 복잡합니다. 그래프 시각화가 이해와 디버그를 도와줄 수 있습니다. 여기에 시각화 작동 예시가 있습니다.
 
 ![TensorFlow 그래프의 시각화](../../images/graph_vis_animation.gif "TensorFlow 그래프의 시각화")
 *TensorFlow 그래프의 시각화.*
@@ -276,15 +276,12 @@ Name scope는 내부 연산에 대한 장치의 비율에 비례하여 색이 �
         train_writer.add_summary(summary, i)
 ```
 
-This code will emit runtime statistics for every 100th step starting at step99.
+이 코드는 99 단계에서 시작해 매 100번째 단계 마다 런타임 통계를 내보냅니다.
 
-When you launch tensorboard and go to the Graph tab, you will now see options
-under "Session runs" which correspond to the steps where run metadata was added.
-Selecting one of these runs will show you the snapshot of the network at that
-step, fading out unused nodes. In the controls on the left hand side, you will
-be able to color the nodes by total memory or total compute time. Additionally,
-clicking on a node will display the exact total memory, compute time, and
-tensor output sizes.
+tensorboard를 시작하고 그래프 탭으로 가면, 실행 메타데이터가 추가된 단계에 대응하는 
+"Sessopm runs" 아래 옵션들을 볼 것입니다. 이 실행 중 하나를 선택하면 사용하지 않는 노드들을 사라지게 해 
+그 단계의 네트워크 스냅샷을 보여줍니다. 왼쪽의 컨트롤에서 총 메모리 또는 총 계산 시간으로 노드의 색을 지정할 수 있습니다. 
+추가적으로, 노드를 클릭하면 정확한 총 메모리, 계산 시간, tensor 출력 사이즈를 보여줍니다.
 
 
 <table width="100%;">
