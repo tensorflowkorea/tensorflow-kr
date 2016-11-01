@@ -1,26 +1,22 @@
-# TensorBoard: Graph Visualization
+# TensorBoard: 그래프 시각화
 
-TensorFlow computation graphs are powerful but complicated. The graph visualization can help you understand and debug them. Here's an example of the visualization at work.
+TensorFlow computation 그래프는 강력하지만 복잡하다. 그래프 시각화가 이해와 디버그를 도와줄 수 있다. 여기에 시각화 작동 예시가 있습니다.
 
-![Visualization of a TensorFlow graph](../../images/graph_vis_animation.gif "Visualization of a TensorFlow graph")
-*Visualization of a TensorFlow graph.*
+![TensorFlow 그래프의 시각화](../../images/graph_vis_animation.gif "TensorFlow 그래프의 시각화")
+*TensorFlow 그래프의 시각화.*
 
-To see your own graph, run TensorBoard pointing it to the log directory of the job, click on the graph tab on the top pane and select the appropriate run using the menu at the upper left corner. For in depth information on how to run TensorBoard and make sure you are logging all the necessary information, see [TensorBoard: Visualizing Learning](../../how_tos/summaries_and_tensorboard/index.md).
+자신의 그래프를 보기 위해, 작업의 로그 디렉토리를 대상으로 실행하고 위쪽 판에 있는 그래프 탭을 클릭하고 위 외쪽 모서리에 있는 메뉴를 사용해 적당한 작업을 선택하십시요. TensorBoard를 어떻게 실행하는지에 대한 심화된 정보와 필요한 정보를 기록하고 있는지 확인하려면 [TensorBoard: 시각화 학습](../../how_tos/summaries_and_tensorboard/index.md)를 보시면 됩니다.
 
-You can interact with an instance of TensorBoard looking at data from an
-[MNIST](../../tutorials/mnist/beginners/index.md) training session, including the
-graph visualization, by clicking
-[here](https://www.tensorflow.org/tensorboard/index.html#graphs).
+[여기](https://www.tensorflow.org/tensorboard/index.html#graphs)를 클릭해서 그래프 시각화를 포함해 [MNIST](../../tutorials/mnist/beginners/index.md) 트레이닝 세션 데이터를 보고 TensorBoard 인스턴스와 상호작용 할 수 있습니다.
 
 ## Name scoping and nodes
 
-Typical TensorFlow graphs can have many thousands of nodes--far too many to see
-easily all at once, or even to lay out using standard graph tools. To simplify,
-variable names can be scoped and the visualization uses this information to
-define a hierarchy on the nodes in the graph.  By default, only the top of this
-hierarchy is shown. Here is an example that defines three operations under the
-`hidden` name scope using
-[`tf.name_scope`](../../api_docs/python/framework.md#name_scope):
+일반적으로 TensorFlow 그래프는 수천의 많은 노드를 가질 수 있고 한 눈에 쉽게 보거나 
+표준 그래프 툴을 이용해 배치하는 것 까지 할 수 있습니다.
+간단히, 변수 이름은 범위화 되어 있고  시각화를 이 정보를 이용해 그래프에 있는 노드들을 계층 형태로 정의합니다. 
+기본적으로 이 계층 형태의 최상위만 볼 수 있습니다. 여기에 
+[`tf.name_scope`](../../api_docs/python/framework.md#name_scope)를 사용해 
+`hidden` name scope 아래에 세 가지 기능을 정의한 예시가 있습니다:
 
 ```python
 import tensorflow as tf
@@ -31,19 +27,17 @@ with tf.name_scope('hidden') as scope:
   b = tf.Variable(tf.zeros([1]), name='biases')
 ```
 
-This results in the following three op names:
+이것은 아래와 같은 세가지 op 이름을 만듭니다:
 
 * *hidden*/alpha
 * *hidden*/weights
 * *hidden*/biases
 
-By default, the visualization will collapse all three into a node labeled `hidden`.
-The extra detail isn't lost. You can double-click, or click
-on the orange `+` sign in the top right to expand the node, and then you'll see
-three subnodes for `alpha`, `weights` and `biases`.
+기본적으로 시각화는 이 세 가지를 `hidden` 노드에 접어놓습니다.
+추가적인 디테일은 유지됩니다. 노드를 펼치기 위해 오측 상단에 있는 주황색 `+` 표시를 클릭하거나 노드 자체를 더블 클릭하면 
+세 개의 `alpha`, `weights`, `biases` 서브노드를 볼 수 있습니다.
 
-Here's a real-life example of a more complicated node in its initial and
-expanded states.
+여기에 좀 더 복잡한 노드의 초기 상태와 펼쳐진 상태를 보여주는 실제 예제가 있습니다.
 
 <table width="100%;">
   <tr>
@@ -56,38 +50,35 @@ expanded states.
   </tr>
   <tr>
     <td style="width: 50%;">
-      Initial view of top-level name scope <code>pool_1</code>. Clicking on the orange <code>+</code> button on the top right or double-clicking on the node itself will expand it.
+      최상단 name scope <code>pool_1</code>의 초기 화면. 우측 상단의 오렌지색 <code>+</code> 버튼을 클릭하거나 노드를 더블 클릭하면 펼칠 수 있다.
     </td>
     <td style="width: 50%;">
-      Expanded view of <code>pool_1</code> name scope. Clicking on the orange <code>-</code> button on the top right or double-clicking on the node itself will collapse the name scope.
+      <code>pool_1</code> name scope가 펼치진 모습. 우측 상단의 오렌지색 <code>-</code> 버튼을 클릭하거나 노드를 더블 클릭하면 name scope를 접을 수 있다.
     </td>
   </tr>
 </table>
 
-Grouping nodes by name scopes is critical to making a legible graph. If you're
-building a model, name scopes give you control over the resulting visualization.
-**The better your name scopes, the better your visualization.**
+name scope로 노드를 묶는 것은 읽기 쉬운 그래프를 만드는데 중요하다.
+만약 당신이 모델을 만들고 있다면, name scope가 시각화된 결과를 통제할 수 있게 해 줄 것이다.
+**name scope를 잘 사용할수록 시각화가 잘 된다.**
 
-The figure above illustrates a second aspect of the visualization. TensorFlow
-graphs have two kinds of connections: data dependencies and control
-dependencies. Data dependencies show the flow of tensors between two ops and
-are shown as solid arrows, while control dependencies use dotted lines. In the
-expanded view (right side of the figure above) all the connections are data
-dependencies with the exception of the dotted line connecting `CheckNumerics`
-and `control_dependency`.
+위 그림은 시각화의 두 번째 면을 보여줍니다. TensorFlow 그래프는 두 가지 종류의 연결을 가지고 있습니다: 
+데이터 종속과 컨트롤 종속. 데이터 종속은 두 ops 사이 tensor의 흐름을 보여주고 
+화살표의 실선으로 나타냅니다. 반면 컨트롤 종속은 점선을 사용합니다. 
+펼쳐진 모습에서(위 그림의 오른쪽 부분) `CheckNumerics`와 `control_dependency`를 연결하는 
+점선을 제외하고 모든 연결은 데이터 종속입니다.
 
-There's a second trick to simplifying the layout. Most TensorFlow graphs have a
-few nodes with many connections to other nodes. For example, many nodes might
-have a control dependency on an initialization step. Drawing all edges between
-the `init` node and its dependencies would create a very cluttered view.
+레이아웃을 간단하게 하는 두 번째 트릭이 있습니다. 대부분의 TensorFlow 그래프는 
+다른 노드와 많이 연결된 몇 개의 노드로 이루어져 있습니다. 예를 들어, 많은 노드는 
+초기화 단계에서 컨트롤 종속이 있을 수 있습니다. `init` 노드와 그 노드에 종속된 것들 사이의에
+모든 간선을 그리는 것은 뭉쳐진 모습을 생성하게 됩니다.
 
-To reduce clutter, the visualization separates out all high-degree nodes to an
-*auxiliary* area on the right and doesn't draw lines to represent their edges.
-Instead of lines, we draw small *node icons* to indicate the connections.
-Separating out the auxiliary nodes typically doesn't remove critical
-information since these nodes are usually related to bookkeeping functions.
-See [Interaction](#interaction) for how to move nodes between the main graph
-and the auxiliary area.
+뭉침(clustter)을 줄이기 위해, 시각화는 상위에 있는 노드를 분리해서 
+우측에 있는 *auxiliary(보조)* 공간에 두고 간선을 그리지 않습니다. 
+선 대신에 연결을 나타내기 위해 작은 *노드 아이콘*을 그립니다. 
+보조 노드를 떼어놓는 것은 일반적으로 중요한 정보를 없애지 않습니다. 왜냐하면 
+이 노드들은 보통 부기 기능(bookkeeping function)과 관련있기 때문입니다. 
+메인 그래프과 보조 영역 사이에서 노드를 어떻게 움직이는지 보려면 [Interaction](#interaction)를 보세요.
 
 <table width="100%;">
   <tr>
@@ -100,21 +91,19 @@ and the auxiliary area.
   </tr>
   <tr>
     <td style="width: 50%;">
-      Node <code>conv_1</code> is connected to <code>save</code>. Note the little <code>save</code> node icon on its right.
+      <code>conv_1</code> 노드는 <code>save</code> 와 연결되어 있습니다. 우측에 작은 <code>save</code> 노드 아이콘이 있는 것을 주의하세요.
     </td>
     <td style="width: 50%;">
-      <code>save</code> has a high degree, and will appear as an auxiliary node. The connection with <code>conv_1</code> is shown as a node icon on its left. To further reduce clutter, since <code>save</code> has a lot of connections, we show the first 5 and abbreviate the others as <code>... 12 more</code>.
+      <code>save</code> 는 상위에 있고 보조 노드로 표시됩니다. <code>conv_1</code> 과의 연결은 그것의 왼쪽에 있는 노드 아이콘으로 표현됩니다. <code>save</code>가 많은 연결을 가지고 있기 때문에, 클러스터를 더 줄이기 위해, 처음 5개만 보여주고 나머지는 <code>... 12 more</code> 로 축약합니다.
     </td>
   </tr>
 </table>
 
-One last structural simplification is *series collapsing*. Sequential
-motifs--that is, nodes whose names differ by a number at the end and have
-isomorphic structures--are collapsed into a single *stack* of nodes, as shown
-below. For networks with long sequences, this greatly simplifies the view. As
-with hierarchical nodes, double-clicking expands the series. See
-[Interaction](#interaction) for how to disable/enable series collapsing for a
-specific set of nodes.
+마지막 구조 단순화는 *series collapsing* 입니다. 이름의 마지막 숫자만 
+다르고 같은 구조를 가진 노드, 순차적 모티프는 아래에 나와 있는 것 처럼 
+하나의 노드 스택으로 접을 수 있습니다. 긴 배열을 가진 네트워크의 경우, 이것이 
+모양을 굉장히 단순하게 합니다. 계층 노드와 마찬가지로, 더블 클릭으로 이 series를 펼칠 수 있습니다. 
+어떻게 특정 노드 셋이 접힌 것을 비활성화/활성화 하는지는 [Interaction](#interaction)를 보세요.
 
 <table width="100%;">
   <tr>
@@ -127,41 +116,39 @@ specific set of nodes.
   </tr>
   <tr>
     <td style="width: 50%;">
-      A collapsed view of a node sequence.
+      노드 시퀸스가 접힌 모습.
     </td>
     <td style="width: 50%;">
-      A small piece of the expanded view, after double-click.
+      더블 클릭 후에 펼쳐진 모습의 일부분.
     </td>
   </tr>
 </table>
 
-Finally, as one last aid to legibility, the visualization uses special icons
-for constants and summary nodes. To summarize, here's a table of node symbols:
+마지막으로, 가독성을 높이기 위해, 시각화는 상수와 요약 노드를 위해 특별한 아이콘을 사용합니다. 
+간단히, 노드 기호 표가 있습니다:
 
-Symbol | Meaning
+기호 | 의미
 --- | ---
-![Name scope](../../images/namespace_node.png "Name scope") | *High-level* node representing a name scope. Double-click to expand a high-level node.
-![Sequence of unconnected nodes](../../images/horizontal_stack.png "Sequence of unconnected nodes") | Sequence of numbered nodes that are not connected to each other.
-![Sequence of connected nodes](../../images/vertical_stack.png "Sequence of connected nodes") | Sequence of numbered nodes that are connected to each other.
-![Operation node](../../images/op_node.png "Operation node") | An individual operation node.
-![Constant node](../../images/constant.png "Constant node") | A constant.
-![Summary node](../../images/summary.png "Summary node") | A summary node.
-![Data flow edge](../../images/dataflow_edge.png "Data flow edge") | Edge showing the data flow between operations.
-![Control dependency edge](../../images/control_edge.png "Control dependency edge") | Edge showing the control dependency between operations.
-![Reference edge](../../images/reference_edge.png "Reference edge") | A reference edge showing that the outgoing operation node can mutate the incoming tensor.
+![Name scope](../../images/namespace_node.png "Name scope") | *High-level* 노드는 name scope를 나타냅니다. high-level 노드를 펼치기 위해 더블 클릭 하세요.
+![Sequence of unconnected nodes](../../images/horizontal_stack.png "Sequence of unconnected nodes") | 서로 연결되지 않은 숫자가 메겨진 노드의 시퀸스.
+![Sequence of connected nodes](../../images/vertical_stack.png "Sequence of connected nodes") | 서로 연결된 숫자가 메겨진 노드의 시퀸스.
+![Operation node](../../images/op_node.png "Operation node") | 각각의 연산 노드.
+![Constant node](../../images/constant.png "Constant node") | 상수.
+![Summary node](../../images/summary.png "Summary node") | 요약 노드.
+![Data flow edge](../../images/dataflow_edge.png "Data flow edge") | 간선은 연산 사이의 데이터 흐름을 보여줍니다.
+![Control dependency edge](../../images/control_edge.png "Control dependency edge") | 간선은 연산 사이의 컨트롤 종속을 보여줍니다.
+![Reference edge](../../images/reference_edge.png "Reference edge") | 레퍼런스 간선은 나가는 연산 노드가 들어오는 tensor를 변형할 수 있다는 것을 보여줍니다.
 
 ## Interaction {#interaction}
 
-Navigate the graph by panning and zooming. Click and drag to pan, and use a
-scroll gesture to zoom. Double-click on a node, or click on its `+` button, to
-expand a name scope that represents a group of operations. To easily keep
-track of the current viewpoint when zooming and panning, there is a minimap in
-the bottom right corner.
+줌과 이동으로 그래프를 탐색할 수 있습니다. 화면을 클릭하고 드래그하고 줌하기 위해 
+스크롤 제스쳐를 사용하세요. 연산 그룹을 보여주는 name scope를 펼치기 위해 
+노드를 더블클릭 하거나 노드의 `+` 버튼을 누르세요. 줌과 이동을 했을 때 현재 화면을 
+쉽게 쫓기 위해 우측 하단 모서리에 미니맵이 있습니다.
 
-To close an open node, double-click it again or click its `-` button. You can
-also click once to select a node. It will turn a darker color, and details
-about it and the nodes it connects to will appear in the info card at upper
-right corner of the visualization.
+열린 노드를 닫기 위해 다시 한번 더블 클릭 하거나 노드의 `-` 버튼을 누르세요. 
+노드를 선택하기 위해 한번 누르셔도 됩니다. 노드는 어두운 색으로 변하고, 노드에 대한 세부 사항과 
+연결된 노드가 시각화의 우측 상단 모서리 정보 카드에 표시됩니다.
 
 <table width="100%;">
   <tr>
@@ -174,40 +161,36 @@ right corner of the visualization.
   </tr>
   <tr>
     <td style="width: 50%;">
-      Info card showing detailed information for the <code>conv2</code> name scope. The inputs and outputs are combined from the inputs and outputs of the operation nodes inside the name scope. For name scopes no attributes are shown.
+      정보 카드가 <code>conv2</code> name scope의 세부 정보를 보여줍니다. 입력과 출력은 name scope 내의 연산 노드의 입력과 출력에서 결합됩니다. name scope에 대한 속성은 보여지지 않습니다.
     </td>
     <td style="width: 50%;">
-      Info card showing detailed information for the <code>DecodeRaw</code> operation node. In addition to inputs and outputs, the card shows the device and the attributes associated with the current operation.
+      정보 카드가 <code>DecodeRaw</code> 연산 노드의 세부 정보를 보여줍니다. 입력과 출력에 더해서, 카드는 현재 연산에 관련된 디바이스와 속성들을 보여줍니다.
     </td>
   </tr>
 </table>
 
-TensorBoard provides several ways to change the visual layout of the graph. This
-doesn't change the graph's computational semantics, but it can bring some
-clarity to the network's structure. By right clicking on a node or pressing
-buttons on the bottom of that node's info card, you can make the following
-changes to its layout:
+TensorBoard는 그래프의 레이아웃을 바꿀 수 있는 몇 가지 방법을 제공합니다. 
+이것이 그래프의 연산 의미를 바꾸지는 않지만 네트워크 구조를 좀 더 명확하게 합니다. 
+노드를 우클릭하거나 정보 카드 하단에 있는 버튼을 눌러서 레이아웃에 아래와 같은 변화를 
+줄 수 있습니다:
 
-* Nodes can be moved between the main graph and the auxiliary area.
-* A series of nodes can be ungrouped so that the nodes in the series do not
-appear grouped together. Ungrouped series can likewise be regrouped.
+* 노드는 메인 그래프와 보조 영역 사이를 이동할 수 있습니다.
+* 연속된(series) 노드를 그룹 해제해서 이 노드들이 그룹으로 함께 보여지지 않게 합니다. 
+그룹 해제된 series는 같은 방법으로 재그룹화 할 수 있습니다.
 
-Selection can also be helpful in understanding high-degree nodes. Select any
-high-degree node, and the corresponding node icons for its other connections
-will be selected as well. This makes it easy, for example, to see which nodes
-are being saved--and which aren't.
+셀렉션은 또한 상위 노드를 이해하는데 도움이 됩니다. 어떤 상위 노드를 선택하면 
+다른 연결을 위해 대응하는 노드 아이콘도 또한 선택됩니다. 예를 들어, 이것은 어떤 노드가 
+저장되고 어떤것이 안됐는지 보는 것을 쉽게 만들어 줍니다.
 
-Clicking on a node name in the info card will select it. If necessary, the
-viewpoint will automatically pan so that the node is visible.
+정보 카드에 있는 노드 이름을 클릭하면 해당 노드를 선택합니다. 필요하다면, 노드를 볼 수 있도록 
+화면이 자동으로 이동합니다.
 
-Finally, you can choose two color schemes for your graph, using the color menu
-above the legend. The default *Structure View* shows structure: when two
-high-level nodes have the same structure, they appear in the same color of the
-rainbow. Uniquely structured nodes are gray. There's a second view, which shows
-what device the different operations run on. Name scopes are colored
-proportionally to the fraction of devices for the operations inside them.
+마지막으로, 상단 표에 있는 컬러 메뉴를 이용해 그래프에 두 가지 색을 선택할 수 있습니다. 
+기본 *Structure View* 는 구조를 보여줍니다: 두 상위 레벨의 노드가 같은 구조를 가졌을 때, 같은 색으로 표현됩니다. 
+유일한 구조를 가진 노드는 회색입니다. 어떤 디바이스가 다른 연산을 실행하고 있는지 보여주는 두 번째 화면이 있습니다. 
+Name scope는 내부 연산에 대한 장치의 비율에 비례하여 색이 지정됩니다.
 
-The images below give an illustration for a piece of a real-life graph.
+아래의 이미지는 실시간 그래프 일부분의 모습을 제공합니다.
 
 <table width="100%;">
   <tr>
@@ -220,21 +203,21 @@ The images below give an illustration for a piece of a real-life graph.
   </tr>
   <tr>
     <td style="width: 50%;">
-      Structure view: The gray nodes have unique structure. The orange <code>conv1</code> and <code>conv2</code> nodes have the same structure, and analogously for nodes with other colors.
+      Structure view: 회색 노드는 유일한 구조를 가지고 있습니다. 주황색 <code>conv1</code> 과 <code>conv2</code> 노드는 같은 구조를 가지고 있고 다른 색을 가진 노드와 비슷합니다.
     </td>
     <td style="width: 50%;">
-      Device view: Name scopes are colored proportionally to the fraction of devices of the operation nodes inside them. Here, purple means GPU and the green is CPU.
+      Device view: Name scope는 내부 연산 노드의 장치 비율에 비례해서 색이 지정됩니다. 여기서는 보라색이 GPU를 의미하고 초록색이 CPU를 의미합니다.
     </td>
   </tr>
 </table>
 
 ## Tensor shape information
 
-When the serialized `GraphDef` includes tensor shapes, the graph visualizer
-labels edges with tensor dimensions, and edge thickness reflects total tensor
-size. To include tensor shapes in the `GraphDef` pass the actual graph object
-(as in `sess.graph`) to the `SummaryWriter` when serializing the graph.
-The images below show the CIFAR-10 model with tensor shape information:
+연속된 `GraphDef` 가 tensor 형태를 포함할 때, 그래프 시각화는 tensor dimension으로 간선에 이름을 붙이고 
+간선의 두께는 총 tensor 크기를 반영합니다. `GraphDef` 에 tensor 형태를 포함하기 위해 
+그래프를 연속화할 때 실제 그래프 객체(`sess.graph`와 같이)를 `SummaryWriter` 에 전달합니다.
+아래의 이미지는 tensor 형태 정보를 가진 CIFAR-10 모델을 보여줍니다:
+
 <table width="100%;">
   <tr>
     <td style="width: 100%;">
@@ -243,25 +226,24 @@ The images below show the CIFAR-10 model with tensor shape information:
   </tr>
   <tr>
     <td style="width: 100%;">
-      CIFAR-10 model with tensor shape information.
+      tensor 형태 정보를 가진 IFAR-10 모델.
     </td>
   </tr>
 </table>
 
 ## Runtime statistics
 
-Often it is useful to collect runtime metadata for a run, such as total memory
-usage, total compute time, and tensor shapes for nodes. The code example below
-is a snippet from the train and test section of a modification of the
-[simple MNIST tutorial](http://tensorflow.org/tutorials/mnist/beginners/index.md),
-in which we have recorded summaries and runtime statistics. See the [Summaries Tutorial](../../how_tos/summaries_and_tensorboard/index.md#serializing-the-data)
-for details on how to record summaries.
-Full source is [here](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py).
+보통 실행 상에서 총 메모리 사용량, 총 계산 시간, 노드의 tensor 형태와 같은 
+런타임 메타데이터를 수집하는 것이 도움이 됩니다. 아래의 코드 예제는 
+[simple MNIST tutorial](http://tensorflow.org/tutorials/mnist/beginners/index.md)를 변형해 훈련과 테스트 섹션에서 발췌한 
+요약과 런타임 통계를 기록하는 짧은 단락이다. 
+어떻게 요약을 기록하는지 세부 세항은 [Summaries Tutorial](../../how_tos/summaries_and_tensorboard/index.md#serializing-the-data)을 보세요. 
+전체 소스는 [여기](https://www.tensorflow.org/code/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py).
 
 ```python
-  # Train the model, and also write summaries.
-  # Every 10th step, measure test-set accuracy, and write test summaries
-  # All other steps, run train_step on training data, & add training summaries
+  # 모델을 트레이닝하고 또한 요약을 작성한다.
+  # 매 10번째 순서 마다, 테스트 셋의 정확도를 측정하고 테스트 요약을 작성한다.
+  # 다른 모든 순서에서 트레이닝 데이터로 트레이닝 단계를 실행하고 트레이닝 요약을 작성한다.
 
   def feed_dict(train):
     """Make a TensorFlow feed_dict: maps data onto Tensor placeholders."""
@@ -274,12 +256,12 @@ Full source is [here](https://www.tensorflow.org/code/tensorflow/examples/tutori
     return {x: xs, y_: ys, keep_prob: k}
 
   for i in range(FLAGS.max_steps):
-    if i % 10 == 0:  # Record summaries and test-set accuracy
+    if i % 10 == 0:  # 요약과 테스트 셋 정확도를 기록한다
       summary, acc = sess.run([merged, accuracy], feed_dict=feed_dict(False))
       test_writer.add_summary(summary, i)
       print('Accuracy at step %s: %s' % (i, acc))
-    else:  # Record train set summaries, and train
-      if i % 100 == 99:  # Record execution stats
+    else:  # 트레이닝 셋 요약을 기록하고 트레이닝한다 
+      if i % 100 == 99:  # 실행 통계를 기록한다
         run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
         run_metadata = tf.RunMetadata()
         summary, _ = sess.run([merged, train_step],
@@ -289,7 +271,7 @@ Full source is [here](https://www.tensorflow.org/code/tensorflow/examples/tutori
         train_writer.add_run_metadata(run_metadata, 'step%d' % i)
         train_writer.add_summary(summary, i)
         print('Adding run metadata for', i)
-      else:  # Record a summary
+      else:  # 요약을 기록한다
         summary, _ = sess.run([merged, train_step], feed_dict=feed_dict(True))
         train_writer.add_summary(summary, i)
 ```
