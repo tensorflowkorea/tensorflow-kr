@@ -1,6 +1,6 @@
 # Vector Representations of Words
 # 단어들의 벡터 표현
-
+ 
 In this tutorial we look at the word2vec model by
 [Mikolov et al.](http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)
 This model is used for learning vector representations of words, called "word
