@@ -1,6 +1,6 @@
 # Vector Representations of Words
 # 단어들의 벡터 표현
- 
+
 In this tutorial we look at the word2vec model by
 [Mikolov et al.](http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)
 This model is used for learning vector representations of words, called "word
@@ -281,6 +281,7 @@ But for now, let's just use them to draw pretty pictures!
 This is all about embeddings, so let's define our embedding matrix.
 This is just a big random matrix to start.  We'll initialize the values to be
 uniform in the unit cube.
+이것은 embeddings 에 대한 모든 것이다. 그럼 우리의 embedding 매트릭스 를 정의해보자.  이것은 그저 시작하기 위한 랜덤 매트릭스이다. 유닛 큐브의 값이 균일하도록(uniform) 초기화 할 것이다.
 
 ```python
 embeddings = tf.Variable(
@@ -291,6 +292,7 @@ The noise-contrastive estimation loss is defined in terms of a logistic regressi
 model. For this, we need to define the weights and biases for each word in the
 vocabulary (also called the `output weights` as opposed to the `input
 embeddings`). So let's define that.
+noise-contrastive estimation loss 는 로지스틱 회귀 모델 관점에서 정의된다. 이를 위해, 어휘(vocabulary) 의 각 단어에 대한 가중치(weights)와 편향(biases) 을 정의할 필요가 있다(`input embeddings` 와 대조되어 `output weights` 라 불린다). 그럼 정의해보자.
 
 ```python
 nce_weights = tf.Variable(
@@ -307,6 +309,7 @@ for the details). The skip-gram model takes two inputs. One is a batch full of
 integers representing the source context words, the other is for the target
 words. Let's create placeholder nodes for these inputs, so that we can feed in
 data later.
+파라미터들이 준비되었고, 이제 우리의 skip-gram 모델 그래프 를 정의할 수 있다. 간단하게, 텍스트 말뭉치(text corpus) 를 어휘(vocabulary)로 미리 정수화했다 가정하자. 그럼 각 단어는 정수로 표현되어 진다(자세한 사항은 다음을 참고하자, [tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py)). skip-gram 모델은 두 입력을 가진다. 하나는 원본 컨텍스트 단어들을 대표하는 정수들의 집합이고, 다른 하나는 타겟 단어들이다. 이들 입력들에 대한 placeholder 노드들을 만들어 보자. 그래야 후에 데이터를 넣을 수 있다.
 
 ```python
 # Placeholders for inputs
@@ -316,6 +319,7 @@ train_labels = tf.placeholder(tf.int32, shape=[batch_size, 1])
 
 Now what we need to do is look up the vector for each of the source words in
 the batch.  TensorFlow has handy helpers that make this easy.
+이제 필요한 것은 집단(batch) 안의 각 원본 단어들에 대한 벡터를 살펴보는 것이다. TensorFlow 는 이를 쉽게 해주는 편리한 헬퍼들을 가지고 있다.
 
 ```python
 embed = tf.nn.embedding_lookup(embeddings, train_inputs)
@@ -323,9 +327,11 @@ embed = tf.nn.embedding_lookup(embeddings, train_inputs)
 
 Ok, now that we have the embeddings for each word, we'd like to try to predict
 the target word using the noise-contrastive training objective.
+좋다, 이제 각 단어에 대한 embeddings 을 만들었고, noise-contrastive 학습 목적함수를 이용한 타겟 단어 예측을 시도해야 한다.
 
 ```python
 # Compute the NCE loss, using a sample of the negative labels each time.
+# 매번 음수로 라벨링 된 셈플을 이용한 NCE loos 계산
 loss = tf.reduce_mean(
   tf.nn.nce_loss(nce_weights, nce_biases, embed, train_labels,
                  num_sampled, vocabulary_size))
@@ -334,18 +340,22 @@ loss = tf.reduce_mean(
 Now that we have a loss node, we need to add the nodes required to compute
 gradients and update the parameters, etc. For this we will use stochastic
 gradient descent, and TensorFlow has handy helpers to make this easy as well.
+loss 노드를 만들었고, 이제 gradients 를 계산하고 파라미터들을 업데이트 하는 등에 필요한 노드들을 추가할 필요가 있다. 이를 위해 stochastic(확률) gradient descent 를 사용할 것이다. 그리고 TensorFlow 는 이를 매우 쉽게 만들어주는 편리한 헬퍼들을 가지고 있다.
 
 ```python
 # We use the SGD optimizer.
+# SGD optimizer 를 사용
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=1.0).minimize(loss)
 ```
 
 ## Training the Model
+## 모델 학습하기
 
 Training the model is then as simple as using a `feed_dict` to push data into
 the placeholders and calling
 [`session.run`](../../api_docs/python/client.md#Session.run) with this new data
 in a loop.
+모델 학습하는 것은 데이터를 placeholders 에 넣기 위한 `feed_dict` 를 사용하는 것 만큼 간단하며 루프 내에서 새로운 데이터와 함께 [`session.run`](../../api_docs/python/client.md#Session.run) 로 함수를 사용할 수 있다.
 
 ```python
 for inputs, labels in generate_batch(...):
@@ -355,11 +365,14 @@ for inputs, labels in generate_batch(...):
 
 See the full example code in
 [tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py).
+전체 예제 코드는 [tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py) 을 참고하자.
 
 ## Visualizing the Learned Embeddings
+## 학습된 Embeddings 시각화하기
 
 After training has finished we can visualize the learned embeddings using
 t-SNE.
+학습이 완료된 후 t-SNE 를 사용하여 학습한 embeddings 를 시각화 할 수 있다.
 
 <div style="width:100%; margin:auto; margin-bottom:10px; margin-top:20px;">
 <img style="width:100%" src="../../images/tsne.png" alt>
@@ -369,8 +382,10 @@ Et voila! As expected, words that are similar end up clustering nearby each
 other. For a more heavyweight implementation of word2vec that showcases more of
 the advanced features of TensorFlow, see the implementation in
 [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py).
+이제 다 됐어! 예상한 것 처럼 비슷한 단어들은 결국 서로 가까운 집단화(clustering) 된다. TensorFlow 의 더욱 향상된 features 를 보여주는 더 비중있는 word2vec 구현을 위해서, [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 을 참고하자.
 
 ## Evaluating Embeddings: Analogical Reasoning
+## Embeddings 평가하기 : 유추(Analogical Reasoning)
 
 Embeddings are useful for a wide variety of prediction tasks in NLP. Short of
 training a full-blown part-of-speech model or named-entity model, one simple way
@@ -380,18 +395,21 @@ relationships like `king is to queen as father is to ?`. This is called
 [Mikolov and colleagues](http://msr-waypoint.com/en-us/um/people/gzweig/Pubs/NAACL2013Regularities.pdf),
 and the dataset can be downloaded from here:
 https://word2vec.googlecode.com/svn/trunk/questions-words.txt.
+Embeddings 는 NLP 의 다양한 예측 문제에 대해 유용하다. 완전 품사 모델이나 개체명 모델 학습을 제외하고, embeddings 를 평가하는 한가지 간단한 방법은 직접 이들을 사용하여 `king is to queen as father is to ?` 와 같이 구문론적인 그리고 의미론적인 관계를 예측하는 것이다. 이 방법을 *analogical reasoning(유추)* 이라고 부르며 [Mikolov and colleagues](http://msr-waypoint.com/en-us/um/people/gzweig/Pubs/NAACL2013Regularities.pdf) 에 의해 소개되었고, dataset 은 여기에서 다운로드 할 수 있다: https://word2vec.googlecode.com/svn/trunk/questions-words.txt.
 
 To see how we do this evaluation, have a look at the `build_eval_graph()` and
 `eval()` functions in
 [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py).
+우리가 어떻게 이 평가을 진행했는지 알고 싶다면, [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 의 `build_eval_graph()` 와 `eval()` 함수를 살펴봐라.
 
 The choice of hyperparameters can strongly influence the accuracy on this task.
 To achieve state-of-the-art performance on this task requires training over a
 very large dataset, carefully tuning the hyperparameters and making use of
 tricks like subsampling the data, which is out of the scope of this tutorial.
-
+hyperparameters 의 선정은 이 문제의 정확도에 매우 큰 영향을 줄 수 있다. 이 문제에서 최고의 성과를 달성하기 위해선 매우 큰 dataset 을 학습하는 것, hyperparameters 에 대한 신중한 조절, 그리고 데이터의 이단추출과 같은 기법을 이용하는 것이 필요하다. 그리고 이 기법들은 이 튜토리얼의 범위를 넘어가는 것이다.
 
 ## Optimizing the Implementation
+## 구현 최적화하기
 
 Our vanilla implementation showcases the flexibility of TensorFlow. For
 example, changing the training objective is as simple as swapping out the call
@@ -401,6 +419,7 @@ can manually write an expression for the new objective in TensorFlow and let
 the optimizer compute its derivatives. This flexibility is invaluable in the
 exploratory phase of machine learning model development, where we are trying
 out several different ideas and iterating quickly.
+우리의 평범한 구현은 TensorFlow 의 다루기 쉬움을 보여준다. 예를들어 학습 목적함수의 변화는 `tf.nn.nce_loss()` 을 `tf.nn.sampled_softmax_loss()` 와 대체 함수로 교체하는 것 만큼 간단하다. loss 함수에 대해 새로운 아이디어가 있다면, TensorFlow 내에서 새로운 목적함수에 대해 직접 고쳐 표현할 수 있으며 최적화 도구로 이것의 미분을 계산할 수 있다. 여러 가지 아이디어를 시험하거나 빠르게 반복할 경우, 이러한 용이성은 머신 러닝 모델 개발의 탐색 단계에서 매우 유용하다.
 
 Once you have a model structure you're satisfied with, it may be worth
 optimizing your implementation to run more efficiently (and cover more data in
@@ -412,6 +431,7 @@ custom data reader for your problem, as described in
 [New Data Formats](../../how_tos/new_data_formats/index.md).  For the case of Skip-Gram
 modeling, we've actually already done this for you as an example in
 [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py).
+만족할 만한 모델 구조를 가지고 있으면, 더 효율적으로 실행하여 당신의 구현을 최적화하는 이점을 가질 수 있다(그리고 적은 시간에 더 많은 데이터를 다룰 수 있다). 예를 들어, 우리가 이 튜토리얼에서 사용한 간단한 코드는 데이터 아이템들을 읽고 대입하는데 --이들 각각은 TensorFlow back-end 에서 매우 적게 고려된다--  Python 을 사용하기 때문에 절충된 속도로 수행된다. 만일 당신의 모델이 입력 데이터에 심각한 병목현상을 격는 것을 발견한다면, [New Data Formats](../../how_tos/new_data_formats/index.md) 에 설명된 것과 처럼, 수정된 데이터 리더(reader) 를 구현할 수 있다. Skip-gram 모델링의 경우, [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 의 예제에서 이미 다루었다.
 
 If your model is no longer I/O bound but you want still more performance, you
 can take things further by writing your own TensorFlow Ops, as described in
@@ -420,8 +440,10 @@ example of this for the Skip-Gram case
 [tensorflow/models/embedding/word2vec_optimized.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec_optimized.py).
 Feel free to benchmark these against each other to measure performance
 improvements at each stage.
+당신의 모델이 입출력 바운드 뿐만아니라 더 높은 성능을 원한다면, [Adding a New Op](../../how_tos/adding_an_op/index.md) 에 설명된 것처럼, 당신의 TensorFlow Ops 작성을 통해 조치할 수 있다. Skip-Gram 경우에 대한 예제는 [tensorflow/models/embedding/word2vec_optimized.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec_optimized.py) 에 제시했다. 각의 단계의 성능 향상 측정을 위해 각각에 대해 이들을 자유롭게 벤치마크 해보자.
 
 ## Conclusion
+## 결론
 
 In this tutorial we covered the word2vec model, a computationally efficient
 model for learning word embeddings. We motivated why embeddings are useful,
@@ -429,3 +451,4 @@ discussed efficient training techniques and showed how to implement all of this
 in TensorFlow. Overall, we hope that this has show-cased how TensorFlow affords
 you the flexibility you need for early experimentation, and the control you
 later need for bespoke optimized implementation.
+이 튜토리얼에서 word embeddings 학습에 대해 계산적으로 효율적인 모델인, word2vec 모델을 다뤘다. 우리는 왜 embeddings 가 유용한지 이유를 설명했고, 효율적인 학습 기술들에 대한 논의했으며,TensorFlow 에서 이 모든 것들을 어떻게 구현하는지 보였다. 종합하면, 이것들은 어떻게 TensorFlow 가 초기 실험에 필요한 유용성을 제공하고 나중에 개인 맞춤의 최적화된 구현에 필요한 조작을 하는지 보여주기를 바란다.
