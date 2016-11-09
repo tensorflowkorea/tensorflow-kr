@@ -1,14 +1,14 @@
 # Translation Coverage                         
 (Automatically generated. DO NOT edit.)
-* :waning_crescent_moon: [/](/) (57953/214024) [27%]
+* :waning_crescent_moon: [/](/) (63998/207409) [30%]
   * :waning_gibbous_moon: [/README.md](/README.md) (642/934) [68%]
   * :new_moon: [/SUMMARY.md](/SUMMARY.md) (363/3188) [11%]
-  * :waning_crescent_moon: [/g3doc](/g3doc) (56948/209902) [27%]
+  * :waning_crescent_moon: [/g3doc](/g3doc) (62993/203287) [30%]
     * :last_quarter_moon: [/g3doc/get_started](/g3doc/get_started) (7266/13615) [53%]
       * :last_quarter_moon: [/g3doc/get_started/basic_usage.md](/g3doc/get_started/basic_usage.md) (1864/3788) [49%]
       * :last_quarter_moon: [/g3doc/get_started/index.md](/g3doc/get_started/index.md) (499/1116) [44%]
       * :last_quarter_moon: [/g3doc/get_started/os_setup.md](/g3doc/get_started/os_setup.md) (4903/8711) [56%]
-    * :new_moon: [/g3doc/how_tos](/g3doc/how_tos) (16928/108122) [15%]
+    * :new_moon: [/g3doc/how_tos](/g3doc/how_tos) (18451/106818) [17%]
       * :new_moon: [/g3doc/how_tos/adding_an_op](/g3doc/how_tos/adding_an_op) (0/24037) [0%]
         * :new_moon: [/g3doc/how_tos/adding_an_op/index.md](/g3doc/how_tos/adding_an_op/index.md) (0/24037) [0%]
       * :new_moon: [/g3doc/how_tos/distributed](/g3doc/how_tos/distributed) (0/6532) [0%]
@@ -22,8 +22,8 @@
       * :waning_gibbous_moon: [/g3doc/how_tos/index.md](/g3doc/how_tos/index.md) (1288/1738) [74%]
       * :new_moon: [/g3doc/how_tos/meta_graph](/g3doc/how_tos/meta_graph) (0/2603) [0%]
         * :new_moon: [/g3doc/how_tos/meta_graph/index.md](/g3doc/how_tos/meta_graph/index.md) (0/2603) [0%]
-      * :new_moon: [/g3doc/how_tos/new_data_formats](/g3doc/how_tos/new_data_formats) (0/5420) [0%]
-        * :new_moon: [/g3doc/how_tos/new_data_formats/index.md](/g3doc/how_tos/new_data_formats/index.md) (0/5420) [0%]
+      * :waning_crescent_moon: [/g3doc/how_tos/new_data_formats](/g3doc/how_tos/new_data_formats) (1523/4116) [37%]
+        * :waning_crescent_moon: [/g3doc/how_tos/new_data_formats/index.md](/g3doc/how_tos/new_data_formats/index.md) (1523/4116) [37%]
       * :waning_gibbous_moon: [/g3doc/how_tos/quantization](/g3doc/how_tos/quantization) (3445/4550) [75%]
         * :waning_gibbous_moon: [/g3doc/how_tos/quantization/index.md](/g3doc/how_tos/quantization/index.md) (3445/4550) [75%]
       * :new_moon: [/g3doc/how_tos/reading_data](/g3doc/how_tos/reading_data) (0/13844) [0%]
@@ -42,7 +42,7 @@
       * :waning_gibbous_moon: [/g3doc/how_tos/variables](/g3doc/how_tos/variables) (1845/2860) [64%]
         * :waning_gibbous_moon: [/g3doc/how_tos/variables/index.md](/g3doc/how_tos/variables/index.md) (1845/2860) [64%]
     * :waning_gibbous_moon: [/g3doc/index.md](/g3doc/index.md) (271/421) [64%]
-    * :waning_crescent_moon: [/g3doc/tutorials](/g3doc/tutorials) (32483/87744) [37%]
+    * :last_quarter_moon: [/g3doc/tutorials](/g3doc/tutorials) (37005/82433) [44%]
       * :new_moon: [/g3doc/tutorials/deep_cnn](/g3doc/tutorials/deep_cnn) (0/15570) [0%]
         * :new_moon: [/g3doc/tutorials/deep_cnn/index.md](/g3doc/tutorials/deep_cnn/index.md) (0/15570) [0%]
       * :last_quarter_moon: [/g3doc/tutorials/image_recognition](/g3doc/tutorials/image_recognition) (3183/6208) [51%]
@@ -77,8 +77,8 @@
         * :waning_crescent_moon: [/g3doc/tutorials/wide/index.md](/g3doc/tutorials/wide/index.md) (1267/5516) [22%]
       * :last_quarter_moon: [/g3doc/tutorials/wide_and_deep](/g3doc/tutorials/wide_and_deep) (1632/3646) [44%]
         * :last_quarter_moon: [/g3doc/tutorials/wide_and_deep/index.md](/g3doc/tutorials/wide_and_deep/index.md) (1632/3646) [44%]
-      * :new_moon: [/g3doc/tutorials/word2vec](/g3doc/tutorials/word2vec) (0/14992) [0%]
-        * :new_moon: [/g3doc/tutorials/word2vec/index.md](/g3doc/tutorials/word2vec/index.md) (0/14992) [0%]
+      * :last_quarter_moon: [/g3doc/tutorials/word2vec](/g3doc/tutorials/word2vec) (4522/9681) [46%]
+        * :last_quarter_moon: [/g3doc/tutorials/word2vec/index.md](/g3doc/tutorials/word2vec/index.md) (4522/9681) [46%]
 
 ---
 Powered by [Translation Coverage](https://github.com/hunkim/translation_coverage)
