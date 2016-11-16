@@ -236,7 +236,7 @@ with tf.Session() as sess:
 코드안에서 `assign()` 연산은 graph 의 한부분으로 `add()` 처럼 동작하게 된다.
 그리고 이런 연산은 `run()`이 실행되기 전까지 실제로 실행되지 않는다.
 
-일반적으로 Variables 셋은 통계 모델의 파라메터를 나타낸다. 예를 들어, Variable 안의 tensor 에
+일반적으로 Variables 셋은 통계 모델의 파라미터를 나타낸다. 예를 들어, Variable 안의 tensor 에
 뉴럴 네트워크를 위한 무게를 저장 한다면, 트레이닝 하는 동안 graph 는 반복적으로 tensor를 업데이트
 하게 된다.
 
