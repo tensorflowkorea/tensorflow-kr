@@ -261,8 +261,7 @@ with tf.Session() as sess:
 # [array([ 21.], dtype=float32), array([ 7.], dtype=float32)]
 ```
 
-All the ops needed to produce the values of the requested tensors are run once
-(not once per requested tensor).
+여러 개의 tensor들의 값을 계산해내기 위해 수행되는 ops들은 각 tensor 별로 한 번씩 수행 되는 것이 아니라 전체적으로 한 번만 수행된다.
 
 ## Feeds
 
