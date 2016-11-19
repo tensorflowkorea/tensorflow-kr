@@ -1,11 +1,11 @@
 # Translation Coverage                         
 (Automatically generated. DO NOT edit.)
-* :waning_crescent_moon: [/](/) (64723/206556) [31%]
+* :waning_crescent_moon: [/](/) (64771/206530) [31%]
   * :waning_gibbous_moon: [/README.md](/README.md) (642/934) [68%]
   * :new_moon: [/SUMMARY.md](/SUMMARY.md) (363/3188) [11%]
-  * :waning_crescent_moon: [/g3doc](/g3doc) (63718/202434) [31%]
-    * :last_quarter_moon: [/g3doc/get_started](/g3doc/get_started) (7266/13615) [53%]
-      * :last_quarter_moon: [/g3doc/get_started/basic_usage.md](/g3doc/get_started/basic_usage.md) (1864/3788) [49%]
+  * :waning_crescent_moon: [/g3doc](/g3doc) (63766/202408) [31%]
+    * :last_quarter_moon: [/g3doc/get_started](/g3doc/get_started) (7314/13589) [53%]
+      * :last_quarter_moon: [/g3doc/get_started/basic_usage.md](/g3doc/get_started/basic_usage.md) (1912/3762) [50%]
       * :last_quarter_moon: [/g3doc/get_started/index.md](/g3doc/get_started/index.md) (499/1116) [44%]
       * :last_quarter_moon: [/g3doc/get_started/os_setup.md](/g3doc/get_started/os_setup.md) (4903/8711) [56%]
     * :new_moon: [/g3doc/how_tos](/g3doc/how_tos) (19176/105965) [18%]
