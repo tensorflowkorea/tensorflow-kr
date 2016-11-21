@@ -235,32 +235,17 @@ Filling queue with 20000 CIFAR images before starting to train. This will take a
 총 손실(total loss)뿐만 아니라, 개별적인 손실 함수(loss function) 들은 특히 시간 경과에 따라 흥미롭습니다. 그러나, 손실(loss)은 훈련에 사용되는 작은 배치 사이즈에 따라 상당히 많은 양의 노이즈를 나타냅니다. 이 연습에서 우리는 원본 값에 더하여 그들의 이동 평균을 시각화하는데 매우 유용함을 발견하였습니다. 이러한 목적을 위하여 어떻게 스크립트가 [`ExponentialMovingAverage`](../../api_docs/python/train.md#ExponentialMovingAverage)를 사용하는지 보세요.
 
 
-## Evaluating a Model
 ## 모델 평가하기
 
-Let us now evaluate how well the trained model performs on a hold-out data set.
-The model is evaluated by the script `cifar10_eval.py`.  It constructs the model
-with the `inference()` function and uses all 10,000 images in the evaluation set
-of CIFAR-10. It calculates the *precision at 1:* how often the top prediction
-matches the true label of the image.
 이제 남아있는 데이터 셋에 대하여 학습된 모델이 얼마나 잘 작동하는지 평가해봅시다. 모델은 `cifar10_eval.py` 스크립트에 의해 평가됩니다. 이 스크립트는 `inference()` 함수로 모델을 구축하고 CIFAR-10 평가 데이터셋에 있는 10,000장의 이미지를 사용하여 *1에서의 정밀도(Precision at 1)*:가장 높은 예측값이 이미지의 실제 라벨과 얼마나 자주 일치 하는지를 계산합니다.
 
-To monitor how the model improves during training, the evaluation script runs
-periodically on the latest checkpoint files created by the `cifar10_train.py`.
 훈련하는 동안 모델이 어떻게 개선되는지 추적하기 위하여, `cifar10_train.py`가 생성하는 최근의 체크포인트 파일에서 평가 스크립트가 주기적으로 실행됩니다.
 
 ```shell
 python cifar10_eval.py
 ```
 
-> Be careful not to run the evaluation and training binary on the same GPU or
-else you might run out of memory. Consider running the evaluation on
-a separate GPU if available or suspending the training binary while running
-the evaluation on the same GPU.
-
 > 같은 GPU에서 평가와 훈련 바이너리를 실행하지 않도록 주의하세요. 아마 메모리가 부족할 것입니다. 분리된 GPU에서 각각 실행하거나 같은 GPU에서 평가를 하는 동안에는 훈련을 잠시 중단하는 것을 고려하세요.
-
-You should see the output:
 
 아래와 같은 결과를 보게 됩니다.
 
@@ -269,68 +254,27 @@ You should see the output:
 ...
 ```
 
-The script merely returns the precision @ 1 periodically -- in this case
-it returned 86% accuracy. `cifar10_eval.py` also
-exports summaries that may be visualized in TensorBoard. These summaries
-provide additional insight into the model during evaluation.
-
 스크립트는 주기적으로 오직 정밀도@1(precision@1)을 리턴합니다 -- 이 경우에는 86%의 정확도를 리턴하였습니다.
 또한 `cifar10_eval.py`는 TensorBoard에서 시각화를 해볼 수 있는 요약(summaries)을 내보냅니다. 이 요약들은 평가를 하는 동안 모델에 대한 추가적인 이해를 제공합니다.
 
-
-The training script calculates the
-[moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
-version of all learned variables. The evaluation script substitutes
-all learned model parameters with the moving average version. This
-substitution boosts model performance at evaluation time.
-
 훈련 스크립트는 모든 학습된 변수의 [이동평균(moving average)](../../api_docs/python/train.md#ExponentialMovingAverage) 버전을 계산합니다. 평가 스크립트는 모든 학습된 모델 파라미터를 이동 평균 버전으로 치환합니다. 이 치환은 평가시 모델 성능을 향상시킵니다.
-
-> **EXERCISE:** Employing averaged parameters may boost predictive performance
-by about 3% as measured by precision @ 1. Edit `cifar10_eval.py` to not employ
-the averaged parameters for the model and verify that the predictive performance
-drops.
 
 > **연습:** 평균 파라미터를 사용하는 것은 예측 성능을 정밀도 @ 1(precision @ 1)에서 약 3%정도 향상시킬 수 있습니다.
 `cifar10_eval.py`를 수정하여 평균 파라미터를 사용하지 않도록 해보고 예측 성능이 떨어지는 것을 확인해보세요.
 
-## Training a Model Using Multiple GPU Cards
-## 다중 GPU 카드를 사용하여 모델 훈련하기
 
-Modern workstations may contain multiple GPUs for scientific computation.
-TensorFlow can leverage this environment to run the training operation
-concurrently across multiple cards.
+## 다중 GPU 카드를 사용하여 모델 훈련하기
 
 최신 워크스테이션은 과학적인 계산을 위하여 다수의 GPU를 갖추고 있습니다. TensorFlow는 이러한 환경을 이용하여 다수의 GPU 카드에서 동시에 훈련 연산을 실행할 수 있습니다.
 
-Training a model in a parallel, distributed fashion requires
-coordinating training processes. For what follows we term *model replica*
-to be one copy of a model training on a subset of data.
-
 병렬로 모델을 훈련하려면, 훈련 과정을 분산된 방식으로 조직할 필요가 있습니다. 다음에 나오는 *모델 복제본* 이라는 용어는 데이터의 하위 집합으로 훈련한 모델의 복사본 중의 하나입니다.
 
-Naively employing asynchronous updates of model parameters
-leads to sub-optimal training performance
-because an individual model replica might be trained on a stale
-copy of the model parameters. Conversely, employing fully synchronous
-updates will be as slow as the slowest model replica.
-
-나이브하게 비동기 모델 파라미터 업데이트를 적용하면 차선의 훈련 성능을 얻을 수 있습니다. 독립된 모델 복제본은 오래된 모델 파라미터의 복사본으로 학습되어 있기 때문입니다. 반대로, 완전한 동기 업데이트의 경우는 가장 느린 모델 복제본 만큼 느릴 것 입니다.
-
-In a workstation with multiple GPU cards, each GPU will have similar speed
-and contain enough memory to run an entire CIFAR-10 model. Thus, we opt to
-design our training system in the following manner:
+나이브하게 비동기(asynchronous) 모델 파라미터 업데이트를 적용하면 차선의 훈련 성능을 얻을 수 있습니다. 독립된 모델 복제본은 오래된 모델 파라미터의 복사본으로 학습되어 있기 때문입니다. 반대로, 완전한 동기(synchronous) 업데이트의 경우는 가장 느린 모델 복제본 만큼 느릴 것 입니다.
 
 다수의 GPU 카드를 갖춘 워크스테이션에서, 각각의 GPU는 비슷한 속도와 CIFAR-10 모델 전체를 실행할 만한 충분한 메모리를 탑재하고 있을 것입니다. 그러므로, 우리는 우리의 훈련 시스템을 디자인 하는데에 아래와 같은 규칙을 따릅니다:
 
-* Place an individual model replica on each GPU.
-* Update model parameters synchronously by waiting for all GPUs to finish
-processing a batch of data.
-
 * 각각의 GPU에 개별의 모델 복제본을 올립니다.
 * 모든 GPU가 한 배치의 데이터를 처리 완료 할때까지 기다려 모델 파라미터 업데이트를 동기적으로 수행합니다.
-
-Here is a diagram of this model:
 
 이 모델의 다이어그램은 다음과 같습니다.
 
@@ -338,73 +282,31 @@ Here is a diagram of this model:
   <img style="width:100%" src="../../images/Parallelism.png">
 </div>
 
-Note that each GPU computes inference as well as the gradients for a unique
-batch of data. This setup effectively permits dividing up a larger batch
-of data across the GPUs.
-
 각각의 GPU는 추론(inference)뿐만 아니라 경사(gradients)도 독자적인 데이터 배치를 사용하여 계산한다는 것에 주의하세요.
 이러한 설정은 GPU간의 더 큰 데이터 배치를 효과적으로 분배 할 수 있도록 해줍니다.
 
-This setup requires that all GPUs share the model parameters. A well-known
-fact is that transferring data to and from GPUs is quite slow. For this
-reason, we decide to store and update all model parameters on the CPU (see
-green box). A fresh set of model parameters is transferred to the GPU
-when a new batch of data is processed by all GPUs.
-
 이러한 설정은 모든 GPU들이 모델 파라미터를 공유해야 합니다. GPU간의 데이터 전송이 꽤 느린 작업이라는 사실은 잘 알려져 있습니다. 이러한 이유로, 우리는 모든 모델 파라미터를 CPU 위에 저장하고 업데이트 하기로 정하였습니다(위의 그림에서 녹색 박스). 모든 GPU에서 새로운 데이터 배치가 처리 되고 난 뒤 갓 생성된 모델 파라미터의 집합은 각각의 GPU로 전송됩니다.
-
-The GPUs are synchronized in operation. All gradients are accumulated from
-the GPUs and averaged (see green box). The model parameters are updated with
-the gradients averaged across all model replicas.
 
 GPU들은 연산에 동기화되어있습니다. 모든 경사(gradients)를 GPU들로부터 축적하여 평균을 구합니다(녹색 박스를 보세요). 모델 파라미터는 모든 모델 복제본들의 경사(gradients)의 평균을 사용하여 업데이트됩니다.
 
 
-### Placing Variables and Operations on Devices
 ### 장치에 변수와 연산 배치시키기
-
-Placing operations and variables on devices requires some special
-abstractions.
 
 장치에 변수와 연산을 배치시키는 것은 조금 특별한 추상화(abstraction)가 필요합니다.
 
-The first abstraction we require is a function for computing inference and
-gradients for a single model replica. In the code we term this abstraction
-a "tower". We must set two attributes for each tower:
-
 우리에게 필요한 첫번째 추상화는 단일 모델 복제본에 대한 추론(inference)과 경사(gradients)를 계산하기 위한 함수입니다. 코드에서 우리는 이 추상화를 "타워"라는 용어로 부릅니다. 우리는 각각의 타워에 두가지 속성을 설정해야 합니다:
-
-* A unique name for all operations within a tower.
-[`tf.name_scope()`](../../api_docs/python/framework.md#name_scope) provides
-this unique name by prepending a scope. For instance, all operations in
-the first tower are prepended with `tower_0`, e.g. `tower_0/conv1/Conv2D`.
 
 * 타워 안의 모든 연산들에 대한 유일한 이름.
 [`tf.name_scope()`](../../api_docs/python/framework.md#name_scope)는 scope를 붙여 이런 유일한 이름을 제공합니다. 예를 들면, 첫번째 타워의 모든 연산들은 `tower_0`가 앞에 붙습니다. e.g. `tower_0/conv1/Conv2D`.
 
-* A preferred hardware device to run the operation within a tower.
-[`tf.device()`](../../api_docs/python/framework.md#device) specifies this. For
-instance, all operations in the first tower reside within `device('/gpu:0')`
-scope indicating that they should be run on the first GPU.
-
 * 타워 안의 연산을 실행할 선호하는 하드웨어 장치.
 [`tf.device()`](../../api_docs/python/framework.md#device)는 이를 특정해줍니다. 예를 들면, 첫번째 타워의 모든 연산들은 `device('/gpu:0')` 스코프 안에 존재하게 됩니다. 이는 해당 연산들을 첫번째 GPU에서 실행하라는 것을 나타냅니다.
-
-All variables are pinned to the CPU and accessed via
-[`tf.get_variable()`](../../api_docs/python/state_ops.md#get_variable)
-in order to share them in a multi-GPU version.
-See how-to on [Sharing Variables](../../how_tos/variable_scope/index.md).
 
 모든 변수는 다중-GPU 버전에서 공유 되기 위하여 CPU에 고정되어있고, [`tf.get_variable()`](../../api_docs/python/state_ops.md#get_variable)를 통하여 접근할 수 있습니다.
 자세한 방법은 [변수 공유하기(Sharing Variables)](../../how_tos/variable_scope/index.md)를 보세요.
 
 
-### Launching and Training the Model on Multiple GPU cards
 ### 다수의 GPU 카드에서 모델을 실행하고 훈련하기
-
-If you have several GPU cards installed on your machine you can use them to
-train the model faster with the `cifar10_multi_gpu_train.py` script.  This
-version of the training script parallelizes the model across multiple GPU cards.
 
 만약 당신의 머신에 여러 대의 GPU 카드가 있다면 `cifar10_multi_gpu_train` 스크립트를 이용하여 모델을 좀더 빠르게 학습하는데 사용할 수 있습니다. 이 버전의 훈련 스크립트는 다수의 GPU 카드에 모델을 병렬화합니다.
 
@@ -412,35 +314,15 @@ version of the training script parallelizes the model across multiple GPU cards.
 python cifar10_multi_gpu_train.py --num_gpus=2
 ```
 
-Note that the number of GPU cards used defaults to 1. Additionally, if only 1
-GPU is available on your machine, all computations will be placed on it, even if
-you ask for more.
-
 기본 GPU 카드 숫자는 1로 설정되어 있다는 것을 참고하세요. 추가적으로, 당신의 머신에 하나의 GPU만 사용가능하다면, 당신이 더욱 많은 GPU를 요청하더라도 모든 계산은 그 하나의 GPU에 위치하게 됩니다.
-
-> **EXERCISE:** The default settings for `cifar10_train.py` is to
-run on a batch size of 128. Try running `cifar10_multi_gpu_train.py` on 2 GPUs
-with a batch size of 64 and compare the training speed.
 
 > **연습:** `cifar10_train.py`의 기본 설정은 128의 배치 크기로 실행 하는 것입니다. 64 배치 크기로 2대의 GPU를 사용하여 `cifar10_multi_gpu_train.py`을 실행해보고 훈련 속도를 비교해보세요.
 
-## Next Steps
+
 ## 다음 단계
 
-[Congratulations!](https://www.youtube.com/watch?v=9bZkp7q19f0) You have
-completed the CIFAR-10 tutorial.
 [축하합니다!](https://www.youtube.com/watch?v=9bZkp7q19f0) 당신은 CIFAR-10 튜토리얼을 완료하였습니다.
 
-If you are now interested in developing and training your own image
-classification system, we recommend forking this tutorial and replacing
-components to address your image classification problem.
-
 만약 지금 당신만의 이미지 분류 시스템을 개발하고 훈련하는 데에 흥미가 있다면, 이 튜토리얼을 포크(fork)하고 당신의 이미지 분류 문제에 맞춰 구성요소를 교체하는 것을 추천합니다.
-
-
-> **EXERCISE:** Download the
-[Street View House Numbers (SVHN)](http://ufldl.stanford.edu/housenumbers/) data set.
-Fork the CIFAR-10 tutorial and swap in the SVHN as the input data. Try adapting
-the network architecture to improve predictive performance.
 
 > **연습:** [Street View House Numbers (SVHN)](http://ufldl.stanford.edu/housenumbers/) 데이터셋을 다운로드 하세요. CIFAR-10 튜토리얼을 포크(fork)하고 SVHN을 입력 데이터로 교체하세요. 예측 성능을 향상시키기 위하여 네트워크 아키텍쳐를 조정해보세요.
