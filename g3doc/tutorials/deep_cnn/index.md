@@ -236,15 +236,18 @@ Filling queue with 20000 CIFAR images before starting to train. This will take a
 
 
 ## Evaluating a Model
+## 모델 평가하기
 
 Let us now evaluate how well the trained model performs on a hold-out data set.
 The model is evaluated by the script `cifar10_eval.py`.  It constructs the model
 with the `inference()` function and uses all 10,000 images in the evaluation set
 of CIFAR-10. It calculates the *precision at 1:* how often the top prediction
 matches the true label of the image.
+이제 남아있는 데이터 셋에 대하여 학습된 모델이 얼마나 잘 작동하는지 평가해봅시다. 모델은 `cifar10_eval.py` 스크립트에 의해 평가됩니다. 이 스크립트는 `inference()` 함수로 모델을 구축하고 CIFAR-10 평가 데이터셋에 있는 10,000장의 이미지를 사용하여 *1에서의 정밀도(Precision at 1)*:가장 높은 예측값이 이미지의 실제 라벨과 얼마나 자주 일치 하는지를 계산합니다.
 
 To monitor how the model improves during training, the evaluation script runs
 periodically on the latest checkpoint files created by the `cifar10_train.py`.
+훈련하는 동안 모델이 어떻게 개선되는지 추적하기 위하여, `cifar10_train.py`가 생성하는 최근의 체크포인트 파일에서 평가 스크립트가 주기적으로 실행됩니다.
 
 ```shell
 python cifar10_eval.py
@@ -255,7 +258,11 @@ else you might run out of memory. Consider running the evaluation on
 a separate GPU if available or suspending the training binary while running
 the evaluation on the same GPU.
 
+> 같은 GPU에서 평가와 훈련 바이너리를 실행하지 않도록 주의하세요. 아마 메모리가 부족할 것입니다. 분리된 GPU에서 각각 실행하거나 같은 GPU에서 평가를 하는 동안에는 훈련을 잠시 중단하는 것을 고려하세요.
+
 You should see the output:
+
+아래와 같은 결과를 보게 됩니다.
 
 ```shell
 2015-11-06 08:30:44.391206: precision @ 1 = 0.860
@@ -267,33 +274,48 @@ it returned 86% accuracy. `cifar10_eval.py` also
 exports summaries that may be visualized in TensorBoard. These summaries
 provide additional insight into the model during evaluation.
 
+스크립트는 주기적으로 오직 정밀도@1(precision@1)을 리턴합니다 -- 이 경우에는 86%의 정확도를 리턴하였습니다.
+또한 `cifar10_eval.py`는 TensorBoard에서 시각화를 해볼 수 있는 요약(summaries)을 내보냅니다. 이 요약들은 평가를 하는 동안 모델에 대한 추가적인 이해를 제공합니다.
+
+
 The training script calculates the
 [moving average](../../api_docs/python/train.md#ExponentialMovingAverage)
 version of all learned variables. The evaluation script substitutes
 all learned model parameters with the moving average version. This
 substitution boosts model performance at evaluation time.
 
+훈련 스크립트는 모든 학습된 변수의 [이동평균(moving average)](../../api_docs/python/train.md#ExponentialMovingAverage) 버전을 계산합니다. 평가 스크립트는 모든 학습된 모델 파라미터를 이동 평균 버전으로 치환합니다. 이 치환은 평가시 모델 성능을 향상시킵니다.
+
 > **EXERCISE:** Employing averaged parameters may boost predictive performance
 by about 3% as measured by precision @ 1. Edit `cifar10_eval.py` to not employ
 the averaged parameters for the model and verify that the predictive performance
 drops.
 
+> **연습:** 평균 파라미터를 사용하는 것은 예측 성능을 정밀도 @ 1(precision @ 1)에서 약 3%정도 향상시킬 수 있습니다.
+`cifar10_eval.py`를 수정하여 평균 파라미터를 사용하지 않도록 해보고 예측 성능이 떨어지는 것을 확인해보세요.
 
 ## Training a Model Using Multiple GPU Cards
+## 다중 GPU 카드를 사용하여 모델 훈련하기
 
 Modern workstations may contain multiple GPUs for scientific computation.
 TensorFlow can leverage this environment to run the training operation
 concurrently across multiple cards.
 
+최신 워크스테이션은 과학적인 계산을 위하여 다수의 GPU를 갖추고 있습니다. TensorFlow는 이러한 환경을 이용하여 다수의 GPU 카드에서 동시에 훈련 연산을 실행할 수 있습니다.
+
 Training a model in a parallel, distributed fashion requires
 coordinating training processes. For what follows we term *model replica*
 to be one copy of a model training on a subset of data.
+
+병렬로 모델을 훈련하려면, 훈련 과정을 분산된 방식으로 조직할 필요가 있습니다. 다음에 나오는 *모델 복제본* 이라는 용어는 데이터의 하위 집합으로 훈련한 모델의 복사본 중의 하나입니다.
 
 Naively employing asynchronous updates of model parameters
 leads to sub-optimal training performance
 because an individual model replica might be trained on a stale
 copy of the model parameters. Conversely, employing fully synchronous
 updates will be as slow as the slowest model replica.
+
+나이브하게 비동기 모델 파라미터 업데이트를 적용하면 차선의 훈련 성능을 얻을 수 있습니다. 독립된 모델 복제본은 오래된 모델 파라미터의 복사본으로 학습되어 있기 때문입니다. 반대로, 완전한 동기 업데이트의 경우는 가장 느린 모델 복제본 만큼 느릴 것 입니다.
 
 In a workstation with multiple GPU cards, each GPU will have similar speed
 and contain enough memory to run an entire CIFAR-10 model. Thus, we opt to
