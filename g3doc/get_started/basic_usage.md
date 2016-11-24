@@ -44,7 +44,7 @@ Python 라이브러리에서 단위 연산(ops) 생성자는 구성된 단위 �
 객체를 반환한다. 그리고 이 객체들은 다른 단위 연산(ops) 생성자의 input으로 전달할 수 있다.
 
 Python 라이브러리로 사용하는 TensorFlow는 단위 연산(ops) 생성자가 노드를 추가한
-*graph* 를 가지고 된다. *graph* 는 많은 애플리케이션용으로 충분하다.
+*graph* 를 가지게 된다. *graph* 는 많은 애플리케이션용으로 충분하다.
 [Graph class](../api_docs/python/framework.md#Graph) 문서에서 어떻게 많은 graph를
 명시적으로 관리할 수 있는지 알 수 있다.
 
