@@ -23,7 +23,7 @@ all elements set to zero.
 For example:
 
 ```python
-tf.zeros([3, 4], int32) ==> [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+tf.zeros([3, 4], tf.int32) ==> [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 ```
 
 ##### Args:
@@ -40,7 +40,7 @@ tf.zeros([3, 4], int32) ==> [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
 - - -
 
-### `tf.zeros_like(tensor, dtype=None, name=None)` {#zeros_like}
+### `tf.zeros_like(tensor, dtype=None, name=None, optimize=True)` {#zeros_like}
 
 Creates a tensor with all elements set to zero.
 
@@ -63,6 +63,8 @@ tf.zeros_like(tensor) ==> [[0, 0, 0], [0, 0, 0]]
   `int8`, `int16`, `int32`, `int64`, `uint8`, `complex64`, or `complex128`.
 
 *  <b>`name`</b>: A name for the operation (optional).
+*  <b>`optimize`</b>: if true, attempt to statically determine the shape of 'tensor'
+  and encode it as a constant.
 
 ##### Returns:
 
@@ -82,7 +84,7 @@ elements set to 1.
 For example:
 
 ```python
-tf.ones([2, 3], int32) ==> [[1, 1, 1], [1, 1, 1]]
+tf.ones([2, 3], tf.int32) ==> [[1, 1, 1], [1, 1, 1]]
 ```
 
 ##### Args:
@@ -99,7 +101,7 @@ tf.ones([2, 3], int32) ==> [[1, 1, 1], [1, 1, 1]]
 
 - - -
 
-### `tf.ones_like(tensor, dtype=None, name=None)` {#ones_like}
+### `tf.ones_like(tensor, dtype=None, name=None, optimize=True)` {#ones_like}
 
 Creates a tensor with all elements set to 1.
 
@@ -119,9 +121,11 @@ tf.ones_like(tensor) ==> [[1, 1, 1], [1, 1, 1]]
 
 *  <b>`tensor`</b>: A `Tensor`.
 *  <b>`dtype`</b>: A type for the returned `Tensor`. Must be `float32`, `float64`,
-  `int8`, `int16`, `int32`, `int64`, `uint8`, `complex64`, or `complex128`.
-
+    `int8`, `int16`, `int32`, `int64`, `uint8`, `complex64`, `complex128` or
+    `bool`.
 *  <b>`name`</b>: A name for the operation (optional).
+*  <b>`optimize`</b>: if true, attempt to statically determine the shape of 'tensor'
+  and encode it as a constant.
 
 ##### Returns:
 
@@ -238,7 +242,8 @@ tf.linspace(10.0, 12.0, 3, name="linspace") => [ 10.0  11.0  12.0]
     First entry in the range.
 *  <b>`stop`</b>: A `Tensor`. Must have the same type as `start`.
     Last entry in the range.
-*  <b>`num`</b>: A `Tensor` of type `int32`. Number of values to generate.
+*  <b>`num`</b>: A `Tensor`. Must be one of the following types: `int32`, `int64`.
+    Number of values to generate.
 *  <b>`name`</b>: A name for the operation (optional).
 
 ##### Returns:
@@ -274,13 +279,15 @@ tf.range(limit) ==> [0, 1, 2, 3, 4]
 ##### Args:
 
 
-*  <b>`start`</b>: A 0-D (scalar) of type `int32`. First entry in sequence.
-    Defaults to 0.
+*  <b>`start`</b>: A 0-D (scalar) of type `int32`. Acts as first entry in the range if
+    `limit` is not None; otherwise, acts as range limit and first entry
+    defaults to 0.
 *  <b>`limit`</b>: A 0-D (scalar) of type `int32`. Upper limit of sequence,
-    exclusive.
-*  <b>`delta`</b>: A 0-D `Tensor` (scalar) of type `int32`. Optional. Default is 1.
-    Number that increments `start`.
-*  <b>`name`</b>: A name for the operation (optional).
+    exclusive. If None, defaults to the value of `start` while the first
+    entry of the range defaults to 0.
+*  <b>`delta`</b>: A 0-D `Tensor` (scalar) of type `int32`. Number that increments
+    `start`. Defaults to 1.
+*  <b>`name`</b>: A name for the operation. Defaults to "range".
 
 ##### Returns:
 
@@ -557,6 +564,26 @@ Example:
   samples = tf.random_gamma([30], [[1.],[3.],[5.]], beta=[[3., 4.]])
   # samples has shape [30, 3, 2], with 30 samples each of 3x2 distributions.
 
+  Note that for small alpha values, there is a chance you will draw a value of
+  exactly 0, which gets worse for lower-precision dtypes, even though zero is
+  not in the support of the gamma distribution.
+
+  Relevant cdfs (~chance you will draw a exactly-0 value):
+  ```
+    stats.gamma(.01).cdf(np.finfo(np.float16).tiny)
+        0.91269738769897879
+    stats.gamma(.01).cdf(np.finfo(np.float32).tiny)
+        0.41992668622045726
+    stats.gamma(.01).cdf(np.finfo(np.float64).tiny)
+        0.00084322740680686662
+    stats.gamma(.35).cdf(np.finfo(np.float16).tiny)
+        0.037583276135263931
+    stats.gamma(.35).cdf(np.finfo(np.float32).tiny)
+        5.9514895726818067e-14
+    stats.gamma(.35).cdf(np.finfo(np.float64).tiny)
+        2.3529843400647272e-108
+  ```
+
 ##### Args:
 
 
@@ -682,40 +709,5 @@ with tf.Session() as sess2:
 
 
 *  <b>`seed`</b>: integer.
-
-
-
-## Other Functions and Classes
-- - -
-
-### `tf.contrib.graph_editor.ops(*args, **kwargs)` {#ops}
-
-Helper to select operations.
-
-##### Args:
-
-
-*  <b>`*args`</b>: list of 1) regular expressions (compiled or not) or  2) (array of)
-    tf.Operation. tf.Tensor instances are silently ignored.
-*  <b>`**kwargs`</b>: 'graph': tf.Graph in which to perform the regex query.This is
-    required when using regex.
-    'positive_filter': an elem if selected only if positive_filter(elem) is
-      True. This is optional.
-    'restrict_ops_regex': a regular expression is ignored if it doesn't start
-      with the substring "(?#ops)".
-
-##### Returns:
-
-  list of tf.Operation
-
-##### Raises:
-
-
-*  <b>`TypeError`</b>: if the optional keyword argument graph is not a tf.Graph
-    or if an argument in args is not an (array of) tf.Operation
-    or an (array of) tf.Tensor (silently ignored) or a string
-    or a regular expression.
-*  <b>`ValueError`</b>: if one of the keyword arguments is unexpected or if a regular
-    expression is used without passing a graph as a keyword argument.
 
 

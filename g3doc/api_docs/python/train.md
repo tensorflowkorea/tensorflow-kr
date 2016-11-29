@@ -204,9 +204,9 @@ applies gradients.
 
 ### Gating Gradients
 
-Both `minimize()` and `compute_gradients()` accept a `gate_gradient` argument
-that controls the degree of parallelism during the application of the
-gradients.
+Both `minimize()` and `compute_gradients()` accept a `gate_gradients`
+argument that controls the degree of parallelism during the application of
+the gradients.
 
 The possible values are: `GATE_NONE`, `GATE_OP`, and `GATE_GRAPH`.
 
@@ -363,6 +363,52 @@ Construct a new Adagrad optimizer.
 
 
 *  <b>`ValueError`</b>: If the `initial_accumulator_value` is invalid.
+
+
+
+- - -
+
+### `class tf.train.AdagradDAOptimizer` {#AdagradDAOptimizer}
+
+Adagrad Dual Averaging algorithm for sparse linear models.
+
+See this [paper](http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf).
+
+This optimizer takes care of regularization of unseen features in a mini batch
+by updating them when they are seen with a closed form update rule that is
+equivalent to having updated them on every mini-batch.
+
+AdagradDA is typically used when there is a need for large sparsity in the
+trained model. This optimizer only guarantees sparsity for linear models. Be
+careful when using AdagradDA for deep networks as it will require careful
+initialization of the gradient accumulators for it to train.
+
+- - -
+
+#### `tf.train.AdagradDAOptimizer.__init__(learning_rate, global_step, initial_gradient_squared_accumulator_value=0.1, l1_regularization_strength=0.0, l2_regularization_strength=0.0, use_locking=False, name='AdagradDA')` {#AdagradDAOptimizer.__init__}
+
+Construct a new AdagradDA optimizer.
+
+##### Args:
+
+
+*  <b>`learning_rate`</b>: A `Tensor` or a floating point value.  The learning rate.
+*  <b>`global_step`</b>: A `Tensor` containing the current training step number.
+*  <b>`initial_gradient_squared_accumulator_value`</b>: A floating point value.
+    Starting value for the accumulators, must be positive.
+*  <b>`l1_regularization_strength`</b>: A float value, must be greater than or
+    equal to zero.
+*  <b>`l2_regularization_strength`</b>: A float value, must be greater than or
+    equal to zero.
+*  <b>`use_locking`</b>: If `True` use locks for update operations.
+*  <b>`name`</b>: Optional name prefix for the operations created when applying
+    gradients.  Defaults to "AdagradDA".
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: If the `initial_gradient_squared_accumulator_value` is
+  invalid.
 
 
 
@@ -1407,7 +1453,7 @@ and reporting exceptions, etc.
 The `QueueRunner`, combined with the `Coordinator`, helps handle these issues.
 - - -
 
-#### `tf.train.QueueRunner.__init__(queue=None, enqueue_ops=None, close_op=None, cancel_op=None, queue_runner_def=None)` {#QueueRunner.__init__}
+#### `tf.train.QueueRunner.__init__(queue=None, enqueue_ops=None, close_op=None, cancel_op=None, queue_closed_exception_types=None, queue_runner_def=None)` {#QueueRunner.__init__}
 
 Create a QueueRunner.
 
@@ -1427,6 +1473,11 @@ to all be the same op, but it is expected that they all enqueue tensors in
 *  <b>`enqueue_ops`</b>: List of enqueue ops to run in threads later.
 *  <b>`close_op`</b>: Op to close the queue. Pending enqueue ops are preserved.
 *  <b>`cancel_op`</b>: Op to close the queue and cancel pending enqueue ops.
+*  <b>`queue_closed_exception_types`</b>: Optional tuple of Exception types that
+    indicate that the queue has been closed when raised during an enqueue
+    operation.  Defaults to `(tf.errors.OutOfRangeError,)`.  Another common
+    case includes `(tf.errors.OutOfRangeError, tf.errors.CancelledError)`,
+    when some of the enqueue ops may dequeue from other Queues.
 *  <b>`queue_runner_def`</b>: Optional `QueueRunnerDef` protocol buffer. If specified,
     recreates the QueueRunner from its contents. `queue_runner_def` and the
     other arguments are mutually exclusive.
@@ -1537,6 +1588,13 @@ The string name of the underlying Queue.
 - - -
 
 #### `tf.train.QueueRunner.queue` {#QueueRunner.queue}
+
+
+
+
+- - -
+
+#### `tf.train.QueueRunner.queue_closed_exception_types` {#QueueRunner.queue_closed_exception_types}
 
 
 
@@ -1709,7 +1767,7 @@ Returns the `tf.train.ServerDef` for this server.
 
 ##### Returns:
 
-  A `tf.train.ServerDef` prototocol buffer that describes the configuration
+  A `tf.train.ServerDef` protocol buffer that describes the configuration
   of this server.
 
 
@@ -1813,8 +1871,8 @@ with tf.Graph().as_default():
 
 In the *chief* task, the `Supervisor` works exactly as in the first example
 above.  In the other tasks `sv.managed_session()` waits for the Model to have
-been intialized before returning a session to the training code.  The
-non-chief tasks depend on the chief taks for initializing the model.
+been initialized before returning a session to the training code.  The
+non-chief tasks depend on the chief task for initializing the model.
 
 If one of the tasks crashes and restarts, `managed_session()`
 checks if the Model is initialized.  If yes, it just creates a session and
@@ -1900,7 +1958,7 @@ session and check if it could be initialized automatically.
 
 - - -
 
-#### `tf.train.Supervisor.__init__(graph=None, ready_op=0, is_chief=True, init_op=0, init_feed_dict=None, local_init_op=0, logdir=None, summary_op=0, saver=0, global_step=0, save_summaries_secs=120, save_model_secs=600, recovery_wait_secs=30, stop_grace_secs=120, checkpoint_basename='model.ckpt', session_manager=None, summary_writer=0, init_fn=None)` {#Supervisor.__init__}
+#### `tf.train.Supervisor.__init__(graph=None, ready_op=0, ready_for_local_init_op=0, is_chief=True, init_op=0, init_feed_dict=None, local_init_op=0, logdir=None, summary_op=0, saver=0, global_step=0, save_summaries_secs=120, save_model_secs=600, recovery_wait_secs=30, stop_grace_secs=120, checkpoint_basename='model.ckpt', session_manager=None, summary_writer=0, init_fn=None)` {#Supervisor.__init__}
 
 Create a `Supervisor`.
 
@@ -1916,6 +1974,13 @@ Create a `Supervisor`.
     The model is considered ready if it returns an empty array.  Defaults to
     the tensor returned from `tf.report_uninitialized_variables()`  If
     `None`, the model is not checked for readiness.
+*  <b>`ready_for_local_init_op`</b>: 1-D string `Tensor`.  This tensor is evaluated by
+    supervisors in `prepare_or_wait_for_session()` to check if the model is
+    ready to run the local_init_op.
+    The model is considered ready if it returns an empty array.  Defaults to
+    the tensor returned from
+    `tf.report_uninitialized_variables(tf.all_variables())`. If `None`, the
+    model is not checked for readiness before running local_init_op.
 *  <b>`is_chief`</b>: If True, create a chief supervisor in charge of initializing
     and restoring the model.  If False, create a supervisor that relies
     on a chief supervisor for inits and restore.
@@ -2107,7 +2172,7 @@ Start threads for `QueueRunners`.
 Note that the queue runners collected in the graph key `QUEUE_RUNNERS`
 are already started automatically when you create a session with the
 supervisor, so unless you have non-collected queue runners to start
-you do not need to call this explicitely.
+you do not need to call this explicitly.
 
 ##### Args:
 
@@ -2309,7 +2374,7 @@ Start threads for `QueueRunners`.
 Note that the queue runners collected in the graph key `QUEUE_RUNNERS`
 are already started automatically when you create a session with the
 supervisor, so unless you have non-collected queue runners to start
-you do not need to call this explicitely.
+you do not need to call this explicitly.
 
 ##### Args:
 
@@ -2504,6 +2569,13 @@ so it does not need to be passed to the `stop()` method.
 
 - - -
 
+#### `tf.train.Supervisor.ready_for_local_init_op` {#Supervisor.ready_for_local_init_op}
+
+
+
+
+- - -
+
 #### `tf.train.Supervisor.ready_op` {#Supervisor.ready_op}
 
 Return the Ready Op used by the supervisor.
@@ -2637,7 +2709,7 @@ with tf.Graph().as_default():
 `wait_for_session()` waits for a model to be initialized by other processes.
 - - -
 
-#### `tf.train.SessionManager.__init__(local_init_op=None, ready_op=None, graph=None, recovery_wait_secs=30)` {#SessionManager.__init__}
+#### `tf.train.SessionManager.__init__(local_init_op=None, ready_op=None, ready_for_local_init_op=None, graph=None, recovery_wait_secs=30)` {#SessionManager.__init__}
 
 Creates a SessionManager.
 
@@ -2648,6 +2720,12 @@ The `ready_op` is an `Operation` used to check if the model is ready.  The
 model is considered ready if that operation returns an empty string tensor.
 If the operation returns non empty string tensor, the elements are
 concatenated and used to indicate to the user why the model is not ready.
+
+The `ready_for_local_init_op` is an `Operation` used to check if the model
+is ready to run local_init_op.  The model is considered ready if that
+operation returns an empty string tensor. If the operation returns non empty
+string tensor, the elements are concatenated and used to indicate to the
+user why the model is not ready.
 
 If `ready_op` is `None`, the model is not checked for readiness.
 
@@ -2661,8 +2739,16 @@ be initialized or restored.  Defaults to 30 seconds.
 *  <b>`local_init_op`</b>: An `Operation` run immediately after session creation.
      Usually used to initialize tables and local variables.
 *  <b>`ready_op`</b>: An `Operation` to check if the model is initialized.
+*  <b>`ready_for_local_init_op`</b>: An `Operation` to check if the model is ready
+     to run local_init_op.
 *  <b>`graph`</b>: The `Graph` that the model will use.
 *  <b>`recovery_wait_secs`</b>: Seconds between checks for the model to be ready.
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: If ready_for_local_init_op is not None but local_init_op is
+    None
 
 
 - - -
@@ -2680,21 +2766,12 @@ up to `max_wait_secs`, for recovery to succeed.
 
 If the model cannot be recovered successfully then it is initialized by
 either running the provided `init_op`, or calling the provided `init_fn`.
-It is an error if the model cannot be recovered and neither an `init_op`
-or an `init_fn` are passed.
+The local_init_op is also run after init_op and init_fn, regardless of
+whether the model was recovered successfully, but only if
+ready_for_local_init_op passes.
 
-This is a convenient function for the following, with a few error checks
-added:
-
-```python
-sess, initialized = self.recover_session(master)
-if not initialized:
-  if init_op:
-    sess.run(init_op, feed_dict=init_feed_dict)
-  if init_fn;
-    init_fn(sess)
-return sess
-```
+It is an error if the model cannot be recovered and no `init_op`
+or `init_fn` or `local_init_op` are passed.
 
 ##### Args:
 
@@ -2745,7 +2822,7 @@ and can be recovered from a checkpoint, recover it.
 ##### Returns:
 
   A pair (sess, initialized) where 'initialized' is `True` if
-  the session could be recovered, `False` otherwise.
+  the session could be recovered and initialized, `False` otherwise.
 
 
 - - -
@@ -2805,6 +2882,17 @@ cluster = tf.train.ClusterSpec({"worker": ["worker0.example.com:2222",
                                        "ps1.example.com:2222"]})
 ```
 
+Each job may also be specified as a sparse mapping from task indices
+to network addresses. This enables a server to be configured without
+needing to know the identity of (for example) all other worker
+tasks:
+
+```
+cluster = tf.train.ClusterSpec({"worker": {1: "worker1.example.com:2222"},
+                                "ps": ["ps0.example.com:2222",
+                                       "ps1.example.com:2222"]})
+```
+
 - - -
 
 #### `tf.train.ClusterSpec.as_cluster_def()` {#ClusterSpec.as_cluster_def}
@@ -2816,11 +2904,35 @@ Returns a `tf.train.ClusterDef` protocol buffer based on this cluster.
 
 #### `tf.train.ClusterSpec.as_dict()` {#ClusterSpec.as_dict}
 
-Returns a dictionary from job names to lists of network addresses.
+Returns a dictionary from job names to their tasks.
+
+For each job, if the task index space is dense, the corresponding
+value will be a list of network addresses; otherwise it will be a
+dictionary mapping (sparse) task indices to the corresponding
+addresses.
+
+##### Returns:
+
+  A dictionary mapping job names to lists or dictionaries
+  describing the tasks in those jobs.
 
 
 
 #### Other Methods
+- - -
+
+#### `tf.train.ClusterSpec.__bool__()` {#ClusterSpec.__bool__}
+
+
+
+
+- - -
+
+#### `tf.train.ClusterSpec.__eq__(other)` {#ClusterSpec.__eq__}
+
+
+
+
 - - -
 
 #### `tf.train.ClusterSpec.__init__(cluster)` {#ClusterSpec.__init__}
@@ -2830,8 +2942,10 @@ Creates a `ClusterSpec`.
 ##### Args:
 
 
-*  <b>`cluster`</b>: A dictionary mapping one or more job names to lists of network
-    addresses, or a `tf.train.ClusterDef` protocol buffer.
+*  <b>`cluster`</b>: A dictionary mapping one or more job names to (i) a
+    list of network addresses, or (ii) a dictionary mapping integer
+    task indices to network addresses; or a `tf.train.ClusterDef`
+    protocol buffer.
 
 ##### Raises:
 
@@ -2842,9 +2956,29 @@ Creates a `ClusterSpec`.
 
 - - -
 
+#### `tf.train.ClusterSpec.__ne__(other)` {#ClusterSpec.__ne__}
+
+
+
+
+- - -
+
+#### `tf.train.ClusterSpec.__nonzero__()` {#ClusterSpec.__nonzero__}
+
+
+
+
+- - -
+
 #### `tf.train.ClusterSpec.job_tasks(job_name)` {#ClusterSpec.job_tasks}
 
-Returns a list of tasks in the given job.
+Returns a mapping from task ID to address in the given job.
+
+NOTE: For backwards compatibility, this method returns a list. If
+the given job was defined with a sparse set of task indices, the
+length of this list may not reflect the number of tasks defined in
+this job. Use the [`num_tasks()`](#ClusterSpec.num_tasks) method
+to find the number of tasks defined in a particular job.
 
 ##### Args:
 
@@ -2853,8 +2987,9 @@ Returns a list of tasks in the given job.
 
 ##### Returns:
 
-  A list of strings, corresponding to the network addresses of tasks in
-  the given job, ordered by task index.
+  A list of task addresses, where the index in the list
+  corresponds to the task index of each task. The list may contain
+  `None` if the job was defined with a sparse set of task indices.
 
 ##### Raises:
 
@@ -2871,6 +3006,72 @@ Returns a list of job names in this cluster.
 ##### Returns:
 
   A list of strings, corresponding to the names of jobs in this cluster.
+
+
+- - -
+
+#### `tf.train.ClusterSpec.num_tasks(job_name)` {#ClusterSpec.num_tasks}
+
+Returns the number of tasks defined in the given job.
+
+##### Args:
+
+
+*  <b>`job_name`</b>: The string name of a job in this cluster.
+
+##### Returns:
+
+  The number of tasks defined in the given job.
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: If `job_name` does not name a job in this cluster.
+
+
+- - -
+
+#### `tf.train.ClusterSpec.task_address(job_name, task_index)` {#ClusterSpec.task_address}
+
+Returns the address of the given task in the given job.
+
+##### Args:
+
+
+*  <b>`job_name`</b>: The string name of a job in this cluster.
+*  <b>`task_index`</b>: A non-negative integer.
+
+##### Returns:
+
+  The address of the given task in the given job.
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: If `job_name` does not name a job in this cluster,
+  or no task with index `task_index` is defined in that job.
+
+
+- - -
+
+#### `tf.train.ClusterSpec.task_indices(job_name)` {#ClusterSpec.task_indices}
+
+Returns a list of valid task indices in the given job.
+
+##### Args:
+
+
+*  <b>`job_name`</b>: The string name of a job in this cluster.
+
+##### Returns:
+
+  A list of valid task indices in the given job.
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: If `job_name` does not name a job in this cluster,
+  or no task with index `task_index` is defined in that job.
 
 
 
@@ -3319,6 +3520,13 @@ Adds a metadata information for a single session.run() call.
 *  <b>`ValueError`</b>: If the provided tag was already used for this type of event.
 
 
+- - -
+
+#### `tf.train.SummaryWriter.get_logdir()` {#SummaryWriter.get_logdir}
+
+Returns the directory where event file will be written.
+
+
 
 - - -
 
@@ -3496,6 +3704,13 @@ Create a LooperThread.
 
 
 *  <b>`ValueError`</b>: If one of the arguments is invalid.
+
+
+- - -
+
+#### `tf.train.LooperThread.__repr__()` {#LooperThread.__repr__}
+
+
 
 
 - - -
