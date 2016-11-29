@@ -31,7 +31,7 @@ Word2vec 는 특히 가공하지 않은 텍스트로부터 학습한 단어 embe
 
 ## Noise-Contrastive 학습을 이용한 규모확장
 
-신경 확률 언어 모델들(Neural probabilistic language models) 은 일반적으로 [*softmax* function](https://en.wikipedia.org/wiki/Softmax_function) 에 대해 이전에 주어진 단어들 \\(h'\\) (for "history") 에서 다음 단어(\\(w_t\\)(for "target") 에 대한 확률을 최대화하는 [maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood) (ML) 원리를 이용하여 학습되어 진다.
+신경 확률 언어 모델들(Neural probabilistic language models) 은 일반적으로 [*softmax* function](https://en.wikipedia.org/wiki/Softmax_function) 에 대해 이전에 주어진 단어들 \\(h\\) (for "history") 에서 다음 단어(\\(w_t\\)(for "target") 에 대한 확률을 최대화하는 [maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood) (ML) 원리를 이용하여 학습되어 진다.
 
 $$
 \begin{align}
@@ -63,7 +63,6 @@ $$
 <img style="width:100%" src="../../images/nce-nplm.png" alt>
 </div>
 
-Mathematically, the objective (for each example) is to maximize
 수학적으로, 목적함수(각 예제에 대해) 는 이를 최대화 한다.
 
 $$J_\text{NEG} = \log Q_\theta(D=1 |w_t, h) +
