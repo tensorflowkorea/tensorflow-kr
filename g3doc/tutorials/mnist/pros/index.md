@@ -70,7 +70,7 @@ b = tf.Variable(tf.zeros([10]))
 `Variable`들은 세션이 시작되기 전에 초기화되어야 합니다. 아래 코드는 모든 `Variable`들 각각에 대해 미리 지정된 초기 값(위에서 지정된 0으로만 구성된 텐서)를 넣어 주는 역할을 합니다.
 
 ```python
-sess.run(tf.initialize_all_variables())
+sess.run(tf.global_variables_initializer())
 ```
 
 ### 클래스 예측 및 비용 함수(Cost Function)
