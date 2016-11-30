@@ -189,7 +189,7 @@ train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 이제 우리 모델은 학습할 준비가 되었습니다. 학습을 실행시키기 전에 마지막으로, 우리가 작성한 변수들을 초기화하는 작업을 추가해야 합니다:
 
 ```python
-init = tf.initialize_all_variables()
+init = tf.global_variables_initializer()
 ```
 
 이제 `Session`에서 모델을 실행시키고, 변수들을 초기화 하는 작업을 실행시킬 수 있습니다:
