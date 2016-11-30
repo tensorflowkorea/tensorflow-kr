@@ -1,9 +1,9 @@
 # Translation Coverage                         
 (Automatically generated. DO NOT edit.)
-* :waning_crescent_moon: [/](/) (74021/197131) [37%]
+* :waning_crescent_moon: [/](/) (74021/197079) [37%]
   * :waning_gibbous_moon: [/README.md](/README.md) (642/934) [68%]
   * :new_moon: [/SUMMARY.md](/SUMMARY.md) (363/3188) [11%]
-  * :waning_crescent_moon: [/g3doc](/g3doc) (73016/193009) [37%]
+  * :waning_crescent_moon: [/g3doc](/g3doc) (73016/192957) [37%]
     * :last_quarter_moon: [/g3doc/get_started](/g3doc/get_started) (7314/13589) [53%]
       * :last_quarter_moon: [/g3doc/get_started/basic_usage.md](/g3doc/get_started/basic_usage.md) (1912/3762) [50%]
       * :last_quarter_moon: [/g3doc/get_started/index.md](/g3doc/get_started/index.md) (499/1116) [44%]
@@ -42,7 +42,7 @@
       * :waning_gibbous_moon: [/g3doc/how_tos/variables](/g3doc/how_tos/variables) (1845/2860) [64%]
         * :waning_gibbous_moon: [/g3doc/how_tos/variables/index.md](/g3doc/how_tos/variables/index.md) (1845/2860) [64%]
     * :waning_gibbous_moon: [/g3doc/index.md](/g3doc/index.md) (271/421) [64%]
-    * :last_quarter_moon: [/g3doc/tutorials](/g3doc/tutorials) (42153/77296) [54%]
+    * :last_quarter_moon: [/g3doc/tutorials](/g3doc/tutorials) (42153/77244) [54%]
       * :last_quarter_moon: [/g3doc/tutorials/deep_cnn](/g3doc/tutorials/deep_cnn) (5147/10432) [49%]
         * :last_quarter_moon: [/g3doc/tutorials/deep_cnn/index.md](/g3doc/tutorials/deep_cnn/index.md) (5147/10432) [49%]
       * :last_quarter_moon: [/g3doc/tutorials/image_recognition](/g3doc/tutorials/image_recognition) (3183/6208) [51%]
@@ -77,8 +77,8 @@
         * :waning_crescent_moon: [/g3doc/tutorials/wide/index.md](/g3doc/tutorials/wide/index.md) (1267/5516) [22%]
       * :last_quarter_moon: [/g3doc/tutorials/wide_and_deep](/g3doc/tutorials/wide_and_deep) (1632/3646) [44%]
         * :last_quarter_moon: [/g3doc/tutorials/wide_and_deep/index.md](/g3doc/tutorials/wide_and_deep/index.md) (1632/3646) [44%]
-      * :last_quarter_moon: [/g3doc/tutorials/word2vec](/g3doc/tutorials/word2vec) (4522/9681) [46%]
-        * :last_quarter_moon: [/g3doc/tutorials/word2vec/index.md](/g3doc/tutorials/word2vec/index.md) (4522/9681) [46%]
+      * :last_quarter_moon: [/g3doc/tutorials/word2vec](/g3doc/tutorials/word2vec) (4522/9629) [46%]
+        * :last_quarter_moon: [/g3doc/tutorials/word2vec/index.md](/g3doc/tutorials/word2vec/index.md) (4522/9629) [46%]
 
 ---
 Powered by [Translation Coverage](https://github.com/hunkim/translation_coverage)
