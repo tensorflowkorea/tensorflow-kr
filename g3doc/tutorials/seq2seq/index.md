@@ -30,7 +30,7 @@ python translate.py --data_dir [your_data_directory]
 ([pdf](http://arxiv.org/pdf/1406.1078.pdf))에서 소개된 기본적인 시퀸스-투-시퀸스 모델은 두개의 리커런트 뉴럴 네트워크(RNN)으로 구성된다: 입력을 처리하는 *인코더*와 결과를 생성하는 *디코더*. 이 기본 구조는 아래와 같이 묘사된다.
 
 <div style="width:80%; margin:auto; margin-bottom:10px; margin-top:20px;">
-<img style="width:100%" src="../../images/basic_seq2seq.png" />
+<img style="width:100%" src="https://www.tensorflow.org/images/basic_seq2seq.png" />
 </div>
 
 위 그림에 각 박스는 가장 일반적으로 GRU 쎌이거나 LSTM 쎌인 RNN 쎌을 나타낸다([RNN Tutorial](../../tutorials/recurrent/index.md)를 참조하길 바란다). 인코더와 디코더는 가중치를 공유 할수 있거나, 더 일반적으로는 다른 매개변수 집합을 사용한다. 다중층 쎌들은 역시 시퀸스-투-시퀸스에서 성공적으로 사용되어 왔다. 예로  번역 [Sutskever et al., 2014](http://arxiv.org/abs/1409.3215)
@@ -40,7 +40,7 @@ python translate.py --data_dir [your_data_directory]
 
 
 <div style="width:80%; margin:auto; margin-bottom:10px; margin-top:20px;">
-<img style="width:100%" src="../../images/attention_seq2seq.png" />
+<img style="width:100%" src="https://www.tensorflow.org/images/attention_seq2seq.png" />
 </div>
 
 
@@ -73,7 +73,7 @@ outputs, states = embedding_rnn_seq2seq(
 `embedding_rnn_seq2seq`모드에서, 모든 입력들은(`encoder_inputs` 과 `decoder_inputs`) 이산 값(discrete value)을 나타내는 정수-텐서(integer-tensor)들이다. 그것들은 조밀한(dense) 표현으로 임베딩되어 질 것이다(임베딩에 대해 더 자세한 설명을 위해 [Vectors Representations Tutorial](../../tutorials/word2vec/index.md) 를 보길 권한다, 그러나 이러한 임베딩을 만들기 위해서 나타나는 이산 심볼의 최대 수를 지정할 필요가 있다: 인코더 쪽에 `num_encoder_symbols`, 그리고 디코더 쪽에 `num_decoder_symbols`. 
 
 위 호출에서, `feed_previous`를 False로 설정했다. 이것은 디코더에 전달되는 `decoder_inputs`를 사용할 것이다. `feed_previous`가 True로 설정되면, 디코더는 `decoder_inputs`의 단지 첫번째 원소만 사용할 것이다. 이 리스트에 모든 다른 텐서들은 무시 되어지고, 그대신 디코더의 이전 결과가 사용되어 질 것이다. 이것은 우리의 번역 모델에서 번역을 디코딩 하기 위해서 사용되어진다. [Bengio et al., 2015](http://arxiv.org/abs/1506.03099)
-([pdf](http://arxiv.org/pdf/1506.03099.pdf)와 유사하게 그 모델이 그 자신의 실수에 더 견고하기 하기 위해 또한 학습동안에도 사용되어 질수 있다. 
+([pdf](http://arxiv.org/pdf/1506.03099.pdf))와 유사하게 그 모델이 그 자신의 실수에 더 견고하기 하기 위해 또한 학습동안에도 사용되어 질수 있다. 
 
 위에서 사용된 더 중요한 한 인수는 `output_projection`이다. 그것이 명시되지 않는다면, 임베딩 모델의 결과는  각 생성된 심볼에 대해 로짓(logit)들로 나타내기 때문에 배치사이즈 x `num_decoder_symbols`의 형태를 가진 텐서가 될 것이다. 아주 큰 사전을 가지고 모델을 학습할때, 예를 들어, `num_decoder_symbols`이 아주 클때, 아주 큰 이러한 탠서들을 저장하는것은 비실용적이다. 그대신, 좀더 작은 결과 텐서를 리턴하는 것이 좋다. 그 텐서는 나중에 `output_projection`를 사용해서 큰 결과 텐서에 투여되어진다. 이것은 [Jean et. al., 2014](http://arxiv.org/abs/1412.2007)
 ([pdf](http://arxiv.org/pdf/1412.2007.pdf))에서 설명하는 대로 샘플 소프트맥스 로스(sampled softmax loss)를 가진 seq2seq모델을 사용할수 있게 해준다.
