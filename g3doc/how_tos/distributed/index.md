@@ -1,13 +1,10 @@
-# Distributed TensorFlow
+# 분산환경 텐서플로우
 
-This document shows how to create a cluster of TensorFlow servers, and how to
-distribute a computation graph across that cluster. We assume that you are
-familiar with the [basic concepts](../../get_started/basic_usage.md) of
-writing TensorFlow programs.
+이 문서는 텐서플로우 서버 클러스터를 생성하고, 클러스터 상에서 분산 처리를 수행하는 방법에 대하여 설명한다.  이 문서의 독자들은 텐서플로우를 이용한 [기본적인 프로그래밍 개념](../../get_started/basic_usage)은 숙지가 되어있다고 가정한다 .
 
-## Hello distributed TensorFlow!
+## 안녕 분산환경 텐서플로우!
 
- To see a simple TensorFlow cluster in action, execute the following:
+ 텐서플로우 클러스터의 간단한 동작을 살펴보기 위해서는 아래 예제를 실행해보아라. 
 
 ```shell
 # Start a TensorFlow server as a single-process "cluster".
@@ -20,39 +17,27 @@ $ python
 'Hello, distributed TensorFlow!'
 ```
 
-The
-[`tf.train.Server.create_local_server()`](../../api_docs/python/train.md#Server.create_local_server)
-method creates a single-process cluster, with an in-process server.
+[`tf.train.Server.create_local_server()`](../../api_docs/python/train.md#Server.create_local_server) 메소드는  in-process 서버 형태로 단일 프로세스 클러스터를 생성한다.
 
-## Create a cluster
+## 클러스터 생성하기
 
-A TensorFlow "cluster" is a set of "tasks" that participate in the distributed
-execution of a TensorFlow graph. Each task is associated with a TensorFlow
-"server", which contains a "master" that can be used to create sessions, and a
-"worker" that executes operations in the graph.  A cluster can also be divided
-into one or more "jobs", where each job contains one or more tasks.
+텐서플로우에서 "클러스터"란 텐서플로우 그래프 상에서의 분산 연산의 일부로서 "작업(Task)"의 집합을 의미한다. 각각의 작업은 텐서플로우의 "서버"에 연관되어 있으며, 각 서버는 세션을 생성할 수 있는 "마스터"와 그래프상에서 연산을 수행하는 "워커"로 구성된다.   각 클러스터는 복 수개의 "업무(Jobs)"로 구성되어 있으며, 각각의 업무는 복 수개의 작업으로 이루어져 있다.
 
-To create a cluster, you start one TensorFlow server per task in the cluster.
-Each task typically runs on a different machine, but you can run multiple tasks
-on the same machine (e.g. to control different GPU devices). In each task, do
-the following:
+클러스터를 생성하기 위해서는, 작업 하나당 하나의 텐서플로우 서버를 실행해야한다. 각 작업은 보통 서로 다른 머신에서 실행되지만, 하나의 머신에서 여러개의 작업을 실행하는 것도 가능하다.(예를 들어 복 수개의 GPU를 사용하는 경우). 각 작업마다 아래의 절차를 따라서 진행된다.
 
-1.  **Create a `tf.train.ClusterSpec`** that describes all of the tasks
-    in the cluster. This should be the same for each task.
+1.  클러스터에 할당된 작업을 설명하는 **`tf.train.ClusterSpec`  을 생성**하라. 이 것은 각 작업마다 동일해야 한다.
 
-2.  **Create a `tf.train.Server`**, passing the `tf.train.ClusterSpec` to
-    the constructor, and identifying the local task with a job name
-    and task index.
+2.   `tf.train.ClusterSpec` 를 생성자 인자로 넘겨주어 **`tf.train.Server` 를 생성**하고, 로컬 작업을 업무 이름과 작업 인덱스로 식별하라. 
+
+    ​
 
 
-### Create a `tf.train.ClusterSpec` to describe the cluster
+### 클러스터를 설명하는 `tf.train.ClusterSpec` 생성하기
 
-The cluster specification dictionary maps job names to lists of network
-adresses. Pass this dictionary to the `tf.train.ClusterSpec` constructor.  For
-example:
+클러스터 명세 딕셔너리는 업무 이름과 네트워크 주소를 매핑한다. 아래와 같이 딕셔너리를 `tf.train.ClusterSpec` 의 생성자의 인자로 넘겨 주어라.
 
 <table>
-  <tr><th><code>tf.train.ClusterSpec</code> construction</th><th>Available tasks</th>
+  <tr><th><code>tf.train.ClusterSpec</code> 생성자</th><th>사용 가능 작업</th>
   <tr>
     <td><pre>
 tf.train.ClusterSpec({"local": ["localhost:2222", "localhost:2223"]})
@@ -75,19 +60,13 @@ tf.train.ClusterSpec({
   </tr>
 </table>
 
-### Create a `tf.train.Server` instance in each task
+### 각 작업 마다 `tf.train.Server` 객체 생성하기
 
-A [`tf.train.Server`](../../api_docs/python/train.md#Server) object contains a
-set of local devices, a set of connections to other tasks in its
-`tf.train.ClusterSpec`, and a
-["session target"](../../api_docs/python/client.md#Session) that can use these
-to perform a distributed computation. Each server is a member of a specific
-named job and has a task index within that job.  A server can communicate with
-any other server in the cluster.
+[`tf.train.Server`](../../api_docs/python/train.md#Server)  객체는 여러개의 로컬 디바이스 정보와, 각 작업과 디바이스를 연결해주는 정보인 `tf.train.ClusterSpec` , 분산 연산 수행에 이용되는 ["session target"](../../api_docs/python/client.md#Session) 을 포함하고 있다. 
 
-For example, to launch a cluster with two servers running on `localhost:2222`
-and `localhost:2223`, run the following snippets in two different processes on
-the local machine:
+각각의 서버는 특정한 이름이 부여된 업무의 멤버이며, 해당 업무에서의 작업 인덱스를 가지고 있다.  서버는 클러스터내에 있는 다른 서버와 통신이 가능하다.
+
+예를 들어,  `localhost:2222` `localhost:2223` 두 개의 서버를 가진 클러스터를 구동하려면 밑의 두 코드를 로컬머신의 다른 두 개의 프로세스에서 실행하면 된다.
 
 ```python
 # In task 0:
@@ -100,12 +79,7 @@ cluster = tf.train.ClusterSpec({"local": ["localhost:2222", "localhost:2223"]})
 server = tf.train.Server(cluster, job_name="local", task_index=1)
 ```
 
-**Note:** Manually specifying these cluster specifications can be tedious,
-especially for large clusters. We are working on tools for launching tasks
-programmatically, e.g. using a cluster manager like
-[Kubernetes](http://kubernetes.io). If there are particular cluster managers for
-which you'd like to see support, please raise a
-[GitHub issue](https://github.com/tensorflow/tensorflow/issues).
+**Note:**  거대한 클러스터를 생성하기 위해서 클러스터 명세를 일일히 수동으로 작성하는 것은 지루한 일일 수 있다. 우리는 이러한 작업을 프로그래밍으로 구동하기 위한 도구를 고민중이다. 예를 들어, [Kubernetes](http://kubernetes.io) 와 같은 클러스터 매니저를 사용하는 방법이다. 만약 우리가 지원하기를 원하는 클러스터 매니저가 있다면, [GitHub issue](https://github.com/tensorflow/tensorflow/issues) 에 제보해주길 바란다.
 
 ## Specifying distributed devices in your model
 
@@ -153,7 +127,7 @@ simplify the work of specifying a replicated model. Possible approaches include:
   `tf.Graph` that contains one set of parameters (in `tf.Variable` nodes pinned
   to `/job:ps`); and multiple copies of the compute-intensive part of the model,
   each pinned to a different task in `/job:worker`.
-  
+
 * **Between-graph replication.** In this approach, there is a separate client
   for each `/job:worker` task, typically in the same process as the worker
   task. Each client builds a similar graph containing the parameters (pinned to
