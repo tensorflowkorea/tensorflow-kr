@@ -27,9 +27,9 @@ $ python
 
 1.  클러스터에 할당된 작업을 설명하는 **`tf.train.ClusterSpec`  을 생성**하라. 이 것은 각 작업마다 동일해야 한다.
 
-2.   `tf.train.ClusterSpec` 를 생성자 인자로 넘겨주어 **`tf.train.Server` 를 생성**하고, 로컬 작업을 업무 이름과 작업 인덱스로 식별하라. 
+2.  `tf.train.ClusterSpec` 를 생성자 인자로 넘겨주어 **`tf.train.Server` 를 생성**하고, 로컬 작업을 업무 이름과 작업 인덱스로 식별하라. 
 
-    ​
+     ​
 
 
 ### 클러스터를 설명하는 `tf.train.ClusterSpec` 생성하기
@@ -81,11 +81,9 @@ server = tf.train.Server(cluster, job_name="local", task_index=1)
 
 **Note:**  거대한 클러스터를 생성하기 위해서 클러스터 명세를 일일히 수동으로 작성하는 것은 지루한 일일 수 있다. 우리는 이러한 작업을 프로그래밍으로 구동하기 위한 도구를 고민중이다. 예를 들어, [Kubernetes](http://kubernetes.io) 와 같은 클러스터 매니저를 사용하는 방법이다. 만약 우리가 지원하기를 원하는 클러스터 매니저가 있다면, [GitHub issue](https://github.com/tensorflow/tensorflow/issues) 에 제보해주길 바란다.
 
-## Specifying distributed devices in your model
+## 모델 내 에서 디바이스 명시하기
 
-To place operations on a particular process, you can use the same
-[`tf.device()`](../../api_docs/python/framework.md#device)
-function that is used to specify whether ops run on the CPU or GPU. For example:
+연산을 CPU 혹은 GPU에서 수행할지 선택할 때와 마찬가지로, 특정 연산에 연산을 수행할 디바이스를 명시할 때는     [`tf.device()`](../../api_docs/python/framework.md#device) 를 사용하면 된다. 
 
 ```python
 with tf.device("/job:ps/task:0"):
@@ -108,27 +106,15 @@ with tf.Session("grpc://worker7.example.com:2222") as sess:
     sess.run(train_op)
 ```
 
-In the above example, the variables are created on two tasks in the `ps` job,
-and the compute-intensive part of the model is created in the `worker`
-job. TensorFlow will insert the appropriate data transfers between the jobs
-(from `ps` to `worker` for the forward pass, and from `worker` to `ps` for
-applying gradients).
+위의 예제에서, 변수들은 `ps` 업무(job)에서 생성이 되고, 연산이 집중적으로 일어나는 모델은 `worker` 에서 생성이 된다. 텐서플로우는 각각의 업무간에 적절하게 데이터를 이동시켜준다.(정방향 연산시에는 `ps` 에서 `worker` 로 gradients 전파시에는 `worker` 에서 `ps`로 전달한다.)
 
-## Replicated training
+## 훈련 복제
 
-A common training configuration, called "data parallelism," involves multiple
-tasks in a `worker` job training the same model on different mini-batches of
-data, updating shared parameters hosted in a one or more tasks in a `ps`
-job. All tasks typically run on different machines. There are many ways to
-specify this structure in TensorFlow, and we are building libraries that will
-simplify the work of specifying a replicated model. Possible approaches include:
+일반적으로 ''데이터 병렬화(data parallelism)'' 로 명명되는 훈련 방식은  `worker`업무의 여러개의 작업이 하나의 모델에 대하여, 데이터의 각기 다른 일부를 이용하여 `ps` 에서 생성된 공유변수를 병렬적으로 업데이트 시킨다. 모든 작업들은 각각 다른 머신에서 동작한다. 텐서플로우에서 이러한 훈련 방식을 구현하는 방법은 여러가지가 있는데, 우리는 복제된 모델을 간단하게 명시할 수 있도록 도와주는 라이브러리를 구축하였다. 시도 가능한 방법은 아래와 같다:
 
-* **In-graph replication.** In this approach, the client builds a single
-  `tf.Graph` that contains one set of parameters (in `tf.Variable` nodes pinned
-  to `/job:ps`); and multiple copies of the compute-intensive part of the model,
-  each pinned to a different task in `/job:worker`.
+* **그래프내 복제(In-graph replication).** 이 방법에서 클라이언트는 한 세트의 변수( `/job:ps`에 연관된 `tf.Variable` )가 포함 된 `tf.Graph` 하나를 구축하고, `/job:worker` 에 소속된 서로 다른 작업에 각각 연관된 여러개의 연산 집중 모델을 복제하여 구축한다.
 
-* **Between-graph replication.** In this approach, there is a separate client
+* **그래프간 복제(Between-graph replication).** In this approach, there is a separate client
   for each `/job:worker` task, typically in the same process as the worker
   task. Each client builds a similar graph containing the parameters (pinned to
   `/job:ps` as before using
