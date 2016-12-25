@@ -7,12 +7,12 @@
  텐서플로우 클러스터의 간단한 동작을 살펴보기 위해서는 아래 예제를 실행해보아라. 
 
 ```shell
-# Start a TensorFlow server as a single-process "cluster".
+# 싱글 프로세스 클러스터에서 텐서플로우 서버 실행하기.
 $ python
 >>> import tensorflow as tf
 >>> c = tf.constant("Hello, distributed TensorFlow!")
 >>> server = tf.train.Server.create_local_server()
->>> sess = tf.Session(server.target)  # Create a session on the server.
+>>> sess = tf.Session(server.target)  # 서버에서 세션 생성하기.
 >>> sess.run(c)
 'Hello, distributed TensorFlow!'
 ```
@@ -69,12 +69,12 @@ tf.train.ClusterSpec({
 예를 들어,  `localhost:2222` `localhost:2223` 두 개의 서버를 가진 클러스터를 구동하려면 밑의 두 코드를 로컬머신의 다른 두 개의 프로세스에서 실행하면 된다.
 
 ```python
-# In task 0:
+# 0번 작업:
 cluster = tf.train.ClusterSpec({"local": ["localhost:2222", "localhost:2223"]})
 server = tf.train.Server(cluster, job_name="local", task_index=0)
 ```
 ```python
-# In task 1:
+# 1번 작업:
 cluster = tf.train.ClusterSpec({"local": ["localhost:2222", "localhost:2223"]})
 server = tf.train.Server(cluster, job_name="local", task_index=1)
 ```
@@ -124,13 +124,13 @@ with tf.Session("grpc://worker7.example.com:2222") as sess:
 ```python
 import tensorflow as tf
 
-# Flags for defining the tf.train.ClusterSpec
+# tf.train.ClusterSpec 정의를 위한 설정
 tf.app.flags.DEFINE_string("ps_hosts", "",
                            "Comma-separated list of hostname:port pairs")
 tf.app.flags.DEFINE_string("worker_hosts", "",
                            "Comma-separated list of hostname:port pairs")
 
-# Flags for defining the tf.train.Server
+# tf.train.Server 정의를 위한 설정
 tf.app.flags.DEFINE_string("job_name", "", "One of 'ps', 'worker'")
 tf.app.flags.DEFINE_integer("task_index", 0, "Index of task within the job")
 
@@ -141,10 +141,10 @@ def main(_):
   ps_hosts = FLAGS.ps_hosts.split(",")
   worker_hosts = FLAGS.worker_hosts.split(",")
 
-  # Create a cluster from the parameter server and worker hosts.
+  # 변수 서버와 작업자 클러스터를 생성한다.
   cluster = tf.train.ClusterSpec({"ps": ps_hosts, "worker": worker_hosts})
   
-  # Create and start a server for the local task.
+  # 로컬 작업 수행을 위해 서버를 생성하고 구동한다.
   server = tf.train.Server(cluster,
                            job_name=FLAGS.job_name,
                            task_index=FLAGS.task_index)
@@ -153,12 +153,12 @@ def main(_):
     server.join()
   elif FLAGS.job_name == "worker":
 
-    # Assigns ops to the local worker by default.
+    # 작업자에 연산을 분배한다.
     with tf.device(tf.train.replica_device_setter(
         worker_device="/job:worker/task:%d" % FLAGS.task_index,
         cluster=cluster)):
 
-      # Build model...
+      # 모델 구축...
       loss = ...
       global_step = tf.Variable(0)
 
@@ -169,7 +169,7 @@ def main(_):
       summary_op = tf.merge_all_summaries()
       init_op = tf.initialize_all_variables()
 
-    # Create a "supervisor", which oversees the training process.
+    # 훈련 과정을 살펴보기 위해 "supervisor"를 생성한다.
     sv = tf.train.Supervisor(is_chief=(FLAGS.task_index == 0),
                              logdir="/tmp/train_logs",
                              init_op=init_op,
@@ -178,18 +178,17 @@ def main(_):
                              global_step=global_step,
                              save_model_secs=600)
 
-    # The supervisor takes care of session initialization, restoring from
-    # a checkpoint, and closing when done or an error occurs.
+    # supervisor는 세션 초기화를 관리하고, checkpoint로부터 모델을 복원하고 
+    # 에러가 발생하거나 연산이 완료되면 프로그램을 종료한다.
     with sv.managed_session(server.target) as sess:
-      # Loop until the supervisor shuts down or 1000000 steps have completed.
+      # "supervisor"가 종료되거나 1000000 step이 수행 될 때까지 반복한다.
       step = 0
       while not sv.should_stop() and step < 1000000:
-        # Run a training step asynchronously.
-        # See `tf.train.SyncReplicasOptimizer` for additional details on how to
-        # perform *synchronous* training.
+        # 훈련 과정을 비동기식으로 실행한다.Run a training step asynchronously.
+        # 동기식 훈련 수행을 위해서는 `tf.train.SyncReplicasOptimizer`를 참조하라.
         _, step = sess.run([train_op, global_step])
 
-    # Ask for all the services to stop.
+    # 모든 서비스 중단.
     sv.stop()
 
 if __name__ == "__main__":
