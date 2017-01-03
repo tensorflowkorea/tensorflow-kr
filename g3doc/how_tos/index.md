@@ -19,7 +19,7 @@
 
 텐서보드는 모델들의 학습 및 평가를 시각화 해주는 유용한 툴입니다. 이 튜토리얼을 통해 텐서보드를 어떻게 만들고 동작시키는지 알 수 있습니다. 그리고 Summary 연산자를 추가하여, 텐서보드가 시각화를 위해 사용하게 되는 이벤트 파일에 자동적으로 데이타를 출력하는 방법을 배웁니다.
 
-[View Tutorial](summaries_and_tensorboard/index.md)
+[튜토리얼 보기](summaries_and_tensorboard/index.md)
 
 
 ## 텐서보드: 그래프 시각화
@@ -29,20 +29,11 @@
 [튜토리얼 보기](graph_viz/index.md)
 
 
-## TensorBoard: Embedding Visualization
-
-This tutorial describes how to use the embedding projector in TensorBoard to
-visualize your embeddings.
-
-[View Tutorial](embedding_viz/index.md)
-
-
 ## 데이터 로딩
 
 텐서플로우 프로그램에 데이타를 로딩하는 세가지 방법을 설명합니다: Feeding, Reading, Preloading, 이렇게 세가지입니다.
 
 [튜토리얼 보기](reading_data/index.md)
-
 
 ## 분산처리
 
@@ -108,23 +99,11 @@ GPU상에서 모델을 구축하고 실행하는 방법을 설명하는 튜토�
 
 [튜토리얼 보기](../how_tos/tool_developers/index.md)
 
-
 ## 트랜스퍼 학습을 이용한 부분 학습
 
 Inception과 같은 완성된 형태의 인식 모델을 학습시키는 데에는, 많은 수의 이미지와 오랜 시간이 필요합니다. 학습이 끝난 모델의 최종 레이어만 다시 학습함으로써, 다른 카테고리의 대상을 인식할 수 있게 하는 트랜스퍼 학습 기법을 설명합니다. 모델을 처음부터 다시 학습하는 것보다 훨씬 빠르고 쉬운 방법입니다.
 
 [튜토리얼 보기](../how_tos/image_retraining/index.md)
-
-
-## How to use the TensorFlow Debugger
-
-The TensorFlow Debugger (tfdbg) is a specialized debugger for TensorFlow
-models. It provides visibility into the internal structure and state of running
-TensorFlow graphs. Using the command-line interface of tfdbg, you can debug
-model bugs and issues with fewer code changes and more insight.
-
-[View Tutorial](../how_tos/debugger/index.md)
-
 
 ## 모델 Export 와 Import
 
@@ -132,25 +111,8 @@ model bugs and issues with fewer code changes and more insight.
 
 [튜토리얼 보기](../how_tos/meta_graph/index.md)
 
-
 ## 텐서플로우로 뉴럴 네트워크를 정량화 하기
 
 플로팅 포인트 모델을, 8비트 파라미터와 연산을 사용하도록 정량화(양자화)하는 방법을 배웁니다. 프로그램의 이면에서 정량화가 어떻게 동작하는지도 설명합니다.
 
 [튜토리얼 보기](../how_tos/quantization/index.md)
-
-
-## How to run TensorFlow on Hadoop
-
-This tutorial shows how to read and write HDFS files, and will later describe
-running on cluster managers.
-
-[View Tutorial](../how_tos/hadoop/index.md)
-
-
-## TensorFlow in other languages
-
-This guide describes how TensorFlow features can be provided in other
-programming languages.
-
-[View Tutorial](language_bindings/index.md)
