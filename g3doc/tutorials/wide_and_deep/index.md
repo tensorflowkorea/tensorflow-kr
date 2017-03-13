@@ -1,4 +1,5 @@
 # TensorFlow Wide & Deep Learning 튜토리얼
+(v1.0)
 
 이전 튜토리얼[선형모델(Linear Model) 튜토리얼](../wide/) 에서, [Census Income Dataset](https://archive.ics.uci.edu/ml/datasets/Census+Income) 을 이용하여 연소득이 $50,000 이상인 사람을 예측하기 위한 로지스틱스 회귀모델을 학습했다. TensorFlow 는 deep neural networks(신경망) 학습에 탁월함은 물론, 어느 것을 잘 선택해야 하는가에 대한 것을 생각할 수 있다. 이들을 동시에는 안될까? 하나의 모델에 둘의 strength를 조합하는 것은 가능할까? 
 
@@ -176,8 +177,8 @@ CONTINUOUS_COLUMNS = ["age", "education_num", "capital_gain", "capital_loss",
 # test_file to your own paths.
 train_file = tempfile.NamedTemporaryFile()
 test_file = tempfile.NamedTemporaryFile()
-urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
-urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test", test_file.name)
+urllib.urlretrieve("http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
+urllib.urlretrieve("http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.test", test_file.name)
 
 # Read the training and test data sets into Pandas dataframe.
 df_train = pd.read_csv(train_file, names=COLUMNS, skipinitialspace=True)

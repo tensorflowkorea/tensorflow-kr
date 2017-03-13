@@ -1,4 +1,5 @@
 # 변수 공유
+(v1.0)
 
 [Variables HowTo](../../how_tos/variables/index.md)에 
 설명된 방법으로 단일 변수를 생성, 초기화, 저장 및 불러오기를 할 수 있습니다.
@@ -245,9 +246,9 @@ with tf.variable_scope("root"):
 ```python
 with tf.variable_scope("foo") as foo_scope:
     v = tf.get_variable("v", [1])
-with tf.variable_scope(foo_scope)
+with tf.variable_scope(foo_scope):
     w = tf.get_variable("w", [1])
-with tf.variable_scope(foo_scope, reuse=True)
+with tf.variable_scope(foo_scope, reuse=True):
     v1 = tf.get_variable("v", [1])
     w1 = tf.get_variable("w", [1])
 assert v1 == v
@@ -260,7 +261,7 @@ assert w1 == w
 ```python
 with tf.variable_scope("foo") as foo_scope:
     assert foo_scope.name == "foo"
-with tf.variable_scope("bar")
+with tf.variable_scope("bar"):
     with tf.variable_scope("baz") as other_scope:
         assert other_scope.name == "bar/baz"
         with tf.variable_scope(foo_scope) as foo_scope2:
@@ -322,11 +323,11 @@ assert x.op.name == "foo/bar/add"
 
 ## 사용 예시
 
-다음은 변수 범위를 사용하는 몇 가지 파일에 대한 포인터(pointers)입니다.
-특히, RNN(recurrent neural networks)과 seq2seq(sequence-to-sequence) 모델에서 많이 사용됩니다.
+다음은 변수 범위를 사용하는 몇 가지 파일에 대한 포인터(pointers)입니다. [TensorFlow models repo](https://github.com/tensorflow/models)에서 모두 찾을수있다.
+특히, 변수 범위는 RNN(recurrent neural networks)과 seq2seq(sequence-to-sequence) 모델에서 많이 사용됩니다.
 
 파일 | 내용 
 --- | ---
-`models/image/cifar10.py` | 이미지 내에서 객체를 찾는 모델.
-`models/rnn/rnn_cell.py` | RNN을 위한 Cell 함수.
-`models/rnn/seq2seq.py` | seq2seq 모델을 구축하기 위한 함수.
+`models/tutorials/image/cifar10.py` | 이미지 내에서 객체를 찾는 모델.
+`models/tutorials/rnn/rnn_cell.py` | RNN을 위한 Cell 함수.
+`models/tutorials/rnn/seq2seq.py` | seq2seq 모델을 구축하기 위한 함수.

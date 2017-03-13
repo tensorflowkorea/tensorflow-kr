@@ -1,4 +1,5 @@
 # 단어들의 벡터 표현
+(v1.0)
 
 이 튜토리얼에서 [Mikolov et al.](http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) 의 word2vec 모델을 살펴본다. 이 모델은 "word embeddings" 라 불리는 단어들의 벡터 표현 학습에 사용된다.
 
@@ -11,7 +12,7 @@
 * 또한 TensorFlow 에서 모델의 간단한 구현을 보인다.
 * 마지막으로, 초기 버전 수준을 더 잘 만들수 있는 방법을 알아본다.
 
-이후에 튜토리얼에서는 코드를 보여줄 것이나, 좀 더 자세히 알고 싶다면 [tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py) 의 최소화된 구현을 참고하자. 이 기본 예제는 특정 데이터를 다운로드 하기 위해 필요한 코드, 이것을 약간 학습하기 위한 코드, 그리고 결과를 시각화하기 위하 코드를 포함한다. 기본 버전을 읽고 실행하는데 익숙해지면, 쓰레드를 이용하여 어떻게 효율적으로 데이터를 텍스트 모델로 이동시키는지, 학습하는 동안 어떻게 체크하는지 등에 대한 좀 더 심화된 TensorFlow 원리들을 보여주는 심화 구현된 [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 을 시작할 수 있다.
+이후에 튜토리얼에서는 코드를 보여줄 것이나, 좀 더 자세히 알고 싶다면 [tensorflow/examples/tutorials/word2vec/word2vec_basic.py](https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py) 의 최소화된 구현을 참고하자. 이 기본 예제는 특정 데이터를 다운로드 하기 위해 필요한 코드, 이것을 약간 학습하기 위한 코드, 그리고 결과를 시각화하기 위하 코드를 포함한다. 기본 버전을 읽고 실행하는데 익숙해지면, 쓰레드를 이용하여 어떻게 효율적으로 데이터를 텍스트 모델로 이동시키는지, 학습하는 동안 어떻게 체크하는지 등에 대한 좀 더 심화된 TensorFlow 원리들을 보여주는 심화 구현된 [tensorflow_models/tutorials/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow_models/tutorials/embedding/word2vec.py) 을 시작할 수 있다.
 
 하지만 우선, 전반부에 왜 word embeddings 를 배워야 하는지 살펴보자. 자신이 Embedding 을 잘 알고 자세한 설명들이 혼란스럽다고 생각하면 이 부분을 넘어가도 된다.
 
@@ -37,7 +38,7 @@ $$
 \begin{align}
 P(w_t | h) &= \text{softmax}(\text{score}(w_t, h)) \\
            &= \frac{\exp \{ \text{score}(w_t, h) \} }
-             {\sum_\text{Word w' in Vocab} \exp \{ \text{score}(w', h) \} }.
+             {\sum_\text{Word w' in Vocab} \exp \{ \text{score}(w', h) \} }
 \end{align}
 $$
 
@@ -47,7 +48,7 @@ $$
 \begin{align}
  J_\text{ML} &= \log P(w_t | h) \\
   &= \text{score}(w_t, h) -
-     \log \left( \sum_\text{Word w' in Vocab} \exp \{ \text{score}(w', h) \} \right)
+     \log \left( \sum_\text{Word w' in Vocab} \exp \{ \text{score}(w', h) \} \right).
 \end{align}
 $$
 
@@ -176,13 +177,13 @@ for inputs, labels in generate_batch(...):
 <img style="width:100%" src="../../images/tsne.png" alt>
 </div>
 
-이제 다 됐어! 예상한 것 처럼 비슷한 단어들은 결국 서로 가까운 집단화(clustering) 된다. TensorFlow 의 더욱 진보된 features 를 보여주는 비중있는 word2vec 구현을 위해서, [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 을 참고하자.
+이제 다 됐어! 예상한 것 처럼 비슷한 단어들은 결국 서로 가까운 집단화(clustering) 된다. TensorFlow 의 더욱 진보된 features 를 보여주는 비중있는 word2vec 구현을 위해서, [tensorflow_models/tutorials/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow_models/tutorials/embedding/word2vec.py) 을 참고하자.
 
 ## Embeddings 평가하기 : 유추(Analogical Reasoning)
 
 Embeddings 는 NLP 의 다양한 예측 문제에 대해 유용하다. 완전 품사 모델이나 개체명 모델의 학습을 제외하고, embeddings 를 평가하는 한가지 간단한 방법은 이들을 직접 사용하여 `king is to queen as father is to ?` 와 같이 구문론적인 그리고 의미론적인 관계를 예측하는 것이다. 이 방법을 유추(*analogical reasoning*) 이라고 부르며 [Mikolov and colleagues](http://msr-waypoint.com/en-us/um/people/gzweig/Pubs/NAACL2013Regularities.pdf) 에 의해 소개되었고, dataset 은 여기에서 다운로드 할 수 있다: https://word2vec.googlecode.com/svn/trunk/questions-words.txt.
 
-어떻게 이 평가를 수행하는 알기 위해선, [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 의 `build_eval_graph()` 와 `eval()` 함수를 살펴봐라.
+어떻게 이 평가를 수행하는 알기 위해선, [tensorflow_models/tutorials/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow_models/tutorials/embedding/word2vec.py) 의 `build_eval_graph()` 와 `eval()` 함수를 살펴봐라.
 
 hyperparameters 의 선정은 이 문제의 정확도에 매우 큰 영향을 줄 수 있다. 이 문제에 대해 최고의 성과를 달성하기 위해선 매우 큰 dataset 을 학습하는 것, hyperparameters 에 대한 신중한 조절, 그리고 데이터의 이단추출과 같은 기법을 이용하는 것이 필요하다. 그리고 이 기법들은 이 튜토리얼의 범위를 넘어가는 것이다.
 
@@ -190,9 +191,9 @@ hyperparameters 의 선정은 이 문제의 정확도에 매우 큰 영향을 �
 
 우리의 평범한 구현은 TensorFlow 이 다루기 쉬움을의 보여준다. 예를들어 학습 목적함수의 변화는 `tf.nn.nce_loss()` 을 `tf.nn.sampled_softmax_loss()` 와 같은 대체 함수로 교체하는 것 만큼 간단하다. loss 함수에 대해 새로운 아이디어가 있다면, TensorFlow 내에서 새로운 목적함수에 대해 직접 고쳐 표현할 수 있으며 최적화 도구로 이것의 미분을 계산할 수 있다. 여러 다른 아이디어를 시도하거나 빠르게 반복할 경우, 이러한 용이성은 머신 러닝 모델 개발의 탐색 단계에서 매우 가치가 있다.
 
-만족할 만한 모델 구조를 가지고 있다면, 당신의 구현을 더 효율적으로 실행하기 위해(그리고 적은 시간에 더 많은 데이터를 다룰수 있게 하기 위해) 최적화할 가치가 있을 수 있다. 예를 들어, 우리가 이 튜토리얼에서 사용한 간단한 코드는 데이터 아이템들을 읽고 대입하는데 --이들 각각은 TensorFlow back-end 에서 매우 적게 고려된다--  Python 을 사용하기 때문에 절충된 속도로 수행된다. 만일 당신의 모델이 입력 데이터에 대해 심각한 병목현상을 격는 것을 발견한다면, [New Data Formats](../../how_tos/new_data_formats/index.md) 에 설명된 것과 처럼, 수정된 데이터 리더(reader) 를 구현할 수 있을 것이다. Skip-gram 모델링의 경우, [tensorflow/models/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py) 의 예제와 같이 이미 다루었다.
+만족할 만한 모델 구조를 가지고 있다면, 당신의 구현을 더 효율적으로 실행하기 위해(그리고 적은 시간에 더 많은 데이터를 다룰수 있게 하기 위해) 최적화할 가치가 있을 수 있다. 예를 들어, 우리가 이 튜토리얼에서 사용한 간단한 코드는 데이터 아이템들을 읽고 대입하는데 --이들 각각은 TensorFlow back-end 에서 매우 적게 고려된다--  Python 을 사용하기 때문에 절충된 속도로 수행된다. 만일 당신의 모델이 입력 데이터에 대해 심각한 병목현상을 격는 것을 발견한다면, [New Data Formats](../../how_tos/new_data_formats/index.md) 에 설명된 것과 처럼, 수정된 데이터 리더(reader) 를 구현할 수 있을 것이다. Skip-gram 모델링의 경우, [tensorflow_models/tutorials/embedding/word2vec.py](https://www.tensorflow.org/code/tensorflow_models/tutorials/embedding/word2vec.py) 의 예제와 같이 이미 다루었다.
 
-당신의 모델이 입출력 바운드 뿐만아니라 더 높은 성능을 원한다면, [Adding a New Op](../../how_tos/adding_an_op/index.md) 에 설명된 것처럼, 당신의 TensorFlow Ops 작성을 통해 자세한 설명을 할 수 있다. 이것에 대한 Skip-Gram 예제는 [tensorflow/models/embedding/word2vec_optimized.py](https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec_optimized.py) 에 제시했다. 각 단계의 성능 향상 측정을 위해 각각에 대해 자유롭게 벤치마크 해보자.
+당신의 모델이 입출력 바운드 뿐만아니라 더 높은 성능을 원한다면, [Adding a New Op](../../how_tos/adding_an_op/index.md) 에 설명된 것처럼, 당신의 TensorFlow Ops 작성을 통해 자세한 설명을 할 수 있다. 이것에 대한 Skip-Gram 예제는 [tensorflow_models/tutorials/embedding/word2vec_optimized.py](https://www.tensorflow.org/code/tensorflow_models/tutorials/embedding/word2vec_optimized.py) 에 제시했다. 각 단계의 성능 향상 측정을 위해 각각에 대해 자유롭게 벤치마크 해보자.
 
 ## 결론
 

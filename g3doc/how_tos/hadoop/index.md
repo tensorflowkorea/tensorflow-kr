@@ -1,5 +1,5 @@
 # 하둡에서 TensorFlow 돌리는 법(How to run TensorFlow on Hadoop)
-(v0.12 rc1)
+(v1.0)
 
 이 문서에서는 TensorFlow를 하둡에서 작동시키는 방법을 다룹니다. 앞으로 다양한 클러스터 관리 프로그램으로 확장되겠지만 여기서는 하둡 분산파일 시스템(HDFS)만 다루겠습니다.
 
@@ -37,6 +37,16 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${JAVA_HOME}/jre/lib/amd64/server
 
 ```shell
 CLASSPATH=$($HADOOP_HDFS_HOME}/bin/hadoop classpath --glob) python your_script.py
-```
+
+For older version of Hadoop/libhdfs (older than 2.6.0), you have to expand the classpath wildcard manually. For more details, see
+[HADOOP-10903](https://issues.apache.org/jira/browse/HADOOP-10903).
+
+만약 하둡 클러스터가 보안모드일 경우, 환경변수가 설정되어야 합니다.
+
+    **KERB_TICKET_CACHE_PATH**: 예를 들어, Kerberos ticket 캐시 파일의 경로:
+
+    ```shell
+    export KERB_TICKET_CACHE_PATH=/tmp/krb5cc_10002
+    ```
 
 [분산처리 TensorFlow](../distributed/index.md)를 이용하려면 모든 머신에 환경 변수 세트와 하둡이 있어야 합니다.

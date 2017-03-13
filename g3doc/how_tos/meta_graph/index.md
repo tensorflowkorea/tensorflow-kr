@@ -1,4 +1,5 @@
 # 메타 그래프를 내보내고 가져오기
+(v1.0)
 
 [`MetaGraph`](https://www.tensorflow.org/code/tensorflow/core/protobuf/meta_graph.proto)는 텐서플로우 GraphDef 뿐만 아니라
 프로세스 경계를 교차할 때 그래프에서 연산을 실행하는 데 필요한 관련된 metadata도 포함합니다.
@@ -202,13 +203,12 @@ MetaGraph 파일을 그래프로 가져오기위한 API는 `import_meta_graph()`
     batch_size = tf.size(labels)
     labels = tf.expand_dims(labels, 1)
     indices = tf.expand_dims(tf.range(0, batch_size), 1)
-    concated = tf.concat(1, [indices, labels])
+    concated = tf.concat([indices, labels], 1)
     onehot_labels = tf.sparse_to_dense(
-        concated, tf.pack([batch_size, 10]), 1.0, 0.0)
+        concated, tf.stack([batch_size, 10]), 1.0, 0.0)
     logits = tf.get_collection("logits")[0]
-    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits,
-                                                            onehot_labels,
-                                                            name="xentropy")
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(
+      labels=onehot_labels, logits=logits, name="xentropy")
     loss = tf.reduce_mean(cross_entropy, name="xentropy_mean")
 
     tf.scalar_summary(loss.op.name, loss)

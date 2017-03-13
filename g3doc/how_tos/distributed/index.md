@@ -1,4 +1,5 @@
 # 분산환경 텐서플로우
+(v1.0)
 
 이 문서는 텐서플로우 서버 클러스터를 생성하고, 클러스터 상에서 분산 처리를 수행하는 방법에 대하여 설명한다.  이 문서의 독자들은 텐서플로우를 이용한 [기본적인 프로그래밍 개념](../../get_started/basic_usage)은 숙지가 되어있다고 가정한다 .
 
@@ -115,26 +116,18 @@ with tf.Session("grpc://worker7.example.com:2222") as sess:
 * **그래프내 복제(In-graph replication).** 이 방법에서 클라이언트는 한 세트의 변수( `/job:ps`에 연관된 `tf.Variable` )가 포함 된 `tf.Graph` 하나를 구축하고, `/job:worker` 에 소속된 서로 다른 작업에 각각 연관된 여러개의 연산 집중 모델을 복제하여 구축한다.
 * **그래프간 복제(Between-graph replication).** 이 방법에서는 각 `/job:worker` 작업마다 별도의 클라이언트가 존재하며 일반적으로 연산수행 작업과 동일한 클라이언트에 있다. 각 클라이언트는 변수를 포함하는 유사한 그래프를 구축한다. (각 변수는 [`tf.train.replica_device_setter()`](https://github.com/JunYeopLee/tensorflow-kr/blob/master/g3doc/api_docs/python/train.md#replica_device_setter)를 사용하기 전에 `/job:ps`에 연관되어있고, 사용후에 동일한 작업에 매핑 된다.)  연산 집중 모델의 하나의 복사본은 `/job:worker` 의 로컬 작업에 연관되어 있다.
 * **비동기식 훈련(Asynchronous training).** 이 방법에서는 각 그래프의 복제품이 독립적으로 각자 고유의 훈련 루프를 가지고 있다. 이 방법은 위의 두 복제방식과 호환이 가능하다.  
-* **동기식 훈련(Synchronous training).** 이 방식에서는 각 그래프의 복제품이 현재의 변수에서 값을 읽어오고, 병렬적으로 gradient를 계산한뒤 병렬적으로 모델에 반영한다. 이 방법은 위 의 두 복제방식과 호환이 가능하다. 예를 들어 [CIFAR-10 multi-GPU trainer](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/cifar10_multi_gpu_train.py) 에서 와 같이 gradient 평균을 활용하여 그래프내 복제를 하거나, `tf.train.SyncReplicasOptimizer`를 활용에서 그래프간 복제를 활용하는 방법이 있다.
+* **동기식 훈련(Synchronous training).** 이 방식에서는 각 그래프의 복제품이 현재의 변수에서 값을 읽어오고, 병렬적으로 gradient를 계산한뒤 병렬적으로 모델에 반영한다. 이 방법은 위 의 두 복제방식과 호환이 가능하다. 예를 들어 [CIFAR-10 multi-GPU trainer](https://www.tensorflow.org/code/tensorflow_models/tutorials/image/cifar10/cifar10_multi_gpu_train.py) 에서 와 같이 gradient 평균을 활용하여 그래프내 복제를 하거나, `tf.train.SyncReplicasOptimizer`를 활용에서 그래프간 복제를 활용하는 방법이 있다.
 
 ### 총 정리 : 훈련 프로그램 예시
 
 아래 코드는 그래프간 복제와 비동기식 훈련을 활용한 분산 훈련 프로그램의 뼈대 코드이다. 아래 코드에는 변수 서버(ps)와 연산 수행(worker)작업을 구현한 코드도 포함되어 있다. 
 
 ```python
+import argparse
+import sys
 import tensorflow as tf
 
-# tf.train.ClusterSpec 정의를 위한 설정
-tf.app.flags.DEFINE_string("ps_hosts", "",
-                           "Comma-separated list of hostname:port pairs")
-tf.app.flags.DEFINE_string("worker_hosts", "",
-                           "Comma-separated list of hostname:port pairs")
-
-# tf.train.Server 정의를 위한 설정
-tf.app.flags.DEFINE_string("job_name", "", "One of 'ps', 'worker'")
-tf.app.flags.DEFINE_integer("task_index", 0, "Index of task within the job")
-
-FLAGS = tf.app.flags.FLAGS
+FLAGS=None
 
 
 def main(_):
@@ -192,7 +185,36 @@ def main(_):
     sv.stop()
 
 if __name__ == "__main__":
-  tf.app.run()
+  parser = argparse.ArgumentParser()
+  parser.register("type", "bool", lambda v: v.lower() == "true")
+  # Flags for defining the tf.train.ClusterSpec
+  parser.add_argument(
+      "--ps_hosts",
+      type=str,
+      default="",
+      help="Comma-separated list of hostname:port pairs"
+  )
+  parser.add_argument(
+      "--worker_hosts",
+      type=str,
+      default="",
+     help="Comma-separated list of hostname:port pairs"
+  )
+  parser.add_argument(
+      "--job_name",
+      type=str,
+      default="",
+      help="One of 'ps', 'worker'"
+  )
+  # Flags for defining the tf.train.Server
+  parser.add_argument(
+      "--task_index",
+      type=int,
+      default=0,
+      help="Index of task within the job"
+  )
+   FLAGS, unparsed = parser.parse_known_args()
+   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 ```
 
 두 개의 변수 서버와 두 개의 연산 수행 작업으로 구성된 훈련용 프로그램을 구동하기 위해서는, 아래 커맨드 라인을 실행하면 된다.(스크립트 파일명이 `train.py`라고 가정한다.) :
