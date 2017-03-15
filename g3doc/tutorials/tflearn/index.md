@@ -117,10 +117,10 @@ import numpy as np
 그 다음, `learn.datasets.base`에 있는 [`load_csv_with_header()`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/datasets/base.py) 함수를 이용하여 훈련 셋과 테스트 셋을 `Dataset`으로 불러옵니다. `load_csv_with_header()` 함수는 세 개의 인자를 요구합니다.
 
 *   `filename`, CSV 파일의 경로
-*   `target_dtype`, 데이터셋에 있는 목표 값의 [`numpy` 데이터형](http://docs.scipy.org/doc/numpy/user/basics.types.html)
+*   `target_dtype`, 데이터셋에 있는 타깃 값의 [`numpy` 데이터형](http://docs.scipy.org/doc/numpy/user/basics.types.html)
 *   `features_dtype`, 데이터셋에 있는 특성 값의 [`numpy` 데이터형](http://docs.scipy.org/doc/numpy/user/basics.types.html)
 
-여기에서 목표 값(모델을 훈련시켜 예측하려고 하는 값)은 0&ndash;2의 정수로 구성된 꽃의 종입니다. 따라서, 적절한 `numpy` 데이터형은 `np.int`입니다.
+여기에서 타깃 값(모델을 훈련시켜 예측하려고 하는 값)은 0&ndash;2의 정수로 구성된 꽃의 종입니다. 따라서, 적절한 `numpy` 데이터형은 `np.int`입니다.
 
 ```python
 # 데이터셋
@@ -138,7 +138,7 @@ test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
     features_dtype=np.float32)
 ```
 
-tf.contrib.learn의 `Dataset`은 파이썬의 [네임드 튜플](https://docs.python.org/2/library/collections.html#collections.namedtuple)이며, `data`와 `target` 필드를*(역주 : namedtuple의 field_name을 말합니다)* 이용해 특성 데이터와 목표 값에 접근할 수 있습니다. 여기에선 `training_set.data`와 `training_set.target`은 각각 훈련 셋의 특성 데이터와 목표 값을 가지고 있고, `test_set.data`와 `test_set.target`은 테스트 셋의 특성 데이터와 목표 값을 가지고 있습니다.
+tf.contrib.learn의 `Dataset`은 파이썬의 [네임드 튜플](https://docs.python.org/2/library/collections.html#collections.namedtuple)이며, `data`와 `target` 필드를*(역주 : namedtuple의 field_name을 말합니다)* 이용해 특성 데이터와 타깃 값에 접근할 수 있습니다. 여기에선 `training_set.data`와 `training_set.target`은 각각 훈련 셋의 특성 데이터와 타깃 값을 가지고 있고, `test_set.data`와 `test_set.target`은 테스트 셋의 특성 데이터와 타깃 값을 가지고 있습니다.
 
 나중에 ["Iris 훈련 데이터로 DNNClassifier 훈련시키기"](#fit-dnnclassifier)에서, `training_set.data`와 `training_set.target`을 이용하여 모델을 훈련시키고, ["모델 정확도 평가하기"](#evaluate-accuracy)에서는 `test_set.data`와 `test_set.target`를 이용할 것입니다. 그전에 먼저, 다음 섹션에서 모델을 구성해 봅시다.
 
@@ -164,85 +164,81 @@ classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
 *   `feature_columns=feature_columns`. 위에서 만든 특성 열을 지정합니다.
 *   `hidden_units=[10, 20, 10]`. 각각 10, 20, 10 개의 뉴런을 가진 세 개의 [히든 레이어](http://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw).
 *   `n_classes=3`. 세 가지 붓꽃의 품종을 나타내는 타깃 클래스.
-*   `model_dir=/tmp/iris_model`. 모델이 학습하는 동안 체크 포인트를 저장할 디렉토리. 텐서플로우의 로깅과 모니터링에 대해서는 [Logging and Monitoring Basics with
-    tf.contrib.learn](../monitors/index.md)을 참고하세요.
+*   `model_dir=/tmp/iris_model`. 모델이 학습하는 동안 체크 포인트를 저장할 디렉토리. 텐서플로우의 로깅과 모니터링에 대해서는 [Logging and Monitoring Basics with tf.contrib.learn](../monitors/index.md)을 참고하세요.
 
-위의 코드는 각각 10, 20, 10개의 뉴런으로 이루어진 3개의 [은닉층](http://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw)을 포함한 `DNNClassifier` 모델을 생성합니다. 이는 (`hidden_units=[10, 20, 10]`), 그리고 세 개의 목표 분류 (`n_classes=3`)에 순차적으로 따른 것입니다.
+## Iris 훈련 데이터에 DNNClassifier 모델 학습 {#fit-dnnclassifier}
 
-## Iris 훈련 데이터로 DNNClassifier 피팅하기
-
-이제 DNN `classifier` 모델을 설정했으니, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터로 이를 피팅할 수 있습니다. 특성 데이터(`x_train`)와 목표 값(`y_train`), 그리고 train할 단계 수(여기서는 200) 인자로 넘겨줍니다.
+이제 DNN `classifier` 모델을 설정했으니, [`fit`](../../api_docs/python/contrib.learn.md#BaseEstimator.fit) 메소드를 이용하여 Iris 훈련 데이터에 학습시킬 수 있습니다. 특성 데이터(`training_set.data`)와 타깃 값(`training_set.target`), 그리고 훈련할 반복 횟수(여기서는 2000)를 인자로 넘겨줍니다.
 
 ```python
-# Fit model
-classifier.fit(x=x_train, y=y_train, steps=200)
+# 모델 학습
+classifier.fit(x=training_set.data, y=training_set.target, steps=2000)
 ```
 
-<!-- Style the below (up to the next section) as an aside (note?) -->
-
-<!-- Pretty sure the following is correct, but maybe a SWE could verify? -->
-
-`classifier`에서 모델의 상태는 유지됩니다. 이는, 만약 원한다면 모델을 반복하여 학습시킬 수 있다는 것을 의미합니다. 예를 들어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
+`classifier`는 모델의 상태를 저장하고 있습니다. 따라서 원한다면 모델을 반복하여 학습시킬 수 있습니다. 예를 들어서, 위의 한 줄은 다음의 두 줄과 완벽하게 같습니다.
 
 ```python
-classifier.fit(x=x_train, y=y_train, steps=100)
-classifier.fit(x=x_train, y=y_train, steps=100)
+classifier.fit(x=training_set.data, y=training_set.target, steps=1000)
+classifier.fit(x=training_set.data, y=training_set.target, steps=1000)
 ```
 
-<!-- TODO: When tutorial exists for monitoring, link to it here -->
-하지만, 만약 학습되는 동안에 모델을 추적하고 싶은 것이라면, (위와 같은 두 줄) 대신에 로그를 남기기 위해서 텐서플로우의 [`monitor`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/monitors.py)를 사용하는 게 낫습니다.
+하지만 만약 학습되는 동안에 모델을 추적하고 싶다면, 대신 텐서플로우의 [`monitor`](https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/monitors.py)를 사용하여 로그를 남기는 게 낫습니다. 이에 대한 내용은 [&ldquo;Logging and Monitoring
+Basics with tf.contrib.learn&rdquo;](../monitors/index.md)를 참고하세요.
 
 ## 모델 정확도 평가하기
 
-이제 Iris 테스트 데이터에 맞춰 `DNNClassifier` 모델을 피팅했습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.md#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 목표 값을 인자로 건내받고, 평가 결과로서 `dict`를 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`x_test`와 `y_test`&mdash;를 건내받아, 결과값으로 `accuracy`를 출력합니다.
+이제 Iris 테스트 데이터를 사용해 `DNNClassifier` 모델을 학습시켰습니다. 이제, [`evaluate`](../../api_docs/python/contrib.learn.md#BaseEstimator.evaluate) 메소드를 이용하여 Iris 테스트 데이터로 모델의 정확도를 확인해 볼 수 있습니다. `evaluate`는 `fit`과 같이 특성 데이터와 타깃 값을 인자로 받고, 평가 결과를 `dict`로 반환합니다. 다음의 코드는 Iris 테스트 데이터&mdash;`test_set.data`와 `test_set.target`&mdash;를 받아, 결과 값으로 `accuracy`를 출력합니다:
 
 ```python
-accuracy_score = classifier.evaluate(x=x_test, y=y_test)["accuracy"]
+accuracy_score = classifier.evaluate(x=test_set.data, y=test_set.target)["accuracy"]
 print('Accuracy: {0:f}'.format(accuracy_score))
 ```
 
-전체 스크립트를 실행하고 나서 정확도의 결과를 확인합시다. 다음과 같은 결과를 얻을 수 있을 것입니다:
+전체 스크립트를 실행하고 나서 정확도의 결과를 확인합니다:
 
 ```
-Accuracy: 0.933333
+Accuracy: 0.966667
 ```
 
-비교적 적은 데이터셋 치고는 나쁘지 않습니다!
+결과 값이 조금 다를 수 있지만 90%는 높게 나올 것입니다. 비교적 적은 데이터셋 치고는 나쁘지 않습니다!
 
 ## 새로운 표본 분류하기
 
-새로운 표본을 분류하기 위해 estimator의 `predict()` 메소드를 이용합시다. 예를 들어, 다음의 두 가지 새로운 꽃의 표본이 있다고 해봅시다 :
+새로운 표본을 분류하기 위해 모델의 `predict()` 메소드를 이용합니다. 예를 들어, 다음의 새로운 꽃의 표본이 두 개가 있습니다:
 
 꽃받침 길이 | 꽃받침 너비 | 꽃잎 길이 | 꽃잎 너비
 :----------- | :---------- | :----------- | :----------
 6.4          | 3.2         | 4.5          | 1.5
 5.8          | 3.1         | 5.0          | 1.7        
 
-다음의 코드로 이들의 종을 예측할 수 있습니다 :
+다음의 코드로 이들의 종을 예측할 수 있습니다:
 
 ```python
 # 새로운 두 꽃의 표본을 분류합니다.
 new_samples = np.array(
     [[6.4, 3.2, 4.5, 1.5], [5.8, 3.1, 5.0, 1.7]], dtype=float)
-y = classifier.predict(new_samples)
-print ('Predictions: {}'.format(str(y)))
+y = list(classifier.predict(new_samples, as_iterable=True))
+print('Predictions: {}'.format(str(y)))
 ```
 
-`predict()` 메소드는 각 표본의 예측 결과를 하나씩 배열로 반환합니다.
+`predict()` 메소드는 각 표본의 예측 결과를 표본 마다 하나씩 할당하여 배열로 반환합니다.
 
 ```python
 Prediction: [1 2]
 ```
 
-따라서 모델은 첫 번째 표본을 *Iris versicolor*, 두 번째 표본을 *Iris virginica*로 예측하였습니다.
+이 모델은 첫 번째 표본을 *Iris versicolor*, 두 번째 표본을 *Iris virginica*로 예측하였습니다.
 
 ## 추가적인 자료
 
-* tf.contrib.learn에 대해 추가적인 참고 자료를 원한다면, 공식적인 [API docs](../../api_docs/python/contrib.learn.md)를 살펴보십시오.
+*   tf.contrib.learn에 대해 추가적인 참고 자료를 원한다면, 공식적인 [API docs](../../api_docs/python/contrib.learn.md)를 살펴보세요.
 
-<!-- David, will the below be live when this tutorial is released? -->
-* 선형 모델을 생성하기 위해서 tf.contrib.learn을 이용하는 것에 대해 좀 더 배우기 위해선 [Large-scale Linear Models with TensorFlow](../linear/)를 살펴보십시오.
+*   tf.contrib.learn을 이용해 선형 모델을 생성하는 방법을 배우려면 [Large-scale Linear Models with TensorFlow](../linear/overview.md)를 살펴보세요.
 
-* 브라우저에서의 신경망 모델링과 시각화를 체험해보기 위해선, [Deep Playground](http://playground.tensorflow.org/)를 살펴보십시오.
+*   tf.contrib.learn API를 이용하여 자신만의 Estimator 클래스를 만들고 싶다면 [Building
+    Machine Learning Estimator in
+    TensorFlow](http://terrytangyuan.github.io/2016/07/08/understand-and-build-tensorflow-estimator/)를 살펴보세요.
 
-* 신경망에 대한 좀 더 심화된 튜토리얼을 원한다면 [Convolutional Neural Networks](../deep_cnn/)와 [Recurrent Neural Networks](../recurrent/)를 살펴보십시오.
+*   브라우저에서의 신경망 모델링과 시각화를 체험해 보려면 [Deep Playground](http://playground.tensorflow.org/)를 살펴보세요.
+
+*   신경망에 대한 좀 더 심화된 튜토리얼을 원한다면 [Convolutional Neural Networks](../deep_cnn/)와 [Recurrent Neural Networks](../recurrent/)를 살펴보세요.
