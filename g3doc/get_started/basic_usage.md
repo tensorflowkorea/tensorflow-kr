@@ -45,7 +45,7 @@ import tensorflow as tf
 # of the constant op.
 matrix1 = tf.constant([[3., 3.]])
 
-# 1x2 행렬을 만드는 constant op을 만들어봅시다.
+# 2x1 행렬을 만드는 constant op을 만들어봅시다.
 # Create another Constant that produces a 2x1 matrix.
 matrix2 = tf.constant([[2.],[2.]])
 
