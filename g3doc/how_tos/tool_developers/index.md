@@ -1,4 +1,5 @@
 # 툴 개발자의 TensorFlow 모델 파일에 대한 가이드
+(v1.0)
 
 대부분의 사용자는 TensorFlow가 디스크에 데이터를 어떻게 저장하는지에 대한 내부적인 세부 사항들에 대해 신경쓸 필요가 없지만, 만약 당신이 툴 개발자라면 그럴 필요가 있습니다. 예를 들면, 당신은 모델을 분석하고 싶다거나 TensorFlow와 다른 포맷 사이에서 상호 변환을 하고싶을 수 있습니다. 이 가이드는 각종 툴들을 좀 더 쉽게 개발할 수 있도록 모델 데이터를 가진 메인 파일들을 어떻게 다룰 수 있는지에 대한 상세 내용들을 설명합니다.
 
@@ -14,7 +15,7 @@ TensorFlow에서 계산의 기본은 `Graph` 객체입니다. 이는 각각이 �
 
 GraphDef 클래스는 [tensorflow/core/framework/graph.proto](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/framework/graph.proto)에 정의된 프로토콜 버퍼 라이브러리에 의해 생성되는 객체입니다. 프로토콜 버퍼 툴은 이 텍스트 파일을 파싱하고 그래프 정의를 로딩, 저장 및 조작하는 코드를 생성합니다. 모델을 나타내는 단일 TensorFlow 파일이 있다면, 이는 프로토콜 버퍼 코드에 의해 저장된 `GraphDef` 객체들중 하나를 직렬화한 버전을 포함할 가능성이 높습니다.
 
-이 생성된 코드는 디스크로부터 GraphDef 파일들을 저장하고 로드하는데 쓰입니다. 이를 좀 더 깊게 살펴볼 수 있는 좋은 예시는 [graph_metrics.py](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/tools/graph_metrics.py)입니다. 이 파이썬 스크립트는 저장된 그래프 정의를 가지고 성능 및 리소스 통계를 추정하기 위해 모델을 분석합니다. 실제로 모델을 로드하는 코드는 다음과 같을 것입니다: 
+이 생성된 코드는 디스크로부터 GraphDef 파일들을 저장하고 로드하는데 쓰입니다. 이 코드는 실제로 모델을 다음과 같이 로드 합니다. 
 
 ```python
 graph_def = graph_pb2.GraphDef()
@@ -37,7 +38,7 @@ with open(FLAGS.graph, "rb") as f:
 
 ## 텍스트 또는 바이너리?
 
-프로토콜 버퍼가 저장할 수 있는 포맷은 두 가지 있습니다. 텍스트 포맷 (Text Format)은 사람이 읽을 수 있는 형태이며, 디버깅과 편집이 편리하지만, 가중치와 같은 수치 데이터가 저장될 경우 커질 수 있습니다. 이에 대한 간단한 예제는 [graph_run_run2.pbtxt](https://github.com/tensorflow/tensorflow/blob/ae3c8479f88da1cd5636b974f653f27755cb0034/tensorflow/tensorboard/components/tf-tensorboard/test/data/graph_run_run2.pbtxt)에서 볼 수 있습니다.
+프로토콜 버퍼가 저장할 수 있는 포맷은 두 가지 있습니다. 텍스트 포맷 (Text Format)은 사람이 읽을 수 있는 형태이며, 디버깅과 편집이 편리하지만, 가중치와 같은 수치 데이터가 저장될 경우 커질 수 있습니다. 이에 대한 간단한 예제는 [graph_run_run2.pbtxt](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tensorboard/components/tf-tensorboard/test/data/graph_run_run2.pbtxt)에서 볼 수 있습니다.
 
 바이너리 포맷 (Binary Format) 파일은 비록 읽기는 어렵지만, 같은 내용의 텍스트 포맷보다 훨씬 작은 크기를 갖습니다. 우리는 적절한 함수를 호출할 수 있도록 사용자에게 입력 파일이 바이너리인지 텍스트인지 구분할 수 있는 플래그를 제공하도록 요청합니다. 큰 바이너리 파일에 대한 예제는 [inception_dec_2015.ziparchive](https://storage.googleapis.com/download.tensorflow.org/models/inception_dec_2015.zip)의 `tensorflow_inception_graph.pb`에서 볼 수 있습니다.
 

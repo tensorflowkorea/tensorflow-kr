@@ -1,5 +1,5 @@
 # 기본 사용법(Basic Usage)
-(v0.12rc1)
+(v1.0)
 
 TensorFlow를 사용하기 위해 먼저 TensorFlow가 어떻게 동작하는지를 이해해 봅시다.
 
@@ -168,7 +168,7 @@ x.initializer.run()
 
 # 'x'에서 'a'를 빼는 작업을 추가하고 실행시켜서 결과를 봅시다.
 # Add an op to subtract 'a' from 'x'.  Run it and print the result
-sub = tf.sub(x, a)
+sub = tf.subtract(x, a)
 print(sub.eval())
 # ==> [-2. -1.]
 
@@ -239,7 +239,7 @@ input1 = tf.constant([3.0])
 input2 = tf.constant([2.0])
 input3 = tf.constant([5.0])
 intermed = tf.add(input2, input3)
-mul = tf.mul(input1, intermed)
+mul = tf.multiply(input1, intermed)
 
 with tf.Session() as sess:
   result = sess.run([mul, intermed])
@@ -261,7 +261,7 @@ feed 값은 일시적으로 연산의 출력값을 입력한 tensor 값으로 �
 
 input1 = tf.placeholder(tf.float32)
 input2 = tf.placeholder(tf.float32)
-output = tf.mul(input1, input2)
+output = input1 * input2
 
 with tf.Session() as sess:
   print(sess.run([output], feed_dict={input1:[7.], input2:[2.]}))

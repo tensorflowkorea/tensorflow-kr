@@ -1,4 +1,5 @@
 # 텐서플로우 선형 모델 튜토리얼
+(v1.0)
 
 이번 강의에서 우리는 이진 분류 문제를 사람에 나이, 성별, 교육, 그리고 직업(특성들)에 관한 인구조사 데이터를 가지고 한 사람의 연봉이 50,000불이 넘는지를 TensorFlow에 TF.Learn API를 사용해서 풀어 볼 것이다(목표 레이블). 우리는 **로지스틱 회귀** 모델을 주어진 개인들에 정보를 가지고 교육 할 것이고 모델은 개인의 연봉이 50,000달러 이상일 가능성으로 해석 될 수 있는 0과1 사이의 숫자를 출력한다.
 
@@ -106,8 +107,8 @@ import tempfile
 import urllib
 train_file = tempfile.NamedTemporaryFile()
 test_file = tempfile.NamedTemporaryFile()
-urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
-urllib.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test", test_file.name)
+urllib.urlretrieve("http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
+urllib.urlretrieve("http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.test", test_file.name)
 ```
 CSV 파일들에 다운로드가 완료됐다면, [Pandas] (http://pandas.pydata.org/) 데이터프레임에 입력시켜 보자.
 

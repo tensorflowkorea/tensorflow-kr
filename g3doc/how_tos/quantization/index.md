@@ -1,4 +1,5 @@
 # 텐서플로우를 이용하여 신경망 양자화(Quantize) 하는 방법
+(v1.0)
 
 최신 신경망이 개발될 때, 가장 큰 도전은 어떻게든 일을 하게 하는 것이였다.  이것
 은 학습에서 정확도와 속도가 가장 중요했다는 것을 의미한다. 부동소수점을 이용한 
@@ -81,8 +82,8 @@ TensorFlow는 제품화 단계 등급의 8bit 연산기능을 지원하고 있�
 ```sh
 curl http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz -o /tmp/inceptionv3.tgz
 tar xzf /tmp/inceptionv3.tgz -C /tmp/
-bazel build tensorflow/contrib/quantization/tools:quantize_graph
-bazel-bin/tensorflow/contrib/quantization/tools/quantize_graph \
+bazel build tensorflow/tools/quantization/tools:quantize_graph
+bazel-bin/tensorflow/tools/quantization/tools/quantize_graph \
 --input=/tmp/classify_image_graph_def.pb \
 --output_node_names="softmax" --output=/tmp/quantized_graph.pb \
 --mode=eightbit
