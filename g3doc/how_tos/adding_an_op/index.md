@@ -1,48 +1,37 @@
-# Adding a New Op
+# 새 작업을 추가하세요.
 
-PREREQUISITES:
+전제조건:
 
-* Some familiarity with C++.
-* Must have installed the
-  [TensorFlow binary](../../get_started/os_setup.md#pip-installation), or must
-  have
-  [downloaded TensorFlow source](../../get_started/os_setup.md#installing-from-sources),
-  and be able to build it.
+* C++에 어느정도 친숙할 것.
+* 반드시  [TensorFlow binary](../../get_started/os_setup.md#pip-installation)가 설치되어 있거나, 
+  [downloaded TensorFlow source](../../get_started/os_setup.md#installing-from-sources)가 있어야만,
+     빌드 할 수 있음
 
-If you'd like to incorporate an operation that isn't covered by the existing
-library, you can create a custom Op. To incorporate your custom Op, you'll need
-to:
+만약 당신이 존재하는 라이브러리로 감싸져있지 않은 작업을 포함 하길 원한다면, custom Op를 생성할 수 있습니다.
+당신의 custom Op를 포함하기 위해서, '이하'의 항목을 충족해야 합니다.
 
-* Register the new Op in a C++ file. The Op registration is independent of the
-  implementation, and describes the semantics of how the Op is invoked. For
-  example, it defines the Op name, and specifies its inputs and outputs.
-* Implement the Op in C++. This implementation is called a "kernel", and there
-  can be multiple kernels for different architectures (e.g. CPUs, GPUs) or
-  input / output types.
-* Optionally, create a Python wrapper. This wrapper is the public API to create
-  the Op. A default wrapper is generated from the Op registration, which can be
-  used directly or added to.
-* Optionally, write a function to compute gradients for the Op.
-* Optionally, write a function that describes the input and output shapes
-  for the Op.  This allows shape inference to work with your Op.
-* Test the Op, typically in Python. If you define gradients, you can verify them with the Python [`GradientChecker`](https://www.tensorflow.org/code/tensorflow/python/kernel_tests/gradient_checker.py).
+* C++ 파일에서 새로운 작업을  등록하세요. 그 작업 등록은  실행에서 독립적이고, 그 작업이 들먹여 지는 방법의 의미론을 말합니다.(?)
+     예를들어,이것은 작업의 이름을 정의하고 입력과 출력들을 구체적으로 명시합니다.
+* C++안에서 그 작업을 실행하세요. 이 실행은 "커널"이라고 불립니다. 그리고 각색의 구조들(CPUs, GPUs) 또는 입출력 형태들을 위한 다양한 커널들이 존재 할 수 있습니다.
+* 경우에 따라, 파이썬 래퍼(wrapper)를 만드세요. 이 래퍼는 작업을 생성하는 공용의 API입니다. 기본적인 래퍼는 작업 등록으로 부터 발생되어집니다. 그리고 그것은 직접적으로 사용 되어질 수 있거나 추가 되어질 수 있습니다.
+* 경우에 따라, 그 작업을 위해 경사도(gradients)를 계산할 함수를 써넣으세요.
+* 경우에 따라, 그 작업을 위해 입출력 모양들을 설명할 함수를 써넣으세요. 이것이 작업 추론으로 하여금 당신의 작업을 다룰 수 있도록 허락합니다.
+* 전형적으로, 파이썬에서 그 작업을 테스트 하세요. 만약 당신이 기울기들을 정의한다면, 파이썬으로 그 것들을 식별할 수 있을 것입니다.  [`GradientChecker`](https://www.tensorflow.org/code/tensorflow/python/kernel_tests/gradient_checker.py).
 
 [TOC]
 
-## Define the Op's interface 
+## 작업의 인터페이스를 정의하세요.
 
-You define the interface of an Op by registering it with the TensorFlow system.
-In the registration, you specify the name of your Op, its inputs (types and
-names) and outputs (types and names), as well as docstrings and
-any [attrs](#attrs) the Op might require.
+텐써플로우 시스템으로 작업을 등록함으로, 당신은 그 작업의 인터페이스를 정의할 수 있습니다.
+등록에서, 당신의 작업 이름과  그 작업의 입력들(형태들와 이름들)과 출력들(형태들과 이름들) 그리고 'docstrings' 과 그 작업이 요구할지도 모를 어떤 속성들을 명시합니다. 
 
-To see how this works, suppose you'd like to create an Op that takes a tensor of
-`int32`s and outputs a copy of the tensor, with all but the first element set to
-zero. Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and
-add a call to the `REGISTER_OP` macro that defines the interface for such an Op:
+이것이 어떻게 동작할지 보기 위해서는, 당신이 'int32'들의 텐서를 챙겨서, 그것의 복사본을 출력하는 작업을 만들고 싶어함에도 불구하고 그 첫번째 요소는 0으로 세트한다고 가정해보세요.
+[`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` 파일을 생성하세요. 그리고 
+ Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and 이하의 작업을 위한 인터페이스를 정의하는  `REGISTER_OP` macro 에의 요청을 추가하세요.
+* 이하의 작업 :
 
 ```c++
-#include "tensorflow/core/framework/op.h"
+#"tensorflow/core/framework/op.h"를 포함하세요. (Include)
 
 REGISTER_OP("ZeroOut")
     .Input("to_zero: int32")
@@ -50,24 +39,21 @@ REGISTER_OP("ZeroOut")
 ```
 
 This `ZeroOut` Op takes one tensor `to_zero` of 32-bit integers as input, and
-outputs a tensor `zeroed` of 32-bit integers.
+이 `ZeroOut`작업은 텐서 한개를 32비트 정수의 `to_zero`를 입력으로 이해한다. 그리고 텐서 한개를 32비트 정수의 `zeroed`로 출력한다.
 
 > A note on naming: The name of the Op should be unique and CamelCase.  Names
+> 이름 명명에 관한 주목할 점 : 작업의 이름은 유일해야하고 'CamelCase'여야 합니다. 밑줄 (`_`)로 시작하는 이름들은 내부 사용을 위해 예약되어집니다.
 > starting with an underscore (`_`) are reserved for internal use.
 
-## Implement the kernel for the Op
+## 작업을 하기 위해 커널을 실행하세요.
 
-After you define the interface, provide one or more implementations of the Op.
-To create one of these kernels, create a class that extends `OpKernel` and
-overrides the `Compute` method. The `Compute` method provides one `context`
-argument of type `OpKernelContext*`, from which you can access useful things
-like the input and output tensors.
+당신이 인터페이스를 정의한 후에, 하나 혹은 더 많은 작업의 실행을 제공하세요. 이 커널들 중 한개를 생성하기 위해서, `OpKernel`를 확장하는 클래스 한개를 생성하고 `Compute` 메소드를 오버라이드 하세요.
+`Compute`메소드는 입출력 텐써와 같은 유용한 것들에 접근 하게 하는 `OpKernelContext*`타입의  `context` 매개변수 한 개를 제공합니다. 
 
 > Important note: Instances of your OpKernel may be accessed concurrently. Your
-> `Compute` method must be thread-safe. Guard any access to class members with a
-> mutex (Or better yet, don't share state via class members! Consider using a
-> [`ResourceMgr`](https://www.tensorflow.org/code/tensorflow/core/framework/resource_mgr.h)
-> to keep track of Op state).
+> 중요한 메모 : 당신의 작업커널(OpKernel)의 인스턴스들은 동시에 접근되어질지도 모릅니다. 당신의 `Compute`메소드는 다양한 쓰레드들로 부터 안전하게 연결 되어질 것임에 틀림없습니다. 
+> 뮤택스의 클래스 멤버와의 연결을 지키세요.(아니면 클래스 맴버를 통한 상태를 공유하지 않는게 낫습니다!  
+> 작업 상태를 계속 파악 하기 위해서 [`ResourceMgr`](https://www.tensorflow.org/code/tensorflow/core/framework/resource_mgr.h)의 사용을 고려하세요.
 
 Add your kernel to the file you created above. The kernel might look something
 like this:
