@@ -10,6 +10,7 @@
 만약 당신이 존재하는 라이브러리로 감싸져있지 않은 작업을 포함 하길 원한다면, custom Op를 생성할 수 있습니다.
 당신의 custom Op를 포함하기 위해서, '이하'의 항목을 충족해야 합니다.
 
+이하:
 * C++ 파일에서 새로운 작업을  등록하세요. 그 작업 등록은  실행에서 독립적이고, 그 작업이 들먹여 지는 방법의 의미론을 말합니다.(?)
      예를들어,이것은 작업의 이름을 정의하고 입력과 출력들을 구체적으로 명시합니다.
 * C++안에서 그 작업을 실행하세요. 이 실행은 "커널"이라고 불립니다. 그리고 각색의 구조들(CPUs, GPUs) 또는 입출력 형태들을 위한 다양한 커널들이 존재 할 수 있습니다.
@@ -27,9 +28,9 @@
 
 이것이 어떻게 동작할지 보기 위해서는, 당신이 'int32'들의 텐서를 챙겨서, 그것의 복사본을 출력하는 작업을 만들고 싶어함에도 불구하고 그 첫번째 요소는 0으로 세트한다고 가정해보세요.
 [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` 파일을 생성하세요. 그리고 
- Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and 이하의 작업을 위한 인터페이스를 정의하는  `REGISTER_OP` macro 에의 요청을 추가하세요.
-* 이하의 작업 :
+ Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and '이하'의 작업을 위한 인터페이스를 정의하는  `REGISTER_OP` macro 에의 요청을 추가하세요.
 
+이하 :
 ```c++
 #"tensorflow/core/framework/op.h"를 포함하세요. (Include)
 
@@ -55,9 +56,9 @@ This `ZeroOut` Op takes one tensor `to_zero` of 32-bit integers as input, and
 > 뮤택스의 클래스 멤버와의 연결을 지키세요.(아니면 클래스 맴버를 통한 상태를 공유하지 않는게 낫습니다!  
 > 작업 상태를 계속 파악 하기 위해서 [`ResourceMgr`](https://www.tensorflow.org/code/tensorflow/core/framework/resource_mgr.h)의 사용을 고려하세요.
 
-Add your kernel to the file you created above. The kernel might look something
-like this:
+당신의 커널을 당신이 먼저 만들어 놓은 파일에 추가하세요. 그 커널은 '이하'의 것과 같이 보일 것입니다.
 
+이하:
 ```c++
 #include "tensorflow/core/framework/op_kernel.h"
 
@@ -90,26 +91,21 @@ class ZeroOutOp : public OpKernel {
 };
 ```
 
-After implementing your kernel, you register it with the TensorFlow system. In
-the registration, you specify different constraints under which this kernel
-will run. For example, you might have one kernel made for CPUs, and a separate
-one for GPUs.
-
-To do this for the `ZeroOut` op, add the following to `zero_out.cc`:
+커널을 실행 한 뒤, 텐서플로우 시스템에 그것을 등록합니다. 등록할 때, 당신은 이 커널이 동작하게 될 다른 제약사항들을 명시 합니다.
+예를 들어, 당신이 하나의 커널을 CPUs를 위해 그리고 다른 하나는 GPUs를 위해 만들수도 있습니다.
+`ZeroOut` 작업을 위한 이 일을 하기 위해서, `zero_out.cc`를 따라서 추가하세요.
 
 ```c++
 REGISTER_KERNEL_BUILDER(Name("ZeroOut").Device(DEVICE_CPU), ZeroOutOp);
 ```
 
-## Building the Op library
-### With TensorFlow binary installation
+## 작업 라이브러리를 빌드할 것
+### 텐써플로우 바이너리 설치도 병행할 것
 
-You should be able to compile `zero_out.cc` with a `C++` compiler such as `g++`
-or `clang` available on your system. The binary PIP package installs the header
-files and the library that you need to compile your Op in locations that are
-system specific. However, the TensorFlow python library provides the
-`get_include` function to get the header directory.
-Here is the output of this function on a Ubuntu machine.
+당신의 시스템에서 동작 할 수 있는 `g++` 또는 `clang`과 같은 `C++` 컴파일러로 `zero_out.cc`을 컴파일 할 수 있어야 합니다.
+바이너리 PIP 패키지는 당신의 작업을 시스템이 명시한 곳에서 컴파일 해야만 하는 라이브러리와 헤더파일을 설치합니다.
+그러나, 텐써플로우 파이썬 라이브러리는 `get_include` 함수를 제공합니다. 이 함수는 헤더 디렉토리를 얻게 합니다.
+여기 이 함수의 출력된 값을 우분투 머신에서 볼 수 있습니다.
 
 ```bash
 $ python
@@ -118,30 +114,26 @@ $ python
 '/usr/local/lib/python2.7/site-packages/tensorflow/include'
 
 ```
+가령 당신이 설치된 `g++`를 가졌다고 가정해 본다면, 당신이 다이나믹 라이브러리 안에서 작업을 컴파일 하는 것을 가능하도록 해주는 커맨드들의 흐름들이 '이하'에 있습니다.
 
-Assuming you have `g++` installed, here is the sequence of commands you can use
-to compile your Op into a dynamic library.
-
+이하:
 ```bash
 TF_INC=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
 
 g++ -std=c++11 -shared zero_out.cc -o zero_out.so -fPIC -I $TF_INC
 ```
 
-On Mac OS X, the additional flag "-undefined dynamic_lookup" is required when
-building the .so file.
+맥 OS에서, "-undefined dynamic_lookup"라는 추가적인 표시사항은  .so 파일을 빌드할 때 필수 적으로 필요합니다.
 
-> Note on gcc version 5: gcc5 uses the new C++
-[ABI](https://gcc.gnu.org/gcc-5/changes.html#libstdcxx). The binary pip packages
-available on the TensorFlow website are built with gcc4 that uses the older ABI.
-If you compile your op library with gcc5, add `-D_GLIBCXX_USE_CXX11_ABI=0` to
-the command line to make the library compatible with the older abi.
+> gcc 5버전에서의 주의사항 : gcc 5는 새로운 C++을 사용합니다. [ABI](https://gcc.gnu.org/gcc-5/changes.html#libstdcxx). 
+텐써플로우 웹사이트에서 이용 가능한 바이너리 pip 패키지들은 더 오래된 ABI를 사용하는 gcc4로 빌드되어졌습니다.
+만약 당신이 gcc5로 작업 라이브러리를 컴파일 한다면,  `-D_GLIBCXX_USE_CXX11_ABI=0`를 커맨드라인에 추가해야합니다. 
+왜냐하면, 그 라이브러리를 오래된 abi와 호환가능하게 해야하기 때문입니다.
 
-### With TensorFlow source installation
+### 텐써플로우 소스 설치와 함께
 
-If you have TensorFlow sources installed, you can make use of TensorFlow's build
-system to compile your Op. Place a BUILD file with following Bazel build rule in
-the [`tensorflow/core/user_ops`][user_ops] directory.
+만약 당신이 텐써플로우를 다 설치 했다면, 당신의 작업을 컴파일하는 텐써플로우의 빌드 시스템을 이용할 수 있습니다.
+Bazel 빌드 규칙([`tensorflow/core/user_ops`][user_ops] 디렉토리)을 따라 빌드 파일을 가져다 놓으세요.
 
 ```python
 load("//tensorflow:tensorflow.bzl", "tf_custom_op_library")
@@ -152,17 +144,16 @@ tf_custom_op_library(
 )
 ```
 
-Run the following command to build `zero_out.so`.
+'이하'의 `zero_out.so`를 빌드하는 명령을 실행하세요.
 
+이하:
 ```bash
 $ bazel build -c opt //tensorflow/core/user_ops:zero_out.so
 ```
 
-> Note:
-Although you can create a shared library (a `.so` file) with the standard
-`cc_library` rule, we strongly recommend that you use the `tf_custom_op_library`
-macro. It adds some required dependencies, and performs checks to ensure that
-the shared library is compatible with TensorFlow's plugin loading mechanism.
+> 알림:
+표준 `cc_library` 규칙으로, 당신이 공유된 라이브러리 ( `.so` 파일)를 생성할 수 있음에도 불구하고, `tf_custom_op_library`매크로를 사용할 것을 강력하게 권고합니다.
+이것이 어떤 의존들(dependencies)을 추가하고,공유된 라이브러리가 텐써플로우의 플러그인 로딩 구조와 호환이 되는지 점검합니다.
 
 ## Using the Op in Python
 
