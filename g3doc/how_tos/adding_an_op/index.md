@@ -329,90 +329,81 @@ class ZeroOutOp : public OpKernel {
 
 참조 : 최종 리스트를 위한  [`op_def_builder.cc:FinalizeAttr`][FinalizeAttr] 
 
-#### Default values & constraints
+#### 기본 값 & 제약사항
 
-Attrs may have default values, and some types of attrs can have constraints. To
-define an attr with constraints, you can use the following `<attr-type-expr>`s:
+속성들은 기본 값들을 가지고 있을것이다. 그리고 속성의 어떤 타입들은 제약사항을 가질 수 있다. 제약사항이 있는 속성을 정의하기 위해선, '아래'의 `<attr-type-expr>`를 이용 할 수 있습니다.
+이하:
 
-* `{'<string1>', '<string2>'}`: The value must be a string that has either the
-  value `<string1>` or `<string2>`.  The name of the type, `string`, is implied
-  when you use this syntax.  This emulates an enum:
-
+* `{'<string1>', '<string2>'}`: 값은 `<string1>` 혹은 `<string2>` 둘중 하나를 가지고 있는  'string'이여야만 합니다.
+     당신이 이 문법을 사용할 때, 타입의 이름인 `string`은 암시되어집니다.  
+     이것은 'enum'을 모방합니다 :
   ```c++
   REGISTER_OP("EnumExample")
       .Attr("e: {'apple', 'orange'}");
   ```
-
-* `{<type1>, <type2>}`: The value is of type `type`, and must be one of
-  `<type1>` or `<type2>`, where `<type1>` and `<type2>` are supported
-  [tensor types](../../resources/dims_types.md#data-types).  You don't specify
-  that the type of the attr is `type`. This is implied when you have a list of
-  types in `{...}`.  For example, in this case the attr `t` is a type that must
-  be an `int32`, a `float`, or a `bool`:
-
+  
+* `{<type1>, <type2>}`: 값은 `type`타입이고, `<type1>` 이나 `<type2>`이 '[tensor types](../../resources/dims_types.md#data-types)'에 의해 지원되는 곳에서  `<type1>` 혹은 `<type2>` 중 하나여야만 합니다. 
+      당신은 '속성의 타입이 `type`이다.'라고 명시하지 않습니다. 이것은 당신이 `{...}`안에서 타입의 리스트를 가질때 암시되어집니다.
+      예를 들어 이 경우엔,  `t`속성이  `int32`, `float`, `bool` 중 하나여야만 하는 타입 입니다 :
+      
   ```c++
   REGISTER_OP("RestrictedTypeExample")
       .Attr("t: {int32, float, bool}");
   ```
 
-* There are shortcuts for common type constraints:
-    * `numbertype`: Type `type` restricted to the numeric (non-string and
-      non-bool) types.
-    * `realnumbertype`: Like `numbertype` without complex types.
-    * `quantizedtype`: Like `numbertype` but just the quantized number types.
+* 일반적인 타입의 제약사항들을 위해 여기 몇가지 손쉬운 방법이 있습니다 :
+    * `numbertype`: `type`타입은 숫자형으로 제한됩니다. (non-string and non-bool)
+    * `realnumbertype`: 복잡한 타입이 없이 `numbertype`와 같습니다.
+    * `quantizedtype`: quantized 숫자를 제외한  `numbertype`와 같습니다.
 
-    The specific lists of types allowed by these are defined by the functions
-    (like `NumberTypes()`) in
-    [`tensorflow/core/framework/types.h`](https://www.tensorflow.org/code/tensorflow/core/framework/types.h).
-    In this example the attr `t` must be one of the numeric types:
+	이러한 것들로 허가되어진 타입들의 구체적인 리스트들은 함수들('이하'참조)에 의해 정의 되어집니다.
+	이하 :
+    [`tensorflow/core/framework/types.h`](https://www.tensorflow.org/code/tensorflow/core/framework/types.h).에 있는 `NumberTypes()`와 같습니다.
+    
+        이 사례에서 `t` 속성은 반드시 숫자 타입들중 하나여야만 합니다 :
 
     ```c++
     REGISTER_OP("NumberType")
         .Attr("t: numbertype");
     ```
 
-    For this op:
+        이 작업(op)을 위해서:
 
     ```python
     tf.number_type(t=tf.int32)  # Valid
     tf.number_type(t=tf.bool)   # Invalid
     ```
+* `int >= <n>`: 이 값은 자연수인 `<n>`보다 크거나 같은 값이어야 합니다.
 
-* `int >= <n>`: The value must be an int whose value is greater than or equal to
-  `<n>`, where `<n>` is a natural number.
-
-  For example, the following Op registration specifies that the attr `a` must
-  have a value that is at least `2`:
+    예를들어, '아래'의 작업 등록은 `a`속성이 최소 `2`인 값을 가지고 있다는 것을 명시합니다.
+    아래:
 
   ```c++
   REGISTER_OP("MinIntExample")
       .Attr("a: int >= 2");
   ```
 
-* `list(<type>) >= <n>`: A list of type `<type>` whose length is greater than
-  or equal to `<n>`.
+* `list(<type>) >= <n>`: `<n>`보다 크거나 같은 길이를 가진 `<type>` 타입의 리스트입니다.
 
-  For example, the following Op registration specifies that the attr `a` is a
-  list of types (either `int32` or `float`), and that there must be at least 3
-  of them:
+    예를 들어, '아래'의 작업등록은 `a`속성이 `int32` 혹은 `float` 둘중 하나의 타입의 리스트이고, 적어도 그것 들 중에서 3이있어야만 한다는 것을 명시합니다.
+    아래:
 
   ```c++
   REGISTER_OP("TypeListExample")
       .Attr("a: list({int32, float}) >= 3");
   ```
 
-To set a default value for an attr (making it optional in the generated code),
-add `= <default>` to the end, as in:
+발생된 코드에 값을 선택적으로 하는 속성을 위한 기본 값을 할당하기 위해서는, 끝 부분에 `= <default>`를 추가하세요. 
+예:
 
 ```c++
 REGISTER_OP("AttrDefaultExample")
     .Attr("i: int = 0");
 ```
 
-The supported syntax of the default value is what would be used in the proto
-representation of the resulting GraphDef definition.
+기본값에 대해 지원 되는 문법은 GraphDef 의미를 결과로 내는 것들 중에서 프로토(proto)표시에 사용 되어진다.
 
-Here are examples for how to specify a default for all types:
+모든 타입의 기본값을 명시하는 방법에 대한 예 :
 
 ```c++
 REGISTER_OP("AttrDefaultExampleForAllTypes")
@@ -427,8 +418,7 @@ REGISTER_OP("AttrDefaultExampleForAllTypes")
    .Attr("l_int: list(int) = [2, 3, 5, 7]");
 ```
 
-Note in particular that the values of type `type` use [the `DT_*` names
-for the types](../../resources/dims_types.md#data-types).
+특히 `type` 타입의 값들을 사용하는 것에 주의하세요.  [타입을 위한 `DT_*` 이름들](../../resources/dims_types.md#data-types).
 
 ### Polymorphism 
 #### Type Polymorphism 
