@@ -1,48 +1,38 @@
-# Adding a New Op
+# 새 작업을 추가하세요
 
-PREREQUISITES:
+전제조건:
 
-* Some familiarity with C++.
-* Must have installed the
-  [TensorFlow binary](../../get_started/os_setup.md#pip-installation), or must
-  have
-  [downloaded TensorFlow source](../../get_started/os_setup.md#installing-from-sources),
-  and be able to build it.
+* C++에 어느정도 친숙할 것.
+* 반드시  [TensorFlow binary](../../get_started/os_setup.md#pip-installation)가 설치되어 있거나, 
+  [downloaded TensorFlow source](../../get_started/os_setup.md#installing-from-sources)가 있어야만,
+     빌드 할 수 있음
 
-If you'd like to incorporate an operation that isn't covered by the existing
-library, you can create a custom Op. To incorporate your custom Op, you'll need
-to:
+만약 당신이 존재하는 라이브러리로 감싸져있지 않은 작업을 포함 하길 원한다면, custom Op를 생성할 수 있습니다.
+당신의 custom Op를 포함하기 위해서, '이하'의 항목을 충족해야 합니다.
 
-* Register the new Op in a C++ file. The Op registration is independent of the
-  implementation, and describes the semantics of how the Op is invoked. For
-  example, it defines the Op name, and specifies its inputs and outputs.
-* Implement the Op in C++. This implementation is called a "kernel", and there
-  can be multiple kernels for different architectures (e.g. CPUs, GPUs) or
-  input / output types.
-* Optionally, create a Python wrapper. This wrapper is the public API to create
-  the Op. A default wrapper is generated from the Op registration, which can be
-  used directly or added to.
-* Optionally, write a function to compute gradients for the Op.
-* Optionally, write a function that describes the input and output shapes
-  for the Op.  This allows shape inference to work with your Op.
-* Test the Op, typically in Python. If you define gradients, you can verify them with the Python [`GradientChecker`](https://www.tensorflow.org/code/tensorflow/python/kernel_tests/gradient_checker.py).
+이하:
+* C++ 파일에서 새로운 작업을  등록하세요. 그 작업 등록은  실행에서 독립적이고, 그 작업이 들먹여 지는 방법의 의미론을 말합니다.(?)
+     예를들어,이것은 작업의 이름을 정의하고 입력과 출력들을 구체적으로 명시합니다.
+* C++안에서 그 작업을 실행하세요. 이 실행은 "커널"이라고 불립니다. 그리고 각색의 구조들(CPUs, GPUs) 또는 입출력 형태들을 위한 다양한 커널들이 존재 할 수 있습니다.
+* 경우에 따라, 파이썬 래퍼(wrapper)를 만드세요. 이 래퍼는 작업을 생성하는 공용의 API입니다. 기본적인 래퍼는 작업 등록으로 부터 발생되어집니다. 그리고 그것은 직접적으로 사용 되어질 수 있거나 추가 되어질 수 있습니다.
+* 경우에 따라, 그 작업을 위해 경사도(gradients)를 계산할 함수를 써넣으세요.
+* 경우에 따라, 그 작업을 위해 입출력 모양들을 설명할 함수를 써넣으세요. 이것이 작업 추론으로 하여금 당신의 작업을 다룰 수 있도록 허락합니다.
+* 전형적으로, 파이썬에서 그 작업을 테스트 하세요. 만약 당신이 기울기들을 정의한다면, 파이썬으로 그 것들을 식별할 수 있을 것입니다.  [`GradientChecker`](https://www.tensorflow.org/code/tensorflow/python/kernel_tests/gradient_checker.py).
 
 [TOC]
 
-## Define the Op's interface 
+## 작업의 인터페이스를 정의하세요
 
-You define the interface of an Op by registering it with the TensorFlow system.
-In the registration, you specify the name of your Op, its inputs (types and
-names) and outputs (types and names), as well as docstrings and
-any [attrs](#attrs) the Op might require.
+텐써플로우 시스템으로 작업을 등록함으로, 당신은 그 작업의 인터페이스를 정의할 수 있습니다.
+등록에서, 당신의 작업 이름과  그 작업의 입력들(형태들와 이름들)과 출력들(형태들과 이름들) 그리고 'docstrings' 과 그 작업이 요구할지도 모를 어떤 속성들을 명시합니다. 
 
-To see how this works, suppose you'd like to create an Op that takes a tensor of
-`int32`s and outputs a copy of the tensor, with all but the first element set to
-zero. Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and
-add a call to the `REGISTER_OP` macro that defines the interface for such an Op:
+이것이 어떻게 동작할지 보기 위해서는, 당신이 'int32'들의 텐서를 챙겨서, 그것의 복사본을 출력하는 작업을 만들고 싶어함에도 불구하고 그 첫번째 요소는 0으로 세트한다고 가정해보세요.
+[`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` 파일을 생성하세요. 그리고 
+ Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and '이하'의 작업을 위한 인터페이스를 정의하는  `REGISTER_OP` macro 에의 요청을 추가하세요.
 
+이하 :
 ```c++
-#include "tensorflow/core/framework/op.h"
+#"tensorflow/core/framework/op.h"를 포함하세요 (Include)
 
 REGISTER_OP("ZeroOut")
     .Input("to_zero: int32")
@@ -50,28 +40,25 @@ REGISTER_OP("ZeroOut")
 ```
 
 This `ZeroOut` Op takes one tensor `to_zero` of 32-bit integers as input, and
-outputs a tensor `zeroed` of 32-bit integers.
+이 `ZeroOut`작업은 텐서 한개를 32비트 정수의 `to_zero`를 입력으로 이해한다. 그리고 텐서 한개를 32비트 정수의 `zeroed`로 출력한다.
 
 > A note on naming: The name of the Op should be unique and CamelCase.  Names
+> 이름 명명에 관한 주목할 점 : 작업의 이름은 유일해야하고 'CamelCase'여야 합니다. 밑줄 (`_`)로 시작하는 이름들은 내부 사용을 위해 예약되어집니다.
 > starting with an underscore (`_`) are reserved for internal use.
 
-## Implement the kernel for the Op
+## 작업을 하기 위해 커널을 실행
 
-After you define the interface, provide one or more implementations of the Op.
-To create one of these kernels, create a class that extends `OpKernel` and
-overrides the `Compute` method. The `Compute` method provides one `context`
-argument of type `OpKernelContext*`, from which you can access useful things
-like the input and output tensors.
+당신이 인터페이스를 정의한 후에, 하나 혹은 더 많은 작업의 실행을 제공하세요. 이 커널들 중 한개를 생성하기 위해서, `OpKernel`를 확장하는 클래스 한개를 생성하고 `Compute` 메소드를 오버라이드 하세요.
+`Compute`메소드는 입출력 텐써와 같은 유용한 것들에 접근 하게 하는 `OpKernelContext*`타입의  `context` 매개변수 한 개를 제공합니다. 
 
 > Important note: Instances of your OpKernel may be accessed concurrently. Your
-> `Compute` method must be thread-safe. Guard any access to class members with a
-> mutex (Or better yet, don't share state via class members! Consider using a
-> [`ResourceMgr`](https://www.tensorflow.org/code/tensorflow/core/framework/resource_mgr.h)
-> to keep track of Op state).
+> 중요한 메모 : 당신의 작업커널(OpKernel)의 인스턴스들은 동시에 접근되어질지도 모릅니다. 당신의 `Compute`메소드는 다양한 쓰레드들로 부터 안전하게 연결 되어질 것임에 틀림없습니다. 
+> 뮤택스의 클래스 멤버와의 연결을 지키세요.(아니면 클래스 맴버를 통한 상태를 공유하지 않는게 낫습니다!  
+> 작업 상태를 계속 파악 하기 위해서 [`ResourceMgr`](https://www.tensorflow.org/code/tensorflow/core/framework/resource_mgr.h)의 사용을 고려하세요.
 
-Add your kernel to the file you created above. The kernel might look something
-like this:
+당신의 커널을 당신이 먼저 만들어 놓은 파일에 추가하세요. 그 커널은 '이하'의 것과 같이 보일 것입니다.
 
+이하:
 ```c++
 #include "tensorflow/core/framework/op_kernel.h"
 
@@ -104,26 +91,21 @@ class ZeroOutOp : public OpKernel {
 };
 ```
 
-After implementing your kernel, you register it with the TensorFlow system. In
-the registration, you specify different constraints under which this kernel
-will run. For example, you might have one kernel made for CPUs, and a separate
-one for GPUs.
-
-To do this for the `ZeroOut` op, add the following to `zero_out.cc`:
+커널을 실행 한 뒤, 텐서플로우 시스템에 그것을 등록합니다. 등록할 때, 당신은 이 커널이 동작하게 될 다른 제약사항들을 명시 합니다.
+예를 들어, 당신이 하나의 커널을 CPUs를 위해 그리고 다른 하나는 GPUs를 위해 만들수도 있습니다.
+`ZeroOut` 작업을 위한 이 일을 하기 위해서, `zero_out.cc`를 따라서 추가하세요.
 
 ```c++
 REGISTER_KERNEL_BUILDER(Name("ZeroOut").Device(DEVICE_CPU), ZeroOutOp);
 ```
 
-## Building the Op library
-### With TensorFlow binary installation
+## 작업 라이브러리를 빌드
+### 텐써플로우 바이너리 설치도 병행
 
-You should be able to compile `zero_out.cc` with a `C++` compiler such as `g++`
-or `clang` available on your system. The binary PIP package installs the header
-files and the library that you need to compile your Op in locations that are
-system specific. However, the TensorFlow python library provides the
-`get_include` function to get the header directory.
-Here is the output of this function on a Ubuntu machine.
+당신의 시스템에서 동작 할 수 있는 `g++` 또는 `clang`과 같은 `C++` 컴파일러로 `zero_out.cc`을 컴파일 할 수 있어야 합니다.
+바이너리 PIP 패키지는 당신의 작업을 시스템이 명시한 곳에서 컴파일 해야만 하는 라이브러리와 헤더파일을 설치합니다.
+그러나, 텐써플로우 파이썬 라이브러리는 `get_include` 함수를 제공합니다. 이 함수는 헤더 디렉토리를 얻게 합니다.
+여기 이 함수의 출력된 값을 우분투 머신에서 볼 수 있습니다.
 
 ```bash
 $ python
@@ -132,30 +114,26 @@ $ python
 '/usr/local/lib/python2.7/site-packages/tensorflow/include'
 
 ```
+가령 당신이 설치된 `g++`를 가졌다고 가정해 본다면, 당신이 다이나믹 라이브러리 안에서 작업을 컴파일 하는 것을 가능하도록 해주는 커맨드들의 흐름들이 '이하'에 있습니다.
 
-Assuming you have `g++` installed, here is the sequence of commands you can use
-to compile your Op into a dynamic library.
-
+이하:
 ```bash
 TF_INC=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
 
 g++ -std=c++11 -shared zero_out.cc -o zero_out.so -fPIC -I $TF_INC
 ```
 
-On Mac OS X, the additional flag "-undefined dynamic_lookup" is required when
-building the .so file.
+맥 OS에서, "-undefined dynamic_lookup"라는 추가적인 표시사항은  .so 파일을 빌드할 때 필수 적으로 필요합니다.
 
-> Note on gcc version 5: gcc5 uses the new C++
-[ABI](https://gcc.gnu.org/gcc-5/changes.html#libstdcxx). The binary pip packages
-available on the TensorFlow website are built with gcc4 that uses the older ABI.
-If you compile your op library with gcc5, add `-D_GLIBCXX_USE_CXX11_ABI=0` to
-the command line to make the library compatible with the older abi.
+> gcc 5버전에서의 주의사항 : gcc 5는 새로운 C++을 사용합니다. [ABI](https://gcc.gnu.org/gcc-5/changes.html#libstdcxx). 
+텐써플로우 웹사이트에서 이용 가능한 바이너리 pip 패키지들은 더 오래된 ABI를 사용하는 gcc4로 빌드되어졌습니다.
+만약 당신이 gcc5로 작업 라이브러리를 컴파일 한다면,  `-D_GLIBCXX_USE_CXX11_ABI=0`를 커맨드라인에 추가해야합니다. 
+왜냐하면, 그 라이브러리를 오래된 abi와 호환가능하게 해야하기 때문입니다.
 
-### With TensorFlow source installation
+### 텐써플로우 소스 설치와 함께
 
-If you have TensorFlow sources installed, you can make use of TensorFlow's build
-system to compile your Op. Place a BUILD file with following Bazel build rule in
-the [`tensorflow/core/user_ops`][user_ops] directory.
+만약 당신이 텐써플로우를 다 설치 했다면, 당신의 작업을 컴파일하는 텐써플로우의 빌드 시스템을 이용할 수 있습니다.
+Bazel 빌드 규칙([`tensorflow/core/user_ops`][user_ops] 디렉토리)을 따라 빌드 파일을 가져다 놓으세요.
 
 ```python
 load("//tensorflow:tensorflow.bzl", "tf_custom_op_library")
@@ -166,61 +144,53 @@ tf_custom_op_library(
 )
 ```
 
-Run the following command to build `zero_out.so`.
+'이하'의 `zero_out.so`를 빌드하는 명령을 실행하세요.
 
+이하:
 ```bash
 $ bazel build -c opt //tensorflow/core/user_ops:zero_out.so
 ```
 
-> Note:
-Although you can create a shared library (a `.so` file) with the standard
-`cc_library` rule, we strongly recommend that you use the `tf_custom_op_library`
-macro. It adds some required dependencies, and performs checks to ensure that
-the shared library is compatible with TensorFlow's plugin loading mechanism.
+> 알림:
+표준 `cc_library` 규칙으로, 당신이 공유된 라이브러리 ( `.so` 파일)를 생성할 수 있음에도 불구하고, `tf_custom_op_library`매크로를 사용할 것을 강력하게 권고합니다.
+이것이 어떤 의존들(dependencies)을 추가하고,공유된 라이브러리가 텐써플로우의 플러그인 로딩 구조와 호환이 되는지 점검합니다.
 
-## Using the Op in Python
+## 파이썬에서의 작업 실행
 
-TensorFlow Python API provides the
-[load_op_library](../../api_docs/python/framework#load_op_library) function to
-load the dynamic library and register the Op with the TensorFlow
-framework. `load_op_library` returns a Python module, that contains the Python
-wrappers for the Op. Thus, once you have built the op, you can do the following
-to run it from Python :
+텐써플로우 파이썬 API는 역동적인 라이브러리를 로드하는 것과 텐써플로우 프레임워크에 작업을 등록하기 위해서 [load_op_library](../../api_docs/python/framework#load_op_library) 함수를 제공합니다.
+`load_op_library`는 작업을 위한 파이썬 래퍼들을 담고 있는 파이썬 모듈을 반환합니다.
+게다가, 당신이 그 작업을 빌드 했다면, 파이썬으로 부터 이하의 작업을 실행 할 수 있습니다.
+이하:
 
-```python
+```파이썬
 import tensorflow as tf
 zero_out_module = tf.load_op_library('zero_out.so')
 with tf.Session(''):
   zero_out_module.zero_out([[1, 2], [3, 4]]).eval()
-
-# Prints
+  
+# 프린트들
 array([[1, 0],
        [0, 0]], dtype=int32)
 ```
 
-> Note: The generated function will be given a snake\_case name (to comply with
-> [PEP8](https://www.python.org/dev/peps/pep-0008/)).  So if your op is named
-> `ZeroOut` in the C++ files, the python function will be called `zero_out`.
+> 알림: 발생된 함수는 ([PEP8](https://www.python.org/dev/peps/pep-0008/))을 준수하기 위해서 뱀형(snake/_case)이름을 받을 것입니다. 
+> 그래서 만약   C++ 파일에서 `ZeroOut`으로 작업이름을 명명한다면, 파이썬 함수는  `zero_out`로 쓰여질 것입니다.
 
-To make the Op available as a regular function `import`-able from a Python
-module, it maybe useful to have the `load_op_library` call in a Python source
-file as follows (see
-[zero_out_op_1.py](https://www.tensorflow.org/code/tensorflow/g3doc/how_tos/adding_an_op/zero_out_op_1.py))
-:
+파이썬 모듈로 부터 일반적인 함수 `import`-able로써, 그 작업이 사용가능해지도록 하기위해서, 파이썬 소스파일(이하 참조 : [zero_out_op_1.py](https://www.tensorflow.org/code/tensorflow/g3doc/how_tos/adding_an_op/zero_out_op_1.py))에서  `load_op_library`을 가지고 있는 것이 유용할지도 모릅니다.
 
+이하:
 ```python
-import tensorflow as tf
+tf로써 텐써플로우를 임포트
 
 _zero_out_module = tf.load_op_library('zero_out_op_kernel_1.so')
 zero_out = _zero_out_module.zero_out
 ```
 
-## Verify it works
+## 이것이 작동하는지 확인하세요.
 
-A good way to verify that you've successfully implemented your Op is to write a
-test for it. Create the file
-`tensorflow/python/kernel_tests/zero_out_op_test.py` with the contents:
+당신이 성공적으로 작업을 수행했다는 것을 확인할 좋은 방법은 테스트를 작성 하는 것입니다. `tensorflow/python/kernel_tests/zero_out_op_test.py` 파일을 '이하'의 내용으로 작성하세요.
 
+이하:
 ```python
 import tensorflow as tf
 
@@ -232,17 +202,17 @@ class ZeroOutTest(tf.test.TestCase):
       self.assertAllEqual(result.eval(), [5, 0, 0, 0, 0])
 ```
 
-Then run your test:
+이렇게 한 이후에 당신의 테스트를 실행해 보세요.
 
 ```sh
 $ bazel test tensorflow/python:zero_out_op_test
 ```
 
+## 유효성
 ## Validation 
 
-The example above assumed that the Op applied to a tensor of any shape.  What
-if it only applied to vectors?  That means adding a check to the above OpKernel
-implementation.
+이 예제는 작업이 먼저 어떤 모양의 텐써에 적용 했다는 것을 가정합니다. 만약에 이것을 오직 벡터에만 적용한다면 어떻게 될까요?
+이 말은 확인(check)을 OpKernel 구현 위에 추가한다는 것을 의미 합니다.
 
 ```c++
   void Compute(OpKernelContext* context) override {
@@ -255,55 +225,37 @@ implementation.
   }
 ```
 
-This asserts that the input is a vector, and returns having set the
-`InvalidArgument` status if it isn't.  The
-[`OP_REQUIRES` macro][validation-macros] takes three arguments:
+이것은 '입력은 한 벡터다'라고 주장합니다. 만약 입력이 있지 않다면, 이것은 `InvalidArgument` 상태를 세팅한 것를 되돌립니다.
+[`OP_REQUIRES` macro][validation-macros]은 3요소를 가지고 있습니다.
 
-*   The `context`, which can either be an `OpKernelContext` or
-    `OpKernelConstruction` pointer (see
-    [`tensorflow/core/framework/op_kernel.h`](https://www.tensorflow.org/code/tensorflow/core/framework/op_kernel.h)),
-    for its `SetStatus()` method.
-*   The condition.  For example, there are functions for validating the shape
-    of a tensor in
-    [`tensorflow/core/framework/tensor_shape.h`](https://www.tensorflow.org/code/tensorflow/core/framework/tensor_shape.h)
-*   The error itself, which is represented by a `Status` object, see
-    [`tensorflow/core/lib/core/status.h`](https://www.tensorflow.org/code/tensorflow/core/lib/core/status.h). A
-    `Status` has both a type (frequently `InvalidArgument`, but see the list of
-    types) and a message.  Functions for constructing an error may be found in
-    [`tensorflow/core/lib/core/errors.h`][validation-macros].
+*	`context`의 `SetStatus()`메소드 를 위해서`OpKernelContext` 혹은 `OpKernelConstruction` 포인터(참조: [`tensorflow/core/framework/op_kernel.h`](https://www.tensorflow.org/code/tensorflow/core/framework/op_kernel.h) 둘 중 하나가 될수 있는 `context`.
+*	'상태(condition)'. 예를들어, [`tensorflow/core/framework/tensor_shape.h`](https://www.tensorflow.org/code/tensorflow/core/framework/tensor_shape.h)에서의 텐써 모양을 확인하기 위한 함수들이 있습니다.
+*	`Status` 객체에 의해 보여지는 '에러 그자체' (참조 : [`tensorflow/core/lib/core/status.h`](https://www.tensorflow.org/code/tensorflow/core/lib/core/status.h)
+	`Status`는 타입(종종 `InvalidArgument`이긴 하나, 타입들의 리스트를 봅니다)과 메시지를 가집니다. 에러를 구성하는 것을 위한 함수들은 [`tensorflow/core/lib/core/errors.h`][validation-macros]에서 찾을지도 모릅니다.
 
-Alternatively, if you want to test whether a `Status` object returned from some
-function is an error, and if so return it, use
-[`OP_REQUIRES_OK`][validation-macros].  Both of these macros return from the
-function on error.
+그렇지 않으면, 만약 당신이 어떤 함수로 부터 반환되어진 `Status`객체가 오류인지 아닌지를 테스트 하고, 그것을 반환하기를 원한다면 [`OP_REQUIRES_OK`][validation-macros]를 사용하세요. 이 두가지 매크로들은 오류에 걸린 함수로 부터 되돌아 옵니다.
 
-## Op registration
+## 작업 등록
 
-### Attrs
+### 속성들
 
-Ops can have attrs, whose values are set when the Op is added to a graph. These
-are used to configure the Op, and their values can be accessed both within the
-kernel implementation and in the types of inputs and outputs in the Op
-registration. Prefer using an input instead of an attr when possible, since
-inputs are more flexible.  They can change every step, be set using a feed, etc.
-Attrs are used for things that can't be done with inputs: any configuration
-that affects the signature (number or type of inputs or outputs) or that
-can't change from step-to-step.
+작업들은 속성을 가질 수 있습니다.그리고, 속성의 값은 작업이 그래프에 추가되어질때 할당되어 집니다. 이 속성들은 작업의 환경 설정을 위해 사용되어 지며, 속성들의 값은 커널 구현과 작업 등록의 입출력 형태안에서 접근되어 질 수 있습니다.
+입력이 가능 할때, 속성보다 입력들이 좀 더 유연하기 때문에, 속성보단 입력을 사용할 것을 권장합니다. 
+입력들은 모든 단계들을 바꿀수 있고, feed를 사용할 준비 등등을 할 수 있습니다.
+속성들은 특징(숫자 혹은 입출력의 형태)에 영향을 주거나 단계별로 변경할 수 없는 환경설정들과 같은 입력 을 끝마칠 수 없는 것들을 위해 사용되어 집니다.
 
-You define an attr when you register the Op, by specifying its name and type
-using the `Attr` method, which expects a spec of the form:
+당신은 작업을 등록 할 때, `Attr`메소드를 사용하는 속성의 이름과 타입을 명시함으로  속성을 정의합니다.
+
+`Attr` 메소드에서 예상할 수 있는 형태:
 
 ```
 <name>: <attr-type-expr>
 ```
 
-where `<name>` begins with a letter and can be composed of alphanumeric
-characters and underscores, and `<attr-type-expr>` is a type expression of the
-form [described below](#attr-types)
+`<name>`이 한 글자로 시작하고, 글자와 숫자로 쓴 문자와 밑줄, 그리고 `<attr-type-expr>`로 구성되어 질 수 있는 곳은 '이하'에 표현된 폼의 형태입니다. (#attr-types)
 
-For example, if you'd like the `ZeroOut` Op to preserve a user-specified index,
-instead of only the 0th element, you can register the Op like so:
-
+이하:
+예를들어, 만약 당신이 `ZeroOut`작업이 사용자 지정 색인을 보존하기 원한다면, 단지 0번째 요소 대신에 다음과 같은 작업을 등록 할 수 있습니다.
 <code class="lang-c++"><pre>
 REGISTER\_OP("ZeroOut")
     <b>.Attr("preserve\_index: int")</b>
@@ -311,8 +263,7 @@ REGISTER\_OP("ZeroOut")
     .Output("zeroed: int32");
 </pre></code>
 
-Your kernel can then access this attr in its constructor via the `context`
-parameter:
+당신의 커널은 `context` 파라미터를 통해서 이것의 constructor안에 있는 이 속성에 접근 할 수 있습니다.
 
 <code class="lang-c++"><pre>
 class ZeroOutOp : public OpKernel {
@@ -334,7 +285,7 @@ class ZeroOutOp : public OpKernel {
 };
 </pre></code>
 
-which can then be used in the `Compute` method:
+`Compute` 메소드에서 사용 가능 한 것 :
 
 <code class="lang-c++"><pre>
   void Compute(OpKernelContext\* context) override {
@@ -352,10 +303,8 @@ which can then be used in the `Compute` method:
   }
 </pre></code>
 
-> To preserve [backwards compatibility](#backwards-compatibility), you should
-> specify a [default value](#default-values-constraints) when adding an attr to
-> an existing op:
->
+> [backwards compatibility](#backwards-compatibility) 를 보호하기 위해서, 당신이 '이하'존재하는 작업에 속성을 추가할 때  [default value](#default-values-constraints)를 명시해야 합니다.
+> 이하:
 > <code class="lang-c++"><pre>
 > REGISTER\_OP("ZeroOut")
 >     <b>.Attr("preserve\_index: int = 0")</b>
@@ -363,106 +312,98 @@ which can then be used in the `Compute` method:
 >     .Output("zeroed: int32");
 > </pre></code>
 
-### Attr types
+### 속성 타입들
 
-The following types are supported in an attr:
+'이하'의 타입들은 속성에서 지원됩니다.
 
-* `string`: Any sequence of bytes (not required to be UTF8).
-* `int`: A signed integer.
-* `float`: A floating point number.
-* `bool`: True or false.
-* `type`: One of the (non-ref) values of [`DataType`][DataTypeString].
-* `shape`: A [`TensorShapeProto`][TensorShapeProto].
-* `tensor`: A [`TensorProto`][TensorProto].
-* `list(<type>)`: A list of `<type>`, where `<type>` is one of the above types.
-  Note that `list(list(<type>))` is invalid.
+이하:
+* `string`: 바이트들의 연속 (UTF8이 필수는 아님).
+* `int`: 부호가 붙은 정수형.
+* `float`: 부동 소수점 숫자.
+* `bool`: 참 혹은 거짓.
+* `type`: [`DataType`][DataTypeString]의 불 참조 값들 중에 하나.
+* `shape`: [`TensorShapeProto`][TensorShapeProto].
+* `tensor`: [`TensorProto`][TensorProto].
+* `list(<type>)`: `<type>`이 상위 타입들 중 하나인 곳에서 `<type>`의 리스트.
+  `list(list(<type>))`가 유효하지 않음을 주의하세요 .
 
-See also: [`op_def_builder.cc:FinalizeAttr`][FinalizeAttr] for a definitive list.
+참조 : 최종 리스트를 위한  [`op_def_builder.cc:FinalizeAttr`][FinalizeAttr] 
 
-#### Default values & constraints
+#### 기본 값 & 제약사항
 
-Attrs may have default values, and some types of attrs can have constraints. To
-define an attr with constraints, you can use the following `<attr-type-expr>`s:
+속성들은 기본 값들을 가지고 있을것이다. 그리고 속성의 어떤 타입들은 제약사항을 가질 수 있다. 제약사항이 있는 속성을 정의하기 위해선, '아래'의 `<attr-type-expr>`를 이용 할 수 있습니다.
+이하:
 
-* `{'<string1>', '<string2>'}`: The value must be a string that has either the
-  value `<string1>` or `<string2>`.  The name of the type, `string`, is implied
-  when you use this syntax.  This emulates an enum:
-
+* `{'<string1>', '<string2>'}`: 값은 `<string1>` 혹은 `<string2>` 둘중 하나를 가지고 있는  'string'이여야만 합니다.
+     당신이 이 문법을 사용할 때, 타입의 이름인 `string`은 암시되어집니다.  
+     이것은 'enum'을 모방합니다 :
   ```c++
   REGISTER_OP("EnumExample")
       .Attr("e: {'apple', 'orange'}");
   ```
-
-* `{<type1>, <type2>}`: The value is of type `type`, and must be one of
-  `<type1>` or `<type2>`, where `<type1>` and `<type2>` are supported
-  [tensor types](../../resources/dims_types.md#data-types).  You don't specify
-  that the type of the attr is `type`. This is implied when you have a list of
-  types in `{...}`.  For example, in this case the attr `t` is a type that must
-  be an `int32`, a `float`, or a `bool`:
-
+  
+* `{<type1>, <type2>}`: 값은 `type`타입이고, `<type1>` 이나 `<type2>`이 '[tensor types](../../resources/dims_types.md#data-types)'에 의해 지원되는 곳에서  `<type1>` 혹은 `<type2>` 중 하나여야만 합니다. 
+      당신은 '속성의 타입이 `type`이다.'라고 명시하지 않습니다. 이것은 당신이 `{...}`안에서 타입의 리스트를 가질때 암시되어집니다.
+      예를 들어 이 경우엔,  `t`속성이  `int32`, `float`, `bool` 중 하나여야만 하는 타입 입니다 :
+      
   ```c++
   REGISTER_OP("RestrictedTypeExample")
       .Attr("t: {int32, float, bool}");
   ```
 
-* There are shortcuts for common type constraints:
-    * `numbertype`: Type `type` restricted to the numeric (non-string and
-      non-bool) types.
-    * `realnumbertype`: Like `numbertype` without complex types.
-    * `quantizedtype`: Like `numbertype` but just the quantized number types.
+* 일반적인 타입의 제약사항들을 위해 여기 몇가지 손쉬운 방법이 있습니다 :
+    * `numbertype`: `type`타입은 숫자형으로 제한됩니다. (non-string and non-bool)
+    * `realnumbertype`: 복잡한 타입이 없이 `numbertype`와 같습니다.
+    * `quantizedtype`: quantized 숫자를 제외한  `numbertype`와 같습니다.
 
-    The specific lists of types allowed by these are defined by the functions
-    (like `NumberTypes()`) in
-    [`tensorflow/core/framework/types.h`](https://www.tensorflow.org/code/tensorflow/core/framework/types.h).
-    In this example the attr `t` must be one of the numeric types:
+	이러한 것들로 허가되어진 타입들의 구체적인 리스트들은 함수들('이하'참조)에 의해 정의 되어집니다.
+	이하 :
+    [`tensorflow/core/framework/types.h`](https://www.tensorflow.org/code/tensorflow/core/framework/types.h).에 있는 `NumberTypes()`와 같습니다.
+    
+        이 사례에서 `t` 속성은 반드시 숫자 타입들중 하나여야만 합니다 :
 
     ```c++
     REGISTER_OP("NumberType")
         .Attr("t: numbertype");
     ```
 
-    For this op:
+        이 작업(op)을 위해서:
 
     ```python
     tf.number_type(t=tf.int32)  # Valid
     tf.number_type(t=tf.bool)   # Invalid
     ```
+* `int >= <n>`: 이 값은 자연수인 `<n>`보다 크거나 같은 값이어야 합니다.
 
-* `int >= <n>`: The value must be an int whose value is greater than or equal to
-  `<n>`, where `<n>` is a natural number.
-
-  For example, the following Op registration specifies that the attr `a` must
-  have a value that is at least `2`:
+    예를들어, '아래'의 작업 등록은 `a`속성이 최소 `2`인 값을 가지고 있다는 것을 명시합니다.
+    아래:
 
   ```c++
   REGISTER_OP("MinIntExample")
       .Attr("a: int >= 2");
   ```
 
-* `list(<type>) >= <n>`: A list of type `<type>` whose length is greater than
-  or equal to `<n>`.
+* `list(<type>) >= <n>`: `<n>`보다 크거나 같은 길이를 가진 `<type>` 타입의 리스트입니다.
 
-  For example, the following Op registration specifies that the attr `a` is a
-  list of types (either `int32` or `float`), and that there must be at least 3
-  of them:
+    예를 들어, '아래'의 작업등록은 `a`속성이 `int32` 혹은 `float` 둘중 하나의 타입의 리스트이고, 적어도 그것 들 중에서 3이있어야만 한다는 것을 명시합니다.
+    아래:
 
   ```c++
   REGISTER_OP("TypeListExample")
       .Attr("a: list({int32, float}) >= 3");
   ```
 
-To set a default value for an attr (making it optional in the generated code),
-add `= <default>` to the end, as in:
+발생된 코드에 값을 선택적으로 하는 속성을 위한 기본 값을 할당하기 위해서는, 끝 부분에 `= <default>`를 추가하세요. 
+예:
 
 ```c++
 REGISTER_OP("AttrDefaultExample")
     .Attr("i: int = 0");
 ```
 
-The supported syntax of the default value is what would be used in the proto
-representation of the resulting GraphDef definition.
+기본값에 대해 지원 되는 문법은 GraphDef 의미를 결과로 내는 것들 중에서 프로토(proto)표시에 사용 되어진다.
 
-Here are examples for how to specify a default for all types:
+모든 타입의 기본값을 명시하는 방법에 대한 예 :
 
 ```c++
 REGISTER_OP("AttrDefaultExampleForAllTypes")
@@ -477,8 +418,7 @@ REGISTER_OP("AttrDefaultExampleForAllTypes")
    .Attr("l_int: list(int) = [2, 3, 5, 7]");
 ```
 
-Note in particular that the values of type `type` use [the `DT_*` names
-for the types](../../resources/dims_types.md#data-types).
+특히 `type` 타입의 값들을 사용하는 것에 주의하세요.  [타입을 위한 `DT_*` 이름들](../../resources/dims_types.md#data-types).
 
 ### Polymorphism 
 #### Type Polymorphism 
