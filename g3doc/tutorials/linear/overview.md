@@ -117,7 +117,7 @@ age_buckets = tf.contrib.layers.bucketized_column(
 models tutorial code](
 https://www.tensorflow.org/code/tensorflow/examples/learn/wide_n_deep_tutorial.py?l=160)에서 `input_fn`을 보십시오.
 
-`fir()`과 `evaluate()`로 전달되는 입력 함수는 다음 섹션에서 보게될 훈련과 테스팅의 시작을 호출합니다.
+`fit()`과 `evaluate()`로 전달되는 입력 함수는 다음 섹션에서 보게될 훈련과 테스팅의 시작을 호출합니다.
 
 ### 선형 추정량
 
