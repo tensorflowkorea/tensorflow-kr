@@ -415,16 +415,12 @@ REGISTER_OP("AttrDefaultExampleForAllTypes")
 
 특히 `type` 타입의 값들을 사용하는 것에 주의하세요.  [타입을 위한 `DT_*` 이름들](../../resources/dims_types.md#data-types).
 
-### Polymorphism
-#### Type Polymorphism
+### 다형성 (Polymorphism)
+#### 타입 다형성  
 
-For ops that can take different types as input or produce different output
-types, you can specify [an attr](#attrs) in
-[an input or output type](#inputs-outputs) in the Op registration.  Typically
-you would then register an `OpKernel` for each supported type.
+Input으로서 다른 타입을 가질 수 있는 작업이나 다른 ouput 타입을 내보내는 작업에 대하여, 당신은 작업등록(Op registration)안의 [input타입이나 output타입](#inputs-outputs)에서 [속성](#attrs)을 명시해줄 수 있습니다. 전형적으로 그런 뒤 당신은 각 지원된 타입들에 대해 `OpKernel`를 등록할 수 있습니다.
 
-For instance, if you'd like the `ZeroOut` Op to work on `float`s
-in addition to `int32`s, your Op registration might look like:
+예를 들어서, 당신이 `ZeroOut` 작업을 `int32`타입이나 `float`타입에서 하고 싶다면, 당신의 작업 등록(Op Registration)은 다음과 같을 것입니다:
 
 <code class="lang-c++"><pre>
 REGISTER\_OP("ZeroOut")
@@ -433,15 +429,9 @@ REGISTER\_OP("ZeroOut")
     .Output("zeroed: <b>T</b>");
 </pre></code>
 
-Your Op registration now specifies that the input's type must be `float`, or
-`int32`, and that its output will be the same type, since both have type `T`.
+당신의 작업등록은 이제 input타입이 `float`타입 또는 `int32`타입에서 이루어지고, 둘 다 `T`타입을 가지고 있기 때문에, output타입이 (input 타입과) 같은 타입일 것이라고 명시합니다.
 
-> <a id="naming"></a>A note on naming: Inputs, outputs, and attrs generally should be
-> given snake\_case names.  The one exception is attrs that are used as the type
-> of an input or in the type of an input. Those attrs can be inferred when the
-> op is added to the graph and so don't appear in the op's function.  For
-> example, this last definition of ZeroOut will generate a Python function that
-> looks like:
+> <a id="naming"></a>이름짓기에 관한 메모: 입력(Inputs), 출력(Outputs), 그리고 속성은 일반적으로 이름이 snake\_case로 주어져야 합니다. 한 가지 예외는 속성(attrs)이 input의 타입이나 input의 타입으로 주어진 경우입니다(?). 그러한 속성들은 작업이 그래프에 추가되었고 작업의 함수에 보이지 않을 때 추론될 수 있습니다. 예를 들어, 이 ZeroOut의 마지막 정의는 파이썬 함수를 다음과 같이 보이도록 만들것입니다:
 >
 > ```python
 > def zero_out(to_zero, name=None):
@@ -456,12 +446,9 @@ Your Op registration now specifies that the input's type must be `float`, or
 >   """
 > ```
 >
-> If `to_zero` is passed an `int32` tensor, then `T` is automatically set to
-> `int32` (well, actually `DT_INT32`). Those inferred attrs are given
-> Capitalized or CamelCase names.
+> 만약 `to_zero`가 `int32`텐서로 넘겨졌다면, `T`는 자동적으로 `int32`로 설정됩니다(사실상 `DT_INT32`이겠죠?). 그러한 추론된 속성(attrs)들은 Capitalized 또는 CamelCase의 이름으로 주어질 것입니다.
 >
-> Compare this with an op that has a type attr that determines the output
-> type:
+> 이것을 output 타입을 결정하는 attr 타입을 가지고 있는 작업과 비교해보세요!
 >
 > ```c++
 > REGISTER_OP("StringToNumber")
@@ -473,8 +460,7 @@ Your Op registration now specifies that the input's type must be `float`, or
 > )doc");
 > ```
 >
-> In this case, the user has to specify the output type, as in the generated
-> Python:
+> 이러한 경우에, 유저는 output 타입을 생성된 파이썬 같이 명시해줘야합니다:
 >
 > ```python
 > def string_to_number(string_tensor, out_type=None, name=None):
@@ -533,9 +519,9 @@ REGISTER\_KERNEL\_BUILDER(
     ZeroOutFloatOp);
 </b></pre></code>
 
-> To preserve [backwards compatibility](#backwards-compatibility), you should
-> specify a [default value](#default-values-constraints) when adding an attr to
-> an existing op:
+> [backwards compatibility](#backwards-compatibility)를 방지하기 위해서, 다음과 같이
+> 존재하는 작업에 속성(attr)을 추가할 때, 당신은
+> [default값](#default-values-constraints)를 명시해줘야 합니다.
 >
 > <code class="lang-c++"><pre>
 > REGISTER\_OP("ZeroOut")
@@ -544,7 +530,8 @@ REGISTER\_KERNEL\_BUILDER(
 >   .Output("zeroed: T")
 > </pre></code>
 
-Lets say you wanted to add more types, say `double`:
+
+당신이 더 많은 타입들을 추가하고 싶다고 해봅시다. `double`이라고 해볼까요?:
 
 <code class="lang-c++"><pre>
 REGISTER\_OP("ZeroOut")
@@ -553,9 +540,8 @@ REGISTER\_OP("ZeroOut")
     .Output("zeroed: <b>T</b>");
 </pre></code>
 
-Instead of writing another `OpKernel` with redundant code as above, often you
-will be able to use a C++ template instead.  You will still have one kernel
-registration (`REGISTER\_KERNEL\_BUILDER` call) per overload.
+위처럼 장황한 코드로 또다른 `OpKernel`을 작성하는 것 대신에, 당신은 C++ 템플릿을 사용할 수 있을 것입니다. 이렇게 하더라도 당신은 overload당 하나의 커널등록 (`REGISTER\_KERNEL\_BUILDER` call)을 가질 것입니다.
+
 
 <code class="lang-c++"><pre>
 <b>template &lt;typename T&gt;</b>
@@ -600,8 +586,8 @@ REGISTER\_KERNEL\_BUILDER(
     ZeroOutOp&lt;double&gt;);
 </b></pre></code>
 
-If you have more than a couple overloads, you can put the registration in a
-macro.
+
+Overload가 한 두개가 아니라면, 당신은 매크로에 등록을 추가시킬 수 있습니다.
 
 ```c++
 #include "tensorflow/core/framework/op_kernel.h"
@@ -618,8 +604,8 @@ REGISTER_KERNEL(double);
 #undef REGISTER_KERNEL
 ```
 
-Depending on the list of types you are registering the kernel for, you may be
-able to use a macro provided by
+
+당신이 커널을 등록하는 타입들의 목록에 따라서, 당신은 이곳에서 제공하는 매크로를 사용할 수 있을 것입니다 ->
 [`tensorflow/core/framework/register_types.h`][register_types]:
 
 ```c++
