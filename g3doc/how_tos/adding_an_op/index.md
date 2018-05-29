@@ -3,7 +3,7 @@
 전제조건:
 
 * C++에 어느정도 친숙할 것.
-* 반드시  [TensorFlow binary](../../get_started/os_setup.md#pip-installation)가 설치되어 있거나, 
+* 반드시  [TensorFlow binary](../../get_started/os_setup.md#pip-installation)가 설치되어 있거나,
   [downloaded TensorFlow source](../../get_started/os_setup.md#installing-from-sources)가 있어야만,
      빌드 할 수 있음
 
@@ -24,10 +24,10 @@
 ## 작업의 인터페이스를 정의하세요
 
 텐써플로우 시스템으로 작업을 등록함으로, 당신은 그 작업의 인터페이스를 정의할 수 있습니다.
-등록에서, 당신의 작업 이름과  그 작업의 입력들(형태들와 이름들)과 출력들(형태들과 이름들) 그리고 'docstrings' 과 그 작업이 요구할지도 모를 어떤 속성들을 명시합니다. 
+등록에서, 당신의 작업 이름과  그 작업의 입력들(형태들와 이름들)과 출력들(형태들과 이름들) 그리고 'docstrings' 과 그 작업이 요구할지도 모를 어떤 속성들을 명시합니다.
 
 이것이 어떻게 동작할지 보기 위해서는, 당신이 'int32'들의 텐서를 챙겨서, 그것의 복사본을 출력하는 작업을 만들고 싶어함에도 불구하고 그 첫번째 요소는 0으로 세트한다고 가정해보세요.
-[`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` 파일을 생성하세요. 그리고 
+[`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` 파일을 생성하세요. 그리고
  Create file [`tensorflow/core/user_ops`][user_ops]`/zero_out.cc` and '이하'의 작업을 위한 인터페이스를 정의하는  `REGISTER_OP` macro 에의 요청을 추가하세요.
 
 이하 :
@@ -39,20 +39,16 @@ REGISTER_OP("ZeroOut")
     .Output("zeroed: int32");
 ```
 
-This `ZeroOut` Op takes one tensor `to_zero` of 32-bit integers as input, and
-이 `ZeroOut`작업은 텐서 한개를 32비트 정수의 `to_zero`를 입력으로 이해한다. 그리고 텐서 한개를 32비트 정수의 `zeroed`로 출력한다.
+이 `ZeroOut` 작업은 텐서 한개를 32비트 정수의 `to_zero`를 입력으로 이해합니다. 그리고 텐서 한 개를 32비트 정수의 `zeroed`로 출력합니다.
 
-> A note on naming: The name of the Op should be unique and CamelCase.  Names
-> 이름 명명에 관한 주목할 점 : 작업의 이름은 유일해야하고 'CamelCase'여야 합니다. 밑줄 (`_`)로 시작하는 이름들은 내부 사용을 위해 예약되어집니다.
-> starting with an underscore (`_`) are reserved for internal use.
+> 이름 명명에 관해 주목할 점 : 작업(Op)의 이름은 유일해야하고 'CamelCase'여야 합니다. 밑줄 (`_`)로 시작하는 이름들은 내부 사용을 위해 예약되어집니다.
 
 ## 작업을 하기 위해 커널을 실행
 
 당신이 인터페이스를 정의한 후에, 하나 혹은 더 많은 작업의 실행을 제공하세요. 이 커널들 중 한개를 생성하기 위해서, `OpKernel`를 확장하는 클래스 한개를 생성하고 `Compute` 메소드를 오버라이드 하세요.
-`Compute`메소드는 입출력 텐써와 같은 유용한 것들에 접근 하게 하는 `OpKernelContext*`타입의  `context` 매개변수 한 개를 제공합니다. 
+`Compute`메소드는 입출력 텐써와 같은 유용한 것들에 접근 하게 하는 `OpKernelContext*`타입의  `context` 매개변수 한 개를 제공합니다.
 
-> Important note: Instances of your OpKernel may be accessed concurrently. Your
-> 중요한 메모 : 당신의 작업커널(OpKernel)의 인스턴스들은 동시에 접근되어질지도 모릅니다. 당신의 `Compute`메소드는 다양한 쓰레드들로 부터 안전하게 연결 되어질 것임에 틀림없습니다. 
+> 중요한 메모 : 당신의 작업커널(OpKernel)의 인스턴스들은 동시에 접근되어질지도 모릅니다. 당신의 `Compute`메소드는 다양한 쓰레드들로 부터 안전하게 연결 되어질 것임에 틀림없습니다.
 > 뮤택스의 클래스 멤버와의 연결을 지키세요.(아니면 클래스 맴버를 통한 상태를 공유하지 않는게 낫습니다!  
 > 작업 상태를 계속 파악 하기 위해서 [`ResourceMgr`](https://www.tensorflow.org/code/tensorflow/core/framework/resource_mgr.h)의 사용을 고려하세요.
 
@@ -75,8 +71,7 @@ class ZeroOutOp : public OpKernel {
 
     // Create an output tensor
     Tensor* output_tensor = NULL;
-    OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
-                                                     &output_tensor));
+    OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(), &output_tensor));
     auto output = output_tensor->template flat<int32>();
 
     // Set all but the first element of the output tensor to 0.
@@ -125,9 +120,9 @@ g++ -std=c++11 -shared zero_out.cc -o zero_out.so -fPIC -I $TF_INC
 
 맥 OS에서, "-undefined dynamic_lookup"라는 추가적인 표시사항은  .so 파일을 빌드할 때 필수 적으로 필요합니다.
 
-> gcc 5버전에서의 주의사항 : gcc 5는 새로운 C++을 사용합니다. [ABI](https://gcc.gnu.org/gcc-5/changes.html#libstdcxx). 
+> gcc 5버전에서의 주의사항 : gcc 5는 새로운 C++을 사용합니다. [ABI](https://gcc.gnu.org/gcc-5/changes.html#libstdcxx).
 텐써플로우 웹사이트에서 이용 가능한 바이너리 pip 패키지들은 더 오래된 ABI를 사용하는 gcc4로 빌드되어졌습니다.
-만약 당신이 gcc5로 작업 라이브러리를 컴파일 한다면,  `-D_GLIBCXX_USE_CXX11_ABI=0`를 커맨드라인에 추가해야합니다. 
+만약 당신이 gcc5로 작업 라이브러리를 컴파일 한다면,  `-D_GLIBCXX_USE_CXX11_ABI=0`를 커맨드라인에 추가해야합니다.
 왜냐하면, 그 라이브러리를 오래된 abi와 호환가능하게 해야하기 때문입니다.
 
 ### 텐써플로우 소스 설치와 함께
@@ -167,13 +162,13 @@ import tensorflow as tf
 zero_out_module = tf.load_op_library('zero_out.so')
 with tf.Session(''):
   zero_out_module.zero_out([[1, 2], [3, 4]]).eval()
-  
+
 # 프린트들
 array([[1, 0],
        [0, 0]], dtype=int32)
 ```
 
-> 알림: 발생된 함수는 ([PEP8](https://www.python.org/dev/peps/pep-0008/))을 준수하기 위해서 뱀형(snake/_case)이름을 받을 것입니다. 
+> 알림: 발생된 함수는 ([PEP8](https://www.python.org/dev/peps/pep-0008/))을 준수하기 위해서 뱀형(snake/_case)이름을 받을 것입니다.
 > 그래서 만약   C++ 파일에서 `ZeroOut`으로 작업이름을 명명한다면, 파이썬 함수는  `zero_out`로 쓰여질 것입니다.
 
 파이썬 모듈로 부터 일반적인 함수 `import`-able로써, 그 작업이 사용가능해지도록 하기위해서, 파이썬 소스파일(이하 참조 : [zero_out_op_1.py](https://www.tensorflow.org/code/tensorflow/g3doc/how_tos/adding_an_op/zero_out_op_1.py))에서  `load_op_library`을 가지고 있는 것이 유용할지도 모릅니다.
@@ -209,7 +204,7 @@ $ bazel test tensorflow/python:zero_out_op_test
 ```
 
 ## 유효성
-## Validation 
+## Validation
 
 이 예제는 작업이 먼저 어떤 모양의 텐써에 적용 했다는 것을 가정합니다. 만약에 이것을 오직 벡터에만 적용한다면 어떻게 될까요?
 이 말은 확인(check)을 OpKernel 구현 위에 추가한다는 것을 의미 합니다.
@@ -240,7 +235,7 @@ $ bazel test tensorflow/python:zero_out_op_test
 ### 속성들
 
 작업들은 속성을 가질 수 있습니다.그리고, 속성의 값은 작업이 그래프에 추가되어질때 할당되어 집니다. 이 속성들은 작업의 환경 설정을 위해 사용되어 지며, 속성들의 값은 커널 구현과 작업 등록의 입출력 형태안에서 접근되어 질 수 있습니다.
-입력이 가능 할때, 속성보다 입력들이 좀 더 유연하기 때문에, 속성보단 입력을 사용할 것을 권장합니다. 
+입력이 가능 할때, 속성보다 입력들이 좀 더 유연하기 때문에, 속성보단 입력을 사용할 것을 권장합니다.
 입력들은 모든 단계들을 바꿀수 있고, feed를 사용할 준비 등등을 할 수 있습니다.
 속성들은 특징(숫자 혹은 입출력의 형태)에 영향을 주거나 단계별로 변경할 수 없는 환경설정들과 같은 입력 을 끝마칠 수 없는 것들을 위해 사용되어 집니다.
 
@@ -327,7 +322,7 @@ class ZeroOutOp : public OpKernel {
 * `list(<type>)`: `<type>`이 상위 타입들 중 하나인 곳에서 `<type>`의 리스트.
   `list(list(<type>))`가 유효하지 않음을 주의하세요 .
 
-참조 : 최종 리스트를 위한  [`op_def_builder.cc:FinalizeAttr`][FinalizeAttr] 
+참조 : 최종 리스트를 위한  [`op_def_builder.cc:FinalizeAttr`][FinalizeAttr]
 
 #### 기본 값 & 제약사항
 
@@ -341,11 +336,11 @@ class ZeroOutOp : public OpKernel {
   REGISTER_OP("EnumExample")
       .Attr("e: {'apple', 'orange'}");
   ```
-  
-* `{<type1>, <type2>}`: 값은 `type`타입이고, `<type1>` 이나 `<type2>`이 '[tensor types](../../resources/dims_types.md#data-types)'에 의해 지원되는 곳에서  `<type1>` 혹은 `<type2>` 중 하나여야만 합니다. 
+
+* `{<type1>, <type2>}`: 값은 `type`타입이고, `<type1>` 이나 `<type2>`이 '[tensor types](../../resources/dims_types.md#data-types)'에 의해 지원되는 곳에서  `<type1>` 혹은 `<type2>` 중 하나여야만 합니다.
       당신은 '속성의 타입이 `type`이다.'라고 명시하지 않습니다. 이것은 당신이 `{...}`안에서 타입의 리스트를 가질때 암시되어집니다.
       예를 들어 이 경우엔,  `t`속성이  `int32`, `float`, `bool` 중 하나여야만 하는 타입 입니다 :
-      
+
   ```c++
   REGISTER_OP("RestrictedTypeExample")
       .Attr("t: {int32, float, bool}");
@@ -359,7 +354,7 @@ class ZeroOutOp : public OpKernel {
 	이러한 것들로 허가되어진 타입들의 구체적인 리스트들은 함수들('이하'참조)에 의해 정의 되어집니다.
 	이하 :
     [`tensorflow/core/framework/types.h`](https://www.tensorflow.org/code/tensorflow/core/framework/types.h).에 있는 `NumberTypes()`와 같습니다.
-    
+
         이 사례에서 `t` 속성은 반드시 숫자 타입들중 하나여야만 합니다 :
 
     ```c++
@@ -393,7 +388,7 @@ class ZeroOutOp : public OpKernel {
       .Attr("a: list({int32, float}) >= 3");
   ```
 
-발생된 코드에 값을 선택적으로 하는 속성을 위한 기본 값을 할당하기 위해서는, 끝 부분에 `= <default>`를 추가하세요. 
+발생된 코드에 값을 선택적으로 하는 속성을 위한 기본 값을 할당하기 위해서는, 끝 부분에 `= <default>`를 추가하세요.
 예:
 
 ```c++
@@ -420,16 +415,12 @@ REGISTER_OP("AttrDefaultExampleForAllTypes")
 
 특히 `type` 타입의 값들을 사용하는 것에 주의하세요.  [타입을 위한 `DT_*` 이름들](../../resources/dims_types.md#data-types).
 
-### Polymorphism 
-#### Type Polymorphism 
+### 다형성 (Polymorphism)
+#### 타입 다형성  
 
-For ops that can take different types as input or produce different output
-types, you can specify [an attr](#attrs) in
-[an input or output type](#inputs-outputs) in the Op registration.  Typically
-you would then register an `OpKernel` for each supported type.
+Input으로서 다른 타입을 가질 수 있는 작업이나 다른 ouput 타입을 내보내는 작업에 대하여, 당신은 작업등록(Op registration)안의 [input타입이나 output타입](#inputs-outputs)에서 [속성](#attrs)을 명시해줄 수 있습니다. 전형적으로 그런 뒤 당신은 각 지원된 타입들에 대해 `OpKernel`를 등록할 수 있습니다.
 
-For instance, if you'd like the `ZeroOut` Op to work on `float`s
-in addition to `int32`s, your Op registration might look like:
+예를 들어서, 당신이 `ZeroOut` 작업을 `int32`타입이나 `float`타입에서 하고 싶다면, 당신의 작업 등록(Op Registration)은 다음과 같을 것입니다:
 
 <code class="lang-c++"><pre>
 REGISTER\_OP("ZeroOut")
@@ -438,15 +429,9 @@ REGISTER\_OP("ZeroOut")
     .Output("zeroed: <b>T</b>");
 </pre></code>
 
-Your Op registration now specifies that the input's type must be `float`, or
-`int32`, and that its output will be the same type, since both have type `T`.
+당신의 작업등록은 이제 input타입이 `float`타입 또는 `int32`타입에서 이루어지고, 둘 다 `T`타입을 가지고 있기 때문에, output타입이 (input 타입과) 같은 타입일 것이라고 명시합니다.
 
-> <a id="naming"></a>A note on naming: Inputs, outputs, and attrs generally should be
-> given snake\_case names.  The one exception is attrs that are used as the type
-> of an input or in the type of an input. Those attrs can be inferred when the
-> op is added to the graph and so don't appear in the op's function.  For
-> example, this last definition of ZeroOut will generate a Python function that
-> looks like:
+> <a id="naming"></a>이름짓기에 관한 메모: 입력(Inputs), 출력(Outputs), 그리고 속성은 일반적으로 이름이 snake\_case로 주어져야 합니다. 한 가지 예외는 속성(attrs)이 input의 타입이나 input의 타입으로 주어진 경우입니다(?). 그러한 속성들은 작업이 그래프에 추가되었고 작업의 함수에 보이지 않을 때 추론될 수 있습니다. 예를 들어, 이 ZeroOut의 마지막 정의는 파이썬 함수를 다음과 같이 보이도록 만들것입니다:
 >
 > ```python
 > def zero_out(to_zero, name=None):
@@ -461,12 +446,9 @@ Your Op registration now specifies that the input's type must be `float`, or
 >   """
 > ```
 >
-> If `to_zero` is passed an `int32` tensor, then `T` is automatically set to
-> `int32` (well, actually `DT_INT32`). Those inferred attrs are given
-> Capitalized or CamelCase names.
+> 만약 `to_zero`가 `int32`텐서로 넘겨졌다면, `T`는 자동적으로 `int32`로 설정됩니다(사실상 `DT_INT32`이겠죠?). 그러한 추론된 속성(attrs)들은 Capitalized 또는 CamelCase의 이름으로 주어질 것입니다.
 >
-> Compare this with an op that has a type attr that determines the output
-> type:
+> 이것을 output 타입을 결정하는 attr 타입을 가지고 있는 작업과 비교해보세요!
 >
 > ```c++
 > REGISTER_OP("StringToNumber")
@@ -478,8 +460,7 @@ Your Op registration now specifies that the input's type must be `float`, or
 > )doc");
 > ```
 >
-> In this case, the user has to specify the output type, as in the generated
-> Python:
+> 이러한 경우에, 유저는 output 타입을 생성된 파이썬 같이 명시해줘야합니다:
 >
 > ```python
 > def string_to_number(string_tensor, out_type=None, name=None):
@@ -538,9 +519,9 @@ REGISTER\_KERNEL\_BUILDER(
     ZeroOutFloatOp);
 </b></pre></code>
 
-> To preserve [backwards compatibility](#backwards-compatibility), you should
-> specify a [default value](#default-values-constraints) when adding an attr to
-> an existing op:
+> [backwards compatibility](#backwards-compatibility)를 방지하기 위해서, 다음과 같이
+> 존재하는 작업에 속성(attr)을 추가할 때, 당신은
+> [default값](#default-values-constraints)를 명시해줘야 합니다.
 >
 > <code class="lang-c++"><pre>
 > REGISTER\_OP("ZeroOut")
@@ -549,7 +530,8 @@ REGISTER\_KERNEL\_BUILDER(
 >   .Output("zeroed: T")
 > </pre></code>
 
-Lets say you wanted to add more types, say `double`:
+
+당신이 더 많은 타입들을 추가하고 싶다고 해봅시다. `double`이라고 해볼까요?:
 
 <code class="lang-c++"><pre>
 REGISTER\_OP("ZeroOut")
@@ -558,9 +540,8 @@ REGISTER\_OP("ZeroOut")
     .Output("zeroed: <b>T</b>");
 </pre></code>
 
-Instead of writing another `OpKernel` with redundant code as above, often you
-will be able to use a C++ template instead.  You will still have one kernel
-registration (`REGISTER\_KERNEL\_BUILDER` call) per overload.
+위처럼 장황한 코드로 또다른 `OpKernel`을 작성하는 것 대신에, 당신은 C++ 템플릿을 사용할 수 있을 것입니다. 이렇게 하더라도 당신은 overload당 하나의 커널등록 (`REGISTER\_KERNEL\_BUILDER` call)을 가질 것입니다.
+
 
 <code class="lang-c++"><pre>
 <b>template &lt;typename T&gt;</b>
@@ -605,8 +586,8 @@ REGISTER\_KERNEL\_BUILDER(
     ZeroOutOp&lt;double&gt;);
 </b></pre></code>
 
-If you have more than a couple overloads, you can put the registration in a
-macro.
+
+Overload가 한 두개가 아니라면, 당신은 매크로에 등록을 추가시킬 수 있습니다.
 
 ```c++
 #include "tensorflow/core/framework/op_kernel.h"
@@ -623,8 +604,8 @@ REGISTER_KERNEL(double);
 #undef REGISTER_KERNEL
 ```
 
-Depending on the list of types you are registering the kernel for, you may be
-able to use a macro provided by
+
+당신이 커널을 등록하는 타입들의 목록에 따라서, 당신은 이곳에서 제공하는 매크로를 사용할 수 있을 것입니다 ->
 [`tensorflow/core/framework/register_types.h`][register_types]:
 
 ```c++
@@ -649,7 +630,7 @@ TF_CALL_REAL_NUMBER_TYPES(REGISTER_KERNEL);
 #undef REGISTER_KERNEL
 ```
 
-#### List Inputs and Outputs 
+#### List Inputs and Outputs
 
 In addition to being able to accept or produce different types, ops can consume
 or produce a variable number of tensors.
@@ -886,7 +867,7 @@ new optional arguments to the end.  Generally incompatible changes may only be
 made when TensorFlow's changes major versions, and must conform to the
 [`GraphDef` version semantics](../../resources/versions.md#graphs).
 
-## GPU Support 
+## GPU Support
 
 You can implement different OpKernels and register one for CPU and another for
 GPU, just like you can [register kernels for different types](#polymorphism).
