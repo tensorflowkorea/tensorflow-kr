@@ -97,9 +97,9 @@ NOTE: 만약 텐서플로우 0.7.1 버전 이하에서 업그레이드하는 경
 
 [Virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 은
 각기 다른 파이썬 프로젝트에서 필요한 패키지들의 버전이 충돌되지 않도록 다른 공간에서 운영되도록 하는 툴입니다.
-텐서플로우를 Virtualenv 로 설치하면 기존 파이썬 패키지들을 덮어쓰지 않게됩니다.
+텐서플로우를 Virtualenv 로 설치하면 기존 파이썬 패키지들을 덮어쓰지 않게 됩니다.
 
-[Virtualenv](https://pypi.python.org/pypi/virtualenv) 설치 과정은 다음과 같습니다:
+[Virtualenv](https://pypi.python.org/pypi/virtualenv) 설치 과정은 다음과 같습니다 :
 
 *  pip 와 Virtualenv 를 설치합니다.
 *  Virtualenv 환경을 만듭니다.
@@ -202,7 +202,7 @@ $ source ~/tensorflow/bin/activate.csh  # csh을 사용할 경우
 (역주: 텐서플로우 뿐만이 아니라 일반적인 데이터 사이언스를 위해서도 아나콘다를 추천합니다)
 
 Virtualenv 처럼 conda 환경은 각기 다른 파이썬 프로젝트에서 필요한 패키지들의 버전이 충돌되지 않도록 다른 공간에서 운영합니다.
-텐서플로우를 Anaconda 환경으로 설치하면 기존 파이썬 패키지들을 덮어쓰지 않게됩니다.
+텐서플로우를 Anaconda 환경으로 설치하면 기존 파이썬 패키지들을 덮어쓰지 않게 됩니다.
 
 *  Anaconda를 설치합니다.
 *  conda 환경을 만듭니다.
@@ -286,7 +286,7 @@ conda 활성화하고 [설치 테스트](#test-the-tensorflow-installation)를 �
 $  # Your prompt should change back
 ```
 
-나중에 텐서플로우를 다시 사용하려면 conda 환경을 다시 활성화해야 합니다::
+나중에 텐서플로우를 다시 사용하려면 conda 환경을 다시 활성화해야 합니다:
 
 ```bash
 $ source activate tensorflow
@@ -468,7 +468,7 @@ $ sudo apt-get install python3-numpy swig python3-dev python3-wheel
 
 #### 설치환경 설정
 
-루트 디렉토리에 있는 `configure` 스크립트를 실행합니다. 환경설정 스크립트는 파이썬 인터프리터의 경로를 요청하고 (선택사항으로)CUDA 라이브러리를 설정합니다 ([아래](#configure-tensorflows-canonical-view-of-cuda-libraries)를 참고하세요).
+루트 디렉토리에 있는 `configure` 스크립트를 실행합니다. 환경설정 스크립트는 파이썬 인터프리터의 경로를 요청하고 (선택사항으로)CUDA 라이브러리를 설정합니다. ([아래](#configure-tensorflows-canonical-view-of-cuda-libraries)를 참고하세요)
 
 이 단계에서는 파이썬과 넘파이(numpy) 헤더파일을 찾습니다.
 
@@ -694,7 +694,7 @@ $ sudo pip install /tmp/tensorflow_pkg/tensorflow-0.9.0-py2-none-any.whl
 
 ## 텐서플로우 개발자 셋팅
 
-텐서플로우 자체를 수정할 때 텐서플로우를 재 설치하지 않고 파이썬 대화식 쉘에서 변경 내용을 테스트할 수 있다면 매우 유용할 것입니다.
+텐서플로우 자체를 수정할 때 텐서플로우를 재설치하지 않고 파이썬 대화식 쉘에서 변경 내용을 테스트할 수 있다면 매우 유용할 것입니다.
 
 모든 파일이 시스템 디렉토리로 부터 링크(복사가 아닌)되도록 텐서플로우를 셋팅하기 위해서는 텐서플로우 루트 디렉토리에서 다음 명령을 실행합니다:
 
@@ -797,7 +797,7 @@ ImportError: Traceback (most recent call last):
 ImportError: cannot import name 'descriptor'
 ```
 
-최신 버전의 텐서플로우로 업그레이드할 때 위와 같은 에러가 발생하면 텐서플로우와 protobuf를 모두 언인스톨하고 텐서플로우를 다시 재설치합니다(올바른 protobuf 의존성을 찾기 위해서).
+최신 버전의 텐서플로우로 업그레이드할 때 위와 같은 에러가 발생하면 텐서플로우와 protobuf를 모두 언인스톨하고 텐서플로우를 다시 재설치합니다.(올바른 protobuf 의존성을 찾기 위해서)
 
 #### Can't find setup.py
 
