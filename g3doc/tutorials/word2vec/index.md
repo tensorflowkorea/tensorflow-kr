@@ -144,7 +144,7 @@ embed = tf.nn.embedding_lookup(embeddings, train_inputs)
 좋다, 이제 각 단어에 대한 embeddings 을 만들었고, noise-contrastive 학습 목적함수를 이용한 타겟 단어 예측을 시도를 해보자.
 
 ```python
-# 매번 음수 라벨링 된 셈플을 이용한 NCE loos 계산
+# 매번 음수 라벨링 된 셈플을 이용한 NCE loss 계산
 loss = tf.reduce_mean(
   tf.nn.nce_loss(nce_weights, nce_biases, embed, train_labels,
                  num_sampled, vocabulary_size))
