@@ -5,11 +5,11 @@
 
 텐서플로우의 고수준 머신러닝 API(tf.contrib.learn)는 다양한 머신러닝 모델을 쉽게 설정하고, 훈련하고, 평가할 수 있도록 해줍니다. 이 튜토리얼에서는 tf.contrib.learn 을 사용하여 [신경망](https://en.wikipedia.org/wiki/Artificial_neural_network) 분류기를 만들고, [Iris 데이터셋](https://en.wikipedia.org/wiki/Iris_flower_data_set)에 있는 꽃받침과 꽃잎의 정보를 이용하여 꽃의 종류를 예측할 수 있도록 분류기를 훈련시킬 것입니다. 코드는 다음의 다섯 단계로 수행됩니다:
 
-1. Iris 훈련/테스트 데이터를 담은 CSV 파일을 텐서플로우 `Dataset`으로 불러옵니다
-2. [신경망 분류기](../../api_docs/python/contrib.learn.md#DNNClassifier)를 만듭니다
-3. 훈련 데이터를 이용하여 모델을 훈련 시킵니다
-4. 모델의 정확도를 평가합니다
-5. 새로운 표본을 분류합니다
+1. Iris 훈련/테스트 데이터를 담은 CSV 파일을 텐서플로우 `Dataset`으로 불러옵니다.
+2. [신경망 분류기](../../api_docs/python/contrib.learn.md#DNNClassifier)를 만듭니다.
+3. 훈련 데이터를 이용하여 모델을 훈련 시킵니다.
+4. 모델의 정확도를 평가합니다.
+5. 새로운 표본을 분류합니다.
 
 참고: 이 튜토리얼을 시작하기 전에 [텐서플로우를 설치](../../get_started/os_setup.md#download-and-setup)해야 합니다.
 

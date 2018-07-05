@@ -1,44 +1,44 @@
-<!-- This file is machine generated: DO NOT EDIT! -->
+<! -이 파일은 생성 된 기계입니다 : 편집하지 마십시오! ->
 
-# Asserts and boolean checks.
+# Asserts 및 boolean 검사
 [TOC]
 
-## Asserts and Boolean Checks
+# Asserts 및 boolean 검사
 
 - - -
 
 ### `tf.assert_negative(x, data=None, summarize=None, name=None)` {#assert_negative}
 
-Assert the condition `x < 0` holds element-wise.
+`x <0`가 가지고 있는 요소의 조건을 assert 하세요.
 
-Example of adding a dependency to an operation:
+조작에 종속성을 추가하는 예 :
 
 ```python
 with tf.control_dependencies([tf.assert_negative(x)]):
   output = tf.reduce_sum(x)
 ```
 
-Example of adding dependency to the tensor being checked:
+확인중인 텐서에 의존성을 추가하는 예 :
 
 ```python
 x = tf.with_dependencies([tf.assert_negative(x)], x)
 ```
 
-Negative means, for every element `x[i]` of `x`, we have `x[i] < 0`.
-If `x` is empty this is trivially satisfied.
+부정은 `x`의 모든 원소`x [i]`에 대해`x [i] <0`을 의미합니다.
+`x`가 비어 있으면 이것은 약간 부족하지만 만족됩니다.
 
-##### Args:
+##### 객체:
 
 
-*  <b>`x`</b>: Numeric `Tensor`.
-*  <b>`data`</b>: The tensors to print out if the condition is False.  Defaults to
-    error message and first few entries of `x`.
-*  <b>`summarize`</b>: Print this many entries of each tensor.
-*  <b>`name`</b>: A name for this operation (optional).  Defaults to "assert_negative".
+* <b>`x` </ b> : 숫자 형`Tensor`.
+* <b>`data` </ b> : 조건이 거짓이면 텐서 (tenors)가 출력됩니다. 기본값은
+    에러 메시지와`x`의 처음 몇개의 엔트리입니다.
+* <b>`summarize` </ b> : 각 텐서의 많은 엔트리를 인쇄하십시오.
+* <b>`name` </ b> :이 작업의 이름입니다 (선택 사항). 기본값은 "assert_negative"입니다.
 
-##### Returns:
+##### 반환값:
 
-  Op raising `InvalidArgumentError` unless `x` is all negative.
+`x`가 모두 음수가 아닌 한`InvalidArgumentError`를 발생시킵니다.
 
 
 - - -
